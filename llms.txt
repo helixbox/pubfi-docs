@@ -21,7 +21,8 @@ Public documentation for PubFi's agent-native crypto data layer.
 
 - Product site: https://pubfi.ai
 - Discovery: https://pubfi.ai/discovery
-- Agent guide: https://pubfi.ai/agents.md
+- Agent interface guide: https://docs.pubfi.ai/docs/reference/agent-interface
+- Agent-readable surfaces: https://docs.pubfi.ai/docs/agent-readable/surfaces
 
 ## Boundary
 

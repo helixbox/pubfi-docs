@@ -35,7 +35,6 @@ Discovery content is also exposed through:
 
 - `/llms.txt`
 - `/llms-full.txt`
-- `/agents.md`
 - `/discovery/api/{source_slug}.md`
 - `/discovery/topic/{slug}.md`
 - `/discovery/agent-capabilities.json`
@@ -54,4 +53,3 @@ At snapshot commit `1658e1b298c5`, checked-in public-safe Discovery data include
 - 7 topic-intent records.
 
 These are content/source counts, not traffic, ranking, or citation metrics.
-

@@ -14,7 +14,6 @@
 
 - `https://pubfi.ai/llms.txt`
 - `https://pubfi.ai/llms-full.txt`
-- `https://pubfi.ai/agents.md`
 - `https://pubfi.ai/discovery/agent-capabilities.json`
 
 ## Markdown Mirrors

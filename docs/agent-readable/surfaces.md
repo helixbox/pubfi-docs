@@ -9,7 +9,7 @@ search systems, documentation tools, and integration clients.
 | --- | --- | --- |
 | `llms.txt` | concise public site and Discovery index | `https://pubfi.ai/llms.txt` |
 | `llms-full.txt` | expanded answer-engine retrieval corpus | `https://pubfi.ai/llms-full.txt` |
-| `agents.md` | public agent integration guide | `https://pubfi.ai/agents.md` |
+| Agent interface guide | agent integration guidance | `https://docs.pubfi.ai/docs/reference/agent-interface` |
 | API Reference | interactive HTTP reference | `https://api.pubfi.ai/reference` |
 | OpenAPI | executable HTTP schema | `https://api.pubfi.ai/openapi.json` |
 | MCP manifest | hosted MCP discovery | `https://mcp.pubfi.ai/.well-known/mcp.json` |
@@ -21,7 +21,7 @@ search systems, documentation tools, and integration clients.
 
 - Use `llms.txt` as the concise public site index.
 - Use `llms-full.txt` for expanded Discovery context.
-- Use `agents.md` for agent integration guidance.
+- Use the Agent interface guide for agent integration guidance.
 - Use the API Reference for interactive HTTP route exploration.
 - Use OpenAPI for executable HTTP route shapes, methods, auth headers, parameters, and response
   schemas.
@@ -47,7 +47,7 @@ When a public docs page, Discovery page, or example changes, maintainers should 
 
 1. `llms.txt` needs a new concise link;
 2. `llms-full.txt` needs expanded plain-text context;
-3. `agents.md` needs a new agent-readable note;
+3. the Agent interface guide needs a new agent-readable note;
 4. API Reference, OpenAPI, or MCP links changed;
 5. README and GitHub navigation should point to the new asset;
 6. the page avoids implying ranking, traffic, AI citation, or runtime availability success.
@@ -60,7 +60,6 @@ For public launch and maintenance, record only public-safe reachability status:
 | --- | --- |
 | `llms.txt` returns 200 | `llms_index_reachable` |
 | `llms-full.txt` returns 200 | `llms_full_reachable` |
-| `agents.md` returns 200 | `agents_guide_reachable` |
 | API Reference returns 200 | `api_reference_reachable` |
 | OpenAPI returns JSON | `openapi_reachable` |
 | MCP manifest returns JSON | `mcp_manifest_reachable` |

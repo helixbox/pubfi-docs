@@ -22,7 +22,7 @@ binding every workflow directly to a different upstream API.
 - [Capability contracts](/docs/concepts/capability-contracts): understand normalized agent-facing
   responses.
 - [Agent-readable surfaces](/docs/agent-readable/surfaces): understand `llms.txt`, `llms-full.txt`,
-  `agents.md`, OpenAPI, MCP, and Discovery links.
+  OpenAPI, MCP, and Discovery links.
 
 ## Public Surfaces
 
@@ -32,7 +32,6 @@ binding every workflow directly to a different upstream API.
 | [Discovery](https://pubfi.ai/discovery) | public crypto data API index and source-selection surface |
 | [llms.txt](https://pubfi.ai/llms.txt) | concise site index for LLM and crawler discovery |
 | [llms-full.txt](https://pubfi.ai/llms-full.txt) | expanded Discovery export for answer-engine retrieval |
-| [agents.md](https://pubfi.ai/agents.md) | public agent guide |
 | [API Reference](https://api.pubfi.ai/reference) | interactive API reference |
 | [OpenAPI](https://api.pubfi.ai/openapi.json) | API schema |
 | [MCP manifest](https://mcp.pubfi.ai/.well-known/mcp.json) | MCP discovery manifest |

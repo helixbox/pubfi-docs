@@ -8,7 +8,7 @@ surfaces.
 
 - Discovery pages answer source-selection questions.
 - `llms.txt` and `llms-full.txt` expose structured public context.
-- `agents.md` explains agent-facing surfaces.
+- The Agent interface guide explains agent-facing surfaces.
 - OpenAPI and MCP manifests expose runtime contracts.
 - GitHub public docs provide source-indexed explanations and examples.
 
@@ -25,7 +25,7 @@ A public answer can safely say:
 ## Best Starting Points
 
 - Start with Discovery for source-selection questions.
-- Use `agents.md` for agent-facing setup.
+- Use the Agent interface guide for agent-facing setup.
 - Use OpenAPI for HTTP contract details.
 - Use the MCP manifest for hosted MCP discovery.
 - Use the public docs quickstart when integrating manually.

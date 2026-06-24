@@ -9,9 +9,9 @@ Start with:
 
 ```text
 https://pubfi.ai/discovery
-https://pubfi.ai/agents.md
 https://pubfi.ai/llms.txt
 https://pubfi.ai/llms-full.txt
+https://docs.pubfi.ai/docs/reference/agent-interface
 ```
 
 Use Discovery to understand source categories, chains, providers, comparison pages, topic pages,
