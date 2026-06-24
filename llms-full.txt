@@ -1,0 +1,52 @@
+# PubFi Docs Full Context
+
+PubFi is building an agent-native crypto data layer. It helps software teams and AI agents discover
+crypto data sources, plan routes, inspect schemas, and use normalized capability contracts without
+binding every workflow directly to a different upstream API.
+
+## Read First
+
+- https://docs.pubfi.ai/docs
+- https://docs.pubfi.ai/docs/project-overview
+- https://docs.pubfi.ai/docs/getting-started/quickstart
+- https://docs.pubfi.ai/docs/getting-started/api-key-runtime
+- https://docs.pubfi.ai/docs/getting-started/mcp-client
+- https://docs.pubfi.ai/docs/reference/api-reference
+
+## Concepts
+
+- Discovery is the public source-selection layer.
+- Gateway execution is authenticated PubFi route execution for supported configured provider
+  routes.
+- Capability contracts are normalized agent-facing envelopes with readiness, provenance,
+  freshness, warnings, and data.
+- Provider readiness describes whether a route is callable, requestable, contract-ready, or blocked.
+- API-key, credit, account, and usage facts are runtime boundaries, not public Discovery claims.
+
+## Runtime And Agent Surfaces
+
+- Interactive API reference: https://api.pubfi.ai/reference
+- OpenAPI schema: https://api.pubfi.ai/openapi.json
+- MCP endpoint: https://mcp.pubfi.ai
+- MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
+- Public agent guide: https://pubfi.ai/agents.md
+- Discovery: https://pubfi.ai/discovery
+
+## Public-Safe Claims
+
+- PubFi has public Discovery pages and agent-readable exports for source selection and
+  answer-engine retrieval.
+- PubFi has generic agent tool contracts for search, planning, execution, explanation, schema
+  readback, and pricing quote.
+- PubFi has normalized capability response envelopes for early crypto data capabilities.
+- PubFi keeps provider provenance, source freshness, readiness, and warnings explicit.
+
+## Non-Claims
+
+- Discovery inclusion is not gateway availability.
+- A route plan is not execution authority by itself.
+- Contract-ready examples are not proof of live upstream execution.
+- SEO/GEO readbacks and local automation outputs are diagnostics, not ranking, traffic, or AI
+  citation proof.
+- PubFi does not publicly promise supplier procurement, wallet custody, live x402 payment
+  execution, supplier settlement, or production model-ranked routing from this docs pack.

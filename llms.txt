@@ -1,0 +1,30 @@
+# PubFi Docs
+
+Public documentation for PubFi's agent-native crypto data layer.
+
+## Core Docs
+
+- Docs home: https://docs.pubfi.ai/docs
+- Project overview: https://docs.pubfi.ai/docs/project-overview
+- Quickstart: https://docs.pubfi.ai/docs/getting-started/quickstart
+- API reference guide: https://docs.pubfi.ai/docs/reference/api-reference
+- Agent interface: https://docs.pubfi.ai/docs/reference/agent-interface
+- Agent-readable surfaces: https://docs.pubfi.ai/docs/agent-readable/surfaces
+
+## Runtime References
+
+- Interactive API reference: https://api.pubfi.ai/reference
+- OpenAPI schema: https://api.pubfi.ai/openapi.json
+- MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
+
+## Product Surfaces
+
+- Product site: https://pubfi.ai
+- Discovery: https://pubfi.ai/discovery
+- Agent guide: https://pubfi.ai/agents.md
+
+## Boundary
+
+Discovery inclusion does not imply gateway availability. Route planning does not authorize
+execution. Public docs and reachability checks do not prove ranking, traffic, or AI citation
+success.

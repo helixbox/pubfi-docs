@@ -1,0 +1,105 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "PubFi Docs",
+  "description": "Public documentation for PubFi's agent-native crypto data layer.",
+  "seo": {
+    "indexing": "navigable",
+    "metatags": {
+      "canonical": "https://docs.pubfi.ai",
+      "og:site_name": "PubFi Docs",
+      "twitter:card": "summary_large_image"
+    }
+  },
+  "colors": {
+    "primary": "#0F766E",
+    "light": "#14B8A6",
+    "dark": "#0F172A"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Start",
+        "pages": [
+          "docs/index",
+          "docs/project-overview"
+        ]
+      },
+      {
+        "group": "Getting Started",
+        "pages": [
+          "docs/getting-started/quickstart",
+          "docs/getting-started/api-key-runtime",
+          "docs/getting-started/mcp-client"
+        ]
+      },
+      {
+        "group": "Concepts",
+        "pages": [
+          "docs/concepts/discovery",
+          "docs/concepts/capability-contracts",
+          "docs/concepts/route-planning",
+          "docs/concepts/account-credit-usage",
+          "docs/concepts/provider-readiness",
+          "docs/concepts/readiness-and-claim-safety"
+        ]
+      },
+      {
+        "group": "Agent-Readable",
+        "pages": [
+          "docs/agent-readable/surfaces"
+        ]
+      },
+      {
+        "group": "Use Cases",
+        "pages": [
+          "docs/use-cases/agent-wallet-balance",
+          "docs/use-cases/crypto-api-discovery",
+          "docs/use-cases/answer-engine-discovery",
+          "docs/use-cases/provider-integration-review",
+          "docs/use-cases/source-evaluation"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": [
+          "docs/reference/architecture-map",
+          "docs/reference/api-reference",
+          "docs/reference/agent-interface",
+          "docs/reference/runtime-endpoints",
+          "docs/reference/public-surfaces",
+          "docs/reference/security-and-public-data"
+        ]
+      },
+      {
+        "group": "Project",
+        "pages": [
+          "docs/faq",
+          "docs/glossary"
+        ]
+      }
+    ]
+  },
+  "links": [
+    {
+      "label": "Product",
+      "url": "https://pubfi.ai"
+    },
+    {
+      "label": "Discovery",
+      "url": "https://pubfi.ai/discovery"
+    },
+    {
+      "label": "Agents",
+      "url": "https://pubfi.ai/agents.md"
+    },
+    {
+      "label": "API Reference",
+      "url": "https://api.pubfi.ai/reference"
+    },
+    {
+      "label": "OpenAPI",
+      "url": "https://api.pubfi.ai/openapi.json"
+    }
+  ]
+}
