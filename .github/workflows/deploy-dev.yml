@@ -1,13 +1,12 @@
-name: Deploy production
+name: Deploy develop
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   deploy:
@@ -32,6 +31,6 @@ jobs:
           dist_path: dist
           preview_output: true
           project_name: pubfi-docs
-          prod_mode: true
-          alias_domain: docs.pubfi.ai
+          alias_domain: pubfi-docs-dev
           enable_cache: true
+          enable_notify_comment: true

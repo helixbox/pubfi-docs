@@ -1,4 +1,4 @@
-name: Deploy production
+name: Deploy staging
 
 on:
   push:
@@ -32,6 +32,5 @@ jobs:
           dist_path: dist
           preview_output: true
           project_name: pubfi-docs
-          prod_mode: true
-          alias_domain: docs.pubfi.ai
+          alias_domain: pubfi-docs-stg
           enable_cache: true
