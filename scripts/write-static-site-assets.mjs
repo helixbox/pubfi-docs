@@ -97,16 +97,6 @@ function vercelConfig() {
         source: "/index",
         destination: "/",
         permanent: true
-      },
-      {
-        source: "/docs",
-        destination: "/",
-        permanent: true
-      },
-      {
-        source: "/docs/:path*",
-        destination: "/:path*",
-        permanent: true
       }
     ]
   };

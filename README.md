@@ -116,9 +116,9 @@ store. Do not commit credentials, wallet addresses, raw account responses, or pr
 ## Publishing
 
 Deploy this repository with Mintlify export to Vercel and set `docs.pubfi.ai` as the canonical docs
-domain. Production builds emit `sitemap.xml`, `robots.txt`, and redirects from the retired
-`/docs/*` URL shape to the root docs routes. GitHub Pages is a fallback only; do not run a second
-canonical docs site unless canonical and noindex rules are explicit.
+domain. Production builds emit `sitemap.xml`, `robots.txt`, and clean canonical metadata for root
+docs routes. GitHub Pages is a fallback only; do not run a second canonical docs site unless
+canonical and noindex rules are explicit.
 
 ## Public Boundary
 
