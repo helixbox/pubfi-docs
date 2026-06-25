@@ -44,7 +44,7 @@ credentials, billing records, dashboard data, raw readbacks, or production `seo_
 
 ## Snapshot Counts
 
-At snapshot commit `38852a16c5af`, checked-in public-safe Discovery data includes:
+At snapshot commit `4a1a92a8d61d`, checked-in public-safe Discovery data includes:
 
 - 167 data-source records;
 - 167 source-freshness records;

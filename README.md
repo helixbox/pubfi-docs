@@ -31,7 +31,7 @@ github.com/helixbox/pubfi-docs
   -> canonical cross-links from README, llms.txt, Discovery, API Reference, MCP, and examples
 ```
 
-Snapshot source: `pubfi-mono` commit `38852a16c5af`.
+Snapshot source: `pubfi-mono` commit `4a1a92a8d61d`.
 
 ## Start Here
 

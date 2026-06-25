@@ -12,6 +12,7 @@
 
 ## Agent-Readable Files
 
+- `https://pubfi.ai/agents.md`
 - `https://pubfi.ai/llms.txt`
 - `https://pubfi.ai/llms-full.txt`
 - `https://pubfi.ai/discovery/agent-capabilities.json`
@@ -25,6 +26,8 @@
 
 - `https://api.pubfi.ai/reference`
 - `https://api.pubfi.ai/openapi.json`
+- `https://pubfi.ai/openapi/degov-openapi.json`
+- `https://pubfi.ai/openapi/subscan-openapi.json`
 - `https://mcp.pubfi.ai/.well-known/mcp.json`
 - `https://pubfi.ai/.well-known/mcp.json`
 

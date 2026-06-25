@@ -10,7 +10,7 @@ contracts instead of binding every workflow directly to a different upstream API
 
 | Layer | Role |
 | --- | --- |
-| Discovery | public open index, source-selection surface, demand engine, and SEO/GEO context |
+| Discovery | public open index, source-selection surface, demand engine, and agent-readable retrieval context |
 | Gateway | authenticated PubFi route execution for supported configured provider routes |
 | Capability runtime | stable normalized agent-facing data contracts |
 | MCP tools | generic route/capability tools for agent runtimes |
@@ -57,4 +57,3 @@ auth-required surface for planning, explaining, and executing supported data rou
 keeps source provenance, freshness, readiness, and claim boundaries explicit so agents can decide
 when a route is callable, requestable, contract-ready, or research-only.
 ```
-

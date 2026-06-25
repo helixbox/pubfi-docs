@@ -35,12 +35,12 @@ Out of scope:
 Run:
 
 ```sh
-find docs -name '*.md' -print
+find . -path './.git' -prune -o -path './.worktrees' -prune -o -path './node_modules' -prune -o -name '*.md' -print | sort
 ```
 
-If this material is still staged inside `pubfi-mono`, also run from the repository root:
+Before opening a PR, also run from the repository root:
 
 ```sh
-decodex docs check
-git diff --check
+npm run check
+npx --yes mint@latest validate
 ```
