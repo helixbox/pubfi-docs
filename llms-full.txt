@@ -29,7 +29,8 @@ binding every workflow directly to a different upstream API.
 - OpenAPI schema: https://api.pubfi.ai/openapi.json
 - MCP endpoint: https://mcp.pubfi.ai
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
-- Public agent guide: https://pubfi.ai/agents.md
+- Agent interface guide: https://docs.pubfi.ai/docs/reference/agent-interface
+- Agent-readable surfaces: https://docs.pubfi.ai/docs/agent-readable/surfaces
 - Discovery: https://pubfi.ai/discovery
 
 ## Public-Safe Claims

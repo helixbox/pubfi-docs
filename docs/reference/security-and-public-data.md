@@ -13,8 +13,7 @@ Allowed in public docs:
 - redacted response shapes;
 - public-safe source freshness summaries;
 - claim-safety language.
-- public explanations of `llms.txt`, `llms-full.txt`, `agents.md`, OpenAPI, MCP, and Discovery
-  links.
+- public explanations of `llms.txt`, `llms-full.txt`, OpenAPI, MCP, and Discovery links.
 
 ## Private Data
 

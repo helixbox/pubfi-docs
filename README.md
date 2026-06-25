@@ -27,7 +27,7 @@ github.com/helixbox/pubfi-docs
   -> Mintlify GitHub integration
   -> docs.pubfi.ai
   -> pinned build-time consumption by pubfi.ai/docs
-  -> canonical cross-links from README, llms.txt, agents.md, Discovery, and examples
+  -> canonical cross-links from README, llms.txt, Discovery, API Reference, MCP, and examples
 ```
 
 Snapshot source: `pubfi-mono` commit `1658e1b298c5`.
@@ -50,7 +50,6 @@ Snapshot source: `pubfi-mono` commit `1658e1b298c5`.
 - Interactive API reference: `https://api.pubfi.ai/reference`
 - OpenAPI schema: `https://api.pubfi.ai/openapi.json`
 - MCP manifest: `https://mcp.pubfi.ai/.well-known/mcp.json`
-- Agent guide: `https://pubfi.ai/agents.md`
 
 ## Repository Contents
 
@@ -59,14 +58,12 @@ pubfi-docs/
 ├── README.md
 ├── docs.json
 ├── CONTRIBUTING.md
-├── SECURITY.md
 ├── LICENSE.md
 ├── LICENSE-DOCS.md
 ├── LICENSE-CODE.md
 ├── CHANGELOG.md
 ├── llms.txt
 ├── llms-full.txt
-├── agents.md
 ├── docs/
 │   ├── index.md
 │   ├── project-overview.md

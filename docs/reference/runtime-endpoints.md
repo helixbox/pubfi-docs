@@ -46,7 +46,6 @@ Public endpoint families:
 - `/docs`
 - `/llms.txt`
 - `/llms-full.txt`
-- `/agents.md`
 - `/.well-known/mcp.json`
 
 ## Docs Rule
