@@ -67,6 +67,7 @@
           "reference/api-reference",
           "reference/agent-interface",
           "reference/runtime-endpoints",
+          "reference/provider-gateway-examples",
           "reference/public-surfaces",
           "reference/security-and-public-data"
         ]

@@ -24,8 +24,8 @@ Out of scope:
 
 - Prefer short pages with one clear purpose.
 - Keep canonical product and runtime links stable.
-- Do not duplicate full pages across `pubfi.ai/docs` and the canonical docs site without a
-  canonical decision.
+- Do not duplicate full pages across `pubfi.ai` product surfaces and the canonical docs site. Legacy
+  `pubfi.ai/docs/...` paths should stay redirect-only unless the canonical URL decision changes.
 - Use examples that can run without upstream provider secrets in the prompt or repository.
 - Keep generated schemas linked from canonical runtime URLs unless a copied snapshot is explicitly
   versioned.
@@ -44,4 +44,3 @@ If this material is still staged inside `pubfi-mono`, also run from the reposito
 decodex docs check
 git diff --check
 ```
-

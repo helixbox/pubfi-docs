@@ -27,7 +27,7 @@ github.com/helixbox/pubfi-docs
   -> Mintlify GitHub integration
   -> docs.pubfi.ai
   -> root docs routes such as /getting-started/quickstart and /reference/api-reference
-  -> pinned build-time consumption by pubfi.ai/docs entry points
+  -> linked from pubfi.ai product surfaces and legacy docs redirects
   -> canonical cross-links from README, llms.txt, Discovery, API Reference, MCP, and examples
 ```
 

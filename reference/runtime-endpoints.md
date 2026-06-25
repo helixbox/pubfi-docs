@@ -43,10 +43,11 @@ https://pubfi.ai
 Public endpoint families:
 
 - `/discovery`
-- `/docs`
 - `/llms.txt`
 - `/llms-full.txt`
 - `/.well-known/mcp.json`
+
+Legacy `pubfi.ai/docs/...` paths redirect to `https://docs.pubfi.ai`.
 
 ## Docs Rule
 

@@ -12,6 +12,7 @@ binding every workflow directly to a different upstream API.
 - https://docs.pubfi.ai/getting-started/api-key-runtime
 - https://docs.pubfi.ai/getting-started/mcp-client
 - https://docs.pubfi.ai/reference/api-reference
+- https://docs.pubfi.ai/reference/provider-gateway-examples
 
 ## Concepts
 

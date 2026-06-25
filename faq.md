@@ -31,6 +31,6 @@ navigation, sitemap control, metadata, product trust, and conversion routing.
 
 ## Why not mirror everything on `pubfi.ai/docs`?
 
-Full mirroring can create duplicate-content and canonical ambiguity. `pubfi.ai/docs` should keep
-product-owned entry pages and selected summaries unless it is the chosen canonical URL.
-
+Full mirroring can create duplicate-content and canonical ambiguity. `docs.pubfi.ai` is the canonical
+docs site; legacy `pubfi.ai/docs/...` paths should redirect there instead of carrying a second copy
+of the same docs pages.

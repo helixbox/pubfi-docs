@@ -17,6 +17,9 @@ PubFi API keys are caller credentials for machine, gateway, capability, and MCP 
 be loaded from a secret store or environment variable, not pasted into prompts, public docs, issue
 comments, screenshots, or code examples.
 
+Create keys from the PubFi dashboard under **Manage application keys**. Copy the key when it is
+shown, because the full secret is displayed only once.
+
 Supported public auth shapes:
 
 ```text
@@ -53,4 +56,3 @@ A route can execute only when these gates pass:
 
 Public docs may explain the auth and credit model, but they must not publish real keys, account
 ids, usage rows, billing-provider payloads, customer data, or production ledger records.
-
