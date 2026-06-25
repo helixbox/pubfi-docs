@@ -5,11 +5,14 @@ import { spawnSync } from "node:child_process";
 
 const root = process.cwd();
 const docsJsonPath = path.join(root, "docs.json");
+const docsDomain = "https://docs.pubfi.ai";
 const failures = [];
 
 checkNavigation();
+checkRouteShape();
 checkMarkdownLinks();
 checkDocsSiteLinks();
+checkCanonicalDocsUrls();
 checkTextHygiene();
 checkExampleSyntax();
 
@@ -25,17 +28,26 @@ console.log("public materials check: pass");
 function checkNavigation() {
   const docsJson = JSON.parse(readFileSync(docsJsonPath, "utf8"));
 
-  const groups = Array.isArray(docsJson.navigation)
-    ? docsJson.navigation
-    : docsJson.navigation?.groups || [];
+  for (const page of navigationPages(docsJson)) {
+    const target = path.join(root, `${page}.md`);
 
-  for (const group of groups) {
-    for (const page of group.pages || []) {
-      const target = path.join(root, `${page}.md`);
+    if (!existsSync(target)) {
+      failures.push(`missing docs.json navigation target: ${page}`);
+    }
+  }
+}
 
-      if (!existsSync(target)) {
-        failures.push(`missing docs.json navigation target: ${page}`);
-      }
+function checkRouteShape() {
+  const docsJson = JSON.parse(readFileSync(docsJsonPath, "utf8"));
+  const pages = navigationPages(docsJson);
+
+  if (!pages.includes("index")) {
+    failures.push("docs.json navigation must include root index page");
+  }
+
+  for (const page of pages) {
+    if (page === "docs" || page.startsWith("docs/") || page.startsWith("/")) {
+      failures.push(`docs.json navigation target must map to root docs domain routes: ${page}`);
     }
   }
 }
@@ -70,8 +82,8 @@ function checkMarkdownLinks() {
 }
 
 function checkDocsSiteLinks() {
-  const docsRoot = path.join(root, "docs");
-  const files = walk(docsRoot).filter((file) => file.endsWith(".md"));
+  const docsJson = JSON.parse(readFileSync(docsJsonPath, "utf8"));
+  const files = navigationPages(docsJson).map((page) => path.join(root, `${page}.md`));
   const linkPattern = /\[[^\]]+\]\(([^)]+)\)/g;
 
   for (const file of files) {
@@ -84,12 +96,34 @@ function checkDocsSiteLinks() {
         continue;
       }
 
-      if (href.includes(".md") || href.startsWith("..") || !href.startsWith("/docs/")) {
+      if (
+        href.includes(".md") ||
+        href.startsWith("..") ||
+        !href.startsWith("/") ||
+        href === "/docs" ||
+        href.startsWith("/docs/")
+      ) {
         failures.push(
-          `docs site link must use a Mintlify route, not a repo-local path: ${relative(file)} -> ${href}`
+          `docs site link must use a root Mintlify route: ${relative(file)} -> ${href}`
         );
       }
     }
+  }
+}
+
+function checkCanonicalDocsUrls() {
+  const textFiles = walk(root).filter((file) =>
+    [".md", ".json", ".mjs", ".txt", ".yml", ".yaml"].includes(path.extname(file))
+  );
+
+  for (const file of textFiles) {
+    const lines = readFileSync(file, "utf8").split("\n");
+
+    lines.forEach((line, index) => {
+      if (line.includes(`${docsDomain}/docs`)) {
+        failures.push(`canonical docs URL must not include /docs: ${relative(file)}:${index + 1}`);
+      }
+    });
   }
 }
 
@@ -156,11 +190,33 @@ function checkExampleSyntax() {
   }
 }
 
+function navigationPages(docsJson) {
+  const groups = Array.isArray(docsJson.navigation)
+    ? docsJson.navigation
+    : docsJson.navigation?.groups || [];
+  const pages = [];
+
+  for (const group of groups) {
+    for (const page of group.pages || []) {
+      if (typeof page === "string") {
+        pages.push(page);
+      }
+    }
+  }
+
+  return pages;
+}
+
 function walk(dir) {
   const files = [];
 
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === "node_modules" || entry.name === ".git") {
+    if (
+      entry.name === "node_modules" ||
+      entry.name === ".git" ||
+      entry.name === ".worktrees" ||
+      entry.name === "dist"
+    ) {
       continue;
     }
 

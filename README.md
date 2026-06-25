@@ -26,7 +26,8 @@ The v0 docs framework is Mintlify. The intended production shape is:
 github.com/helixbox/pubfi-docs
   -> Mintlify GitHub integration
   -> docs.pubfi.ai
-  -> pinned build-time consumption by pubfi.ai/docs
+  -> root docs routes such as /getting-started/quickstart and /reference/api-reference
+  -> pinned build-time consumption by pubfi.ai/docs entry points
   -> canonical cross-links from README, llms.txt, Discovery, API Reference, MCP, and examples
 ```
 
@@ -34,13 +35,13 @@ Snapshot source: `pubfi-mono` commit `1658e1b298c5`.
 
 ## Start Here
 
-- [Docs home](docs/index.md)
-- [Project overview](docs/project-overview.md)
-- [Quickstart](docs/getting-started/quickstart.md)
-- [API Reference](docs/reference/api-reference.md)
-- [MCP client setup](docs/getting-started/mcp-client.md)
-- [Agent-readable surfaces](docs/agent-readable/surfaces.md)
-- [Security and public data](docs/reference/security-and-public-data.md)
+- [Docs home](index.md)
+- [Project overview](project-overview.md)
+- [Quickstart](getting-started/quickstart.md)
+- [API Reference](reference/api-reference.md)
+- [MCP client setup](getting-started/mcp-client.md)
+- [Agent-readable surfaces](agent-readable/surfaces.md)
+- [Security and public data](reference/security-and-public-data.md)
 
 ## Published Surfaces
 
@@ -64,16 +65,15 @@ pubfi-docs/
 ├── CHANGELOG.md
 ├── llms.txt
 ├── llms-full.txt
-├── docs/
-│   ├── index.md
-│   ├── project-overview.md
-│   ├── getting-started/
-│   ├── concepts/
-│   ├── agent-readable/
-│   ├── reference/
-│   ├── use-cases/
-│   ├── faq.md
-│   └── glossary.md
+├── index.md
+├── project-overview.md
+├── getting-started/
+├── concepts/
+├── agent-readable/
+├── reference/
+├── use-cases/
+├── faq.md
+├── glossary.md
 ├── assets/
 │   └── README.md
 └── examples/
@@ -98,7 +98,7 @@ Runnable public-safe examples live under [examples/](examples/README.md):
 npx mint@latest dev --no-open
 ```
 
-The local preview serves the docs site at `http://localhost:3000/docs`.
+The local preview serves the docs site at `http://localhost:3000`.
 
 ## Checks
 
@@ -115,9 +115,10 @@ store. Do not commit credentials, wallet addresses, raw account responses, or pr
 
 ## Publishing
 
-Deploy this repository with Mintlify GitHub sync and set `docs.pubfi.ai` as the canonical docs
-domain. GitHub Pages is a fallback only; do not run a second canonical docs site unless canonical
-and noindex rules are explicit.
+Deploy this repository with Mintlify export to Vercel and set `docs.pubfi.ai` as the canonical docs
+domain. Production builds emit `sitemap.xml`, `robots.txt`, and clean canonical metadata for root
+docs routes. GitHub Pages is a fallback only; do not run a second canonical docs site unless
+canonical and noindex rules are explicit.
 
 ## Public Boundary
 

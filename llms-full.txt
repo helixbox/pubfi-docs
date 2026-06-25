@@ -6,12 +6,12 @@ binding every workflow directly to a different upstream API.
 
 ## Read First
 
-- https://docs.pubfi.ai/docs
-- https://docs.pubfi.ai/docs/project-overview
-- https://docs.pubfi.ai/docs/getting-started/quickstart
-- https://docs.pubfi.ai/docs/getting-started/api-key-runtime
-- https://docs.pubfi.ai/docs/getting-started/mcp-client
-- https://docs.pubfi.ai/docs/reference/api-reference
+- https://docs.pubfi.ai
+- https://docs.pubfi.ai/project-overview
+- https://docs.pubfi.ai/getting-started/quickstart
+- https://docs.pubfi.ai/getting-started/api-key-runtime
+- https://docs.pubfi.ai/getting-started/mcp-client
+- https://docs.pubfi.ai/reference/api-reference
 
 ## Concepts
 
@@ -29,8 +29,8 @@ binding every workflow directly to a different upstream API.
 - OpenAPI schema: https://api.pubfi.ai/openapi.json
 - MCP endpoint: https://mcp.pubfi.ai
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
-- Agent interface guide: https://docs.pubfi.ai/docs/reference/agent-interface
-- Agent-readable surfaces: https://docs.pubfi.ai/docs/agent-readable/surfaces
+- Agent interface guide: https://docs.pubfi.ai/reference/agent-interface
+- Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
 - Discovery: https://pubfi.ai/discovery
 
 ## Public-Safe Claims
