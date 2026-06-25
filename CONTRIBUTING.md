@@ -1,7 +1,7 @@
 # Contributing
 
-This staged repository is public-facing material prepared inside `pubfi-mono`. After it moves to a
-public GitHub repository, contributions should follow a docs-as-code workflow.
+This public repository contains PubFi docs and examples maintained alongside `pubfi-mono`.
+Contributions should follow a docs-as-code workflow.
 
 ## Contribution Scope
 
