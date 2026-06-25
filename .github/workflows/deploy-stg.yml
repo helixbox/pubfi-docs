@@ -1,0 +1,36 @@
+name: Deploy staging
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: darwinia-network/devops/actions/smart-vercel@main
+        name: Deploy to Vercel
+        with:
+          node_version: 20
+          vercel_token: ${{ secrets.VERCEL_TOKEN }}
+          vercel_group: itering
+          cache_type: npm
+          script_install: npm i
+          script_build: |
+            npx --yes mint@latest export --output export.zip
+            rm -rf dist
+            mkdir -p dist
+            unzip -q export.zip -d dist
+          dist_path: dist
+          preview_output: true
+          project_name: pubfi-docs
+          alias_domain: pubfi-docs-stg
+          enable_cache: true
