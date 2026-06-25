@@ -11,7 +11,7 @@ Start with:
 https://pubfi.ai/discovery
 https://pubfi.ai/llms.txt
 https://pubfi.ai/llms-full.txt
-https://docs.pubfi.ai/docs/reference/agent-interface
+https://docs.pubfi.ai/reference/agent-interface
 ```
 
 Use Discovery to understand source categories, chains, providers, comparison pages, topic pages,
@@ -55,8 +55,8 @@ freshness evidence, and a supported callable route.
 
 ## Next
 
-- [API reference](/docs/reference/api-reference)
-- [MCP client setup](/docs/getting-started/mcp-client)
-- [Capability contracts](/docs/concepts/capability-contracts)
-- [Readiness and claim safety](/docs/concepts/readiness-and-claim-safety)
+- [API reference](/reference/api-reference)
+- [MCP client setup](/getting-started/mcp-client)
+- [Capability contracts](/concepts/capability-contracts)
+- [Readiness and claim safety](/concepts/readiness-and-claim-safety)
 - [Public examples](https://github.com/helixbox/pubfi-docs/tree/main/examples)

@@ -9,19 +9,19 @@ binding every workflow directly to a different upstream API.
 
 ## What To Read First
 
-- [Project overview](/docs/project-overview): what PubFi is and what it is not.
-- [Quickstart](/docs/getting-started/quickstart): the shortest path through public docs and live
+- [Project overview](/project-overview): what PubFi is and what it is not.
+- [Quickstart](/getting-started/quickstart): the shortest path through public docs and live
   surfaces.
-- [API reference](/docs/reference/api-reference): where to find the interactive HTTP reference and
+- [API reference](/reference/api-reference): where to find the interactive HTTP reference and
   OpenAPI schema.
-- [API key and runtime](/docs/getting-started/api-key-runtime): how account, credit, and runtime
+- [API key and runtime](/getting-started/api-key-runtime): how account, credit, and runtime
   boundaries fit together.
-- [MCP client setup](/docs/getting-started/mcp-client): connect an agent runtime to PubFi's generic
+- [MCP client setup](/getting-started/mcp-client): connect an agent runtime to PubFi's generic
   MCP tools.
-- [Discovery](/docs/concepts/discovery): understand the public source-selection layer.
-- [Capability contracts](/docs/concepts/capability-contracts): understand normalized agent-facing
+- [Discovery](/concepts/discovery): understand the public source-selection layer.
+- [Capability contracts](/concepts/capability-contracts): understand normalized agent-facing
   responses.
-- [Agent-readable surfaces](/docs/agent-readable/surfaces): understand `llms.txt`, `llms-full.txt`,
+- [Agent-readable surfaces](/agent-readable/surfaces): understand `llms.txt`, `llms-full.txt`,
   OpenAPI, MCP, and Discovery links.
 
 ## Public Surfaces
@@ -46,12 +46,12 @@ boundaries explicit so agents can choose routes safely.
 
 | Area | Start here |
 | --- | --- |
-| Product positioning | [Project overview](/docs/project-overview) |
-| HTTP API details | [API reference](/docs/reference/api-reference) |
-| API key, account, and credits | [API key and runtime](/docs/getting-started/api-key-runtime) |
-| Agent/MCP interface | [MCP client setup](/docs/getting-started/mcp-client) |
-| Discovery and source selection | [Discovery](/docs/concepts/discovery) |
-| Provider readiness and certification | [Provider readiness](/docs/concepts/provider-readiness) |
-| Agent-readable surfaces | [Agent-readable surfaces](/docs/agent-readable/surfaces) |
-| Runtime endpoints | [Runtime endpoints](/docs/reference/runtime-endpoints) |
-| Public/security boundary | [Security and public data](/docs/reference/security-and-public-data) |
+| Product positioning | [Project overview](/project-overview) |
+| HTTP API details | [API reference](/reference/api-reference) |
+| API key, account, and credits | [API key and runtime](/getting-started/api-key-runtime) |
+| Agent/MCP interface | [MCP client setup](/getting-started/mcp-client) |
+| Discovery and source selection | [Discovery](/concepts/discovery) |
+| Provider readiness and certification | [Provider readiness](/concepts/provider-readiness) |
+| Agent-readable surfaces | [Agent-readable surfaces](/agent-readable/surfaces) |
+| Runtime endpoints | [Runtime endpoints](/reference/runtime-endpoints) |
+| Public/security boundary | [Security and public data](/reference/security-and-public-data) |

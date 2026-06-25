@@ -1,0 +1,9 @@
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE*.md
+assets/**
+examples/**
+scripts/**
+.github/**
+package.json

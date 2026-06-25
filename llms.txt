@@ -4,12 +4,12 @@ Public documentation for PubFi's agent-native crypto data layer.
 
 ## Core Docs
 
-- Docs home: https://docs.pubfi.ai/docs
-- Project overview: https://docs.pubfi.ai/docs/project-overview
-- Quickstart: https://docs.pubfi.ai/docs/getting-started/quickstart
-- API reference guide: https://docs.pubfi.ai/docs/reference/api-reference
-- Agent interface: https://docs.pubfi.ai/docs/reference/agent-interface
-- Agent-readable surfaces: https://docs.pubfi.ai/docs/agent-readable/surfaces
+- Docs home: https://docs.pubfi.ai
+- Project overview: https://docs.pubfi.ai/project-overview
+- Quickstart: https://docs.pubfi.ai/getting-started/quickstart
+- API reference guide: https://docs.pubfi.ai/reference/api-reference
+- Agent interface: https://docs.pubfi.ai/reference/agent-interface
+- Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
 
 ## Runtime References
 
@@ -21,8 +21,8 @@ Public documentation for PubFi's agent-native crypto data layer.
 
 - Product site: https://pubfi.ai
 - Discovery: https://pubfi.ai/discovery
-- Agent interface guide: https://docs.pubfi.ai/docs/reference/agent-interface
-- Agent-readable surfaces: https://docs.pubfi.ai/docs/agent-readable/surfaces
+- Agent interface guide: https://docs.pubfi.ai/reference/agent-interface
+- Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
 
 ## Boundary
 

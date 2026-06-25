@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Changed the public docs route shape from `/docs/*` to root docs-domain routes such as
+  `/getting-started/quickstart` and `/reference/api-reference`.
+- Added explicit Vercel static SEO assets for `sitemap.xml`, `robots.txt`, and redirects from the
+  retired `/docs/*` route shape.
 - Added public-docs v0 structure with `docs.json`, docs navigation, quickstarts, concepts, use
   cases, references, FAQ, glossary, contribution notes, and public-safe examples.
 - Added public developer and agent docs for Discovery, capability contracts, route planning,

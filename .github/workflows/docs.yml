@@ -15,3 +15,14 @@ jobs:
         with:
           node-version: 20
       - run: npm run check
+      - run: npx --yes mint@latest validate
+      - run: |
+          npx --yes mint@latest export --output export.zip
+          rm -rf dist
+          mkdir -p dist
+          unzip -q export.zip -d dist
+          npm run build:static-assets
+          test -f dist/sitemap.xml
+          test -f dist/robots.txt
+          grep -q "https://docs.pubfi.ai/reference/api-reference" dist/sitemap.xml
+          ! grep -R "https://docs.pubfi.ai/src/_props" dist --include='*.html'

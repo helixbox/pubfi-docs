@@ -21,61 +21,61 @@
       {
         "group": "Start",
         "pages": [
-          "docs/index",
-          "docs/project-overview"
+          "index",
+          "project-overview"
         ]
       },
       {
         "group": "Getting Started",
         "pages": [
-          "docs/getting-started/quickstart",
-          "docs/getting-started/api-key-runtime",
-          "docs/getting-started/mcp-client"
+          "getting-started/quickstart",
+          "getting-started/api-key-runtime",
+          "getting-started/mcp-client"
         ]
       },
       {
         "group": "Concepts",
         "pages": [
-          "docs/concepts/discovery",
-          "docs/concepts/capability-contracts",
-          "docs/concepts/route-planning",
-          "docs/concepts/account-credit-usage",
-          "docs/concepts/provider-readiness",
-          "docs/concepts/readiness-and-claim-safety"
+          "concepts/discovery",
+          "concepts/capability-contracts",
+          "concepts/route-planning",
+          "concepts/account-credit-usage",
+          "concepts/provider-readiness",
+          "concepts/readiness-and-claim-safety"
         ]
       },
       {
         "group": "Agent-Readable",
         "pages": [
-          "docs/agent-readable/surfaces"
+          "agent-readable/surfaces"
         ]
       },
       {
         "group": "Use Cases",
         "pages": [
-          "docs/use-cases/agent-wallet-balance",
-          "docs/use-cases/crypto-api-discovery",
-          "docs/use-cases/answer-engine-discovery",
-          "docs/use-cases/provider-integration-review",
-          "docs/use-cases/source-evaluation"
+          "use-cases/agent-wallet-balance",
+          "use-cases/crypto-api-discovery",
+          "use-cases/answer-engine-discovery",
+          "use-cases/provider-integration-review",
+          "use-cases/source-evaluation"
         ]
       },
       {
         "group": "Reference",
         "pages": [
-          "docs/reference/architecture-map",
-          "docs/reference/api-reference",
-          "docs/reference/agent-interface",
-          "docs/reference/runtime-endpoints",
-          "docs/reference/public-surfaces",
-          "docs/reference/security-and-public-data"
+          "reference/architecture-map",
+          "reference/api-reference",
+          "reference/agent-interface",
+          "reference/runtime-endpoints",
+          "reference/public-surfaces",
+          "reference/security-and-public-data"
         ]
       },
       {
         "group": "Project",
         "pages": [
-          "docs/faq",
-          "docs/glossary"
+          "faq",
+          "glossary"
         ]
       }
     ]
