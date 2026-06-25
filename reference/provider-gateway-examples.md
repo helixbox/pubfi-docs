@@ -118,14 +118,12 @@ as executable in production.
 | HTTP status | Code | When it happens |
 | --- | --- | --- |
 | `200` | `ok: true` | Gateway authenticated the request and the upstream provider returned success. |
-| `400` | `gateway.invalid_route` | The route shape or route segments are invalid. |
-| `401` | `gateway.missing_api_key` | No PubFi API key was sent in the request headers. |
-| `401` | `gateway.invalid_api_key` | The PubFi API key is invalid, revoked, or inactive. |
+| `401` | `pubfi.unauthorized` | No PubFi API key was sent, or the key is invalid, revoked, or inactive. |
 | `402` | `gateway.insufficient_credits` | The account linked to the API key has no credits left. |
-| `404` | `gateway.unsupported_provider` | The provider segment is not registered in the gateway. |
-| `502` | `gateway.upstream_error` | The upstream provider returned an error or provider-specific failure payload. |
-| `502` | `gateway.fetch_failed` | PubFi could not reach the upstream provider. |
-| `503` | `gateway.billing_unavailable` | PubFi could not verify or update account credit state. |
+| `502` | `pubfi.gateway_failed` | Route decision, provider dispatch, or upstream gateway execution failed. |
+| `503` | `pubfi.provider_credentials_not_configured` | The provider route needs a server-side credential that is not configured. |
+| `503` | `pubfi.provider_credentials_unavailable` | Provider credentials are temporarily unavailable. |
+| `500` | `pubfi.provider_credential_store_failed` | PubFi could not read the provider credential store. |
 
 ## What This Page Does Not Publish
 

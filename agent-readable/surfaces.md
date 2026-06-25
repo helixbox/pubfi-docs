@@ -7,11 +7,14 @@ search systems, documentation tools, and integration clients.
 
 | Asset | Canonical purpose | Public URL |
 | --- | --- | --- |
+| `agents.md` | agent-readable public guide for Discovery, OpenAPI, capabilities, and gateway examples | `https://pubfi.ai/agents.md` |
 | `llms.txt` | concise public site and Discovery index | `https://pubfi.ai/llms.txt` |
 | `llms-full.txt` | expanded answer-engine retrieval corpus | `https://pubfi.ai/llms-full.txt` |
 | Agent interface guide | agent integration guidance | `https://docs.pubfi.ai/reference/agent-interface` |
 | API Reference | interactive HTTP reference | `https://api.pubfi.ai/reference` |
 | OpenAPI | executable HTTP schema | `https://api.pubfi.ai/openapi.json` |
+| DeGov OpenAPI | executable provider gateway schema | `https://pubfi.ai/openapi/degov-openapi.json` |
+| Subscan OpenAPI | executable provider gateway schema | `https://pubfi.ai/openapi/subscan-openapi.json` |
 | MCP manifest | hosted MCP discovery | `https://mcp.pubfi.ai/.well-known/mcp.json` |
 | Discovery pages | source-selection and provider context | `https://pubfi.ai/discovery` |
 | public docs repository | source provenance and contribution corpus | `https://github.com/helixbox/pubfi-docs` |
@@ -19,6 +22,8 @@ search systems, documentation tools, and integration clients.
 
 ## How To Use Them
 
+- Use `agents.md` as the public machine-readable guide for Discovery, OpenAPI, capability, and
+  gateway boundaries.
 - Use `llms.txt` as the concise public site index.
 - Use `llms-full.txt` for expanded Discovery context.
 - Use the Agent interface guide for agent integration guidance.
@@ -48,7 +53,7 @@ When a public docs page, Discovery page, or example changes, maintainers should 
 1. `llms.txt` needs a new concise link;
 2. `llms-full.txt` needs expanded plain-text context;
 3. the Agent interface guide needs a new agent-readable note;
-4. API Reference, OpenAPI, or MCP links changed;
+4. API Reference, OpenAPI, provider OpenAPI, `agents.md`, or MCP links changed;
 5. README and GitHub navigation should point to the new asset;
 6. the page avoids implying ranking, traffic, AI citation, or runtime availability success.
 

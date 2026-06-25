@@ -3,7 +3,7 @@
 This repository was migrated from a public-safe documentation snapshot in `pubfi-mono`.
 
 - source snapshot license context: `GPL-3.0`
-- snapshot commit: `38852a16c5af`
+- snapshot commit: `4a1a92a8d61d`
 
 The public docs repository now uses a split license:
 
