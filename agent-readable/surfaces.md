@@ -14,8 +14,8 @@ search systems, documentation tools, and integration clients.
 | OpenAPI | executable HTTP schema | `https://api.pubfi.ai/openapi.json` |
 | MCP manifest | hosted MCP discovery | `https://mcp.pubfi.ai/.well-known/mcp.json` |
 | Discovery pages | source-selection and provider context | `https://pubfi.ai/discovery` |
-| public docs repository | source provenance and contribution corpus | future `pubfi-docs` repository |
-| canonical docs site | full long-form docs | future `docs.pubfi.ai` site |
+| public docs repository | source provenance and contribution corpus | `https://github.com/helixbox/pubfi-docs` |
+| canonical docs site | full long-form docs | `https://docs.pubfi.ai` |
 
 ## How To Use Them
 
