@@ -42,12 +42,33 @@ HTTP contract source. The MCP manifest is the agent-tool discovery surface.
 | Estimate cost posture | `pubfi.pricing.quote` |
 | Execute a supported route | `pubfi.route.execute` with PubFi API-key auth and planning evidence |
 
-## 4. Keep Secrets Out Of Prompts
+## 4. Create Or Load An API Key
+
+Open the PubFi dashboard, go to **Manage application keys**, and create a key for the
+environment or agent runtime you are wiring up. Name keys by where they run, such as
+`staging`, `production`, or `agent-runtime`.
+
+Copy the key when it is shown. PubFi keys use the `pf_sk_v1_` prefix and are shown only once after
+creation. Multiple keys under the same account share account-level credits and usage history.
+
+## 5. Keep Secrets Out Of Prompts
 
 PubFi API keys belong in a secret store or environment variable. Upstream provider keys stay
 server-side and must not be sent by agents.
 
-## 5. Check Readiness Before Execution
+## 6. Send A Minimal Gateway Request
+
+Use a public route-shape example when you need to confirm gateway auth and endpoint routing:
+
+```bash
+curl --location 'https://api.pubfi.ai/v1/gateway/subscan/polkadot/api/now' \
+  --header 'Authorization: Bearer <PubFi API key>'
+```
+
+For provider-specific route examples, including Subscan and DeGov, read
+[Provider Gateway Examples](/reference/provider-gateway-examples).
+
+## 7. Check Readiness Before Execution
 
 Do not treat a source page, schema, or route plan as proof of live execution. Live execution also
 requires PubFi API-key auth, credits, provider readiness, credential configuration, source
@@ -56,6 +77,7 @@ freshness evidence, and a supported callable route.
 ## Next
 
 - [API reference](/reference/api-reference)
+- [Provider Gateway Examples](/reference/provider-gateway-examples)
 - [MCP client setup](/getting-started/mcp-client)
 - [Capability contracts](/concepts/capability-contracts)
 - [Readiness and claim safety](/concepts/readiness-and-claim-safety)

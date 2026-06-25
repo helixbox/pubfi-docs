@@ -13,6 +13,7 @@
   agent-readable assets.
 - Added runnable public-safe examples for MCP, capability HTTP calls, and Subscan gateway
   inspection.
+- Added public-safe provider gateway examples for Subscan and DeGov route-shape documentation.
 - Added security/public-data boundaries and asset placement rules for public-safe examples,
   screenshots, diagrams, and generated artifacts.
 - Added future public repository issue and PR templates.
