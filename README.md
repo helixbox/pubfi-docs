@@ -56,6 +56,7 @@ Snapshot source: `pubfi-mono` commit `4a1a92a8d61d`.
 
 ```text
 pubfi-docs/
+├── AGENTS.md
 ├── README.md
 ├── docs.json
 ├── CONTRIBUTING.md
@@ -74,6 +75,8 @@ pubfi-docs/
 ├── use-cases/
 ├── faq.md
 ├── glossary.md
+├── maintenance/
+│   └── public-docs-maintenance.md
 ├── assets/
 │   └── README.md
 └── examples/
