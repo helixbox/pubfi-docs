@@ -43,9 +43,19 @@ https://pubfi.ai
 Public endpoint families:
 
 - `/discovery`
+- `/discovery.md`
+- `/discovery/sources`
+- `/discovery/sources/page/{page}`
+- `/agents.md`
 - `/llms.txt`
 - `/llms-full.txt`
+- `/discovery/agent-capabilities.json`
+- `/openapi/degov-openapi.json`
+- `/openapi/subscan-openapi.json`
 - `/.well-known/mcp.json`
+- `/.well-known/mcp/server-card.json`
+- `/.well-known/mcp-registry-auth` (optional proof route; may return 404 when no proof is
+  configured)
 
 Legacy `pubfi.ai/docs/...` paths redirect to `https://docs.pubfi.ai`.
 

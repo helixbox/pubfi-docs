@@ -15,10 +15,12 @@ PubFi Platform is a crypto-data-specific agent layer:
 
 | Surface | Role |
 | --- | --- |
-| `pubfi.ai` | public web presentation, Discovery, docs entry, account/dashboard UI |
+| `pubfi.ai` | public web presentation, Discovery, docs entry, account/dashboard UI, and agent-readable product exports |
 | `api.pubfi.ai` | Rust API backend for health, OpenAPI, capabilities, gateway, API keys, account, and usage routes |
 | `mcp.pubfi.ai` | Rust Streamable HTTP MCP endpoint for generic PubFi route/capability tools |
 | `pubfi.ai/.well-known/mcp.json` | public discovery pointer for the lane-specific MCP endpoint |
+| `pubfi.ai/.well-known/mcp/server-card.json` | metadata card for hosted MCP discovery |
+| `pubfi.ai/.well-known/mcp-registry-auth` | optional public proof route for MCP Registry ownership checks |
 
 ## Repository Layout
 
@@ -43,4 +45,3 @@ PubFi Platform is a crypto-data-specific agent layer:
   exports, and static discovery manifests.
 - Public Discovery and LLM routes use checked-in public-safe curated data.
 - Provider credentials stay server-side and must not appear in public docs or examples.
-

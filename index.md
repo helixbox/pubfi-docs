@@ -30,11 +30,20 @@ binding every workflow directly to a different upstream API.
 | --- | --- |
 | [Product](https://pubfi.ai) | product, account, Discovery, and agent-readable product entry |
 | [Discovery](https://pubfi.ai/discovery) | public crypto data API index and source-selection surface |
+| [Discovery directory Markdown](https://pubfi.ai/discovery.md) | Markdown mirror for the Discovery directory |
+| [Provider Profile index](https://pubfi.ai/discovery/sources) | paginated public Discovery source index |
+| [Agents guide](https://pubfi.ai/agents.md) | machine-readable guide for PubFi agent setup and public boundaries |
 | [llms.txt](https://pubfi.ai/llms.txt) | concise site index for LLM and crawler discovery |
 | [llms-full.txt](https://pubfi.ai/llms-full.txt) | expanded Discovery export for answer-engine retrieval |
+| [Capability discovery JSON](https://pubfi.ai/discovery/agent-capabilities.json) | machine-readable capability and envelope catalog |
 | [API Reference](https://api.pubfi.ai/reference) | interactive API reference |
 | [OpenAPI](https://api.pubfi.ai/openapi.json) | API schema |
+| [DeGov OpenAPI](https://pubfi.ai/openapi/degov-openapi.json) | provider gateway schema for DeGov route examples |
+| [Subscan OpenAPI](https://pubfi.ai/openapi/subscan-openapi.json) | provider gateway schema for Subscan route examples |
 | [MCP manifest](https://mcp.pubfi.ai/.well-known/mcp.json) | MCP discovery manifest |
+| [MCP discovery pointer](https://pubfi.ai/.well-known/mcp.json) | product-site pointer to the hosted MCP endpoint |
+| [MCP server card](https://pubfi.ai/.well-known/mcp/server-card.json) | metadata card for hosted MCP discovery |
+| [Optional MCP registry auth proof](https://pubfi.ai/.well-known/mcp-registry-auth) | optional public proof route for MCP Registry ownership checks |
 
 ## Claim Boundary
 
