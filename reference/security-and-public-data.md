@@ -40,7 +40,7 @@ Do not publish:
 Examples should load secrets from environment variables or secret stores:
 
 ```sh
-export PROD_PUBFI_API_KEY='<production PubFi API key>'
+export PROD_PUBFI_API_KEY='<PubFi API key>'
 ```
 
 The docs may show the variable name, but not a real value.
