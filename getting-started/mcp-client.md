@@ -50,7 +50,7 @@ that launch tools as local commands. The bridge reads JSON-RPC frames from the c
 them to the hosted Rust MCP endpoint, and writes the hosted response back to stdio.
 
 ```sh
-export PROD_PUBFI_API_KEY='<production PubFi API key>'
+export PROD_PUBFI_API_KEY='<PubFi API key>'
 export PUBFI_MCP_ENDPOINT='https://mcp.pubfi.ai'
 node examples/agents/pubfi-route-tools-mcp/server.mjs
 ```
