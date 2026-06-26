@@ -120,6 +120,7 @@ as executable in production.
 | `200` | `ok: true` | Gateway authenticated the request and the upstream provider returned success. |
 | `401` | `pubfi.unauthorized` | No PubFi API key was sent, or the key is invalid, revoked, or inactive. |
 | `402` | `gateway.insufficient_credits` | The account linked to the API key has no credits left. |
+| `403` | `pubfi.forbidden` | The API key is valid but does not include the scope required for provider invocation. |
 | `502` | `pubfi.gateway_failed` | Route decision, provider dispatch, or upstream gateway execution failed. |
 | `503` | `pubfi.provider_credentials_not_configured` | The provider route needs a server-side credential that is not configured. |
 | `503` | `pubfi.provider_credentials_unavailable` | Provider credentials are temporarily unavailable. |
