@@ -10,12 +10,16 @@ search systems, documentation tools, and integration clients.
 | `agents.md` | agent-readable public guide for Discovery, OpenAPI, capabilities, and gateway examples | `https://pubfi.ai/agents.md` |
 | `llms.txt` | concise public site and Discovery index | `https://pubfi.ai/llms.txt` |
 | `llms-full.txt` | expanded answer-engine retrieval corpus | `https://pubfi.ai/llms-full.txt` |
+| Discovery directory Markdown | agent-readable Markdown mirror for the Discovery directory | `https://pubfi.ai/discovery.md` |
 | Agent interface guide | agent integration guidance | `https://docs.pubfi.ai/reference/agent-interface` |
 | API Reference | interactive HTTP reference | `https://api.pubfi.ai/reference` |
 | OpenAPI | executable HTTP schema | `https://api.pubfi.ai/openapi.json` |
 | DeGov OpenAPI | executable provider gateway schema | `https://pubfi.ai/openapi/degov-openapi.json` |
 | Subscan OpenAPI | executable provider gateway schema | `https://pubfi.ai/openapi/subscan-openapi.json` |
 | MCP manifest | hosted MCP discovery | `https://mcp.pubfi.ai/.well-known/mcp.json` |
+| MCP discovery pointer | product-site pointer to hosted MCP discovery | `https://pubfi.ai/.well-known/mcp.json` |
+| MCP server card | marketplace-oriented metadata for the hosted MCP endpoint | `https://pubfi.ai/.well-known/mcp/server-card.json` |
+| MCP registry auth proof | optional public domain-auth proof route for MCP Registry ownership checks | `https://pubfi.ai/.well-known/mcp-registry-auth` |
 | Discovery pages | source-selection and provider context | `https://pubfi.ai/discovery` |
 | public docs repository | source provenance and contribution corpus | `https://github.com/helixbox/pubfi-docs` |
 | canonical docs site | full long-form docs | `https://docs.pubfi.ai` |
@@ -26,11 +30,13 @@ search systems, documentation tools, and integration clients.
   gateway boundaries.
 - Use `llms.txt` as the concise public site index.
 - Use `llms-full.txt` for expanded Discovery context.
+- Use the Discovery directory Markdown mirror for agent-readable source-selection context.
 - Use the Agent interface guide for agent integration guidance.
 - Use the API Reference for interactive HTTP route exploration.
 - Use OpenAPI for executable HTTP route shapes, methods, auth headers, parameters, and response
   schemas.
-- Use the MCP manifest for hosted MCP discovery.
+- Use the MCP manifest, product-site discovery pointer, or MCP server card for hosted MCP
+  discovery metadata.
 - Use the public docs site for long-form explanations and examples.
 
 ## Public Boundary

@@ -31,7 +31,7 @@ github.com/helixbox/pubfi-docs
   -> canonical cross-links from README, llms.txt, Discovery, API Reference, MCP, and examples
 ```
 
-Snapshot source: `pubfi-mono` commit `4a1a92a8d61d`.
+Snapshot source: `pubfi-mono` commit `d1a0fee2e525f0fa1e100c655ef62042d15fcdcf`.
 
 ## Start Here
 
@@ -48,9 +48,20 @@ Snapshot source: `pubfi-mono` commit `4a1a92a8d61d`.
 - Docs site: `https://docs.pubfi.ai`
 - Product site: `https://pubfi.ai`
 - Discovery: `https://pubfi.ai/discovery`
+- Discovery directory Markdown: `https://pubfi.ai/discovery.md`
+- Provider Profile index: `https://pubfi.ai/discovery/sources`
+- Agents guide: `https://pubfi.ai/agents.md`
+- Product LLM index: `https://pubfi.ai/llms.txt`
+- Product LLM full export: `https://pubfi.ai/llms-full.txt`
+- Capability discovery JSON: `https://pubfi.ai/discovery/agent-capabilities.json`
 - Interactive API reference: `https://api.pubfi.ai/reference`
 - OpenAPI schema: `https://api.pubfi.ai/openapi.json`
+- DeGov OpenAPI: `https://pubfi.ai/openapi/degov-openapi.json`
+- Subscan OpenAPI: `https://pubfi.ai/openapi/subscan-openapi.json`
 - MCP manifest: `https://mcp.pubfi.ai/.well-known/mcp.json`
+- MCP discovery pointer: `https://pubfi.ai/.well-known/mcp.json`
+- MCP server card: `https://pubfi.ai/.well-known/mcp/server-card.json`
+- Optional MCP registry auth proof route: `https://pubfi.ai/.well-known/mcp-registry-auth`
 
 ## Repository Contents
 

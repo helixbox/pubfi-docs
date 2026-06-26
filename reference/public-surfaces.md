@@ -8,6 +8,8 @@
 - `https://pubfi.ai/discovery/category/{slug}`
 - `https://pubfi.ai/discovery/chain/{slug}`
 - `https://pubfi.ai/discovery/compare/{slug-a}-vs-{slug-b}`
+- `https://pubfi.ai/discovery/sources`
+- `https://pubfi.ai/discovery/sources/page/{page}`
 - `https://pubfi.ai/discovery/topic/{slug}`
 
 ## Agent-Readable Files
@@ -20,6 +22,7 @@
 ## Markdown Mirrors
 
 - `https://pubfi.ai/discovery/api/{source_slug}.md`
+- `https://pubfi.ai/discovery.md`
 - `https://pubfi.ai/discovery/topic/{slug}.md`
 
 ## Runtime Schemas And Manifests
@@ -30,6 +33,9 @@
 - `https://pubfi.ai/openapi/subscan-openapi.json`
 - `https://mcp.pubfi.ai/.well-known/mcp.json`
 - `https://pubfi.ai/.well-known/mcp.json`
+- `https://pubfi.ai/.well-known/mcp/server-card.json`
+- `https://pubfi.ai/.well-known/mcp-registry-auth` (optional proof route; may return 404 when no
+  proof is configured)
 
 ## Public-Safe Rule
 

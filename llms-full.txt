@@ -30,9 +30,20 @@ binding every workflow directly to a different upstream API.
 - OpenAPI schema: https://api.pubfi.ai/openapi.json
 - MCP endpoint: https://mcp.pubfi.ai
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
+- MCP discovery pointer: https://pubfi.ai/.well-known/mcp.json
+- MCP server card: https://pubfi.ai/.well-known/mcp/server-card.json
+- Optional MCP registry auth proof route: https://pubfi.ai/.well-known/mcp-registry-auth
+- Agents guide: https://pubfi.ai/agents.md
+- Product LLM index: https://pubfi.ai/llms.txt
+- Product LLM full export: https://pubfi.ai/llms-full.txt
+- Capability discovery JSON: https://pubfi.ai/discovery/agent-capabilities.json
+- DeGov OpenAPI: https://pubfi.ai/openapi/degov-openapi.json
+- Subscan OpenAPI: https://pubfi.ai/openapi/subscan-openapi.json
 - Agent interface guide: https://docs.pubfi.ai/reference/agent-interface
 - Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
 - Discovery: https://pubfi.ai/discovery
+- Discovery directory Markdown: https://pubfi.ai/discovery.md
+- Provider Profile index: https://pubfi.ai/discovery/sources
 
 ## Public-Safe Claims
 
