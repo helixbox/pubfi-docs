@@ -1,0 +1,29 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "ai.pubfi/pubfi-mcp",
+  "title": "PubFi MCP",
+  "description": "Route crypto data needs through PubFi capability and gateway tools.",
+  "version": "0.1.1",
+  "websiteUrl": "https://pubfi.ai/agents.md",
+  "repository": {
+    "url": "https://github.com/helixbox/pubfi-docs",
+    "source": "github",
+    "subfolder": "examples/agents/pubfi-route-tools-mcp"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.pubfi.ai",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "PubFi API key as a Bearer token. Example: Bearer <PubFi API key>.",
+          "isRequired": true,
+          "isSecret": true,
+          "format": "string",
+          "placeholder": "Bearer <PubFi API key>"
+        }
+      ]
+    }
+  ]
+}
