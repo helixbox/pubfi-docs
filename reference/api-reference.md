@@ -25,9 +25,10 @@ The API reference is the executable HTTP contract for PubFi runtime routes, incl
 ## How It Fits With These Docs
 
 Use this docs site for product concepts, agent workflows, claim boundaries, public examples, and
-integration guidance. Use the API reference when you need current HTTP methods, route shapes, auth
-headers, and annotated request or response details. For nested provider payloads returned through
-gateway routes, check the provider endpoint contract as well as PubFi route readiness.
+integration guidance. Use the API reference when you need live published route families, auth header
+boundaries, and annotated request or response details. Use the provider gateway examples and provider
+docs for wildcard endpoint paths, supported methods, and nested provider payloads returned through
+gateway routes.
 
 ## Auth Boundary
 
