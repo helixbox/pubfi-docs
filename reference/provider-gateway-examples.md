@@ -124,13 +124,12 @@ as executable in production.
 | `502` | `pubfi.gateway_failed` | Route decision, provider dispatch, or upstream gateway execution failed. |
 | `503` | `pubfi.provider_credentials_not_configured` | The provider route needs a server-side credential that is not configured. |
 | `503` | `pubfi.provider_credentials_unavailable` | Provider credentials are temporarily unavailable. |
-| `500` | `pubfi.provider_credential_store_failed` | PubFi could not read the provider credential store. |
 
 ## What This Page Does Not Publish
 
 - Real PubFi API keys.
 - Upstream provider keys.
-- Provider credential-store operations.
+- Server-side credential administration details.
 - Account ids, usage rows, or billing records.
 - A claim that every listed provider route is always callable.
 - A claim that a gateway route is a stable public capability when a PubFi capability exists.
