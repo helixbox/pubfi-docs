@@ -17,8 +17,8 @@
       "headers": [
         {
           "name": "Authorization",
-          "description": "PubFi API key as a Bearer token. Example: Bearer <PubFi API key>.",
-          "isRequired": true,
+          "description": "PubFi API key as a Bearer token. Optional for initialize and tools/list; required for tools/call. Example: Bearer <PubFi API key>.",
+          "isRequired": false,
           "isSecret": true,
           "format": "string",
           "placeholder": "Bearer <PubFi API key>"
