@@ -20,6 +20,7 @@ Examples:
 
 - `GET /v1/gateway/subscan/polkadot/api/now`
 - `POST /v1/gateway/subscan/polkadot/api/v2/scan/accounts`
+- `POST /v1/gateway/subscan/polkadot/api/scan/account/tokens`
 - `POST /v1/gateway/subscan/acala/api/scan/account/tokens`
 
 ## Run
