@@ -11,6 +11,7 @@ search systems, documentation tools, and integration clients.
 | `llms.txt` | concise public site and Discovery index | `https://pubfi.ai/llms.txt` |
 | `llms-full.txt` | expanded answer-engine retrieval corpus | `https://pubfi.ai/llms-full.txt` |
 | Discovery directory Markdown | agent-readable Markdown mirror for the Discovery directory | `https://pubfi.ai/discovery.md` |
+| Capability discovery JSON | contract-derived capability, schema, provenance, and freshness metadata | `https://pubfi.ai/discovery/agent-capabilities.json` |
 | Agent interface guide | agent integration guidance | `https://docs.pubfi.ai/reference/agent-interface` |
 | API Reference | interactive HTTP reference | `https://api.pubfi.ai/reference` |
 | OpenAPI | executable HTTP schema | `https://api.pubfi.ai/openapi.json` |
@@ -31,6 +32,8 @@ search systems, documentation tools, and integration clients.
 - Use `llms.txt` as the concise public site index.
 - Use `llms-full.txt` for expanded Discovery context.
 - Use the Discovery directory Markdown mirror for agent-readable source-selection context.
+- Use Capability discovery JSON for contract-derived capability, schema, provenance, and freshness
+  metadata.
 - Use the Agent interface guide for agent integration guidance.
 - Use the API Reference for interactive HTTP route exploration.
 - Use OpenAPI for executable HTTP route shapes, methods, auth headers, parameters, and response

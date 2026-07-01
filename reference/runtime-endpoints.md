@@ -12,6 +12,8 @@ Public endpoint families:
 
 - `/healthz`
 - `/readyz`
+- `/`
+- `/.well-known/mcp.json`
 - `/version`
 - `/openapi.json`
 - `/reference`
@@ -20,6 +22,9 @@ Public endpoint families:
 - `/v1/gateway/...`
 - `/v1/api-keys`
 - `/v1/account/...`
+
+The root MCP JSON-RPC endpoint and MCP discovery manifest are also exposed on the API host for
+runtime clients that discover capabilities through the API OpenAPI surface.
 
 ## MCP Host
 
