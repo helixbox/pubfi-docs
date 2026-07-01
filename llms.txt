@@ -32,7 +32,7 @@ Public documentation for PubFi's agent-native crypto data layer.
 - Agents guide: https://pubfi.ai/agents.md
 - Product LLM index: https://pubfi.ai/llms.txt
 - Product LLM full export: https://pubfi.ai/llms-full.txt
-- Capability discovery JSON: https://pubfi.ai/discovery/agent-capabilities.json
+- Discovery capability-card JSON: https://pubfi.ai/discovery/agent-capabilities.json
 - Agent interface guide: https://docs.pubfi.ai/reference/agent-interface
 - Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
 

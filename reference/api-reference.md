@@ -19,16 +19,16 @@ The API reference is the executable HTTP contract for PubFi runtime routes, incl
 - capability discovery and execution;
 - gateway route families;
 - API-key, account, credit, and usage routes;
-- annotated request or response details where the current OpenAPI source publishes them;
-- auth headers and account or scope boundaries.
+- annotated request or response details where the current OpenAPI source publishes them.
 
 ## How It Fits With These Docs
 
 Use this docs site for product concepts, agent workflows, claim boundaries, public examples, and
-integration guidance. Use the API reference when you need live published route families, auth header
-boundaries, and annotated request or response details. Use the provider gateway examples and provider
-docs for wildcard endpoint paths, supported methods, and nested provider payloads returned through
-gateway routes.
+integration guidance. Use the API reference when you need live published route families and
+annotated request or response details. Use the Auth Boundary section below for account and key
+requirements until the public OpenAPI source publishes security metadata. Use the provider gateway
+examples and provider docs for wildcard endpoint paths, supported methods, and nested provider
+payloads returned through gateway routes.
 
 ## Auth Boundary
 

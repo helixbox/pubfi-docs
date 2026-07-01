@@ -23,8 +23,9 @@ Public endpoint families:
 - `/v1/api-keys`
 - `/v1/account/...`
 
-The root MCP JSON-RPC endpoint and MCP discovery manifest are also exposed on the API host for
-runtime clients that discover capabilities through the API OpenAPI surface.
+The API host also exposes a root MCP JSON-RPC endpoint and MCP discovery manifest for runtime
+clients that discover capabilities through the API OpenAPI surface. The hosted MCP client endpoint
+remains `https://mcp.pubfi.ai`.
 
 ## MCP Host
 

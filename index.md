@@ -35,7 +35,7 @@ binding every workflow directly to a different upstream API.
 | [Agents guide](https://pubfi.ai/agents.md) | machine-readable guide for PubFi agent setup and public boundaries |
 | [llms.txt](https://pubfi.ai/llms.txt) | concise site index for LLM and crawler discovery |
 | [llms-full.txt](https://pubfi.ai/llms-full.txt) | expanded Discovery export for answer-engine retrieval |
-| [Capability discovery JSON](https://pubfi.ai/discovery/agent-capabilities.json) | machine-readable capability and envelope catalog |
+| [Discovery capability-card JSON](https://pubfi.ai/discovery/agent-capabilities.json) | machine-readable Discovery source capability-card catalog |
 | [API Reference](https://api.pubfi.ai/reference) | interactive API reference |
 | [OpenAPI](https://api.pubfi.ai/openapi.json) | API schema |
 | [DeGov OpenAPI](https://pubfi.ai/openapi/degov-openapi.json) | provider gateway schema for DeGov route examples |
