@@ -36,7 +36,7 @@ binding every workflow directly to a different upstream API.
 - Agents guide: https://pubfi.ai/agents.md
 - Product LLM index: https://pubfi.ai/llms.txt
 - Product LLM full export: https://pubfi.ai/llms-full.txt
-- Capability discovery JSON: https://pubfi.ai/discovery/agent-capabilities.json
+- Discovery capability-card JSON: https://pubfi.ai/discovery/agent-capabilities.json
 - DeGov OpenAPI: https://pubfi.ai/openapi/degov-openapi.json
 - Subscan OpenAPI: https://pubfi.ai/openapi/subscan-openapi.json
 - Agent interface guide: https://docs.pubfi.ai/reference/agent-interface

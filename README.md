@@ -53,7 +53,7 @@ Snapshot source: `pubfi-mono` commit `d1a0fee2e525f0fa1e100c655ef62042d15fcdcf`.
 - Agents guide: `https://pubfi.ai/agents.md`
 - Product LLM index: `https://pubfi.ai/llms.txt`
 - Product LLM full export: `https://pubfi.ai/llms-full.txt`
-- Capability discovery JSON: `https://pubfi.ai/discovery/agent-capabilities.json`
+- Discovery capability-card JSON: `https://pubfi.ai/discovery/agent-capabilities.json`
 - Interactive API reference: `https://api.pubfi.ai/reference`
 - OpenAPI schema: `https://api.pubfi.ai/openapi.json`
 - DeGov OpenAPI: `https://pubfi.ai/openapi/degov-openapi.json`
