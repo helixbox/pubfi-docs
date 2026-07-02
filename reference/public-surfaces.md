@@ -23,6 +23,11 @@
 - `https://pubfi.ai/privacy-policy`
 - `https://pubfi.ai/terms-of-service`
 
+## Indexing And Crawler Files
+
+- `https://pubfi.ai/sitemap.xml`
+- `https://pubfi.ai/robots.txt`
+
 ## Agent-Readable Files
 
 - `https://pubfi.ai/agents.md`

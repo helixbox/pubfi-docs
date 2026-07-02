@@ -36,7 +36,7 @@ client; provider credentials are server-side.
 
 ## Safety
 
-- Do not use the retired `https://pubfi.ai/api/gateway/...` path.
+- Do not use retired product-site gateway paths; use the API host route shape above.
 - Do not send upstream Subscan keys from an agent client.
 - Do not log PubFi API keys.
 - Do not treat a gateway route as a stable public capability when a PubFi capability exists.

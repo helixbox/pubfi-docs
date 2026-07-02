@@ -45,6 +45,8 @@ binding every workflow directly to a different upstream API.
 - Pricing: https://pubfi.ai/pricing
 - Blog: https://pubfi.ai/blog
 - Product pages: https://pubfi.ai/products/{product_slug}
+- Sitemap: https://pubfi.ai/sitemap.xml
+- Robots policy: https://pubfi.ai/robots.txt
 - Login: https://pubfi.ai/login
 - Privacy policy: https://pubfi.ai/privacy-policy
 - Terms of service: https://pubfi.ai/terms-of-service

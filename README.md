@@ -53,6 +53,8 @@ Snapshot source: `pubfi-mono` commit `962086a460971855c56f775768f7a21477ebebe1`.
 - Discovery: `https://pubfi.ai/discovery`
 - Discovery directory Markdown: `https://pubfi.ai/discovery.md`
 - Provider Profile index: `https://pubfi.ai/discovery/sources`
+- Sitemap: `https://pubfi.ai/sitemap.xml`
+- Robots policy: `https://pubfi.ai/robots.txt`
 - Login: `https://pubfi.ai/login`
 - Privacy policy: `https://pubfi.ai/privacy-policy`
 - Terms of service: `https://pubfi.ai/terms-of-service`
