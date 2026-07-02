@@ -78,6 +78,13 @@ npm run smoke:llms --workspace apps/web
 npm run smoke:discovery-routes --workspace apps/web
 ```
 
+When docs changes touch MCP discovery, server-card metadata, registry proof routes, or hosted MCP
+endpoint behavior, also run:
+
+```sh
+npm run smoke:mcp-e2e --workspace apps/web
+```
+
 ## PR And Landing Rules
 
 - Use one focused branch per maintenance pass.
