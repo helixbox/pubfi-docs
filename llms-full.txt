@@ -41,6 +41,13 @@ binding every workflow directly to a different upstream API.
 - Subscan OpenAPI: https://pubfi.ai/openapi/subscan-openapi.json
 - Agent interface guide: https://docs.pubfi.ai/reference/agent-interface
 - Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
+- Product site: https://pubfi.ai
+- Pricing: https://pubfi.ai/pricing
+- Blog: https://pubfi.ai/blog
+- Product pages: https://pubfi.ai/products/{product_slug}
+- Login: https://pubfi.ai/login
+- Privacy policy: https://pubfi.ai/privacy-policy
+- Terms of service: https://pubfi.ai/terms-of-service
 - Discovery: https://pubfi.ai/discovery
 - Discovery directory Markdown: https://pubfi.ai/discovery.md
 - Provider Profile index: https://pubfi.ai/discovery/sources

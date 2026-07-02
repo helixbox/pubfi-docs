@@ -31,7 +31,7 @@ github.com/helixbox/pubfi-docs
   -> canonical cross-links from README, llms.txt, Discovery, API Reference, MCP, and examples
 ```
 
-Snapshot source: `pubfi-mono` commit `d1a0fee2e525f0fa1e100c655ef62042d15fcdcf`.
+Snapshot source: `pubfi-mono` commit `962086a460971855c56f775768f7a21477ebebe1`.
 
 ## Start Here
 
@@ -47,9 +47,15 @@ Snapshot source: `pubfi-mono` commit `d1a0fee2e525f0fa1e100c655ef62042d15fcdcf`.
 
 - Docs site: `https://docs.pubfi.ai`
 - Product site: `https://pubfi.ai`
+- Pricing: `https://pubfi.ai/pricing`
+- Blog: `https://pubfi.ai/blog`
+- Product pages: `https://pubfi.ai/products/{product_slug}`
 - Discovery: `https://pubfi.ai/discovery`
 - Discovery directory Markdown: `https://pubfi.ai/discovery.md`
 - Provider Profile index: `https://pubfi.ai/discovery/sources`
+- Login: `https://pubfi.ai/login`
+- Privacy policy: `https://pubfi.ai/privacy-policy`
+- Terms of service: `https://pubfi.ai/terms-of-service`
 - Agents guide: `https://pubfi.ai/agents.md`
 - Product LLM index: `https://pubfi.ai/llms.txt`
 - Product LLM full export: `https://pubfi.ai/llms-full.txt`

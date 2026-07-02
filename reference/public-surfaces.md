@@ -3,6 +3,14 @@
 ## Product And Discovery
 
 - `https://pubfi.ai/`
+- `https://pubfi.ai/pricing`
+- `https://pubfi.ai/blog`
+- `https://pubfi.ai/blog/query-polkadot-governance-data-with-one-pubfi-api-key`
+- `https://pubfi.ai/blog/pubfi-discovery-searchable-knowledge-layer-for-crypto-data-apis`
+- `https://pubfi.ai/products/subscan-api`
+- `https://pubfi.ai/products/degov-api`
+- `https://pubfi.ai/products/insight-api`
+- `https://pubfi.ai/products/defi-api`
 - `https://pubfi.ai/discovery`
 - `https://pubfi.ai/discovery/api/{source_slug}`
 - `https://pubfi.ai/discovery/category/{slug}`
@@ -11,6 +19,9 @@
 - `https://pubfi.ai/discovery/sources`
 - `https://pubfi.ai/discovery/sources/page/{page}`
 - `https://pubfi.ai/discovery/topic/{slug}`
+- `https://pubfi.ai/login`
+- `https://pubfi.ai/privacy-policy`
+- `https://pubfi.ai/terms-of-service`
 
 ## Agent-Readable Files
 
