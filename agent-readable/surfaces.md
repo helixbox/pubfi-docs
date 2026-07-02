@@ -12,6 +12,8 @@ search systems, documentation tools, and integration clients.
 | `llms-full.txt` | expanded answer-engine retrieval corpus | `https://pubfi.ai/llms-full.txt` |
 | Discovery directory Markdown | agent-readable Markdown mirror for the Discovery directory | `https://pubfi.ai/discovery.md` |
 | Discovery capability-card JSON | Discovery source capability cards, schemas, provenance, and freshness metadata | `https://pubfi.ai/discovery/agent-capabilities.json` |
+| Sitemap | public route inventory for indexable product and Discovery pages | `https://pubfi.ai/sitemap.xml` |
+| Robots policy | crawler policy for public, dashboard, API, and AI-search crawler boundaries | `https://pubfi.ai/robots.txt` |
 | Agent interface guide | agent integration guidance | `https://docs.pubfi.ai/reference/agent-interface` |
 | API Reference | interactive HTTP reference | `https://api.pubfi.ai/reference` |
 | OpenAPI | executable HTTP schema | `https://api.pubfi.ai/openapi.json` |

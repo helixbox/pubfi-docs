@@ -55,6 +55,8 @@ Public endpoint families:
 - `/agents.md`
 - `/llms.txt`
 - `/llms-full.txt`
+- `/sitemap.xml`
+- `/robots.txt`
 - `/discovery/agent-capabilities.json`
 - `/openapi/degov-openapi.json`
 - `/openapi/subscan-openapi.json`
@@ -63,7 +65,13 @@ Public endpoint families:
 - `/.well-known/mcp-registry-auth` (optional proof route; may return 404 when no proof is
   configured)
 
-Legacy `pubfi.ai/docs/...` paths redirect to `https://docs.pubfi.ai`.
+Legacy docs aliases on `pubfi.ai` redirect to the canonical docs site:
+
+- `/docs` -> `https://docs.pubfi.ai`
+- `/docs/quickstart` -> `https://docs.pubfi.ai/getting-started/quickstart`
+- `/docs/degov-api` ->
+  `https://docs.pubfi.ai/reference/provider-gateway-examples#degov-gateway-example`
+- `/docs/{path}` -> `https://docs.pubfi.ai/{path}`
 
 ## Docs Rule
 
