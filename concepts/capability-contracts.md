@@ -10,8 +10,8 @@ exists.
 | --- | --- | --- |
 | `wallet.token_balances` | normalized token balance rows for one wallet on one chain or network | `contract_ready`/`not_callable` |
 | `wallet.account_balance` | native account balance for one wallet/account on one chain or network | `gateway_available`/`callable` |
-| `market.token_price` | normalized token/reference price in a quote currency | `contract_ready` |
-| `governance.proposals` | normalized governance proposal rows for a chain, network, DAO, or referendum system | `contract_ready` |
+| `market.token_price` | normalized token/reference price in a quote currency | `contract_ready`/`not_callable` |
+| `governance.proposals` | normalized governance proposal rows for a chain, network, DAO, or referendum system | `contract_ready`/`not_callable` |
 
 ## Response Envelope
 
