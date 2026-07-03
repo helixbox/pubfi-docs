@@ -41,6 +41,9 @@ export PUBFI_MCP_ENDPOINT='https://mcp.pubfi.ai'
 node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs
 ```
 
+For staging MCP endpoints, set `STG_PUBFI_API_KEY` instead. The bridge selects the caller-key
+environment variable from `PUBFI_MCP_ENDPOINT` or `PUBFI_MCP_ORIGIN`.
+
 The dry run verifies:
 
 - the six generic PubFi MCP tool names;
@@ -53,8 +56,9 @@ The dry run verifies:
 
 ## Optional Live Execution
 
-Live execution spends account credits and requires the hosted backend to have server-side provider
-credentials configured:
+Live execution spends account credits, currently targets the callable
+`capability:wallet.account_balance` route, and requires the hosted backend to have server-side
+provider credentials configured:
 
 ```sh
 export PROD_PUBFI_API_KEY='<PubFi API key>'
@@ -65,6 +69,14 @@ node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs
 ```
 
 Do not paste the API key or wallet address into issue comments, prompts, public logs, or docs.
+
+## Execution Boundary
+
+`pubfi.route.execute` executes only supported callable PubFi capability route ids with route-planning
+evidence. Contract-ready capabilities can appear in catalog or schema readback without becoming live
+MCP execution routes. Provider-specific route ids, unsupported capability ids, missing planning
+evidence, non-callable plans, supplier API execution, automatic payment, wallet or facilitator
+contact, and production route-time model authority fail closed or remain disabled.
 
 ## MCP Client Config
 
