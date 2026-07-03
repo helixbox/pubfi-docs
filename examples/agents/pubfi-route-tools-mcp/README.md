@@ -5,8 +5,10 @@ This example runs a dependency-free stdio bridge for PubFi's hosted MCP endpoint
 PubFi's MCP server remains hosted at `https://mcp.pubfi.ai`. This local file exists only because
 some MCP clients launch integrations as local stdio commands. It does not run a local provider
 adapter, it does not implement PubFi routing locally, and it does not accept upstream provider keys.
-It forwards MCP JSON-RPC frames to the hosted Rust MCP endpoint and reads the PubFi caller key from
-an environment variable.
+It handles `initialize` and `ping` locally, forwards `tools/list` and authenticated `tools/call`
+requests to the hosted Rust MCP endpoint, and reads the PubFi caller key from an environment
+variable. Other hosted public introspection methods remain available directly on
+`https://mcp.pubfi.ai`; the stdio bridge keeps only the tool surface needed by local MCP clients.
 
 ## Requirements
 
