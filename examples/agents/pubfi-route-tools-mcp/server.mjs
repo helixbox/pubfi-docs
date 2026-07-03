@@ -101,13 +101,15 @@ async function handleMessage(message) {
           version: "0.1.0"
         },
         instructions:
-          `This local stdio bridge forwards generic PubFi MCP tools to the hosted Rust MCP endpoint. Set ${apiKeyEnvName} before listing or calling tools.`
+          `This local stdio bridge forwards generic PubFi MCP tools to the hosted Rust MCP endpoint. Tool listing is public; set ${apiKeyEnvName} before calling tools.`
       });
       return;
     case "ping":
       writeJsonRpcResult(message.id, {});
       return;
     case "tools/list":
+      await forwardToRustMcp(message);
+      return;
     case "tools/call":
       if (!apiKey) {
         writeJsonRpcError(
@@ -126,14 +128,19 @@ async function handleMessage(message) {
 }
 
 async function forwardToRustMcp(message) {
+  const headers = {
+    accept: "application/json, text/event-stream",
+    "content-type": "application/json",
+    "mcp-protocol-version": protocolVersion
+  };
+
+  if (apiKey) {
+    headers.authorization = `Bearer ${apiKey}`;
+  }
+
   const response = await fetch(mcpEndpoint, {
     method: "POST",
-    headers: {
-      accept: "application/json, text/event-stream",
-      authorization: `Bearer ${apiKey}`,
-      "content-type": "application/json",
-      "mcp-protocol-version": protocolVersion
-    },
+    headers,
     body: JSON.stringify(message)
   });
   const bodyText = await response.text();
