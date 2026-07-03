@@ -44,7 +44,7 @@ binding every workflow directly to a different upstream API.
 - Product site: https://pubfi.ai
 - Pricing: https://pubfi.ai/pricing
 - Blog: https://pubfi.ai/blog
-- Product pages: https://pubfi.ai/products/{product_slug}
+- Product pages: https://pubfi.ai/products/subscan-api, https://pubfi.ai/products/degov-api, https://pubfi.ai/products/insight-api, https://pubfi.ai/products/defi-api
 - Sitemap: https://pubfi.ai/sitemap.xml
 - Robots policy: https://pubfi.ai/robots.txt
 - Login: https://pubfi.ai/login
