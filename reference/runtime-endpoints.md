@@ -48,10 +48,25 @@ https://pubfi.ai
 
 Public endpoint families:
 
+- `/`
+- `/pricing`
+- `/blog`
+- `/blog/{slug}`
+- `/products/{slug}`
 - `/discovery`
 - `/discovery.md`
+- `/discovery/api/{source_slug}`
+- `/discovery/api/{source_slug}.md`
+- `/discovery/category/{slug}`
+- `/discovery/chain/{slug}`
+- `/discovery/compare/{slug-a}-vs-{slug-b}`
 - `/discovery/sources`
 - `/discovery/sources/page/{page}`
+- `/discovery/topic/{slug}`
+- `/discovery/topic/{slug}.md`
+- `/login`
+- `/privacy-policy`
+- `/terms-of-service`
 - `/agents.md`
 - `/llms.txt`
 - `/llms-full.txt`

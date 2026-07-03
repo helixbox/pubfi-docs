@@ -67,6 +67,20 @@ node examples/agents/pubfi-route-tools-mcp/server.mjs
 6. Call `pubfi.route.execute` only for supported callable capability route ids with planning
    evidence.
 
+## Tool Inputs
+
+The hosted `tools/list` method publishes the current JSON Schema for each tool. The current public
+input fields are:
+
+| Tool | Input fields |
+| --- | --- |
+| `pubfi.capabilities.search` | `query`, `required_capabilities`, `categories` |
+| `pubfi.route.plan` | `intent`, `objective`, `chains`, `categories`, `required_capabilities`, `dry_run` |
+| `pubfi.route.execute` | `route_id`, `route_plan`, `arguments`, `idempotency_key`, `request_id` |
+| `pubfi.route.explain` | `intent`, `objective`, `chains`, `categories`, `required_capabilities`, `dry_run` |
+| `pubfi.schema.get` | `tool` |
+| `pubfi.pricing.quote` | `route_id`, `capability_id`, `intent` |
+
 ## Fail-Closed Behavior
 
 Unsupported provider-specific route ids, missing planning evidence, non-callable plans, and paid
