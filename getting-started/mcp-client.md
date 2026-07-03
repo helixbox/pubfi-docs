@@ -48,8 +48,10 @@ examples/agents/pubfi-route-tools-mcp/
 
 PubFi's MCP server is hosted at `https://mcp.pubfi.ai`. The local file is not a second MCP backend
 and it does not run provider logic locally. It is a dependency-free stdio bridge for MCP clients
-that launch tools as local commands. The bridge reads JSON-RPC frames from the client, forwards
-them to the hosted Rust MCP endpoint, and writes the hosted response back to stdio.
+that launch tools as local commands. The bridge handles `initialize` and `ping` locally, forwards
+`tools/list` and authenticated `tools/call` requests to the hosted Rust MCP endpoint, and writes
+the response back to stdio. Other hosted public introspection methods remain available on
+`https://mcp.pubfi.ai`; the local bridge keeps its stdio surface intentionally small.
 
 ```sh
 export PROD_PUBFI_API_KEY='<PubFi API key>'
