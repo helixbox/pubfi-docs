@@ -67,24 +67,29 @@ try {
   assert.equal(initialized.protocolVersion, "2025-11-25");
   assert.deepEqual(initialized.capabilities, { tools: { listChanged: false } });
 
+  const listed = await request("tools/list", {});
+  const toolNames = listed.tools.map((tool) => tool.name);
+
+  assert.deepEqual(toolNames, expectedTools);
+  assert.equal(toolNames.some((name) => /subscan|degov|provider|gateway\./i.test(name)), false);
+
   if (!hasApiKey) {
-    const missingKey = await requestAllowError("tools/list", {});
+    const missingKey = await requestAllowError("tools/call", {
+      name: "pubfi.capabilities.search",
+      arguments: {
+        query: "native account balance for a Polkadot wallet"
+      }
+    });
 
     assert.equal(missingKey.error.code, -32001);
     assert.match(missingKey.error.message, new RegExp(apiKeyEnvName));
     printReport({
       verdict: "pass",
       mode: "auth_required",
-      tool_count: 0,
-      checks: ["initialize", "missing_api_key_gate"]
+      tool_count: toolNames.length,
+      checks: ["initialize", "tools_list", "missing_api_key_call_gate"]
     });
   } else {
-    const listed = await request("tools/list", {});
-    const toolNames = listed.tools.map((tool) => tool.name);
-
-    assert.deepEqual(toolNames, expectedTools);
-    assert.equal(toolNames.some((name) => /subscan|degov|provider|gateway\./i.test(name)), false);
-
     const search = await callTool("pubfi.capabilities.search", {
       query: "native account balance for a Polkadot wallet"
     });
