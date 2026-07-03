@@ -89,6 +89,25 @@ curl --location 'https://api.pubfi.ai/v1/gateway/degov/global/v1/daos/ring-dao/b
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
+## World Bank Gateway Example
+
+World Bank uses a generated generic HTTP/OpenAPI adapter with a fixed `global` network placeholder.
+The public example covers the World Bank population indicator path. It does not publish a PubFi
+copy of the World Bank OpenAPI schema or any private provider credential material.
+
+Example route:
+
+```text
+GET /v1/gateway/worldbank/global/v2/country/all/indicator/SP.POP.TOTL
+```
+
+Example request:
+
+```bash
+curl --location 'https://api.pubfi.ai/v1/gateway/worldbank/global/v2/country/all/indicator/SP.POP.TOTL?per_page=1&date=2022' \
+  --header 'Authorization: Bearer <PubFi API key>'
+```
+
 Current public examples preserve route shape and response families, but they intentionally avoid
 publishing real account data, real keys, or upstream provider credentials.
 
