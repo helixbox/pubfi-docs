@@ -38,6 +38,7 @@ Public endpoint families:
 - `/`
 - `/healthz`
 - `/readyz`
+- `/version`
 - `/.well-known/mcp.json`
 
 ## Web Host

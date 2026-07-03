@@ -28,7 +28,7 @@ route-result data. They are not public tool names.
 
 Hosted MCP `tools/call` requests require a PubFi API key. Public handshake and introspection
 methods, such as `initialize`, `ping`, `tools/list`, `resources/list`, `resources/templates/list`,
-and `prompts/list`, can be called without a key:
+`prompts/list`, and `notifications/initialized`, can be called without a key:
 
 ```text
 Authorization: Bearer <PubFi API key>
