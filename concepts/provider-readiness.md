@@ -29,9 +29,11 @@ Generic manifests can make low-risk routes easier to certify, but they fail clos
 - required operation, auth, parameter, timeout, response, usage, and fixture checks passed;
 - supplier procurement and payment authority remain disabled unless separately approved.
 
-The current public certified readiness catalog is provider-specific for Subscan and DeGov routes.
-Generic manifest certification remains a closed gate until a route has the same public readiness
-evidence as a provider adapter.
+The current public certified readiness catalog includes provider-specific Subscan and DeGov routes
+plus the World Bank population indicator route through the generated generic manifest lane. Generic
+manifest certification remains fail-closed unless a route has the same public readiness evidence as
+a provider adapter, including passed certification, public-safe terms evidence, and any required
+fixed-network, no-auth-upstream, or static-query-parameter constraints.
 
 ## Public Docs Rule
 
