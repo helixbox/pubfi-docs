@@ -11,12 +11,13 @@ an environment variable.
 ## Requirements
 
 - Node.js 18 or newer.
-- A PubFi API key only for authenticated tool listing or execution.
+- A PubFi API key only for authenticated tool calls or optional live execution.
 - No upstream Subscan, DeGov, supplier, wallet, or payment credentials.
 
 ## No-Secret Smoke
 
-The smoke passes without secrets by checking initialization and the missing-key gate:
+The smoke passes without secrets by checking initialization, public tool listing, and the
+missing-key gate for tool calls:
 
 ```sh
 node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs
