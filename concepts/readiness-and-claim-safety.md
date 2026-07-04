@@ -40,8 +40,7 @@ Every strong claim should point to one of:
 - a public Discovery page;
 - a public OpenAPI schema;
 - an MCP manifest;
-- a checked-in source map;
+- a checked-in public-safe source inventory;
 - a public-safe release note.
 
 Private runtime data can inform internal decisions, but it should not be copied into public docs.
-
