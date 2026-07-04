@@ -14,9 +14,11 @@ search systems, documentation tools, and integration clients.
 | Discovery capability-card JSON | Discovery source capability cards, schemas, provenance, and freshness metadata | `https://pubfi.ai/discovery/agent-capabilities.json` |
 | Sitemap | public route inventory for indexable product and Discovery pages | `https://pubfi.ai/sitemap.xml` |
 | Robots policy | crawler policy for public, dashboard, API, and AI-search crawler boundaries | `https://pubfi.ai/robots.txt` |
+| IndexNow verification key | public crawler ownership verification file for IndexNow submission | `https://pubfi.ai/50e4aa84-257b-4ff4-a822-5da3d567384c.txt` |
 | Agent interface guide | agent integration guidance | `https://docs.pubfi.ai/reference/agent-interface` |
 | API Reference | interactive HTTP reference | `https://api.pubfi.ai/reference` |
 | OpenAPI | executable HTTP schema | `https://api.pubfi.ai/openapi.json` |
+| API-host MCP manifest | API-host MCP discovery manifest for clients starting from the API domain | `https://api.pubfi.ai/.well-known/mcp.json` |
 | DeGov OpenAPI | executable provider gateway schema | `https://pubfi.ai/openapi/degov-openapi.json` |
 | Subscan OpenAPI | executable provider gateway schema | `https://pubfi.ai/openapi/subscan-openapi.json` |
 | MCP manifest | hosted MCP discovery | `https://mcp.pubfi.ai/.well-known/mcp.json` |
