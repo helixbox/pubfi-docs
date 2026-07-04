@@ -16,6 +16,7 @@ Public documentation for PubFi's agent-native crypto data layer.
 
 - Interactive API reference: https://api.pubfi.ai/reference
 - OpenAPI schema: https://api.pubfi.ai/openapi.json
+- API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
 - MCP discovery pointer: https://pubfi.ai/.well-known/mcp.json
 - MCP server card: https://pubfi.ai/.well-known/mcp/server-card.json
@@ -34,6 +35,7 @@ Public documentation for PubFi's agent-native crypto data layer.
 - Provider Profile index: https://pubfi.ai/discovery/sources
 - Sitemap: https://pubfi.ai/sitemap.xml
 - Robots policy: https://pubfi.ai/robots.txt
+- IndexNow verification key: https://pubfi.ai/50e4aa84-257b-4ff4-a822-5da3d567384c.txt
 - Login: https://pubfi.ai/login
 - Privacy policy: https://pubfi.ai/privacy-policy
 - Terms of service: https://pubfi.ai/terms-of-service

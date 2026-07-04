@@ -2,7 +2,7 @@
 
 ## Product And Discovery
 
-- `https://pubfi.ai/`
+- `https://pubfi.ai`
 - `https://pubfi.ai/pricing`
 - `https://pubfi.ai/blog`
 - `https://pubfi.ai/blog/query-polkadot-governance-data-with-one-pubfi-api-key`
@@ -27,6 +27,7 @@
 
 - `https://pubfi.ai/sitemap.xml`
 - `https://pubfi.ai/robots.txt`
+- `https://pubfi.ai/50e4aa84-257b-4ff4-a822-5da3d567384c.txt`
 
 ## Agent-Readable Files
 
@@ -45,6 +46,7 @@
 
 - `https://api.pubfi.ai/reference`
 - `https://api.pubfi.ai/openapi.json`
+- `https://api.pubfi.ai/.well-known/mcp.json`
 - `https://pubfi.ai/openapi/degov-openapi.json`
 - `https://pubfi.ai/openapi/subscan-openapi.json`
 - `https://mcp.pubfi.ai/.well-known/mcp.json`
