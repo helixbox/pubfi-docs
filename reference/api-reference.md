@@ -30,6 +30,11 @@ requirements until the public OpenAPI source publishes security metadata. Use th
 examples and provider docs for wildcard endpoint paths, supported methods, and nested provider
 payloads returned through gateway routes.
 
+Provider-specific OpenAPI snapshots are public for DeGov and Subscan examples. Generic generated
+gateway adapters, such as the World Bank, USGS Earthquake, Crossref, ROR, and DataCite examples,
+and Federal Register example, may be public `gateway_available` through readiness evidence without
+a copied PubFi-hosted provider OpenAPI snapshot.
+
 ## Auth Boundary
 
 API reference visibility does not mean every route can be executed without an account. Live runtime

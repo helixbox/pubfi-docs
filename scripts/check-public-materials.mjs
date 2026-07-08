@@ -129,7 +129,7 @@ function checkCanonicalDocsUrls() {
 
 function checkTextHygiene() {
   const textFiles = walk(root).filter((file) =>
-    [".md", ".json", ".mjs", ".sh", ".yml", ".yaml"].includes(path.extname(file))
+    [".md", ".json", ".mjs", ".sh", ".txt", ".yml", ".yaml"].includes(path.extname(file))
   );
   const secretPattern =
     /sk-[A-Za-z0-9]{20,}|pf_sk_v1_[A-Za-z0-9_\-]{16,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA|OPENSSH|EC|PRIVATE) KEY-----|password\s*=|secret\s*=/;
@@ -151,7 +151,7 @@ function checkTextHygiene() {
       }
 
       if (
-        [".md", ".json", ".yaml", ".yml"].includes(path.extname(file)) &&
+        [".md", ".json", ".txt", ".yaml", ".yml"].includes(path.extname(file)) &&
         unsafeClaimPattern.test(line) &&
         !isExplicitNegativeContext(lines, index)
       ) {
@@ -159,7 +159,7 @@ function checkTextHygiene() {
       }
 
       if (
-        [".md", ".json", ".yaml", ".yml"].includes(path.extname(file)) &&
+        [".md", ".json", ".txt", ".yaml", ".yml"].includes(path.extname(file)) &&
         relative(file) !== "CHANGELOG.md" &&
         internalStrategyPattern.test(line) &&
         !isExplicitNegativeContext(lines, index)

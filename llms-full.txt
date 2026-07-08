@@ -48,6 +48,9 @@ binding every workflow directly to a different upstream API.
 - Discovery is the public source-selection layer.
 - Gateway execution is authenticated PubFi route execution for supported configured provider
   routes.
+- Provider gateway examples cover Subscan, DeGov, World Bank, USGS Earthquake, Crossref, ROR,
+  DataCite, and Federal Register route shapes, including generic adapter static query requirements
+  when the upstream requires them.
 - Capability contracts are normalized agent-facing envelopes with readiness, provenance,
   freshness, warnings, and data.
 - Provider readiness describes whether a route is callable, requestable, contract-ready, or blocked.

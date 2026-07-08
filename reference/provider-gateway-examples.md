@@ -35,6 +35,9 @@ https://api.pubfi.ai/v1/gateway/{provider}/{network}/{endpoint...}
 The `{provider}` and `{network}` segments are provider-specific gateway routing inputs. The
 `{endpoint...}` segment maps to the upstream path supported by the adapter.
 
+The examples below are public route-shape examples and certified readiness examples where noted.
+They are not a promise that every OpenAPI-listed provider path is certified or path-complete.
+
 ## Subscan Gateway Example
 
 Subscan examples use the network segment to select the upstream chain host, such as `polkadot` or
@@ -92,8 +95,10 @@ curl --location 'https://api.pubfi.ai/v1/gateway/degov/global/v1/daos/ring-dao/b
 ## World Bank Gateway Example
 
 World Bank uses a generated generic HTTP/OpenAPI adapter with a fixed `global` network placeholder.
-The public example covers the World Bank population indicator path. It does not publish a PubFi
-copy of the World Bank OpenAPI schema or any private provider credential material.
+The public example covers the World Bank population indicator path. The adapter applies the
+upstream `format=json` static query server-side; client requests should send only caller-supported
+query parameters such as `per_page` and `date`. It does not publish a PubFi copy of the World Bank
+OpenAPI schema or any private provider credential material.
 
 Example route:
 
@@ -108,6 +113,78 @@ curl --location 'https://api.pubfi.ai/v1/gateway/worldbank/global/v2/country/all
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
+## USGS Earthquake Gateway Example
+
+USGS Earthquake Catalog uses a generated generic HTTP/OpenAPI adapter with a fixed `global` network
+placeholder. The public example covers the earthquake event query path with the adapter's
+server-applied upstream `format=geojson` static query requirement. Client requests should send only
+caller-supported query parameters such as `limit`. It does not publish a PubFi copy of the USGS
+OpenAPI schema or any private provider credential material.
+
+For automated earthquake display use cases, evaluate the provider's real-time GeoJSON feed guidance
+before using the query gateway for high-volume or continuously refreshed displays.
+
+Example route:
+
+```text
+GET /v1/gateway/usgs-earthquake/global/fdsnws/event/1/query
+```
+
+Example request:
+
+```bash
+curl --location 'https://api.pubfi.ai/v1/gateway/usgs-earthquake/global/fdsnws/event/1/query?limit=1' \
+  --header 'Authorization: Bearer <PubFi API key>'
+```
+
+## Research Metadata Gateway Examples
+
+Crossref, ROR, and DataCite use generated generic HTTP/OpenAPI adapters with a fixed `global`
+network placeholder. These examples cover certified metadata list endpoints only. They do not
+publish PubFi-hosted provider OpenAPI snapshots, private provider credential material, or a claim
+that every upstream metadata path is certified.
+
+Example routes:
+
+```text
+GET /v1/gateway/crossref/global/works
+GET /v1/gateway/ror/global/organizations
+GET /v1/gateway/datacite/global/dois
+```
+
+Example requests:
+
+```bash
+curl --location 'https://api.pubfi.ai/v1/gateway/crossref/global/works?rows=1' \
+  --header 'Authorization: Bearer <PubFi API key>'
+
+curl --location 'https://api.pubfi.ai/v1/gateway/ror/global/organizations?page=1' \
+  --header 'Authorization: Bearer <PubFi API key>'
+
+curl --location 'https://api.pubfi.ai/v1/gateway/datacite/global/dois?page[size]=1' \
+  --header 'Authorization: Bearer <PubFi API key>'
+```
+
+## Federal Register Gateway Example
+
+Federal Register Documents API uses a generated generic HTTP/OpenAPI adapter with a fixed `global`
+network placeholder. The public example covers the document list endpoint. It does not publish a
+PubFi-hosted provider OpenAPI snapshot, private provider credential material, or a claim that every
+upstream Federal Register path is certified.
+
+Example route:
+
+```text
+GET /v1/gateway/federalregister-gov/global/api/v1/documents.json
+```
+
+Example request:
+
+```bash
+curl --location 'https://api.pubfi.ai/v1/gateway/federalregister-gov/global/api/v1/documents.json' \
+  --header 'Authorization: Bearer <PubFi API key>'
+```
+
 Current public examples preserve route shape and response families, but they intentionally avoid
 publishing real account data, real keys, or upstream provider credentials.
 
@@ -118,20 +195,23 @@ Successful gateway responses use a PubFi envelope around the provider payload:
 ```json
 {
   "ok": true,
-  "data": {
-    "request": {},
-    "data": {}
-  },
+  "data": {},
   "meta": {
+    "request_id": "<request id>",
     "provider": "degov",
-    "network": "global"
+    "network": "global",
+    "route": "/v1/gateway/degov/global/v1/daos",
+    "upstream": {
+      "status": 200
+    }
   }
 }
 ```
 
-The exact nested `data` object belongs to the provider endpoint. Use the interactive
-[API reference](https://api.pubfi.ai/reference) and current route readiness before treating a route
-as executable in production.
+The `data` value is the provider JSON payload returned for the routed endpoint, so its nested shape
+differs by provider and route. The exact payload and upstream metadata belong to the provider
+endpoint. Use the interactive [API reference](https://api.pubfi.ai/reference) and current route
+readiness before treating a route as executable in production.
 
 ## Common Gateway Outcomes
 
