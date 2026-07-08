@@ -36,8 +36,10 @@ binding every workflow directly to a different upstream API.
 | [llms.txt](https://pubfi.ai/llms.txt) | concise site index for LLM and crawler discovery |
 | [llms-full.txt](https://pubfi.ai/llms-full.txt) | expanded Discovery export for answer-engine retrieval |
 | [Discovery capability-card JSON](https://pubfi.ai/discovery/agent-capabilities.json) | machine-readable Discovery source capability-card catalog |
+| [IndexNow verification key](https://pubfi.ai/50e4aa84-257b-4ff4-a822-5da3d567384c.txt) | crawler ownership verification file for IndexNow submission |
 | [API Reference](https://api.pubfi.ai/reference) | interactive API reference |
 | [OpenAPI](https://api.pubfi.ai/openapi.json) | API schema |
+| [API-host MCP manifest](https://api.pubfi.ai/.well-known/mcp.json) | API-host MCP discovery manifest |
 | [DeGov OpenAPI](https://pubfi.ai/openapi/degov-openapi.json) | provider gateway schema for DeGov route examples |
 | [Subscan OpenAPI](https://pubfi.ai/openapi/subscan-openapi.json) | provider gateway schema for Subscan route examples |
 | [MCP manifest](https://mcp.pubfi.ai/.well-known/mcp.json) | MCP discovery manifest |

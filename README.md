@@ -31,7 +31,8 @@ github.com/helixbox/pubfi-docs
   -> canonical cross-links from README, llms.txt, Discovery, API Reference, MCP, and examples
 ```
 
-Snapshot source: `pubfi-mono` commit `962086a460971855c56f775768f7a21477ebebe1`.
+Snapshot source: `pubfi-mono` origin/main through commit
+`68f202a1b538faf588979a598a30404534e23d4a`.
 
 ## Start Here
 
@@ -55,6 +56,7 @@ Snapshot source: `pubfi-mono` commit `962086a460971855c56f775768f7a21477ebebe1`.
 - Provider Profile index: `https://pubfi.ai/discovery/sources`
 - Sitemap: `https://pubfi.ai/sitemap.xml`
 - Robots policy: `https://pubfi.ai/robots.txt`
+- IndexNow verification key: `https://pubfi.ai/50e4aa84-257b-4ff4-a822-5da3d567384c.txt`
 - Login: `https://pubfi.ai/login`
 - Privacy policy: `https://pubfi.ai/privacy-policy`
 - Terms of service: `https://pubfi.ai/terms-of-service`
@@ -64,6 +66,7 @@ Snapshot source: `pubfi-mono` commit `962086a460971855c56f775768f7a21477ebebe1`.
 - Discovery capability-card JSON: `https://pubfi.ai/discovery/agent-capabilities.json`
 - Interactive API reference: `https://api.pubfi.ai/reference`
 - OpenAPI schema: `https://api.pubfi.ai/openapi.json`
+- API-host MCP manifest: `https://api.pubfi.ai/.well-known/mcp.json`
 - DeGov OpenAPI: `https://pubfi.ai/openapi/degov-openapi.json`
 - Subscan OpenAPI: `https://pubfi.ai/openapi/subscan-openapi.json`
 - MCP manifest: `https://mcp.pubfi.ai/.well-known/mcp.json`

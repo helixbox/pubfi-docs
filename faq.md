@@ -13,7 +13,8 @@ callability requires `gateway_available` readiness and live execution gates.
 ## Can agents use PubFi through MCP?
 
 Yes, through generic MCP tools such as `pubfi.capabilities.search`, `pubfi.route.plan`, and
-`pubfi.route.execute`. Hosted MCP requests require a PubFi API key.
+`pubfi.route.execute`. Public MCP handshake and introspection methods are available without a
+PubFi API key; hosted `tools/call` requests require one.
 
 ## Should upstream provider keys be sent to agents?
 

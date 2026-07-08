@@ -21,7 +21,10 @@ Public endpoint families:
 - `/v1/capabilities/{capability_id}`
 - `/v1/gateway/...`
 - `/v1/api-keys`
-- `/v1/account/...`
+- `/v1/api-keys/{id}`
+- `/v1/account/credits`
+- `/v1/account/recharge-redemptions`
+- `/v1/account/usage`
 
 The API host also exposes a root MCP JSON-RPC endpoint and MCP discovery manifest for runtime
 clients that discover capabilities through the API OpenAPI surface. The hosted MCP client endpoint
