@@ -30,12 +30,12 @@ Generic manifests can make low-risk routes easier to certify, but they fail clos
 - supplier procurement and payment authority remain disabled unless separately approved.
 
 The current public certified readiness catalog includes provider-specific Subscan and DeGov routes
-plus World Bank population indicator, USGS Earthquake event query, Crossref works, ROR
-organizations, DataCite DOI list, and Federal Register document list routes through the generated
-generic manifest lane. Generic
-manifest certification remains fail-closed unless a route has the same public readiness evidence as
-a provider adapter, including passed certification, public-safe terms evidence, and any required
-fixed-network, no-auth-upstream, or static-query-parameter constraints.
+plus World Bank population indicator, USGS Earthquake event query, National Weather Service active
+alerts, Crossref works, ROR organizations, DataCite DOI list, and Federal Register document list
+routes through the generated generic manifest lane. Generic manifest certification remains
+fail-closed unless a route has the same public readiness evidence as a provider adapter, including
+passed certification, public-safe terms evidence, and any required fixed-network, no-auth-upstream,
+or static-query-parameter constraints.
 
 ## Public Docs Rule
 

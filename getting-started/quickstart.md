@@ -66,7 +66,7 @@ curl --location 'https://api.pubfi.ai/v1/gateway/subscan/polkadot/api/now' \
 ```
 
 For provider-specific route examples, including Subscan, DeGov, World Bank, USGS Earthquake,
-Crossref, ROR, DataCite, and Federal Register, read
+National Weather Service Alerts, Crossref, ROR, DataCite, and Federal Register, read
 [Provider Gateway Examples](/reference/provider-gateway-examples).
 
 ## 7. Check Readiness Before Execution

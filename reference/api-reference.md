@@ -31,9 +31,9 @@ examples and provider docs for wildcard endpoint paths, supported methods, and n
 payloads returned through gateway routes.
 
 Provider-specific OpenAPI snapshots are public for DeGov and Subscan examples. Generic generated
-gateway adapters, such as the World Bank, USGS Earthquake, Crossref, ROR, and DataCite examples,
-and Federal Register example, may be public `gateway_available` through readiness evidence without
-a copied PubFi-hosted provider OpenAPI snapshot.
+gateway adapters, such as the World Bank, USGS Earthquake, National Weather Service Alerts,
+Crossref, ROR, DataCite, and Federal Register examples, may be public `gateway_available` through
+readiness evidence without a copied PubFi-hosted provider OpenAPI snapshot.
 
 ## Auth Boundary
 
