@@ -17,7 +17,8 @@ Public documentation for PubFi's agent-native crypto data layer.
 - Interactive API reference: https://api.pubfi.ai/reference
 - OpenAPI schema: https://api.pubfi.ai/openapi.json
 - Provider gateway examples cover Subscan, DeGov, World Bank, USGS Earthquake, National Weather
-  Service Alerts, Crossref, ROR, DataCite, and Federal Register route shapes.
+  Service Alerts, Crossref, ROR, DataCite, Federal Register, openFDA, USGS Water Data, and BLS
+  Public Data route shapes.
 - API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
 - MCP discovery pointer: https://pubfi.ai/.well-known/mcp.json

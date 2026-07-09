@@ -205,6 +205,34 @@ curl --location 'https://api.pubfi.ai/v1/gateway/federalregister-gov/global/api/
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
+## Public Data Gateway Examples
+
+openFDA, USGS Water Data APIs, and BLS Public Data API use generated generic HTTP/OpenAPI
+adapters with a fixed `global` network placeholder. These examples cover certified no-upstream-auth
+sample endpoints only. They do not publish PubFi-hosted provider OpenAPI snapshots, private
+provider credential material, or a claim that every upstream public-data path is certified.
+
+Example routes:
+
+```text
+GET /v1/gateway/openfda/global/drug/event.json
+GET /v1/gateway/usgs-water-data/global/ogcapi/v0/collections
+GET /v1/gateway/bls-public-data/global/publicAPI/v1/timeseries/data/LNS14000000
+```
+
+Example requests:
+
+```bash
+curl --location 'https://api.pubfi.ai/v1/gateway/openfda/global/drug/event.json' \
+  --header 'Authorization: Bearer <PubFi API key>'
+
+curl --location 'https://api.pubfi.ai/v1/gateway/usgs-water-data/global/ogcapi/v0/collections' \
+  --header 'Authorization: Bearer <PubFi API key>'
+
+curl --location 'https://api.pubfi.ai/v1/gateway/bls-public-data/global/publicAPI/v1/timeseries/data/LNS14000000' \
+  --header 'Authorization: Bearer <PubFi API key>'
+```
+
 Current public examples preserve route shape and response families, but they intentionally avoid
 publishing real account data, real keys, or upstream provider credentials.
 
