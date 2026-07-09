@@ -205,26 +205,6 @@ curl --location 'https://api.pubfi.ai/v1/gateway/federalregister-gov/global/api/
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
-## National Weather Service Gateway Example
-
-National Weather Service Alerts API uses a generated generic HTTP/OpenAPI adapter with a fixed
-`global` network placeholder. The public example covers the active alerts endpoint. It does not
-publish a PubFi-hosted provider OpenAPI snapshot, private provider credential material, or a claim
-that every upstream National Weather Service path is certified.
-
-Example route:
-
-```text
-GET /v1/gateway/nws-alerts/global/alerts/active
-```
-
-Example request:
-
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/nws-alerts/global/alerts/active' \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
-
 Current public examples preserve route shape and response families, but they intentionally avoid
 publishing real account data, real keys, or upstream provider credentials.
 
