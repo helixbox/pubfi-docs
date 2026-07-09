@@ -137,6 +137,26 @@ curl --location 'https://api.pubfi.ai/v1/gateway/usgs-earthquake/global/fdsnws/e
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
+## National Weather Service Alerts Gateway Example
+
+National Weather Service Alerts uses a generated generic HTTP/OpenAPI adapter with a fixed `global`
+network placeholder. The public example covers the active alerts path. It does not publish a
+PubFi-hosted provider OpenAPI snapshot, private provider credential material, or a claim that every
+upstream NWS API path is certified.
+
+Example route:
+
+```text
+GET /v1/gateway/nws-alerts/global/alerts/active
+```
+
+Example request:
+
+```bash
+curl --location 'https://api.pubfi.ai/v1/gateway/nws-alerts/global/alerts/active' \
+  --header 'Authorization: Bearer <PubFi API key>'
+```
+
 ## Research Metadata Gateway Examples
 
 Crossref, ROR, and DataCite use generated generic HTTP/OpenAPI adapters with a fixed `global`
@@ -182,6 +202,26 @@ Example request:
 
 ```bash
 curl --location 'https://api.pubfi.ai/v1/gateway/federalregister-gov/global/api/v1/documents.json' \
+  --header 'Authorization: Bearer <PubFi API key>'
+```
+
+## National Weather Service Gateway Example
+
+National Weather Service Alerts API uses a generated generic HTTP/OpenAPI adapter with a fixed
+`global` network placeholder. The public example covers the active alerts endpoint. It does not
+publish a PubFi-hosted provider OpenAPI snapshot, private provider credential material, or a claim
+that every upstream National Weather Service path is certified.
+
+Example route:
+
+```text
+GET /v1/gateway/nws-alerts/global/alerts/active
+```
+
+Example request:
+
+```bash
+curl --location 'https://api.pubfi.ai/v1/gateway/nws-alerts/global/alerts/active' \
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
