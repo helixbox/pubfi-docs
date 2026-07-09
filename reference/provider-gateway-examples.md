@@ -181,7 +181,7 @@ curl --location 'https://api.pubfi.ai/v1/gateway/crossref/global/works?rows=1' \
 curl --location 'https://api.pubfi.ai/v1/gateway/ror/global/organizations?page=1' \
   --header 'Authorization: Bearer <PubFi API key>'
 
-curl --location 'https://api.pubfi.ai/v1/gateway/datacite/global/dois?page[size]=1' \
+curl --location 'https://api.pubfi.ai/v1/gateway/datacite/global/dois?page%5Bsize%5D=1' \
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
