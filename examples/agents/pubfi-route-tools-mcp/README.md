@@ -48,17 +48,16 @@ environment variable from `PUBFI_MCP_ENDPOINT` or `PUBFI_MCP_ORIGIN`.
 
 The dry run verifies:
 
-- the six generic PubFi MCP tool names;
+- the five generic PubFi MCP tool names;
 - capability search;
 - route planning;
 - route explanation;
 - schema readback;
-- pricing quote;
 - provider-specific execution rejection.
 
 ## Optional Live Execution
 
-Live execution spends account credits, currently targets the callable
+Live execution consumes request allocation, currently targets the callable
 `capability:wallet.account_balance` route, and requires the hosted backend to have server-side
 provider credentials configured:
 

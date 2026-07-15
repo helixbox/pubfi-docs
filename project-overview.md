@@ -14,7 +14,7 @@ contracts instead of binding every workflow directly to a different upstream API
 | Gateway | authenticated PubFi route execution for supported configured provider routes |
 | Capability runtime | stable normalized agent-facing data contracts |
 | MCP tools | generic route/capability tools for agent runtimes |
-| Account and usage | API-key auth, scopes, credits, usage facts, and account state |
+| Account and usage | billing-account membership, API-key auth, admission, raw-unit usage facts, and authoritative billing reads |
 
 ## Why Agents Need PubFi
 
@@ -24,7 +24,7 @@ smaller agent-facing interface:
 
 1. search capabilities and sources;
 2. plan a route;
-3. inspect schemas and pricing posture;
+3. inspect schemas and readiness posture;
 4. execute only supported callable routes through PubFi auth;
 5. preserve provenance, freshness, warnings, and usage facts.
 
@@ -32,8 +32,8 @@ smaller agent-facing interface:
 
 - PubFi has public Discovery pages and agent-readable exports for source selection and
   answer-engine retrieval.
-- PubFi has generic agent tool contracts for search, planning, execution, explanation, schema
-  readback, and pricing quote.
+- PubFi has generic agent tool contracts for search, planning, execution, explanation, and schema
+  readback.
 - PubFi has a normalized capability response envelope for early crypto data capabilities.
 - PubFi keeps provider provenance, source freshness, readiness, and warnings explicit.
 - Rust owns backend, account, gateway, capability, MCP, storage, and operations boundaries.

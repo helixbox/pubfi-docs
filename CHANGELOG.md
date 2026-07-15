@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Aligned the public MCP reference and runnable smoke with the current five-tool surface by removing
+  the retired `pubfi.pricing.quote` tool.
+- Replaced stale non-crypto generic gateway readiness claims with the crypto/Web3/on-chain scope and
+  current public catalog authority.
+- Updated account docs and runtime endpoint inventory to the billing-account-scoped admission,
+  raw-unit usage, authoritative billing-read, and API-key contracts published by the current
+  runtime.
 - Changed the public docs route shape from `/docs/*` to root docs-domain routes such as
   `/getting-started/quickstart` and `/reference/api-reference`.
 - Added explicit Vercel static SEO assets for `sitemap.xml`, `robots.txt`, and root-route canonical

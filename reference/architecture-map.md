@@ -6,7 +6,7 @@ PubFi Platform is a crypto-data-specific agent layer:
 
 - catalog and source-selection evidence;
 - route and capability contracts;
-- account, credit, usage, and auth boundaries;
+- billing-account, admission, usage, billing-read, and auth boundaries;
 - gateway execution for configured providers;
 - MCP and OpenAPI surfaces for agents;
 - operational checks that fail closed instead of overstating readiness.
@@ -30,7 +30,7 @@ PubFi Platform is a crypto-data-specific agent layer:
 | `apps/pubfi-cli/` | local operator CLI for catalog, source freshness, demand, reporting, and credential workflows |
 | `apps/web/` | Next.js public site, Discovery, dashboard presentation, LLM exports, and manifest routes |
 | `apps/web/src/data/discovery-static/` | checked-in public-safe curated Discovery data |
-| `packages/rust/account-service/` | API-key auth, scope checks, credits, usage facts, and account repository contracts |
+| `packages/rust/account-service/` | API-key auth, scope checks, raw-unit admission, usage facts, and account repository contracts |
 | `packages/rust/capability-service/` | normalized capability catalog and execution pipeline |
 | `packages/rust/gateway-service/` | provider route decisions, credential injection, request preparation, and normalization |
 | `packages/rust/mcp-service/` | generic PubFi MCP JSON-RPC service |

@@ -19,7 +19,6 @@ https://mcp.pubfi.ai/.well-known/mcp.json
 - `pubfi.route.execute`
 - `pubfi.route.explain`
 - `pubfi.schema.get`
-- `pubfi.pricing.quote`
 
 Provider ids, endpoint paths, schemas, prices, source freshness, and readiness appear as catalog or
 route-result data. They are not public tool names.
@@ -65,8 +64,7 @@ node examples/agents/pubfi-route-tools-mcp/server.mjs
 2. Call `pubfi.route.plan`.
 3. Call `pubfi.route.explain` when the plan needs a reason readback.
 4. Call `pubfi.schema.get` before constructing execution input.
-5. Call `pubfi.pricing.quote` for paid-capable flows.
-6. Call `pubfi.route.execute` only for supported callable capability route ids with planning
+5. Call `pubfi.route.execute` only for supported callable capability route ids with planning
    evidence.
 
 ## Tool Inputs
@@ -81,7 +79,6 @@ input fields are:
 | `pubfi.route.execute` | `route_id`, `route_plan`, `arguments`, `idempotency_key`, `request_id` |
 | `pubfi.route.explain` | `intent`, `objective`, `chains`, `categories`, `required_capabilities`, `dry_run` |
 | `pubfi.schema.get` | `tool` |
-| `pubfi.pricing.quote` | `route_id`, `capability_id`, `intent` |
 
 ## Fail-Closed Behavior
 
