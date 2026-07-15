@@ -48,14 +48,14 @@ binding every workflow directly to a different upstream API.
 - Discovery is the public source-selection layer.
 - Gateway execution is authenticated PubFi route execution for supported configured provider
   routes.
-- Provider gateway examples cover Subscan, DeGov, World Bank, USGS Earthquake, National Weather
-  Service Alerts, Crossref, ROR, DataCite, Federal Register, openFDA, USGS Water Data, and BLS
-  Public Data route shapes, including generic adapter static query requirements when the upstream
-  requires them.
+- Provider gateway examples cover Subscan and DeGov route shapes. The public gateway catalog and
+  current readiness evidence determine runtime availability. Generic gateway candidates must stay
+  within PubFi's crypto/Web3/on-chain data scope.
 - Capability contracts are normalized agent-facing envelopes with readiness, provenance,
   freshness, warnings, and data.
 - Provider readiness describes whether a route is callable, requestable, contract-ready, or blocked.
-- API-key, credit, account, and usage facts are runtime boundaries, not public Discovery claims.
+- Billing-account membership, API-key auth, admission, request allowance, usage facts, and billing
+  reads are runtime boundaries, not public Discovery claims.
 
 ## Runtime And Agent Surfaces
 
@@ -93,8 +93,8 @@ binding every workflow directly to a different upstream API.
 
 - PubFi has public Discovery pages and agent-readable exports for source selection and
   answer-engine retrieval.
-- PubFi has generic agent tool contracts for search, planning, execution, explanation, schema
-  readback, and pricing quote.
+- PubFi has generic agent tool contracts for search, planning, execution, explanation, and schema
+  readback.
 - PubFi has normalized capability response envelopes for early crypto data capabilities.
 - PubFi keeps provider provenance, source freshness, readiness, and warnings explicit.
 

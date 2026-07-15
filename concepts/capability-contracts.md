@@ -53,5 +53,5 @@ reason about source quality and route suitability.
 ## Execution Boundary
 
 A valid capability schema does not make a route callable. Execution still depends on current
-gateway/provider readiness, API-key auth, credits, upstream credentials, source freshness, and
-supported route mapping.
+gateway/provider readiness, API-key auth, active billing admission, sufficient request allocation,
+upstream credentials, source freshness, and supported route mapping.

@@ -35,7 +35,7 @@ Hard filters can include:
 - configured provider credential;
 - source freshness;
 - caller API-key scope;
-- credit entitlement;
+- active billing admission and sufficient request allocation;
 - privacy and redaction policy;
 - payment/procurement policy;
 - route availability.
@@ -54,4 +54,3 @@ Hard filters can include:
 
 Route planning must not silently call suppliers, create payment payloads, grant credentials, or
 hide rejected candidates and policy reasons.
-

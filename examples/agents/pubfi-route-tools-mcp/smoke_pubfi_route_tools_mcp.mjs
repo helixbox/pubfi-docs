@@ -10,8 +10,7 @@ const expectedTools = [
   "pubfi.route.plan",
   "pubfi.route.execute",
   "pubfi.route.explain",
-  "pubfi.schema.get",
-  "pubfi.pricing.quote"
+  "pubfi.schema.get"
 ];
 const defaultWalletAddress = process.env.PUBFI_MCP_SMOKE_WALLET_ADDRESS || "";
 const defaultNetwork = process.env.PUBFI_MCP_SMOKE_NETWORK || "polkadot";
@@ -137,14 +136,6 @@ try {
     assert.equal(schema.tool.name, "pubfi.route.execute");
     assert.equal(schema.tool.input_schema.required.includes("route_plan"), true);
 
-    const quote = await callTool("pubfi.pricing.quote", {
-      route_id: "capability:wallet.account_balance"
-    });
-
-    assert.equal(quote.selected_quote.capability_id, "wallet.account_balance");
-    assert.equal(quote.payment_execution_enabled, false);
-    assert.equal(quote.no_payment_payload_created, true);
-
     const providerSpecific = await callTool("pubfi.route.execute", {
       route_id: "/v1/gateway/subscan/polkadot/api/now"
     });
@@ -159,7 +150,6 @@ try {
       "route_plan_callable",
       "route_explain",
       "schema_readback",
-      "pricing_quote",
       "provider_specific_execute_rejected"
     ];
 

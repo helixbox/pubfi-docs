@@ -18,7 +18,7 @@ Live account-balance execution requires:
 
 - `PROD_PUBFI_API_KEY`;
 - `PUBFI_WALLET_ADDRESS`;
-- account credits;
+- active billing admission and request allocation;
 - server-side provider credentials configured by PubFi;
 - current provider readiness for the selected route.
 

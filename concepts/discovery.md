@@ -26,8 +26,8 @@ Canonical public routes include:
 ## Discovery Is Not Execution
 
 Discovery inclusion does not mean the source is callable through PubFi. Runtime callability depends
-on gateway readiness, configured credentials, source freshness, PubFi API-key auth, credit checks,
-and capability or route support.
+on gateway readiness, configured credentials, source freshness, PubFi API-key auth, active billing
+admission, sufficient request allocation, and capability or route support.
 
 ## Agent-Readable Discovery
 

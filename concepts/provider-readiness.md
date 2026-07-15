@@ -11,7 +11,7 @@ Provider readiness determines when PubFi can safely say a source is callable thr
 | Capability fit | Does the provider support the requested data shape? |
 | Adapter certification | Has the route or generic manifest passed required certification checks? |
 | Runtime credential | Is the upstream credential configured server-side? |
-| Account gate | Does the caller have PubFi auth, scope, and credits? |
+| Account gate | Does the caller have PubFi auth, scope, fresh active admission, and sufficient allocation? |
 | Execution gate | Can the request be validated and attempted safely now? |
 
 ## Certification
@@ -24,18 +24,17 @@ environment requirements, smoke evidence, usage facts, and public-claim basis al
 
 Generic manifests can make low-risk routes easier to certify, but they fail closed unless:
 
+- the provider and operation are within PubFi's crypto/Web3/on-chain data scope;
 - manifest state is runtime-enabled;
 - certification run passed;
 - required operation, auth, parameter, timeout, response, usage, and fixture checks passed;
 - supplier procurement and payment authority remain disabled unless separately approved.
 
-The current public certified readiness catalog includes provider-specific Subscan and DeGov routes
-plus World Bank population indicator, USGS Earthquake event query, National Weather Service active
-alerts, Crossref works, ROR organizations, DataCite DOI list, and Federal Register document list
-routes through the generated generic manifest lane. Generic manifest certification remains
-fail-closed unless a route has the same public readiness evidence as a provider adapter, including
-passed certification, public-safe terms evidence, and any required fixed-network, no-auth-upstream,
-or static-query-parameter constraints.
+The public gateway catalog is the current runtime authority for generated generic operations. An
+empty certified catalog is a valid fail-closed state when no eligible generic providers are active.
+Generic manifest certification requires public-safe terms and relevance evidence bound to the
+exact operation, plus any required fixed-network, no-auth-upstream, or static-query-parameter
+constraints.
 
 ## Public Docs Rule
 

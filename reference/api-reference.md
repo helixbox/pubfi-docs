@@ -18,7 +18,7 @@ The API reference is the executable HTTP contract for PubFi runtime routes, incl
 - service health and readiness;
 - capability discovery and execution;
 - gateway route families;
-- API-key, account, credit, and usage routes;
+- billing-account, API-key, usage, and authoritative billing-read routes;
 - annotated request or response details where the current OpenAPI source publishes them.
 
 ## How It Fits With These Docs
@@ -31,11 +31,13 @@ examples and provider docs for wildcard endpoint paths, supported methods, and n
 payloads returned through gateway routes.
 
 Provider-specific OpenAPI snapshots are public for DeGov and Subscan examples. Generic generated
-gateway adapters, such as the World Bank, USGS Earthquake, National Weather Service Alerts,
-Crossref, ROR, DataCite, and Federal Register examples, may be public `gateway_available` through
-readiness evidence without a copied PubFi-hosted provider OpenAPI snapshot.
+gateway adapters are admitted only for crypto/Web3/on-chain data and become public
+`gateway_available` only through the current certified gateway catalog. A Discovery listing or
+route-shape example is not availability evidence.
 
 ## Auth Boundary
 
-API reference visibility does not mean every route can be executed without an account. Live runtime
-calls require a PubFi API key, matching scope, credits when applicable, and current route readiness.
+API reference visibility does not mean every route can be executed without authentication. Gateway,
+capability, and MCP execution require a PubFi API key, matching scope, fresh active billing
+admission, sufficient allocation, and current route readiness. Billing-account management and
+readback routes require an authenticated account member with the required account role.

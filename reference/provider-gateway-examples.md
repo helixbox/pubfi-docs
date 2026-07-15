@@ -92,146 +92,12 @@ curl --location 'https://api.pubfi.ai/v1/gateway/degov/global/v1/daos/ring-dao/b
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
-## World Bank Gateway Example
+## Generated Generic Gateway Boundary
 
-World Bank uses a generated generic HTTP/OpenAPI adapter with a fixed `global` network placeholder.
-The public example covers the World Bank population indicator path. The adapter applies the
-upstream `format=json` static query server-side; client requests should send only caller-supported
-query parameters such as `per_page` and `date`. It does not publish a PubFi copy of the World Bank
-OpenAPI schema or any private provider credential material.
-
-Example route:
-
-```text
-GET /v1/gateway/worldbank/global/v2/country/all/indicator/SP.POP.TOTL
-```
-
-Example request:
-
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/worldbank/global/v2/country/all/indicator/SP.POP.TOTL?per_page=1&date=2022' \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
-
-## USGS Earthquake Gateway Example
-
-USGS Earthquake Catalog uses a generated generic HTTP/OpenAPI adapter with a fixed `global` network
-placeholder. The public example covers the earthquake event query path with the adapter's
-server-applied upstream `format=geojson` static query requirement. Client requests should send only
-caller-supported query parameters such as `limit`. It does not publish a PubFi copy of the USGS
-OpenAPI schema or any private provider credential material.
-
-For automated earthquake display use cases, evaluate the provider's real-time GeoJSON feed guidance
-before using the query gateway for high-volume or continuously refreshed displays.
-
-Example route:
-
-```text
-GET /v1/gateway/usgs-earthquake/global/fdsnws/event/1/query
-```
-
-Example request:
-
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/usgs-earthquake/global/fdsnws/event/1/query?limit=1' \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
-
-## National Weather Service Alerts Gateway Example
-
-National Weather Service Alerts uses a generated generic HTTP/OpenAPI adapter with a fixed `global`
-network placeholder. The public example covers the active alerts path. It does not publish a
-PubFi-hosted provider OpenAPI snapshot, private provider credential material, or a claim that every
-upstream NWS API path is certified.
-
-Example route:
-
-```text
-GET /v1/gateway/nws-alerts/global/alerts/active
-```
-
-Example request:
-
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/nws-alerts/global/alerts/active' \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
-
-## Research Metadata Gateway Examples
-
-Crossref, ROR, and DataCite use generated generic HTTP/OpenAPI adapters with a fixed `global`
-network placeholder. These examples cover certified metadata list endpoints only. They do not
-publish PubFi-hosted provider OpenAPI snapshots, private provider credential material, or a claim
-that every upstream metadata path is certified.
-
-Example routes:
-
-```text
-GET /v1/gateway/crossref/global/works
-GET /v1/gateway/ror/global/organizations
-GET /v1/gateway/datacite/global/dois
-```
-
-Example requests:
-
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/crossref/global/works?rows=1' \
-  --header 'Authorization: Bearer <PubFi API key>'
-
-curl --location 'https://api.pubfi.ai/v1/gateway/ror/global/organizations?page=1' \
-  --header 'Authorization: Bearer <PubFi API key>'
-
-curl --location 'https://api.pubfi.ai/v1/gateway/datacite/global/dois?page[size]=1' \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
-
-## Federal Register Gateway Example
-
-Federal Register Documents API uses a generated generic HTTP/OpenAPI adapter with a fixed `global`
-network placeholder. The public example covers the document list endpoint. It does not publish a
-PubFi-hosted provider OpenAPI snapshot, private provider credential material, or a claim that every
-upstream Federal Register path is certified.
-
-Example route:
-
-```text
-GET /v1/gateway/federalregister-gov/global/api/v1/documents.json
-```
-
-Example request:
-
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/federalregister-gov/global/api/v1/documents.json' \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
-
-## Public Data Gateway Examples
-
-openFDA, USGS Water Data APIs, and BLS Public Data API use generated generic HTTP/OpenAPI
-adapters with a fixed `global` network placeholder. These examples cover certified no-upstream-auth
-sample endpoints only. They do not publish PubFi-hosted provider OpenAPI snapshots, private
-provider credential material, or a claim that every upstream public-data path is certified.
-
-Example routes:
-
-```text
-GET /v1/gateway/openfda/global/drug/event.json
-GET /v1/gateway/usgs-water-data/global/ogcapi/v0/collections
-GET /v1/gateway/bls-public-data/global/publicAPI/v1/timeseries/data/LNS14000000
-```
-
-Example requests:
-
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/openfda/global/drug/event.json' \
-  --header 'Authorization: Bearer <PubFi API key>'
-
-curl --location 'https://api.pubfi.ai/v1/gateway/usgs-water-data/global/ogcapi/v0/collections' \
-  --header 'Authorization: Bearer <PubFi API key>'
-
-curl --location 'https://api.pubfi.ai/v1/gateway/bls-public-data/global/publicAPI/v1/timeseries/data/LNS14000000' \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
+Generated generic adapters are limited to crypto/Web3/on-chain data operations. They become public
+runtime routes only after the exact operation appears in the current certified gateway catalog.
+An empty catalog is a valid fail-closed state. Discovery inclusion, prior certification, or an old
+route-shape example does not establish current availability.
 
 Current public examples preserve route shape and response families, but they intentionally avoid
 publishing real account data, real keys, or upstream provider credentials.
@@ -267,7 +133,7 @@ readiness before treating a route as executable in production.
 | --- | --- | --- |
 | `200` | `ok: true` | Gateway authenticated the request and the upstream provider returned success. |
 | `401` | `pubfi.unauthorized` | No PubFi API key was sent, or the key is invalid, revoked, or inactive. |
-| `402` | `gateway.insufficient_credits` | The account linked to the API key has no credits left. |
+| `402` | `gateway.insufficient_credits` | Current billing admission has insufficient request allocation. |
 | `403` | `pubfi.forbidden` | The API key is valid but does not include the scope required for provider invocation. |
 | `502` | `pubfi.gateway_failed` | Route decision, provider dispatch, or upstream gateway execution failed. |
 | `503` | `pubfi.provider_credentials_not_configured` | The provider route needs a server-side credential that is not configured. |

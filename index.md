@@ -14,7 +14,8 @@ binding every workflow directly to a different upstream API.
   surfaces.
 - [API reference](/reference/api-reference): where to find the interactive HTTP reference and
   OpenAPI schema.
-- [API key and runtime](/getting-started/api-key-runtime): how account, credit, and runtime
+- [API key and runtime](/getting-started/api-key-runtime): how billing accounts, request allowance,
+  usage, and runtime
   boundaries fit together.
 - [MCP client setup](/getting-started/mcp-client): connect an agent runtime to PubFi's generic
   MCP tools.
@@ -59,7 +60,7 @@ boundaries explicit so agents can choose routes safely.
 | --- | --- |
 | Product positioning | [Project overview](/project-overview) |
 | HTTP API details | [API reference](/reference/api-reference) |
-| API key, account, and credits | [API key and runtime](/getting-started/api-key-runtime) |
+| API key, billing account, allowance, and usage | [API key and runtime](/getting-started/api-key-runtime) |
 | Agent/MCP interface | [MCP client setup](/getting-started/mcp-client) |
 | Discovery and source selection | [Discovery](/concepts/discovery) |
 | Provider readiness and certification | [Provider readiness](/concepts/provider-readiness) |
