@@ -1,9 +1,9 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "ai.pubfi/pubfi-mcp",
+  "name": "ai.pubfi/mcp",
   "title": "PubFi MCP",
   "description": "Route crypto data needs through PubFi capability and gateway tools.",
-  "version": "0.1.1",
+  "version": "0.1.63",
   "websiteUrl": "https://pubfi.ai/agents.md",
   "repository": {
     "url": "https://github.com/helixbox/pubfi-docs",
