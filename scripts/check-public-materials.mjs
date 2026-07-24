@@ -255,7 +255,11 @@ function checkExampleSyntax() {
       ]
     ],
     ["sh", ["-n", "examples/agents/capability-curl/inspect_registry.sh"]],
-    ["sh", ["-n", "examples/agents/x402-base-sepolia/show_challenge.sh"]]
+    ["sh", ["-n", "examples/agents/x402-base-sepolia/show_challenge.sh"]],
+    ["node", ["--check", "examples/agents/x402-base-sepolia/http-paid.mjs"]],
+    ["node", ["--check", "examples/agents/x402-base-sepolia/mcp-paid.mjs"]],
+    ["node", ["--check", "examples/agents/x402-base-sepolia/payment-policy.mjs"]],
+    ["node", ["--check", "examples/agents/x402-base-sepolia/signed-artifacts.mjs"]]
   ];
 
   for (const [command, args] of checks) {

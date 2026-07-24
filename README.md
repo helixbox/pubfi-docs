@@ -33,10 +33,10 @@ github.com/helixbox/pubfi-docs
 
 Snapshot sources:
 
-- `pubfi-mono` main through `cc7e03e8a9f221c424780bf03306bfa48afa060b`;
+- `pubfi-mono` main through `e8ade9e03da4c57cf7fd956c1c13855333030097`;
 - `quantro-mono` origin/main through `f5a4dec934f4a2a6e072149d694df7984391b74b`; and
 - public Runtime OpenAPI, Registry v2 catalog, MCP `tools/list`, and x402 challenge observed on
-  2026-07-23.
+  2026-07-24.
 
 ## Start Here
 
