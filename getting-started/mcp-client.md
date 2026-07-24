@@ -1,3 +1,8 @@
+---
+title: MCP Client Setup
+description: Connect an MCP client to PubFi's hosted Registry v2 tools.
+---
+
 # MCP Client Setup
 
 PubFi exposes generic route and capability tools over MCP. The hosted endpoint is:

@@ -36,6 +36,17 @@ function checkNavigation() {
       failures.push(`missing docs.json navigation target: ${page}`);
     }
   }
+
+  const mcpClientPage = readFileSync(
+    path.join(root, "getting-started/mcp-client.md"),
+    "utf8"
+  );
+
+  if (!/^---\ntitle: MCP Client Setup\n/m.test(mcpClientPage)) {
+    failures.push(
+      "getting-started/mcp-client.md must set the exact MCP Client Setup title"
+    );
+  }
 }
 
 function checkRouteShape() {
