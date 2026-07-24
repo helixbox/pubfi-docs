@@ -5,6 +5,8 @@ import { once } from "node:events";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { apiKeyEnvNameForEndpoint } from "./endpoint-policy.mjs";
+
 const expectedTools = [
   "pubfi.capabilities.search",
   "pubfi.route.plan",
@@ -12,11 +14,13 @@ const expectedTools = [
   "pubfi.route.explain",
   "pubfi.schema.get"
 ];
-const defaultWalletAddress = process.env.PUBFI_MCP_SMOKE_WALLET_ADDRESS || "";
-const defaultNetwork = process.env.PUBFI_MCP_SMOKE_NETWORK || "polkadot";
+const configuredRawPath = process.env.PUBFI_MCP_SMOKE_RAW_PATH || "";
+const configuredMethod = (process.env.PUBFI_MCP_SMOKE_METHOD || "GET").toUpperCase();
+const configuredQuery = process.env.PUBFI_MCP_SMOKE_QUERY || "";
+const configuredBody = process.env.PUBFI_MCP_SMOKE_BODY || "";
 const executeLive = process.env.PUBFI_MCP_EXECUTE_LIVE === "1";
 const apiKeyEnvName = apiKeyEnvNameForEndpoint(
-  process.env.PUBFI_MCP_ENDPOINT || process.env.PUBFI_MCP_ORIGIN || "https://mcp.pubfi.ai"
+  process.env.PUBFI_MCP_ENDPOINT || "https://mcp.pubfi.ai"
 );
 const hasApiKey = Boolean(process.env[apiKeyEnvName]);
 const scriptPath = fileURLToPath(import.meta.url);
@@ -64,19 +68,24 @@ try {
   notify("notifications/initialized");
 
   assert.equal(initialized.protocolVersion, "2025-11-25");
-  assert.deepEqual(initialized.capabilities, { tools: { listChanged: false } });
+  assert.equal(initialized.serverInfo.name, "pubfi-rust-mcp");
+  assert.equal(initialized.capabilities.tools.listChanged, true);
+  assert.ok(initialized._meta?.generation, "initialize omitted Registry generation");
+  assert.ok(initialized._meta?.manifest, "initialize omitted Registry manifest");
 
   const listed = await request("tools/list", {});
   const toolNames = listed.tools.map((tool) => tool.name);
 
   assert.deepEqual(toolNames, expectedTools);
-  assert.equal(toolNames.some((name) => /subscan|degov|provider|gateway\./i.test(name)), false);
+  assert.deepEqual(listed.tools[2].inputSchema.required, ["raw_path", "method"]);
+  assert.deepEqual(initialized._meta.generation, listed._meta.generation);
+  assert.deepEqual(initialized._meta.manifest, listed._meta.manifest);
 
   if (!hasApiKey) {
     const missingKey = await requestAllowError("tools/call", {
       name: "pubfi.capabilities.search",
       arguments: {
-        query: "native account balance for a Polkadot wallet"
+        query: "current Registry v2 routes"
       }
     });
 
@@ -89,91 +98,83 @@ try {
       checks: ["initialize", "tools_list", "missing_api_key_call_gate"]
     });
   } else {
+    const routes = listed.tools[2].inputSchema["x-pubfi-registry-routes"];
+    assert.ok(Array.isArray(routes) && routes.length > 0, "current Registry has no smoke route");
+    let selected = routes.find((route) => route.readiness?.status === "ready") ?? routes[0];
+    const rawPath = configuredRawPath || materializeRawPath(selected.matcher);
+    const method = configuredRawPath ? configuredMethod : selected.methods[0];
+    assert.ok(["GET", "POST"].includes(method), "selected Registry route method is unsupported");
+
     const search = await callTool("pubfi.capabilities.search", {
-      query: "native account balance for a Polkadot wallet"
+      raw_path: rawPath,
+      method
     });
 
-    assert.equal(search.schema_version, "pubfi.capabilities.search.response.v1");
-    assert.equal(search.provider_specific_public_tools.length, 0);
-    assert.ok(
-      search.candidate_capabilities.some(
-        (candidate) => candidate.capability_id === "wallet.account_balance"
-      )
-    );
+    assert.equal(search.schema_version, "pubfi.capabilities.search.response.v2");
+    if (!configuredRawPath) {
+      assert.ok(search.capabilities.some(
+        (capability) => capability.capability_id === selected.capability_id
+      ));
+    }
+    assert.deepEqual(search.registry.generation, listed._meta.generation);
+    assert.deepEqual(search.registry.manifest, listed._meta.manifest);
 
     const plan = await callTool("pubfi.route.plan", {
-      intent: {
-        objective: "Need the native wallet account balance for a Polkadot account.",
-        chains: [defaultNetwork],
-        categories: ["wallet", "on_chain_state"],
-        required_capabilities: ["account_balance"],
-        allow_paid: false
-      },
-      dry_run: true
+      raw_path: rawPath,
+      method
     });
 
-    assert.equal(plan.outcome, "callable_route");
-    assert.equal(plan.selected_route_id, "capability:wallet.account_balance");
-    assert.equal(plan.selected_callability, "callable");
-    assert.equal(plan.production_route_time_model_enabled, false);
+    assert.equal(plan.schema_version, "pubfi.mcp.route_plan.response.v2");
+    if (configuredRawPath) {
+      selected = routes.find((route) => route.capability_id === plan.selected_capability_id);
+      assert.ok(selected, "route planner selected a capability absent from tools/list");
+    }
+    assert.equal(plan.selected_capability_id, selected.capability_id);
+    assert.ok(["ready_route", "blocked_route"].includes(plan.outcome));
+    assert.deepEqual(plan.registry.generation, listed._meta.generation);
 
     const explain = await callTool("pubfi.route.explain", {
-      intent: {
-        objective: "Need account balance data.",
-        required_capabilities: ["account_balance"],
-        categories: ["wallet"]
-      },
-      dry_run: true
+      raw_path: rawPath,
+      method
     });
 
     assert.equal(explain.tool, "pubfi.route.explain");
-    assert.ok(explain.reason_codes.includes("decision_kind:callable_route"));
+    assert.equal(explain.schema_version, "pubfi.route_explain.response.v2");
+    assert.equal(explain.selected_capability_id, selected.capability_id);
 
     const schema = await callTool("pubfi.schema.get", {
       tool: "pubfi.route.execute"
     });
 
     assert.equal(schema.tool.name, "pubfi.route.execute");
-    assert.equal(schema.tool.input_schema.required.includes("route_plan"), true);
-
-    const providerSpecific = await callTool("pubfi.route.execute", {
-      route_id: "/v1/gateway/subscan/polkadot/api/now"
-    });
-
-    assert.equal(providerSpecific.ok, false);
-    assert.equal(providerSpecific.reason_code, "provider_specific_route_rejected");
+    assert.deepEqual(schema.tool.input_schema.required, ["raw_path", "method"]);
+    assert.deepEqual(schema.registry.manifest, listed._meta.manifest);
 
     const checks = [
       "initialize",
       "tools_list",
       "capabilities_search",
-      "route_plan_callable",
+      "route_plan_current_catalog",
       "route_explain",
-      "schema_readback",
-      "provider_specific_execute_rejected"
+      "schema_readback"
     ];
 
     if (executeLive) {
-      if (!defaultWalletAddress) {
-        throw new Error("Set PUBFI_MCP_SMOKE_WALLET_ADDRESS before live execution.");
+      if (!configuredRawPath) {
+        throw new Error("Set PUBFI_MCP_SMOKE_RAW_PATH from the current Registry catalog before live execution.");
       }
 
       const execute = await callTool("pubfi.route.execute", {
-        route_id: "capability:wallet.account_balance",
-        route_plan: plan,
-        arguments: {
-          wallet_address: defaultWalletAddress,
-          network: defaultNetwork,
-          chain: defaultNetwork
-        }
+        raw_path: rawPath,
+        method,
+        ...(configuredQuery ? { query: configuredQuery } : {}),
+        ...(configuredBody ? { body: configuredBody } : {}),
+        idempotency_key: `pubfi-example-smoke-${Date.now()}`
       });
 
       assert.equal(execute.ok, true);
-      assert.equal(execute.execution_authority, "capability_runtime_v1");
-      assert.equal(execute.supplier_execution_enabled, false);
-      assert.equal(execute.payment_execution_enabled, false);
-      assert.equal(execute.capability_response_body.meta.readiness, "gateway_available");
-      checks.push("route_execute_live_gateway");
+      assert.equal(execute.execution_authority, "typed_gateway_registry_v2");
+      checks.push("route_execute_live_registry_v2");
     }
 
     printReport({
@@ -188,6 +189,21 @@ try {
     server.kill();
     await once(server, "exit").catch(() => {});
   }
+}
+
+function materializeRawPath(matcher) {
+  if (matcher?.kind === "exact" && typeof matcher.path === "string") {
+    return matcher.path;
+  }
+  if (matcher?.kind === "template" && Array.isArray(matcher.template)) {
+    return `/${matcher.template.map((segment) =>
+      segment.kind === "literal" ? segment.value : "smoke"
+    ).join("/")}`;
+  }
+  if (matcher?.kind === "namespace_contract" && typeof matcher.namespace === "string") {
+    return matcher.namespace;
+  }
+  throw new Error("current Registry route has an unsupported matcher shape");
 }
 
 async function callTool(name, args) {
@@ -238,14 +254,6 @@ function requestAllowError(method, params) {
       }
     });
   });
-}
-
-function apiKeyEnvNameForEndpoint(endpoint) {
-  const host = new URL(endpoint).hostname;
-
-  return host === "stg.pubfi.ai" || host.endsWith("-stg.pubfi.ai")
-    ? "STG_PUBFI_API_KEY"
-    : "PROD_PUBFI_API_KEY";
 }
 
 function notify(method, params = {}) {

@@ -25,6 +25,8 @@ Check any that apply:
 - [ ] implies every Discovery source is callable
 - [ ] implies gateway availability without current evidence
 - [ ] implies procurement, payment execution, wallet custody, or supplier settlement
+- [ ] implies that a testnet x402 rail has mainnet financial value
+- [ ] exposes an x402 payment signature, payment response, wallet secret, or internal receipt
 - [ ] exposes private account, billing, credential, analytics, or readback data
 
 ## Safer Wording

@@ -13,7 +13,8 @@ chain-specific data. I need to compare source fit before integrating."
 2. Search by provider, category, chain, comparison, or topic.
 3. Read public status, source freshness, auth/pricing posture, and claim-safe notes.
 4. Use related pages and Markdown mirrors for agent-readable context.
-5. If the workflow needs execution, move to route planning and capability readiness.
+5. If the workflow needs execution, inspect the current Registry v2 catalog and plan an exact path
+   and method.
 
 ## Good Fit
 
@@ -29,5 +30,4 @@ Discovery is useful when the user needs:
 ## Not A Fit
 
 Discovery is not proof that PubFi can execute every listed provider route. Execution belongs to
-gateway/capability readiness.
-
+the current Registry and request-time readiness gates.

@@ -20,12 +20,12 @@ https://mcp.pubfi.ai/.well-known/mcp.json
 - `pubfi.route.explain`
 - `pubfi.schema.get`
 
-Provider ids, endpoint paths, schemas, prices, source freshness, and readiness appear as catalog or
-route-result data. They are not public tool names.
+Provider ids, exact paths, methods, request policies, response policies, and readiness appear as
+Registry catalog or route-result data. They are not public tool names.
 
 ## Auth
 
-Hosted MCP `tools/call` requests require a PubFi API key. Public handshake and introspection
+All hosted MCP `tools/call` requests require a PubFi API key. Public handshake and introspection
 methods, such as `initialize`, `ping`, `tools/list`, `resources/list`, `resources/templates/list`,
 `prompts/list`, and `notifications/initialized`, can be called without a key:
 
@@ -47,10 +47,10 @@ examples/agents/pubfi-route-tools-mcp/
 
 PubFi's MCP server is hosted at `https://mcp.pubfi.ai`. The local file is not a second MCP backend
 and it does not run provider logic locally. It is a dependency-free stdio bridge for MCP clients
-that launch tools as local commands. The bridge handles `initialize` and `ping` locally, forwards
-`tools/list` and authenticated `tools/call` requests to the hosted Rust MCP endpoint, and writes
-the response back to stdio. Other hosted public introspection methods remain available on
-`https://mcp.pubfi.ai`; the local bridge keeps its stdio surface intentionally small.
+that launch tools as local commands. The bridge forwards `initialize`, `ping`, `tools/list`, and
+authenticated `tools/call` requests to the hosted Rust MCP endpoint, then writes the response back
+to stdio. Other hosted public introspection methods remain available on `https://mcp.pubfi.ai`;
+the local bridge keeps its stdio surface intentionally small.
 
 ```sh
 export PROD_PUBFI_API_KEY='<PubFi API key>'
@@ -60,12 +60,11 @@ node examples/agents/pubfi-route-tools-mcp/server.mjs
 
 ## Recommended Agent Flow
 
-1. Call `pubfi.capabilities.search`.
-2. Call `pubfi.route.plan`.
+1. Call `pubfi.capabilities.search` with a query or exact path and method.
+2. Call `pubfi.route.plan` with the exact `raw_path` and `method`.
 3. Call `pubfi.route.explain` when the plan needs a reason readback.
 4. Call `pubfi.schema.get` before constructing execution input.
-5. Call `pubfi.route.execute` only for supported callable capability route ids with planning
-   evidence.
+5. Call `pubfi.route.execute` only for an exact ready `raw_path` and `method`.
 
 ## Tool Inputs
 
@@ -74,14 +73,16 @@ input fields are:
 
 | Tool | Input fields |
 | --- | --- |
-| `pubfi.capabilities.search` | `query`, `required_capabilities`, `categories` |
-| `pubfi.route.plan` | `intent`, `objective`, `chains`, `categories`, `required_capabilities`, `dry_run` |
-| `pubfi.route.execute` | `route_id`, `route_plan`, `arguments`, `idempotency_key`, `request_id` |
-| `pubfi.route.explain` | `intent`, `objective`, `chains`, `categories`, `required_capabilities`, `dry_run` |
+| `pubfi.capabilities.search` | `query`, `raw_path`, `method` |
+| `pubfi.route.plan` | `raw_path`, `method`, `objective`, `query` |
+| `pubfi.route.execute` | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id` |
+| `pubfi.route.explain` | `raw_path`, `method`, `objective`, `query` |
 | `pubfi.schema.get` | `tool` |
 
 ## Fail-Closed Behavior
 
-Unsupported provider-specific route ids, missing planning evidence, non-callable plans, and paid
-supplier execution attempts should return explicit gate readbacks rather than silently calling
-upstream APIs.
+Unsupported paths, methods, non-ready operations, invalid exact query or body bytes, and supplier
+procurement attempts return explicit gate readbacks rather than silently calling upstream APIs.
+
+MCP execution uses the API-key lane. It does not accept `PAYMENT-SIGNATURE` and does not provide an
+x402 payment flow.

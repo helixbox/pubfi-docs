@@ -1,35 +1,37 @@
 # PubFi Docs
 
-Public documentation for PubFi's agent-native crypto data layer.
+Public documentation for PubFi's agent-native crypto data layer and signed Registry v2 gateway.
 
 ## Core Docs
 
 - Docs home: https://docs.pubfi.ai
 - Project overview: https://docs.pubfi.ai/project-overview
 - Quickstart: https://docs.pubfi.ai/getting-started/quickstart
+- Accountless x402: https://docs.pubfi.ai/getting-started/x402
+- Payment and execution modes: https://docs.pubfi.ai/concepts/payment-and-execution-modes
+- Registry contracts: https://docs.pubfi.ai/concepts/capability-contracts
 - API reference guide: https://docs.pubfi.ai/reference/api-reference
-- Provider gateway examples: https://docs.pubfi.ai/reference/provider-gateway-examples
+- Registry gateway examples: https://docs.pubfi.ai/reference/provider-gateway-examples
 - Agent interface: https://docs.pubfi.ai/reference/agent-interface
 - Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
 
 ## Runtime References
 
 - Interactive API reference: https://api.pubfi.ai/reference
-- OpenAPI schema: https://api.pubfi.ai/openapi.json
-- Provider gateway examples cover Subscan and DeGov route shapes. Current runtime availability is
-  determined by the public gateway catalog and readiness evidence.
+- Runtime OpenAPI: https://api.pubfi.ai/openapi.json
+- Current Registry v2 catalog: https://api.pubfi.ai/v1/capabilities
+- API-host Glama metadata: https://api.pubfi.ai/.well-known/glama.json
 - API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
 - MCP discovery pointer: https://pubfi.ai/.well-known/mcp.json
 - MCP server card: https://pubfi.ai/.well-known/mcp/server-card.json
 - Optional MCP registry auth proof route: https://pubfi.ai/.well-known/mcp-registry-auth
-- DeGov OpenAPI: https://pubfi.ai/openapi/degov-openapi.json
-- Subscan OpenAPI: https://pubfi.ai/openapi/subscan-openapi.json
 
 ## Product Surfaces
 
 - Product site: https://pubfi.ai
 - Pricing: https://pubfi.ai/pricing
+- Partners: https://pubfi.ai/partners
 - Blog: https://pubfi.ai/blog
 - Product pages: https://pubfi.ai/products/subscan-api, https://pubfi.ai/products/degov-api, https://pubfi.ai/products/insight-api, https://pubfi.ai/products/defi-api
 - Discovery: https://pubfi.ai/discovery
@@ -50,6 +52,7 @@ Public documentation for PubFi's agent-native crypto data layer.
 
 ## Boundary
 
-Discovery inclusion does not imply gateway availability. Route planning does not authorize
-execution. Public docs and reachability checks do not prove ranking, traffic, or AI citation
-success.
+Discovery inclusion does not imply Registry readiness. The current Registry catalog and Runtime
+OpenAPI define executable paths and methods. API-key execution, registered purchases and Credits,
+and accountless x402 are separate modes. MCP tool calls use the API-key mode and do not carry x402
+payments. Public docs and reachability checks do not prove ranking, traffic, or AI citation success.

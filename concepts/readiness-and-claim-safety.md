@@ -7,7 +7,8 @@ overclaiming runtime execution.
 
 | Term | Meaning |
 | --- | --- |
-| `gateway_available` | PubFi can serve the route through a configured gateway adapter with PubFi API-key auth, server-side upstream credentials, usage accounting, and acceptable freshness evidence. |
+| `ready` | Registry v2 contains the exact current operation and allows it to continue to request-time preflight. |
+| `blocked` | Registry v2 prohibits execution of the operation. |
 | `requestable` | PubFi can capture demand or integration interest, but the route is not callable yet. |
 | `needs_procurement` | A high-fit supplier or capability exists, but credential, vendor, payment, policy, or commercial review is needed. |
 | `ready_for_adapter_certification` | Public-safe evidence is strong enough to review adapter certification. Certification itself remains downstream work. |
@@ -20,7 +21,8 @@ overclaiming runtime execution.
 - A source is listed in Discovery.
 - A capability schema exists.
 - A route can be requested or planned.
-- A route is callable only when readiness gates pass.
+- A route can execute only when the current Registry operation is `ready` and request-time gates
+  pass.
 - PubFi keeps provenance and freshness visible.
 
 ## Unsafe Public Claims
@@ -29,8 +31,9 @@ overclaiming runtime execution.
 - A schema means live execution.
 - A local smoke test proves production readiness.
 - SEO/GEO artifacts prove rankings, traffic, or AI citations.
-- PubFi performs automatic procurement, supplier payment, wallet custody, or x402 settlement by
-  default.
+- PubFi performs automatic procurement, supplier payment, or wallet custody.
+- A Discovery x402 label means every listed source or gateway route accepts PubFi x402.
+- The Production API origin means that an x402 route uses a real-value mainnet payment rail.
 
 ## Evidence Rule
 

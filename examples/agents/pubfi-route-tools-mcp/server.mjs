@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 
-const protocolVersion = "2025-11-25";
+import { exactDirectMcpResponse } from "./bridge-response.mjs";
+import {
+  apiKeyEnvNameForEndpoint,
+  normalizePubfiMcpEndpoint,
+  rustMcpRequestInit
+} from "./endpoint-policy.mjs";
+
 const defaultMcpEndpoint = "https://mcp.pubfi.ai";
-const mcpEndpoint = normalizeEndpoint(
-  process.env.PUBFI_MCP_ENDPOINT || process.env.PUBFI_MCP_ORIGIN || defaultMcpEndpoint
+const mcpEndpoint = normalizePubfiMcpEndpoint(
+  process.env.PUBFI_MCP_ENDPOINT || defaultMcpEndpoint
 );
 const apiKeyEnvName = apiKeyEnvNameForEndpoint(mcpEndpoint);
 const apiKey = process.env[apiKeyEnvName] || "";
@@ -17,32 +23,6 @@ process.stdin.on("data", (chunk) => {
 process.stdin.on("end", () => {
   process.exit(0);
 });
-
-function normalizeEndpoint(raw) {
-  let parsed;
-
-  try {
-    parsed = new URL(raw);
-  } catch (error) {
-    throw new Error(`Invalid PUBFI_MCP_ENDPOINT: ${error.message}`);
-  }
-
-  if (!["http:", "https:"].includes(parsed.protocol)) {
-    throw new Error("PUBFI_MCP_ENDPOINT must use http or https.");
-  }
-
-  parsed.hash = "";
-
-  return parsed.toString();
-}
-
-function apiKeyEnvNameForEndpoint(endpoint) {
-  const host = new URL(endpoint).hostname;
-
-  return host === "stg.pubfi.ai" || host.endsWith("-stg.pubfi.ai")
-    ? "STG_PUBFI_API_KEY"
-    : "PROD_PUBFI_API_KEY";
-}
 
 function readFrames() {
   while (true) {
@@ -88,25 +68,7 @@ async function handleMessage(message) {
 
   switch (message.method) {
     case "initialize":
-      writeJsonRpcResult(message.id, {
-        protocolVersion,
-        capabilities: {
-          tools: {
-            listChanged: false
-          }
-        },
-        serverInfo: {
-          name: "pubfi-mcp-stdio-bridge",
-          title: "PubFi MCP Stdio Bridge",
-          version: "0.1.0"
-        },
-        instructions:
-          `This local stdio bridge forwards generic PubFi MCP tools to the hosted Rust MCP endpoint. Tool listing is public; set ${apiKeyEnvName} before calling tools.`
-      });
-      return;
     case "ping":
-      writeJsonRpcResult(message.id, {});
-      return;
     case "tools/list":
       await forwardToRustMcp(message);
       return;
@@ -128,21 +90,7 @@ async function handleMessage(message) {
 }
 
 async function forwardToRustMcp(message) {
-  const headers = {
-    accept: "application/json, text/event-stream",
-    "content-type": "application/json",
-    "mcp-protocol-version": protocolVersion
-  };
-
-  if (apiKey) {
-    headers.authorization = `Bearer ${apiKey}`;
-  }
-
-  const response = await fetch(mcpEndpoint, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(message)
-  });
+  const response = await fetch(mcpEndpoint, rustMcpRequestInit(message, apiKey));
   const bodyText = await response.text();
   let body;
 
@@ -160,16 +108,7 @@ async function forwardToRustMcp(message) {
     return;
   }
 
-  if (body.error) {
-    writeFrame({
-      jsonrpc: "2.0",
-      id: message.id,
-      error: body.error
-    });
-    return;
-  }
-
-  writeJsonRpcResult(message.id, body.result);
+  writeFrame(exactDirectMcpResponse(message.id, body));
 }
 
 function writeJsonRpcResult(id, result) {

@@ -1,43 +1,83 @@
 ---
 title: API Reference
-description: Where to find PubFi's interactive API reference and OpenAPI schema.
+description: Use PubFi's interactive API reference and Registry-derived Runtime OpenAPI.
 ---
 
-PubFi's interactive API reference is hosted by the runtime API service:
+# API Reference
+
+PubFi publishes an interactive reference and a machine-readable Runtime OpenAPI:
 
 - [Interactive API Reference](https://api.pubfi.ai/reference)
+- [Runtime OpenAPI JSON](https://api.pubfi.ai/openapi.json)
 
-The machine-readable OpenAPI schema is:
+## Runtime Authority
 
-- [OpenAPI JSON](https://api.pubfi.ai/openapi.json)
+The Runtime OpenAPI is generated from the currently installed Registry v2 snapshot. It merges
+account, purchase, health, and MCP routes with current `ready` gateway operations. It does not use
+a static provider schema as a fallback.
 
-## What It Covers
+The document identifies its Registry authority with:
 
-The API reference is the executable HTTP contract for PubFi runtime routes, including:
+- `x-pubfi-registry`;
+- `x-pubfi-registry-generation`; and
+- `x-pubfi-registry-manifest`.
 
-- service health and readiness;
-- capability discovery and execution;
-- gateway route families;
-- billing-account, API-key, usage, and authoritative billing-read routes;
-- annotated request or response details where the current OpenAPI source publishes them.
+Each generated Registry operation can also describe the exact route, provider, upstream, matcher,
+readiness, request policy, response policy, meter, and maximum raw units.
 
-## How It Fits With These Docs
+If no valid snapshot is programmed, the document reports that the Registry is unavailable. It
+does not advertise old gateway operations in that state.
 
-Use this docs site for product concepts, agent workflows, claim boundaries, public examples, and
-integration guidance. Use the API reference when you need live published route families and
-annotated request or response details. Use the Auth Boundary section below for account and key
-requirements until the public OpenAPI source publishes security metadata. Use the provider gateway
-examples and provider docs for wildcard endpoint paths, supported methods, and nested provider
-payloads returned through gateway routes.
+## Catalog And OpenAPI Roles
 
-Provider-specific OpenAPI snapshots are public for DeGov and Subscan examples. Generic generated
-gateway adapters are admitted only for crypto/Web3/on-chain data and become public
-`gateway_available` only through the current certified gateway catalog. A Discovery listing or
-route-shape example is not availability evidence.
+Use these surfaces together:
 
-## Auth Boundary
+| Surface | Use |
+| --- | --- |
+| `GET /v1/capabilities` | Inspect all operations in the installed generation, including `ready` and `blocked` entries. |
+| `GET /openapi.json` | Inspect the executable HTTP schema for current `ready` operations. |
+| `GET /reference` | Explore the same OpenAPI in an interactive UI. |
 
-API reference visibility does not mean every route can be executed without authentication. Gateway,
-capability, and MCP execution require a PubFi API key, matching scope, fresh active billing
-admission, sufficient allocation, and current route readiness. Billing-account management and
-readback routes require an authenticated account member with the required account role.
+A Discovery page is source-selection context. It is not Registry execution authority.
+
+## Response Contract
+
+A successful gateway request returns the validated canonical provider JSON for the selected
+operation. It is not wrapped in a PubFi success envelope.
+
+Every success includes:
+
+- `Content-Type`;
+- `x-pubfi-request-id`.
+
+An API-key lane success also includes `x-pubfi-registry-generation`. A settled x402 lane success
+instead includes `PAYMENT-RESPONSE` and `Cache-Control: private, no-store`.
+
+The exact JSON body depends on the current operation response policy. Inspect the Runtime OpenAPI
+before you parse it.
+
+## Authentication And Payment Boundary
+
+OpenAPI visibility does not make every route anonymous.
+
+| Route family | Caller requirement |
+| --- | --- |
+| Catalog, OpenAPI, reference, health, version, and MCP discovery | No PubFi API key. |
+| Gateway through the API-key lane | API key with `invoke_provider`, active admission, and sufficient allocation. |
+| Gateway through the accountless x402 lane | No API key; exact x402-eligible route and valid V2 request-bound payment authorization. |
+| MCP `tools/call` | API key with `invoke_provider`; MCP does not support x402. |
+| Billing-account list | Authenticated human dashboard session. |
+| API-key management | Human Owner or Admin, or same-account API key with `manage_keys`. |
+| Usage and billing readback | Human account member, or same-account API key with `read_usage`. |
+| Purchase offer, list, and status | Authenticated human account member. |
+| Purchase creation | Authenticated human Owner or Admin, current `offerKey`, and `Idempotency-Key`. |
+
+Do not combine a PubFi API key with `PAYMENT-SIGNATURE`. Purchase route visibility also does not
+prove that a current purchase offer exists.
+
+## Use These Docs
+
+Use [Registry Gateway Examples](/reference/provider-gateway-examples) for request selection,
+success headers, and failure classes. Use [Payment And Execution
+Modes](/concepts/payment-and-execution-modes) for the boundary between API-key allowance,
+registered purchases, Credits, and accountless x402.

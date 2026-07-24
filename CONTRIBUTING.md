@@ -18,7 +18,9 @@ Out of scope:
 - credentials, API keys, account ids, wallet secrets, billing data, or private customer data;
 - production `seo_geo` rows or raw readbacks;
 - unreviewed SEO ranking, traffic, or AI citation claims;
-- supplier procurement, payment execution, wallet custody, or private commercial details.
+- supplier procurement, supplier payment, wallet custody, or private commercial details;
+- wallet private keys, x402 payment signatures, payment-response values, or internal settlement
+  records.
 
 ## Editing Rules
 
@@ -27,6 +29,9 @@ Out of scope:
 - Do not duplicate full pages across `pubfi.ai` product surfaces and the canonical docs site. Legacy
   `pubfi.ai/docs/...` paths should stay redirect-only unless the canonical URL decision changes.
 - Use examples that can run without upstream provider secrets in the prompt or repository.
+- Public x402 documentation can describe standard headers, public network and asset identifiers,
+  challenge validation, and exact replay. It must not contain wallet keys, signed authorizations,
+  receipt values, internal Quantro routes, or live commercial details.
 - Keep generated schemas linked from canonical runtime URLs unless a copied snapshot is explicitly
   versioned.
 

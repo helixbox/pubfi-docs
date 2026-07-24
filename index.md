@@ -4,8 +4,8 @@ description: Public documentation for PubFi's agent-native crypto data layer.
 ---
 
 PubFi is building an agent-native crypto data layer. It helps software teams and AI agents discover
-crypto data sources, plan routes, inspect schemas, and use normalized capability contracts without
-binding every workflow directly to a different upstream API.
+crypto data sources, plan exact Registry routes, inspect schemas, and use validated provider
+responses without binding every workflow directly to a different upstream API.
 
 ## What To Read First
 
@@ -17,11 +17,15 @@ binding every workflow directly to a different upstream API.
 - [API key and runtime](/getting-started/api-key-runtime): how billing accounts, request allowance,
   usage, and runtime
   boundaries fit together.
+- [Accountless x402](/getting-started/x402): use an eligible gateway route with a Base Sepolia
+  wallet payment and no PubFi account or API key.
+- [Payment and execution modes](/concepts/payment-and-execution-modes): understand API-key
+  allowance, registered purchases and Credits, and accountless x402.
 - [MCP client setup](/getting-started/mcp-client): connect an agent runtime to PubFi's generic
   MCP tools.
 - [Discovery](/concepts/discovery): understand the public source-selection layer.
-- [Capability contracts](/concepts/capability-contracts): understand normalized agent-facing
-  responses.
+- [Capability contracts](/concepts/capability-contracts): understand Registry v2 catalog,
+  readiness, OpenAPI, and response contracts.
 - [Agent-readable surfaces](/agent-readable/surfaces): understand `llms.txt`, `llms-full.txt`,
   OpenAPI, MCP, and Discovery links.
 
@@ -41,8 +45,6 @@ binding every workflow directly to a different upstream API.
 | [API Reference](https://api.pubfi.ai/reference) | interactive API reference |
 | [OpenAPI](https://api.pubfi.ai/openapi.json) | API schema |
 | [API-host MCP manifest](https://api.pubfi.ai/.well-known/mcp.json) | API-host MCP discovery manifest |
-| [DeGov OpenAPI](https://pubfi.ai/openapi/degov-openapi.json) | provider gateway schema for DeGov route examples |
-| [Subscan OpenAPI](https://pubfi.ai/openapi/subscan-openapi.json) | provider gateway schema for Subscan route examples |
 | [MCP manifest](https://mcp.pubfi.ai/.well-known/mcp.json) | MCP discovery manifest |
 | [MCP discovery pointer](https://pubfi.ai/.well-known/mcp.json) | product-site pointer to the hosted MCP endpoint |
 | [MCP server card](https://pubfi.ai/.well-known/mcp/server-card.json) | metadata card for hosted MCP discovery |
@@ -61,6 +63,8 @@ boundaries explicit so agents can choose routes safely.
 | Product positioning | [Project overview](/project-overview) |
 | HTTP API details | [API reference](/reference/api-reference) |
 | API key, billing account, allowance, and usage | [API key and runtime](/getting-started/api-key-runtime) |
+| Accountless pay-per-request execution | [Accountless x402](/getting-started/x402) |
+| Credits, purchases, and payment-mode boundaries | [Payment and execution modes](/concepts/payment-and-execution-modes) |
 | Agent/MCP interface | [MCP client setup](/getting-started/mcp-client) |
 | Discovery and source selection | [Discovery](/concepts/discovery) |
 | Provider readiness and certification | [Provider readiness](/concepts/provider-readiness) |

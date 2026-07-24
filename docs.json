@@ -30,6 +30,7 @@
         "pages": [
           "getting-started/quickstart",
           "getting-started/api-key-runtime",
+          "getting-started/x402",
           "getting-started/mcp-client"
         ]
       },
@@ -39,6 +40,7 @@
           "concepts/discovery",
           "concepts/capability-contracts",
           "concepts/route-planning",
+          "concepts/payment-and-execution-modes",
           "concepts/account-credit-usage",
           "concepts/provider-readiness",
           "concepts/readiness-and-claim-safety"
