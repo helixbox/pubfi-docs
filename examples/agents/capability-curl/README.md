@@ -1,38 +1,33 @@
-# Capability Curl Example
+# Registry Catalog Curl Example
 
-This example calls the PubFi capability runtime directly over HTTPS.
+This no-secret example fetches the current signed Registry v2 catalog over HTTPS.
 
-Use it when you want a minimal API example before wiring an MCP client.
+Use it before you construct an HTTP gateway request or wire an MCP client. Do not infer execution
+from a Discovery page, old example, or provider name.
 
-## Catalog Check
+## Run
 
-The public catalog does not require a PubFi API key:
-
-```sh
-curl -sS https://api.pubfi.ai/v1/capabilities
-```
-
-## Account Balance Runtime Call
-
-Live account-balance execution requires:
-
-- `PROD_PUBFI_API_KEY`;
-- `PUBFI_WALLET_ADDRESS`;
-- active billing admission and request allocation;
-- server-side provider credentials configured by PubFi;
-- current provider readiness for the selected route.
-
-Run:
+From the repository root:
 
 ```sh
-export PROD_PUBFI_API_KEY='<PubFi API key>'
-export PUBFI_WALLET_ADDRESS='<wallet address to query>'
-export PUBFI_NETWORK='polkadot'
-sh examples/agents/capability-curl/wallet_account_balance.sh
+sh examples/agents/capability-curl/inspect_registry.sh
 ```
 
-The response uses `pubfi.capability.response.v1` and includes readiness, provenance, source
-freshness, warnings, and normalized data.
+To inspect another PubFi environment that you are authorized to use:
 
-Do not commit API keys, wallet addresses, raw account responses, or production readbacks to this
-repository.
+```sh
+export PUBFI_API_BASE='https://api.pubfi.ai'
+sh examples/agents/capability-curl/inspect_registry.sh
+```
+
+The response uses `pubfi.gateway.registry.catalog.v2`. Select only a current `ready` operation and
+use its exact matcher and HTTP method. Refresh
+[`https://api.pubfi.ai/openapi.json`](https://api.pubfi.ai/openapi.json) before you construct an
+execution request because a new signed generation can change the route set.
+
+This example does not call a provider, consume an account allocation, or create an x402 payment
+challenge. See the [Quickstart](../../../getting-started/quickstart.md) for API-key execution and
+the [Accountless x402 guide](../../../getting-started/x402.md) for the separate payment mode.
+
+Do not commit API keys, wallet keys, payment signatures, raw account responses, or production
+readbacks to this repository.

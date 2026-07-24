@@ -26,8 +26,9 @@ Canonical public routes include:
 ## Discovery Is Not Execution
 
 Discovery inclusion does not mean the source is callable through PubFi. Runtime callability depends
-on gateway readiness, configured credentials, source freshness, PubFi API-key auth, active billing
-admission, sufficient request allocation, and capability or route support.
+on an exact `ready` operation in the current Registry v2 generation and its request-time gates.
+Those gates can include configured provider credentials and source freshness. Execution then needs
+either valid PubFi API-key admission or an explicitly enabled x402 HTTP payment lane.
 
 ## Agent-Readable Discovery
 
@@ -40,16 +41,10 @@ Discovery content is also exposed through:
 - `/discovery/agent-capabilities.json`
 
 These exports are public-safe retrieval surfaces. They must not expose private accounts,
-credentials, billing records, dashboard data, raw readbacks, or production `seo_geo` rows.
+credentials, billing records, dashboard data, or raw operational readbacks.
 
-## Snapshot Counts
+## Content And Runtime Authority
 
-At snapshot commit `4a1a92a8d61d`, checked-in public-safe Discovery data includes:
-
-- 167 data-source records;
-- 167 source-freshness records;
-- 178 capability cards;
-- 5 routing-result examples;
-- 7 topic-intent records.
-
-These are content/source counts, not traffic, ranking, or citation metrics.
+Discovery records are reviewed content snapshots. Their count and status can change as sources are
+updated. They are not traffic, ranking, citation, or live execution metrics. Use
+`GET https://api.pubfi.ai/v1/capabilities` for the current executable route catalog.

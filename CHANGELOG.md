@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Replaced the retired fixed-capability and static provider examples with the signed Registry v2
+  catalog, dynamic Runtime OpenAPI, and exact path-and-method execution contract.
+- Synchronized the public MCP stdio bridge and smoke with the current Registry v2 five-tool
+  contract, generation identity, endpoint policy, and exact response forwarding.
+- Documented the separate API-key allocation, registered purchase and Credits, and accountless x402
+  modes, including the current Base Sepolia V2 challenge and exact-replay contract.
+- Added semantic public-material gates for retired runtime routes, static provider schemas, the
+  retired response envelope, old MCP input fields, and blanket no-x402 claims.
 - Aligned the public MCP reference and runnable smoke with the current five-tool surface by removing
   the retired `pubfi.pricing.quote` tool.
 - Replaced stale non-crypto generic gateway readiness claims with the crypto/Web3/on-chain scope and
@@ -18,9 +26,8 @@
 - Added public developer and agent docs for Discovery, capability contracts, route planning,
   account/credit usage, provider readiness, MCP setup, runtime endpoints, public surfaces, and
   agent-readable assets.
-- Added runnable public-safe examples for MCP, capability HTTP calls, and Subscan gateway
+- Added runnable public-safe examples for MCP, Registry catalog inspection, and x402 challenge
   inspection.
-- Added public-safe provider gateway examples for Subscan and DeGov route-shape documentation.
 - Added security/public-data boundaries and asset placement rules for public-safe examples,
   screenshots, diagrams, and generated artifacts.
 - Added future public repository issue and PR templates.

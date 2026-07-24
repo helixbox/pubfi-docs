@@ -3,18 +3,18 @@
 ## Short Description
 
 PubFi is an agent-native crypto data layer. It helps software teams and AI agents find crypto data
-sources, understand source fit, plan routes, inspect schemas, and use normalized PubFi capability
-contracts instead of binding every workflow directly to a different upstream API.
+sources, understand source fit, plan exact Registry routes, inspect schemas, and use validated
+provider responses instead of binding every workflow directly to a different upstream API.
 
 ## Product Layers
 
 | Layer | Role |
 | --- | --- |
 | Discovery | public open index, source-selection surface, demand engine, and agent-readable retrieval context |
-| Gateway | authenticated PubFi route execution for supported configured provider routes |
-| Capability runtime | stable normalized agent-facing data contracts |
+| Gateway Registry v2 | signed, generation-bound catalog and exact route execution for currently ready operations |
 | MCP tools | generic route/capability tools for agent runtimes |
-| Account and usage | billing-account membership, API-key auth, admission, raw-unit usage facts, and authoritative billing reads |
+| Account and usage | billing-account membership, API-key auth, admission, raw-unit usage facts, registered purchases, and authoritative billing reads |
+| Accountless x402 | route-specific pay-per-response execution without a PubFi account, API key, or Credits |
 
 ## Why Agents Need PubFi
 
@@ -23,10 +23,10 @@ auth schemes, quotas, payment rules, and response formats. PubFi reduces that su
 smaller agent-facing interface:
 
 1. search capabilities and sources;
-2. plan a route;
-3. inspect schemas and readiness posture;
-4. execute only supported callable routes through PubFi auth;
-5. preserve provenance, freshness, warnings, and usage facts.
+2. inspect the active Registry generation and ready route matchers;
+3. plan an exact path and method;
+4. execute only a supported current route through API-key admission or an eligible x402 challenge;
+5. preserve provider provenance, Registry identity, and request identity.
 
 ## Safe Claims
 
@@ -34,8 +34,11 @@ smaller agent-facing interface:
   answer-engine retrieval.
 - PubFi has generic agent tool contracts for search, planning, execution, explanation, and schema
   readback.
-- PubFi has a normalized capability response envelope for early crypto data capabilities.
-- PubFi keeps provider provenance, source freshness, readiness, and warnings explicit.
+- PubFi publishes a signed Registry v2 catalog and dynamically generated runtime OpenAPI for
+  currently ready routes.
+- PubFi keeps provider identity, exact matchers, Registry generation, readiness, and request
+  identity explicit.
+- PubFi supports a bounded Base Sepolia x402 lane on explicitly eligible routes.
 - Rust owns backend, account, gateway, capability, MCP, storage, and operations boundaries.
 
 ## Non-Claims
@@ -45,15 +48,14 @@ smaller agent-facing interface:
 - Contract-ready capability examples are not proof of live upstream execution.
 - SEO/GEO readbacks and local automation outputs are diagnostics, not ranking, traffic, or AI
   citation proof.
-- PubFi does not publicly promise supplier procurement, wallet custody, live x402 payment
-  execution, supplier settlement, or production model-ranked routing from this docs pack.
+- PubFi does not promise supplier procurement, supplier payment, wallet custody, Base mainnet x402,
+  universal x402 eligibility, or production model-ranked routing.
 
 ## Suggested Public README Blurb
 
 ```markdown
 PubFi is building an agent-native crypto data layer. Discovery exposes a public source-selection
-index for crypto data APIs, while PubFi gateway and capability contracts give agents a smaller,
-auth-required surface for planning, explaining, and executing supported data routes. The project
-keeps source provenance, freshness, readiness, and claim boundaries explicit so agents can decide
-when a route is callable, requestable, contract-ready, or research-only.
+index for crypto data APIs, while Registry v2 gives agents an exact, fail-closed catalog for
+planning and executing ready routes. Registered callers use API keys and allocations. Explicitly
+eligible HTTP routes can instead use accountless x402 on Base Sepolia.
 ```

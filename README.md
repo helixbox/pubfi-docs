@@ -31,14 +31,20 @@ github.com/helixbox/pubfi-docs
   -> canonical cross-links from README, llms.txt, Discovery, API Reference, MCP, and examples
 ```
 
-Snapshot source: `pubfi-mono` origin/main through commit
-`68f202a1b538faf588979a598a30404534e23d4a`.
+Snapshot sources:
+
+- `pubfi-mono` main through `cc7e03e8a9f221c424780bf03306bfa48afa060b`;
+- `quantro-mono` origin/main through `f5a4dec934f4a2a6e072149d694df7984391b74b`; and
+- public Runtime OpenAPI, Registry v2 catalog, MCP `tools/list`, and x402 challenge observed on
+  2026-07-23.
 
 ## Start Here
 
 - [Docs home](index.md)
 - [Project overview](project-overview.md)
 - [Quickstart](getting-started/quickstart.md)
+- [Accountless x402](getting-started/x402.md)
+- [Payment and execution modes](concepts/payment-and-execution-modes.md)
 - [API Reference](reference/api-reference.md)
 - [MCP client setup](getting-started/mcp-client.md)
 - [Agent-readable surfaces](agent-readable/surfaces.md)
@@ -67,8 +73,6 @@ Snapshot source: `pubfi-mono` origin/main through commit
 - Interactive API reference: `https://api.pubfi.ai/reference`
 - OpenAPI schema: `https://api.pubfi.ai/openapi.json`
 - API-host MCP manifest: `https://api.pubfi.ai/.well-known/mcp.json`
-- DeGov OpenAPI: `https://pubfi.ai/openapi/degov-openapi.json`
-- Subscan OpenAPI: `https://pubfi.ai/openapi/subscan-openapi.json`
 - MCP manifest: `https://mcp.pubfi.ai/.well-known/mcp.json`
 - MCP discovery pointer: `https://pubfi.ai/.well-known/mcp.json`
 - MCP server card: `https://pubfi.ai/.well-known/mcp/server-card.json`
@@ -106,16 +110,15 @@ pubfi-docs/
     └── agents/
         ├── capability-curl/
         ├── pubfi-route-tools-mcp/
-        └── subscan-gateway/
+        └── x402-base-sepolia/
 ```
 
 Runnable public-safe examples live under [examples/](examples/README.md):
 
 - `examples/agents/pubfi-route-tools-mcp/`: dependency-free stdio bridge and smoke for the hosted
   MCP endpoint;
-- `examples/agents/capability-curl/`: minimal HTTPS call to the capability runtime;
-- `examples/agents/subscan-gateway/`: lower-level provider gateway inspection path using Subscan as
-  one concrete provider example.
+- `examples/agents/capability-curl/`: no-auth Registry v2 catalog inspection;
+- `examples/agents/x402-base-sepolia/`: no-secret inspection of the current x402 challenge.
 
 ## Local Preview
 
@@ -135,8 +138,10 @@ npx mint@latest validate
 The portable check validates Mintlify navigation targets, Markdown links, docs-site route links,
 trailing whitespace, secret patterns, unsafe SEO/GEO success phrases, and example syntax.
 
-Live examples require a PubFi API key and must load it from local environment variables or a secret
-store. Do not commit credentials, wallet addresses, raw account responses, or production readbacks.
+Authenticated examples require a PubFi API key and must load it from a secret store. Paid x402
+clients require a buyer wallet key that must also stay in a secret store. Do not commit
+credentials, wallet addresses, payment signatures, payment responses, raw account responses, or
+production readbacks.
 
 ## Publishing
 
@@ -159,8 +164,9 @@ Unsafe claims:
 - every Discovery source is callable through PubFi;
 - local SEO/GEO artifacts prove ranking, traffic, or AI citation success;
 - GitHub exposure alone proves search success;
-- PubFi executes supplier procurement, wallet payments, x402 settlement, or live model-ranked
+- PubFi performs supplier procurement, supplier payment, wallet custody, or live model-ranked
   routing by default.
+- Every gateway route supports x402, or the production API accepts real-value mainnet payments.
 
 ## Appreciation
 

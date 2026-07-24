@@ -35,11 +35,12 @@ HTTP contract source. The MCP manifest is the agent-tool discovery surface.
 | Need | Path |
 | --- | --- |
 | Compare crypto data providers | Discovery pages |
-| Let an agent inspect available data | `pubfi.capabilities.search` |
-| Turn a data need into a route | `pubfi.route.plan` |
-| Understand why a route was selected or rejected | `pubfi.route.explain` |
-| Inspect input/output shape | `pubfi.schema.get` |
-| Execute a supported route | `pubfi.route.execute` with PubFi API-key auth and planning evidence |
+| Inspect the installed Registry v2 catalog | `GET /v1/capabilities` |
+| Search the Registry through MCP | `pubfi.capabilities.search` |
+| Plan or explain an exact path and method | `pubfi.route.plan` or `pubfi.route.explain` |
+| Inspect current MCP schemas and dynamic routes | `pubfi.schema.get` or `tools/list` |
+| Execute through MCP | `pubfi.route.execute` with PubFi API-key auth |
+| Execute an eligible accountless HTTP route | x402 V2 with no PubFi API key |
 
 ## 4. Create Or Load An API Key
 
@@ -56,30 +57,53 @@ history.
 PubFi API keys belong in a secret store or environment variable. Upstream provider keys stay
 server-side and must not be sent by agents.
 
-## 6. Send A Minimal Gateway Request
+## 6. Inspect Current Routes
 
-Use a public route-shape example when you need to confirm gateway auth and endpoint routing:
+The Registry catalog is public and does not require a PubFi API key:
 
 ```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/subscan/polkadot/api/now' \
+curl --silent --show-error 'https://api.pubfi.ai/v1/capabilities'
+```
+
+Treat this response and the Runtime OpenAPI as current authority. Do not infer execution from a
+Discovery listing, an old provider example, or a static provider schema.
+
+## 7. Send A Minimal Gateway Request
+
+The current Registry includes this exact ready route:
+
+```bash
+curl --location 'https://api.pubfi.ai/v1/gateway/quantro/health' \
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
-For provider-specific Subscan and DeGov route-shape examples, read [Provider Gateway
-Examples](/reference/provider-gateway-examples). Check the current public gateway catalog and
-readiness evidence before treating any example as callable.
+Use only paths and methods present in the current Registry generation.
 
-## 7. Check Readiness Before Execution
+## 8. Or Use Accountless x402
+
+Omit the API key on an x402-enabled route to receive a `402 Payment Required` challenge. A paid
+retry uses `PAYMENT-SIGNATURE`; a settled success returns `PAYMENT-RESPONSE`.
+
+```bash
+curl --include 'https://api.pubfi.ai/v1/gateway/quantro/health'
+```
+
+Current x402 support uses Base Sepolia test USDC, not real-value Base mainnet USDC. Read
+[Accountless x402](/getting-started/x402) before signing.
+
+## 9. Check Readiness Before Execution
 
 Do not treat a source page, schema, or route plan as proof of live execution. Live execution also
-requires PubFi API-key auth, fresh active billing admission, sufficient request allocation,
-provider readiness, credential configuration, source freshness evidence, and a supported callable
-route.
+requires a ready route in the installed Registry generation and all route-owned preflight gates.
+The API-key lane also requires valid scope, fresh admission, and sufficient allocation. The x402
+lane instead requires an eligible route and a valid request-bound payment authorization.
 
 ## Next
 
 - [API reference](/reference/api-reference)
 - [Provider Gateway Examples](/reference/provider-gateway-examples)
+- [Accountless x402](/getting-started/x402)
+- [Payment and execution modes](/concepts/payment-and-execution-modes)
 - [MCP client setup](/getting-started/mcp-client)
 - [Capability contracts](/concepts/capability-contracts)
 - [Readiness and claim safety](/concepts/readiness-and-claim-safety)

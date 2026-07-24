@@ -2,19 +2,61 @@
 
 ## Is Discovery the same as the gateway?
 
-No. Discovery is the public source-selection layer. Gateway and capability runtime are
-authenticated execution surfaces with separate readiness gates.
+No. Discovery is the editorial source-selection layer. The Registry v2 catalog is the runtime
+authority for executable routes.
 
 ## Does a listed source mean PubFi can call it?
 
-No. A listed source can be public context, requestable, contract-ready, or blocked. Runtime
-callability requires `gateway_available` readiness and live execution gates.
+No. A Discovery listing can be public context, requestable, or under review. A route is callable
+only when the current `GET /v1/capabilities` catalog lists its exact path and method as `ready`.
 
 ## Can agents use PubFi through MCP?
 
 Yes, through generic MCP tools such as `pubfi.capabilities.search`, `pubfi.route.plan`, and
 `pubfi.route.execute`. Public MCP handshake and introspection methods are available without a
 PubFi API key; hosted `tools/call` requests require one.
+
+MCP does not support x402 payment. Use the HTTP gateway for an eligible x402 request.
+
+## Do all gateway routes support x402?
+
+No. x402 is enabled per exact Registry route. Inspect the current catalog and the route's
+`402 Payment Required` response before you sign.
+
+## Does x402 require an account or API key?
+
+No. An eligible HTTP request uses a wallet authorization instead. It creates no PubFi account, API
+key, Credits balance, invoice, or anonymous dashboard.
+
+## How does an accountless caller see a balance or receipt?
+
+The wallet or chain explorer shows the wallet's Base Sepolia test USDC activity. The settled HTTP
+response includes `PAYMENT-RESPONSE`, and an exact signed replay returns the same response. PubFi
+does not expose an accountless Credits balance because x402 buys one response and does not create
+Credits.
+
+## Is x402 using real money in Production?
+
+The current PubFi application endpoint is Production, but its published x402 payment rail is Base
+Sepolia testnet. Testnet USDC has no financial value. PubFi does not currently publish a Base
+mainnet x402 route.
+
+## Are the free starter requests Credits?
+
+No. The starter allocation provides 1,000 free requests. PubFi uses **Credits** only for eligible
+purchase-origin `request_count` units.
+
+## Can a registered account buy Credits?
+
+The public API and dashboard support provider-neutral purchase offers and purchase status.
+Purchase creation requires an authenticated Owner or Admin. Availability is data-driven: if the
+current offer response is empty, no purchase offer is open for sale.
+
+## Do Stripe and x402 debit the same balance?
+
+No. A registered purchase can create a purchase-origin allocation after verified settlement.
+x402 buys one eligible response directly and never creates or consumes Credits. Quantro remains
+the common financial-fact authority behind both entry modes.
 
 ## Should upstream provider keys be sent to agents?
 

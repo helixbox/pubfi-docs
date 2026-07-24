@@ -1,149 +1,185 @@
 ---
-title: Provider Gateway Examples
-description: Public examples for lower-level PubFi gateway routes.
+title: Registry Gateway Examples
+description: Select and call current Registry v2 gateway operations without using stale provider routes.
 ---
 
-# Provider Gateway Examples
+# Registry Gateway Examples
 
-These examples show the lower-level gateway route shape for provider-backed reads.
+PubFi executes provider-backed requests through the currently installed Registry v2 generation.
+There is no permanent provider URL pattern. Use the public catalog or Runtime OpenAPI before every
+integration or route refresh.
 
-Prefer capability routes or route planning for repeated product workflows. Use provider gateway
-routes when you are inspecting adapter behavior, debugging a provider-specific path, or validating a
-new capability mapping.
+## 1. Inspect Current Authority
 
-## Boundary
+Get the complete installed catalog:
 
-- Clients send only a PubFi API key.
-- Upstream provider credentials stay server-side.
-- Provider inclusion in Discovery does not imply gateway availability.
-- Gateway examples are route-shape examples, not public pricing, uptime, ranking, or citation
-  proof.
+```sh
+curl --silent --show-error \
+  'https://api.pubfi.ai/v1/capabilities'
+```
 
-## Auth
+The response uses `pubfi.gateway.registry.catalog.v2`. It includes:
+
+- the exact generation, manifest, and compile time;
+- each route matcher and allowed method;
+- finite query, body, and response policies;
+- provider and upstream revisions;
+- the meter and maximum raw units; and
+- current `ready` or `blocked` readiness.
+
+Use the Runtime OpenAPI when you need only current `ready` operations:
+
+```sh
+curl --silent --show-error \
+  'https://api.pubfi.ai/openapi.json'
+```
+
+Do not infer execution from a Discovery listing, an old example, or a saved route from a different
+Registry generation.
+
+## 2. Select An Exact Operation
+
+Copy the path and HTTP method from one current `ready` operation. Replace each documented path
+parameter with a value that satisfies its schema. The resulting concrete path is the gateway path.
+Do not add provider, network, or endpoint segments that are not present in the current schema.
+
+Only `GET` and `POST` are supported. The request query and body must satisfy the exact operation
+policy.
+
+Set placeholders from the current schema:
+
+```sh
+export PUBFI_GATEWAY_PATH='<exact ready path from the Runtime OpenAPI>'
+export PUBFI_GATEWAY_METHOD='GET'
+```
+
+## 3. Execute With A PubFi API Key
+
+Send one supported API-key header:
 
 ```text
 Authorization: Bearer <PubFi API key>
 X-PubFi-Api-Key: <PubFi API key>
 ```
 
-## Route Shape
+Example:
 
-```text
-https://api.pubfi.ai/v1/gateway/{provider}/{network}/{endpoint...}
-```
-
-The `{provider}` and `{network}` segments are provider-specific gateway routing inputs. The
-`{endpoint...}` segment maps to the upstream path supported by the adapter.
-
-The examples below are public route-shape examples and certified readiness examples where noted.
-They are not a promise that every OpenAPI-listed provider path is certified or path-complete.
-
-## Subscan Gateway Example
-
-Subscan examples use the network segment to select the upstream chain host, such as `polkadot` or
-`acala`.
-
-Example routes:
-
-```text
-GET /v1/gateway/subscan/polkadot/api/now
-POST /v1/gateway/subscan/polkadot/api/v2/scan/accounts
-POST /v1/gateway/subscan/polkadot/api/scan/account/tokens
-POST /v1/gateway/subscan/acala/api/scan/account/tokens
-```
-
-Example request:
-
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/subscan/polkadot/api/now' \
+```sh
+curl --include \
+  --request "$PUBFI_GATEWAY_METHOD" \
+  "https://api.pubfi.ai${PUBFI_GATEWAY_PATH}" \
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
-For a runnable Subscan inspection script, see the
-[Subscan gateway example](https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/subscan-gateway).
+The key must have `invoke_provider`. The billing account must also have active admission and enough
+allocation for the operation meter.
 
-## DeGov Gateway Example
+For a `POST` operation, use only the JSON fields that the current OpenAPI request body permits:
 
-DeGov uses a fixed upstream base URL, so PubFi uses `global` as the gateway network placeholder.
+```sh
+export PUBFI_GATEWAY_METHOD='POST'
+export PUBFI_GATEWAY_BODY='<JSON that satisfies the current operation schema>'
 
-Example routes:
+curl --include \
+  --request "$PUBFI_GATEWAY_METHOD" \
+  "https://api.pubfi.ai${PUBFI_GATEWAY_PATH}" \
+  --header 'Authorization: Bearer <PubFi API key>' \
+  --header 'Content-Type: application/json' \
+  --data "$PUBFI_GATEWAY_BODY"
+```
+
+Do not copy a request body from another operation.
+
+## 4. Use The Accountless x402 Lane When Eligible
+
+An exact gateway route can separately enable accountless x402. To inspect that lane, send the
+exact request without a PubFi API key or payment signature:
+
+```sh
+curl --include \
+  --request "$PUBFI_GATEWAY_METHOD" \
+  "https://api.pubfi.ai${PUBFI_GATEWAY_PATH}"
+```
+
+An eligible unpaid request returns `402 Payment Required`, a `PAYMENT-REQUIRED` header, and the
+same current requirements in the JSON body. Validate that challenge before a wallet signs it.
+
+The paid retry uses `PAYMENT-SIGNATURE`. A settled success returns `PAYMENT-RESPONSE`. Never send a
+PubFi API key and `PAYMENT-SIGNATURE` together. MCP does not support this payment lane.
+
+See [Accountless x402](/getting-started/x402) for the Base Sepolia safety boundary and exact replay
+rules.
+
+## Success Response
+
+A successful gateway request returns the validated canonical provider JSON. PubFi does not wrap
+the body in a stable success envelope.
+
+Every success includes:
 
 ```text
-GET /v1/gateway/degov/global/health
-GET /v1/gateway/degov/global/v1/meta/pricing
-GET /v1/gateway/degov/global/v1/daos
-GET /v1/gateway/degov/global/v1/activity
-GET /v1/gateway/degov/global/v1/system/freshness
-GET /v1/gateway/degov/global/v1/daos/{daoId}/brief
-GET /v1/gateway/degov/global/v1/items/{kind}/{externalId}
+Content-Type: <validated response media type>
+x-pubfi-request-id: <request id>
 ```
 
-Example free route:
+An API-key lane success also includes:
 
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/degov/global/v1/daos' \
-  --header 'Authorization: Bearer <PubFi API key>'
+```text
+x-pubfi-registry-generation: <generation id>
 ```
 
-Example DAO brief route:
+An x402 lane success instead includes `PAYMENT-RESPONSE` and
+`Cache-Control: private, no-store`.
 
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/degov/global/v1/daos/ring-dao/brief' \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
+The JSON fields depend on the selected operation response policy. Parse only the fields in the
+current Runtime OpenAPI.
 
-## Generated Generic Gateway Boundary
+## Registry Failure Classes
 
-Generated generic adapters are limited to crypto/Web3/on-chain data operations. They become public
-runtime routes only after the exact operation appears in the current certified gateway catalog.
-An empty catalog is a valid fail-closed state. Discovery inclusion, prior certification, or an old
-route-shape example does not establish current availability.
+Registry v2 uses one provider-neutral failure vocabulary:
 
-Current public examples preserve route shape and response families, but they intentionally avoid
-publishing real account data, real keys, or upstream provider credentials.
+| HTTP status | Error code |
+| --- | --- |
+| `400` | `gateway.invalid_typed_request` |
+| `401` | `gateway.unauthenticated` |
+| `402` | `gateway.billing_or_admission_action_required` |
+| `403` | `gateway.forbidden` |
+| `404` | `gateway.no_active_matching_route` |
+| `429` | `gateway.rate_reservation_or_budget_exceeded` |
+| `502` | `gateway.upstream_transport_or_response_failure` |
+| `503` | `gateway.registry_credential_admission_or_health_unavailable` |
+| `504` | `gateway.upstream_timeout` |
 
-## Gateway Response Shape
-
-Successful gateway responses use a PubFi envelope around the provider payload:
+The error body uses the standard PubFi error object:
 
 ```json
 {
-  "ok": true,
-  "data": {},
-  "meta": {
-    "request_id": "<request id>",
-    "provider": "degov",
-    "network": "global",
-    "route": "/v1/gateway/degov/global/v1/daos",
-    "upstream": {
-      "status": 200
-    }
+  "error": {
+    "code": "gateway.no_active_matching_route",
+    "message": "Gateway request could not be completed"
   }
 }
 ```
 
-The `data` value is the provider JSON payload returned for the routed endpoint, so its nested shape
-differs by provider and route. The exact payload and upstream metadata belong to the provider
-endpoint. Use the interactive [API reference](https://api.pubfi.ai/reference) and current route
-readiness before treating a route as executable in production.
+Lane admission can return more specific codes. For example:
 
-## Common Gateway Outcomes
+- API-key admission can return `gateway.insufficient_meter_escrow`,
+  `gateway.billing_account_inactive`, `gateway.billing_admission_unknown`, or
+  `gateway.billing_admission_stale`.
+- x402 can return `x402.conflicting_payment_lanes`, `x402.invalid_payment`,
+  `x402.payment_failed`, `x402.claimed_payment_conflict`, `x402.provider_failure`,
+  `x402.provider_timeout`, or `x402.unavailable`.
 
-| HTTP status | Code | When it happens |
-| --- | --- | --- |
-| `200` | `ok: true` | Gateway authenticated the request and the upstream provider returned success. |
-| `401` | `pubfi.unauthorized` | No PubFi API key was sent, or the key is invalid, revoked, or inactive. |
-| `402` | `gateway.insufficient_credits` | Current billing admission has insufficient request allocation. |
-| `403` | `pubfi.forbidden` | The API key is valid but does not include the scope required for provider invocation. |
-| `502` | `pubfi.gateway_failed` | Route decision, provider dispatch, or upstream gateway execution failed. |
-| `503` | `pubfi.provider_credentials_not_configured` | The provider route needs a server-side credential that is not configured. |
-| `503` | `pubfi.provider_credentials_unavailable` | Provider credentials are temporarily unavailable. |
+A `402` response is not always an account-allocation failure. A `PAYMENT-REQUIRED` header identifies
+an unsigned x402 challenge. Inspect the header and error code before choosing the next action.
 
-## What This Page Does Not Publish
+## Public-Safe Boundary
 
-- Real PubFi API keys.
-- Upstream provider keys.
-- Server-side credential administration details.
-- Account ids, usage rows, or billing records.
-- A claim that every listed provider route is always callable.
-- A claim that a gateway route is a stable public capability when a PubFi capability exists.
+Examples must not publish:
+
+- PubFi API keys;
+- `PAYMENT-SIGNATURE` or `PAYMENT-RESPONSE` values;
+- wallet secrets or unredacted payment payloads;
+- upstream provider credentials;
+- account, purchase, usage, or billing records; or
+- claims that an old path, current offer, price, uptime result, or route remains available.

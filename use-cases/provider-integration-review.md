@@ -20,11 +20,10 @@ A team wants to decide whether a provider should become callable through PubFi.
 3. Decide whether the source is requestable, contract-ready, or certification-ready.
 4. Run adapter certification only when public-safe evidence is sufficient.
 5. Keep procurement, payment, credential, and commercial approval separate.
-6. Promote `gateway_available` only when runtime readiness evidence supports it.
+6. Publish an exact Registry v2 operation only after runtime readiness evidence supports `ready`.
 
 ## Public Docs Boundary
 
 Public docs may describe the review path and public evidence requirements. They must not publish
 credentials, private vendor terms, procurement notes, or claim runtime availability before the
-readiness gate passes.
-
+Registry readiness gate passes.

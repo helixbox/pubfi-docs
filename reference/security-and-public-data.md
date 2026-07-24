@@ -1,57 +1,104 @@
+---
+title: Security And Public Data Boundary
+description: Public-safe rules for PubFi API, Registry, account, purchase, and x402 documentation.
+---
+
 # Security And Public Data Boundary
 
-Public docs should make PubFi easier to understand without leaking private runtime state.
+Public docs must explain PubFi without exposing caller credentials, payment evidence, private
+account data, or operator state.
 
 ## Public-Safe Data
 
-Allowed in public docs:
+Public docs can include:
 
-- public product descriptions;
-- public Discovery URLs;
-- public OpenAPI and MCP manifest URLs;
-- public-safe example requests;
-- redacted response shapes;
-- public-safe source freshness summaries;
+- public product and Discovery descriptions;
+- `/v1/capabilities` field definitions and sanitized catalog shapes;
+- Runtime OpenAPI, API reference, and MCP manifest URLs;
+- public MCP tool names and input schemas;
+- placeholder HTTP and MCP requests;
+- Registry v2 readiness and provider-neutral failure classes;
+- the x402 protocol version, supported test network, standard header names, and safety rules;
+- registered purchase route shapes and role requirements;
+- redacted response shapes; and
 - claim-safety language.
-- public explanations of `llms.txt`, `llms-full.txt`, OpenAPI, MCP, and Discovery links.
 
-## Private Data
+The current `PAYMENT-REQUIRED` challenge is public payment-term authority. Clients must read and
+validate it at request time. Docs must not hard-code a transient price, payee, timeout, or route as
+permanent authority.
+
+## Secrets And Private Data
 
 Do not publish:
 
 - PubFi API keys;
 - upstream provider credentials;
-- account ids and private usage data;
-- billing records;
-- wallet secrets or payment payloads;
+- wallet private keys or signing material;
+- a `PAYMENT-SIGNATURE` value or its decoded payment payload;
+- a `PAYMENT-RESPONSE` value;
+- unredacted wallet or payment identities;
+- account, membership, API-key, purchase, checkout, receipt, usage, allocation, or billing records;
+- private provider responses or production runtime readbacks;
 - private procurement notes;
-- raw production Postgres `seo_geo` rows;
+- raw production database rows;
 - raw answer-engine outputs;
-- unredacted crawler logs;
-- local runner scratch.
-- query-prioritization maps;
-- content-operations workflows;
-- readback methods;
-- campaign plans;
-- internal SEO/GEO operating playbooks.
+- unredacted crawler or application logs;
+- local runner scratch data;
+- query-prioritization maps or campaign plans; or
+- internal content, search, readback, repair, or operator workflows.
 
-## Examples
+An x402 caller must send signed payment evidence to the HTTP gateway. The caller must not place
+that evidence in a prompt, source file, issue, screenshot, analytics event, or general application
+log.
 
-Examples should load secrets from environment variables or secret stores:
+## Secret Injection
+
+Examples can load a PubFi API key from a secret store or environment variable:
 
 ```sh
-export PROD_PUBFI_API_KEY='<PubFi API key>'
+export PUBFI_API_KEY='<PubFi API key>'
 ```
 
-The docs may show the variable name, but not a real value.
+The docs can show the variable name and a placeholder. They must not show a real value.
 
-## Screenshots
+An agent runtime can inject the API key into the HTTP or MCP transport. The model prompt must not
+contain the key. An x402 wallet or payment client must keep its signing key outside the model
+context and inject only the required signed header into the exact HTTP request.
 
-Screenshots must be sanitized before publication. Prefer generated diagrams or cropped public
-surfaces over dashboard screenshots.
+## Response And Cache Handling
 
-## Agent Prompts
+Honor `Cache-Control: private, no-store` on x402 and purchase responses.
 
-Agents should never receive upstream provider keys, wallet secrets, billing payloads, or private
-account identifiers. The agent can receive a public route intent and use PubFi auth through the
-runtime secret store.
+Do not persist or replay sensitive headers through a shared cache. Redact at least:
+
+- `Authorization`;
+- `X-PubFi-Api-Key`;
+- `PAYMENT-SIGNATURE`;
+- `PAYMENT-RESPONSE`; and
+- account-bound checkout or purchase links.
+
+Use the same exact signed x402 request only for the documented recovery and replay flow. Do not
+create a new payment authorization only because the first network response was lost.
+
+## Examples And Screenshots
+
+Examples must use placeholders and public schemas. They must not use real account identifiers,
+wallet addresses, purchase identifiers, payment payloads, provider keys, or private response data.
+
+Sanitize screenshots before publication. Prefer generated diagrams or cropped public pages over
+dashboard, wallet, checkout, billing, or operator screenshots.
+
+## Claims
+
+A public route, OpenAPI operation, health result, or source listing does not prove:
+
+- current provider success;
+- current x402 eligibility or settlement;
+- current registered purchase-offer availability;
+- account allocation or Credits balance;
+- uptime; or
+- ranking, traffic, or citation outcomes.
+
+Use the installed Registry catalog and Runtime OpenAPI for route authority. Use the current x402
+challenge for payment terms. Use authenticated offer and account responses only inside the caller's
+private application context.

@@ -14,6 +14,7 @@ checkMarkdownLinks();
 checkDocsSiteLinks();
 checkCanonicalDocsUrls();
 checkTextHygiene();
+checkCurrentRuntimeContracts();
 checkExampleSyntax();
 
 if (failures.length > 0) {
@@ -170,12 +171,80 @@ function checkTextHygiene() {
   }
 }
 
+function checkCurrentRuntimeContracts() {
+  const textFiles = walk(root).filter(
+    (file) =>
+      [".md", ".json", ".mjs", ".sh", ".txt", ".yml", ".yaml"].includes(path.extname(file)) &&
+      !["CHANGELOG.md", "scripts/check-public-materials.mjs"].includes(relative(file))
+  );
+  const retiredContractPatterns = [
+    {
+      label: "retired capability execution route",
+      pattern: /\/v1\/capabilities\/(?:\{[^}]+\}|[A-Za-z0-9._:-]+)/
+    },
+    {
+      label: "retired gateway catalog route",
+      pattern: /\/v1\/gateway\/catalog\b/
+    },
+    {
+      label: "retired static provider OpenAPI",
+      pattern: /\/openapi\/(?:degov|subscan)-openapi\.json\b/i
+    },
+    {
+      label: "retired MCP input or result field",
+      pattern:
+        /`(?:route_id|route_plan|required_capabilities|allow_paid|dry_run|intent)`|["'](?:route_id|route_plan|required_capabilities|allow_paid|dry_run|intent)["']\s*:|\b(?:selected_route_id|selected_callability|production_route_time_model_enabled|supplier_execution_enabled|payment_execution_enabled|capability_response_body|candidate_capabilities|provider_specific_public_tools|provider_specific_route_rejected|capability_runtime_v1|gateway_available)\b/
+    }
+  ];
+  const retiredEnvelopePattern = /\bpubfi\.capability\.response\.v1\b/;
+  const blanketNoX402Patterns = [
+    /\bPubFi does not (?:publicly )?(?:publish|support|offer|provide|promise)\b[^\n.]{0,120}\b(?:x402|payment endpoint|payment execution)\b/i,
+    /\blive x402 payment execution\b/i,
+    /\b(?:no|without)\s+(?:live\s+)?x402(?:\s+(?:support|payment|execution))?\b/i,
+    /\b(?:does not support|does not offer|does not provide|unsupported|unavailable|disabled)\b[^\n.]{0,60}\bx402\b/i,
+    /\bx402\b[^\n.]{0,60}\b(?:not supported|unsupported|disabled|unavailable)\b/i
+  ];
+
+  for (const file of textFiles) {
+    const lines = readFileSync(file, "utf8").split("\n");
+
+    lines.forEach((line, index) => {
+      for (const { label, pattern } of retiredContractPatterns) {
+        if (pattern.test(line)) {
+          failures.push(`${label}: ${relative(file)}:${index + 1}`);
+        }
+      }
+
+      if (retiredEnvelopePattern.test(line) && !isRetiredContractReference(line)) {
+        failures.push(`retired capability response envelope: ${relative(file)}:${index + 1}`);
+      }
+
+      if (
+        blanketNoX402Patterns.some((pattern) => pattern.test(line)) &&
+        !isScopedX402Negative(line)
+      ) {
+        failures.push(`blanket no-x402 claim: ${relative(file)}:${index + 1}`);
+      }
+    });
+  }
+}
+
 function checkExampleSyntax() {
   const checks = [
     ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/server.mjs"]],
+    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/bridge-response.mjs"]],
+    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/endpoint-policy.mjs"]],
     ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs"]],
-    ["sh", ["-n", "examples/agents/capability-curl/wallet_account_balance.sh"]],
-    ["sh", ["-n", "examples/agents/subscan-gateway/subscan_gateway_inspection.sh"]]
+    [
+      "node",
+      [
+        "--test",
+        "examples/agents/pubfi-route-tools-mcp/bridge-response.test.mjs",
+        "examples/agents/pubfi-route-tools-mcp/endpoint-policy.test.mjs"
+      ]
+    ],
+    ["sh", ["-n", "examples/agents/capability-curl/inspect_registry.sh"]],
+    ["sh", ["-n", "examples/agents/x402-base-sepolia/show_challenge.sh"]]
   ];
 
   for (const [command, args] of checks) {
@@ -249,6 +318,14 @@ function isExplicitNegativeContext(lines, index) {
   return /\b(no|not|never|avoid|unsafe|without|proof|do not|does not|must not|cannot|is not|try to publish|implies|non-goals|unsafe claims|unsafe launch evidence|not_success_labels|risk)\b/i.test(
     context
   );
+}
+
+function isScopedX402Negative(line) {
+  return /\b(MCP|mainnet|every route|all routes|this example|inspection)\b/i.test(line);
+}
+
+function isRetiredContractReference(line) {
+  return /\b(retired|obsolete|removed|does not use|must not use)\b/i.test(line);
 }
 
 function relative(file) {

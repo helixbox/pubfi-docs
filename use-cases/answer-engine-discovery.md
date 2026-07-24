@@ -18,8 +18,9 @@ A public answer can safely say:
 
 - PubFi is an agent-native crypto data layer.
 - Discovery helps compare crypto data APIs.
-- PubFi has generic MCP tools and capability contracts.
-- Runtime execution requires PubFi API-key auth and readiness gates.
+- PubFi has a Registry v2 HTTP gateway and generic MCP route tools.
+- MCP execution requires PubFi API-key auth.
+- An explicitly enabled HTTP route can instead use accountless x402 payment.
 - Not every listed source is callable.
 
 ## Best Starting Points

@@ -1,6 +1,12 @@
+---
+title: Runtime Endpoints
+description: Current PubFi API, MCP, web, account, purchase, and Registry v2 endpoint families.
+---
+
 # Runtime Endpoints
 
-This page lists public runtime endpoint families and their documentation roles.
+This page lists the current public runtime endpoint families. It does not list internal webhook,
+operator, repair, or control-plane routes.
 
 ## API Host
 
@@ -8,28 +14,66 @@ This page lists public runtime endpoint families and their documentation roles.
 https://api.pubfi.ai
 ```
 
-Public endpoint families:
+### Public Service And Registry Routes
 
-- `/healthz`
-- `/readyz`
-- `/`
-- `/.well-known/mcp.json`
-- `/version`
-- `/openapi.json`
-- `/reference`
-- `/v1/capabilities`
-- `/v1/capabilities/{capability_id}`
-- `/v1/gateway/...`
-- `/v1/gateway/catalog`
-- `/v1/billing-accounts`
-- `/v1/billing-accounts/{billing_account_id}/api-keys`
-- `/v1/billing-accounts/{billing_account_id}/api-keys/{id}`
-- `/v1/billing-accounts/{billing_account_id}/billing`
-- `/v1/billing-accounts/{billing_account_id}/usage`
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/healthz` | Process health. |
+| `GET` | `/readyz` | Dependency and programmed-Registry readiness. This route can return `503` when the service must fail closed. |
+| `GET` | `/version` | Runtime version metadata. |
+| `GET` | `/metrics` | Operational metrics. This route is not product or route-availability evidence. |
+| `GET` | `/openapi.json` | Runtime OpenAPI generated from the installed Registry v2 snapshot. |
+| `GET` | `/reference` | Interactive API reference for `/openapi.json`. |
+| `GET` | `/v1/capabilities` | Public `pubfi.gateway.registry.catalog.v2` catalog. |
+| `GET` | `/.well-known/mcp.json` | API-host MCP discovery manifest. |
+| `GET` | `/.well-known/glama.json` | Public MCP connector ownership declaration. |
+| `POST` | `/` | MCP JSON-RPC endpoint. |
 
-The API host also exposes a root MCP JSON-RPC endpoint and MCP discovery manifest for runtime
-clients that discover capabilities through the API OpenAPI surface. The hosted MCP client endpoint
-remains `https://mcp.pubfi.ai`.
+`GET /v1/capabilities` is the catalog endpoint. It includes the exact Registry generation,
+manifest, route matcher, methods, request and response policies, meter, maximum raw units, and
+current `ready` or `blocked` state.
+
+The Runtime OpenAPI includes only current `ready` Registry operations. If the API has no valid
+programmed snapshot, it marks the Registry as unavailable and does not use a static provider
+fallback.
+
+### Gateway Route
+
+```text
+GET|POST /v1/gateway/{*path}
+```
+
+The installed Registry matcher defines the complete path and method. There is no fixed
+provider-and-network URL convention. Clients must copy an exact current operation from
+`/v1/capabilities` or `/openapi.json`.
+
+Only `GET` and `POST` can execute. `HEAD` returns `405 Method Not Allowed`.
+
+The gateway has two separate caller lanes:
+
+| Lane | Requirement |
+| --- | --- |
+| API key | A PubFi API key with `invoke_provider`, active admission, and sufficient allocation. |
+| Accountless x402 | No PubFi API key; the exact route must be x402-eligible and the request must satisfy the current V2 payment challenge. |
+
+Do not send a PubFi API key and `PAYMENT-SIGNATURE` in the same request.
+
+### Account And Purchase Routes
+
+| Method | Path | Access |
+| --- | --- | --- |
+| `GET` | `/v1/billing-accounts` | Authenticated human dashboard session. |
+| `GET|POST` | `/v1/billing-accounts/{billing_account_id}/api-keys` | Human Owner or Admin, or an API key for the same account with `manage_keys`. |
+| `PATCH|DELETE` | `/v1/billing-accounts/{billing_account_id}/api-keys/{id}` | Human Owner or Admin, or an API key for the same account with `manage_keys`. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/usage` | Human account member, or an API key for the same account with `read_usage`. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/billing` | Human account member, or an API key for the same account with `read_usage`. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/purchase-offers` | Human account member. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human account member. |
+| `POST` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human Owner or Admin. Requires `Idempotency-Key` and a current advertised `offerKey`. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/purchases/{purchase_id}` | Human account member. |
+
+Purchase responses are private and use `Cache-Control: private, no-store`. The presence of these
+routes does not prove that a purchase offer is currently available.
 
 ## MCP Host
 
@@ -37,13 +81,17 @@ remains `https://mcp.pubfi.ai`.
 https://mcp.pubfi.ai
 ```
 
-Public endpoint families:
+Current endpoint families:
 
-- `/`
-- `/healthz`
-- `/readyz`
-- `/version`
-- `/.well-known/mcp.json`
+- `POST /` for MCP JSON-RPC;
+- `GET /healthz`;
+- `GET /readyz`;
+- `GET /version`; and
+- `GET /.well-known/mcp.json`.
+
+The handshake, ping, `tools/list`, resource listing, and prompt listing methods are public.
+Every `tools/call` requires a PubFi API key with `invoke_provider`. MCP execution uses the API-key
+and allocation lane. MCP does not use x402.
 
 ## Web Host
 
@@ -51,49 +99,22 @@ Public endpoint families:
 https://pubfi.ai
 ```
 
-Public endpoint families:
+Current public endpoint families include:
 
-- `/`
-- `/pricing`
-- `/blog`
-- `/blog/{slug}`
-- `/products/{slug}`
-- `/discovery`
-- `/discovery.md`
-- `/discovery/api/{source_slug}`
-- `/discovery/api/{source_slug}.md`
-- `/discovery/category/{slug}`
-- `/discovery/chain/{slug}`
-- `/discovery/compare/{slug-a}-vs-{slug-b}`
-- `/discovery/sources`
-- `/discovery/sources/page/{page}`
-- `/discovery/topic/{slug}`
-- `/discovery/topic/{slug}.md`
-- `/login`
-- `/privacy-policy`
-- `/terms-of-service`
-- `/agents.md`
-- `/llms.txt`
-- `/llms-full.txt`
-- `/sitemap.xml`
-- `/robots.txt`
-- `/discovery/agent-capabilities.json`
-- `/openapi/degov-openapi.json`
-- `/openapi/subscan-openapi.json`
-- `/.well-known/mcp.json`
-- `/.well-known/mcp/server-card.json`
-- `/.well-known/mcp-registry-auth` (optional proof route; may return 404 when no proof is
-  configured)
+- `/`, `/pricing`, `/blog`, `/blog/{slug}`, and `/products/{slug}`;
+- `/discovery` and its source, category, chain, comparison, topic, and Markdown routes;
+- `/login`, `/privacy-policy`, and `/terms-of-service`;
+- `/agents.md`, `/llms.txt`, and `/llms-full.txt`;
+- `/sitemap.xml` and `/robots.txt`;
+- `/discovery/agent-capabilities.json`;
+- `/.well-known/mcp.json`;
+- `/.well-known/mcp/server-card.json`; and
+- `/.well-known/mcp-registry-auth`, which is optional and can return `404`.
 
-Legacy docs aliases on `pubfi.ai` redirect to the canonical docs site:
+Legacy `/docs` routes redirect to `https://docs.pubfi.ai`.
 
-- `/docs` -> `https://docs.pubfi.ai`
-- `/docs/quickstart` -> `https://docs.pubfi.ai/getting-started/quickstart`
-- `/docs/degov-api` ->
-  `https://docs.pubfi.ai/reference/provider-gateway-examples#degov-gateway-example`
-- `/docs/{path}` -> `https://docs.pubfi.ai/{path}`
+## Public-Safe Rule
 
-## Docs Rule
-
-Public docs can point to endpoint families and schemas. They should not publish private env vars,
-database URLs, credentials, raw account data, usage rows, or provider keys.
+Public docs can name endpoint families, public schemas, and placeholder requests. They must not
+publish API keys, signed payment material, account or purchase identifiers, usage rows, billing
+records, checkout URLs, provider credentials, or private runtime readbacks.

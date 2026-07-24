@@ -1,28 +1,24 @@
 # Route Planning
 
-Route planning turns an agent data need into a route decision, candidate list, rejection, abstention,
-or procurement preview.
+Route planning resolves an exact path and HTTP method against the currently installed Registry v2
+generation. It can return a match, candidate list, rejection, or abstention without executing an
+upstream provider.
 
 ## Default Flow
 
-1. Normalize the request into a route intent.
-2. Retrieve source and capability candidates.
-3. Apply hard filters before ranking.
-4. Score remaining candidates with deterministic evidence.
-5. Preserve optional semantic/model scores as diagnostics, not hidden authority.
-6. Return an explainable plan.
-7. Execute only if the selected route is supported and callable.
+1. Read the current Registry generation.
+2. Supply an exact `raw_path` and `method`, or a bounded provider-neutral `objective` or `query`.
+3. Apply the Registry matcher and readiness rules.
+4. Return the generation-bound route decision and reason.
+5. Execute only an exact ready path and method from that generation.
 
 ## Example Intent
 
 ```json
 {
-  "objective": "Need token balances for a Polkadot wallet.",
-  "chains": ["polkadot"],
-  "categories": ["on_chain_state"],
-  "required_capabilities": ["wallet.token_balances"],
-  "expected_calls_per_day": 10,
-  "allow_paid": true
+  "raw_path": "/v1/gateway/quantro/health",
+  "method": "GET",
+  "objective": "Check the current Quantro gateway route."
 }
 ```
 
@@ -30,27 +26,25 @@ or procurement preview.
 
 Hard filters can include:
 
-- supported capability id;
-- required chain or network;
-- configured provider credential;
-- source freshness;
-- caller API-key scope;
-- active billing admission and sufficient request allocation;
-- privacy and redaction policy;
-- payment/procurement policy;
-- route availability.
+- exact canonical path and method;
+- current Registry generation and matcher;
+- operation readiness;
+- request query and body bounds;
+- configured provider credential when required;
+- response content and status policy;
+- caller API-key scope and allocation for authenticated execution; and
+- x402 eligibility for an accountless HTTP request.
 
 ## Outcomes
 
 | Outcome | Meaning |
 | --- | --- |
-| callable route | execution may proceed after immediate preflight checks |
+| ready exact route | execution may proceed after immediate request-time preflight |
 | abstention | PubFi should not select a route from available evidence |
 | unsupported | request is outside current product boundary |
-| procurement preview | demand exists, but supplier/commercial review is required |
-| contract-ready | schema shape exists, but live routeability is not promised |
+| no match | the current Registry has no operation for that exact request |
 
 ## Non-Goals
 
-Route planning must not silently call suppliers, create payment payloads, grant credentials, or
-hide rejected candidates and policy reasons.
+Route planning must not call providers, create x402 payment payloads, consume allocation, grant
+credentials, or hide rejected candidates and policy reasons.

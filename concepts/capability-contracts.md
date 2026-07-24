@@ -1,57 +1,49 @@
-# Capability Contracts
+# Capability And Registry Contracts
 
-PubFi capabilities are stable agent-facing data contracts. Agents should use a capability such as
-`wallet.account_balance` instead of binding directly to an upstream provider path when a capability
-exists.
+PubFi's executable capability authority is the currently installed Registry v2 generation. The
+public catalog is:
 
-## Initial Vocabulary
-
-| Capability | Meaning | Current posture |
-| --- | --- | --- |
-| `wallet.token_balances` | normalized token balance rows for one wallet on one chain or network | `contract_ready`/`not_callable` |
-| `wallet.account_balance` | native account balance for one wallet/account on one chain or network | `gateway_available`/`callable` |
-| `market.token_price` | normalized token/reference price in a quote currency | `contract_ready`/`not_callable` |
-| `governance.proposals` | normalized governance proposal rows for a chain, network, DAO, or referendum system | `contract_ready`/`not_callable` |
-
-## Response Envelope
-
-Every v1 capability response uses:
-
-```json
-{
-  "capability_id": "wallet.account_balance",
-  "schema_version": "pubfi.capability.response.v1",
-  "data": {},
-  "meta": {
-    "request_id": "capability_request_...",
-    "mode": "normalized",
-    "readiness": "gateway_available",
-    "route_decision_id": "route_decision_...",
-    "provenance": {},
-    "source_freshness": {},
-    "upstream": null,
-    "warnings": [],
-    "raw_debug": null
-  }
-}
+```text
+GET https://api.pubfi.ai/v1/capabilities
 ```
 
-## Why The Envelope Matters
+It returns `pubfi.gateway.registry.catalog.v2`. Each entry identifies the exact route matcher,
+allowed method, provider, request policy, response policy, meter, maximum raw units, and readiness.
 
-The envelope lets agents inspect:
+## Current Readiness
 
-- selected capability id;
-- readiness posture;
-- selected provider or resource provenance;
-- source freshness evidence;
-- upstream metadata when observed;
-- warnings and fail-closed states.
+Registry v2 exposes two execution readiness states:
 
-Normalized output does not hide provider identity. PubFi keeps provenance visible so agents can
-reason about source quality and route suitability.
+| State | Meaning |
+| --- | --- |
+| `ready` | the exact operation is present in the installed generation and can continue to request-time preflight |
+| `blocked` | the operation must not execute |
+
+Terms such as `requestable`, `contract_ready`, and `research_spike` belong to Discovery editorial
+context. They do not make a Registry operation executable.
+
+## OpenAPI
+
+`https://api.pubfi.ai/openapi.json` is generated from the installed Registry snapshot. It includes
+only current ready gateway routes. PubFi does not publish separate static provider OpenAPI files as
+execution authority.
+
+## Execution Response
+
+A successful Registry gateway request returns the validated provider JSON for that exact operation.
+The response also identifies the PubFi request and Registry generation through response headers.
+It does not use a PubFi success envelope.
 
 ## Execution Boundary
 
-A valid capability schema does not make a route callable. Execution still depends on current
-gateway/provider readiness, API-key auth, active billing admission, sufficient request allocation,
-upstream credentials, source freshness, and supported route mapping.
+A catalog entry is necessary but not sufficient for execution. Request-time checks still enforce:
+
+- the exact path and HTTP method;
+- request query and body policy;
+- provider and credential readiness;
+- route response policy;
+- caller authentication and allocation for the API-key lane; or
+- route-specific payment eligibility and valid authorization for the x402 lane.
+
+Clients must refresh the catalog or Runtime OpenAPI instead of caching a route from an older
+generation as permanent authority.
