@@ -19,7 +19,7 @@ https://api.pubfi.ai/openapi.json
 | --- | --- | --- |
 | `pubfi.capabilities.search` | Search the installed Registry v2 catalog without provider I/O or usage. | `query`, `raw_path`, `method` |
 | `pubfi.route.plan` | Plan an exact Registry route without provider I/O or usage. | `raw_path`, `method`, `objective`, `query` |
-| `pubfi.route.execute` | Execute one exact Registry path through the same data plane as the HTTP gateway. This requires a PubFi API key and may consume allocation. | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id` |
+| `pubfi.route.execute` | Execute one exact Registry path through the same data plane as the HTTP gateway. Use either a PubFi API key, which may consume allocation, or accountless x402 on an eligible route. | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id`; optional MCP `_meta["x402/payment"]` on a paid retry |
 | `pubfi.route.explain` | Explain a Registry route decision without provider I/O or usage. | `raw_path`, `method`, `objective`, `query` |
 | `pubfi.schema.get` | Return PubFi MCP input and output schema details for a named tool, especially `pubfi.route.execute`. This is read-only and intended for agent setup and validation before planning or execution. | `tool` |
 
@@ -41,5 +41,7 @@ Upstream provider keys remain server-side.
 generation. Unsupported paths, methods, non-ready operations, and invalid exact query or body bytes
 fail closed with explicit reasons.
 
-MCP uses only the API-key and allocation lane. Accountless x402 is available only on explicitly
-eligible HTTP gateway routes.
+MCP `pubfi.route.execute` supports the API-key/allocation lane and the mutually exclusive
+accountless x402 lane. The unsigned x402 call returns `PaymentRequired` in a normal MCP tool
+result; the paid retry uses `_meta["x402/payment"]`; the settled result uses
+`_meta["x402/payment-response"]`.

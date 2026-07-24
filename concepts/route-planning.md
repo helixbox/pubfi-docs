@@ -33,7 +33,7 @@ Hard filters can include:
 - configured provider credential when required;
 - response content and status policy;
 - caller API-key scope and allocation for authenticated execution; and
-- x402 eligibility for an accountless HTTP request.
+- x402 eligibility for an accountless HTTP or MCP request.
 
 ## Outcomes
 

@@ -105,7 +105,8 @@ An eligible unpaid request returns `402 Payment Required`, a `PAYMENT-REQUIRED` 
 same current requirements in the JSON body. Validate that challenge before a wallet signs it.
 
 The paid retry uses `PAYMENT-SIGNATURE`. A settled success returns `PAYMENT-RESPONSE`. Never send a
-PubFi API key and `PAYMENT-SIGNATURE` together. MCP does not support this payment lane.
+PubFi API key and `PAYMENT-SIGNATURE` together. MCP `pubfi.route.execute` supports the same payment
+lane through `x402/payment` and `x402/payment-response` metadata.
 
 See [Accountless x402](/getting-started/x402) for the Base Sepolia safety boundary and exact replay
 rules.

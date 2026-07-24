@@ -22,7 +22,7 @@ PubFi's public source-selection layer for crypto data APIs.
 ## Gateway
 
 Exact route execution through PubFi for configured provider operations. A route can use an API-key
-lane, or it can explicitly enable the accountless x402 HTTP lane.
+lane, or it can explicitly enable the accountless x402 lane over HTTP or MCP.
 
 ## MCP
 
@@ -72,5 +72,6 @@ payment evidence.
 
 ## x402
 
-An accountless, request-bound HTTP payment protocol. On an eligible PubFi route, one valid wallet
-authorization buys one response without creating an account, API key, Credits balance, or invoice.
+An accountless, request-bound payment protocol. On an eligible PubFi HTTP or MCP route, one valid
+wallet authorization buys one response without creating an account, API key, Credits balance, or
+invoice.

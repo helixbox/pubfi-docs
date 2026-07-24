@@ -15,7 +15,7 @@ PubFi is an agent-facing execution and discovery layer for crypto data:
 - The HTTP gateway executes exact current Registry operations.
 - MCP exposes generic Registry search, planning, explanation, schema, and execution tools.
 - Registered purchases can create purchase-origin service units after verified settlement.
-- Eligible HTTP routes can use an accountless x402 payment lane.
+- Eligible HTTP and MCP routes can use an accountless x402 payment lane.
 
 Discovery content does not make a route executable. The installed Registry snapshot is the runtime
 authority.
@@ -47,7 +47,8 @@ authority.
 8. The caller receives the canonical provider JSON. API-key responses identify the Registry
    generation. Settled x402 responses include the payment result.
 
-MCP execution uses only the API-key and allocation lane. It does not use x402.
+MCP `pubfi.route.execute` selects either the API-key/allocation lane or the mutually exclusive
+accountless x402 lane. Both transports use the same typed Registry and provider executor.
 
 ## Registered Commerce Flow
 

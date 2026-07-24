@@ -15,7 +15,7 @@ commercial, settlement, allocation, and receipt facts behind those product surfa
 | --- | --- | --- | --- |
 | API key and allowance | registered billing account | PubFi API key, scope, active admission, and sufficient allocation | reserves and finalizes the selected meter allocation |
 | Registered purchase | authenticated account Owner or Admin | an available immutable purchase offer and provider-hosted Checkout | after verified settlement, creates a purchase-origin meter allocation shown by PubFi as Credits |
-| Accountless x402 | wallet authorization; no PubFi account or API key | one valid x402 payment bound to one eligible request | buys that response only; it does not create or consume Credits |
+| Accountless x402 over HTTP or MCP | wallet authorization; no PubFi account or API key | one valid x402 payment bound to one eligible request | buys that response only; it does not create or consume Credits |
 
 The free starter allocation is not Credits. PubFi uses **Credits** only for eligible,
 purchase-origin `request_count` units. Credits are service units, not money, a stored-value wallet,
@@ -35,6 +35,21 @@ For an x402-enabled gateway route:
 An invalid API key never falls back to x402. An x402 authorization never falls back to Credits.
 One request cannot debit both modes.
 
+## MCP Lane Selection
+
+`pubfi.route.execute` has the same two mutually exclusive authorities:
+
+- API-key transport auth selects the registered account/allocation lane.
+- `params._meta["x402/payment"]` selects the accountless x402 lane.
+- Sending both is a conflict.
+- Sending neither on an eligible paid route returns an MCP `CallToolResult` payment requirement.
+
+The bounded `_meta` object can contain unrelated MCP metadata. Only the `x402/payment` entry
+carries payment and selects the x402 lane.
+
+MCP is a transport adapter over the same route execution and x402 settlement owners as HTTP. It
+does not create a separate balance, ledger, provider route, or commercial authority.
+
 ## Current x402 Scope
 
 Current public runtime evidence supports a bounded x402 V2 `exact` lane on eligible Registry v2
@@ -45,7 +60,9 @@ routes with:
 - EIP-3009 authorization;
 - fixed terms known before provider execution;
 - non-streaming, bounded responses; and
-- standard `PAYMENT-REQUIRED`, `PAYMENT-SIGNATURE`, and `PAYMENT-RESPONSE` headers.
+- standard `PAYMENT-REQUIRED`, `PAYMENT-SIGNATURE`, and `PAYMENT-RESPONSE` headers;
+- the official Signed Offers & Receipts extension with Ed25519 `did:web` verification; and
+- the official MCP `x402/payment` and `x402/payment-response` metadata flow.
 
 The production PubFi API origin currently uses a **testnet payment rail**. Base Sepolia USDC has no
 financial value. PubFi does not currently publish a Base mainnet x402 payment route.
@@ -87,8 +104,10 @@ Accountless x402 callers have no PubFi account balance, Credits balance, invoice
 dashboard. Their payment evidence is:
 
 - the wallet's Base Sepolia activity;
-- the request-bound `PAYMENT-RESPONSE`; and
+- the request-bound `PAYMENT-RESPONSE`;
+- the paired signed offer and signed receipt; and
 - exact replay of the same signed request.
 
 PubFi does not expose internal Quantro settlement records or payment payloads as public accountless
-billing data.
+billing data. SIWX, a public wallet-history service, and anonymous Credits are not part of the
+current release.

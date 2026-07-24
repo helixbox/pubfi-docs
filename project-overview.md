@@ -57,5 +57,5 @@ smaller agent-facing interface:
 PubFi is building an agent-native crypto data layer. Discovery exposes a public source-selection
 index for crypto data APIs, while Registry v2 gives agents an exact, fail-closed catalog for
 planning and executing ready routes. Registered callers use API keys and allocations. Explicitly
-eligible HTTP routes can instead use accountless x402 on Base Sepolia.
+eligible HTTP or MCP routes can instead use accountless x402 on Base Sepolia.
 ```

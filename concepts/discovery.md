@@ -28,7 +28,7 @@ Canonical public routes include:
 Discovery inclusion does not mean the source is callable through PubFi. Runtime callability depends
 on an exact `ready` operation in the current Registry v2 generation and its request-time gates.
 Those gates can include configured provider credentials and source freshness. Execution then needs
-either valid PubFi API-key admission or an explicitly enabled x402 HTTP payment lane.
+either valid PubFi API-key admission or an explicitly enabled x402 payment lane over HTTP or MCP.
 
 ## Agent-Readable Discovery
 

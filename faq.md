@@ -14,9 +14,8 @@ only when the current `GET /v1/capabilities` catalog lists its exact path and me
 
 Yes, through generic MCP tools such as `pubfi.capabilities.search`, `pubfi.route.plan`, and
 `pubfi.route.execute`. Public MCP handshake and introspection methods are available without a
-PubFi API key; hosted `tools/call` requests require one.
-
-MCP does not support x402 payment. Use the HTTP gateway for an eligible x402 request.
+PubFi API key. `pubfi.route.execute` accepts either API-key admission or accountless x402 payment.
+The two modes cannot be combined.
 
 ## Do all gateway routes support x402?
 
@@ -25,15 +24,16 @@ No. x402 is enabled per exact Registry route. Inspect the current catalog and th
 
 ## Does x402 require an account or API key?
 
-No. An eligible HTTP request uses a wallet authorization instead. It creates no PubFi account, API
-key, Credits balance, invoice, or anonymous dashboard.
+No. An eligible HTTP or MCP request uses a wallet authorization instead. It creates no PubFi
+account, API key, Credits balance, invoice, or anonymous dashboard.
 
 ## How does an accountless caller see a balance or receipt?
 
-The wallet or chain explorer shows the wallet's Base Sepolia test USDC activity. The settled HTTP
-response includes `PAYMENT-RESPONSE`, and an exact signed replay returns the same response. PubFi
-does not expose an accountless Credits balance because x402 buys one response and does not create
-Credits.
+The wallet or chain explorer shows the wallet's Base Sepolia test USDC activity. The settled
+response includes the x402 payment response and an official Ed25519 signed receipt. An exact paid
+replay returns the same response and receipt. PubFi does not expose an accountless Credits balance
+because x402 buys one response and does not create Credits. SIWX wallet-history lookup is not part
+of the current release.
 
 ## Is x402 using real money in Production?
 

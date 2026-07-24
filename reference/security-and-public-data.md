@@ -47,9 +47,15 @@ Do not publish:
 - query-prioritization maps or campaign plans; or
 - internal content, search, readback, repair, or operator workflows.
 
-An x402 caller must send signed payment evidence to the HTTP gateway. The caller must not place
+An x402 caller must send signed payment evidence through the HTTP gateway header or the MCP
+payment-metadata field. The caller must not place
 that evidence in a prompt, source file, issue, screenshot, analytics event, or general application
 log.
+
+`PUBFI_X402_OFFER_RECEIPT_VERIFYING_KEYS_JSON` is nonsecret operator configuration. It can contain
+up to eight retained Ed25519 public verification keys for the service `did:web` document. It must
+not contain private keys. Only the separately configured active private signer creates new signed
+offers and receipts. Retained public keys keep supported historical receipts verifiable.
 
 ## Secret Injection
 

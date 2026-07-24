@@ -54,5 +54,6 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 
 Discovery inclusion does not imply Registry readiness. The current Registry catalog and Runtime
 OpenAPI define executable paths and methods. API-key execution, registered purchases and Credits,
-and accountless x402 are separate modes. MCP tool calls use the API-key mode and do not carry x402
-payments. Public docs and reachability checks do not prove ranking, traffic, or AI citation success.
+and accountless x402 are separate modes. MCP `pubfi.route.execute` supports API-key admission or
+the mutually exclusive official x402 metadata flow. Public docs and reachability checks do not
+prove ranking, traffic, or AI citation success.

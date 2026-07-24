@@ -65,11 +65,13 @@ upstream API.
   eligible purchase-origin `request_count` units.
 - Registered purchase routes expose the currently available offers. The route existing does not
   prove that an offer is open for sale.
-- Accountless x402 buys one eligible HTTP response. It creates no PubFi account, API key, Credits
-  balance, or invoice.
+- Accountless x402 buys one eligible HTTP or MCP response. It creates no PubFi account, API key,
+  Credits balance, or invoice.
 - Current x402 support uses V2 `exact`, Base Sepolia USDC, EIP-3009, and the standard
-  `PAYMENT-REQUIRED`, `PAYMENT-SIGNATURE`, and `PAYMENT-RESPONSE` headers. The live challenge is the
-  authority for route-specific payment terms.
+  HTTP headers, official MCP payment metadata, and official Ed25519 Signed Offers & Receipts. The
+  live challenge is the authority for route-specific payment terms.
+- PubFi uses one active private Ed25519 signer. Its `did:web` document can retain up to eight
+  public verification keys so supported historical receipts remain verifiable after rotation.
 
 ## Runtime And Agent Surfaces
 
@@ -113,8 +115,12 @@ upstream API.
 - `pubfi.route.explain`: optional `raw_path`, `method`, `objective`, and `query`.
 - `pubfi.schema.get`: `tool`.
 - `tools/list` publishes the current generation, manifest, routes, and input schemas.
-- All hosted `tools/call` requests require a PubFi API key. MCP does not carry accountless x402
-  payment.
+- `pubfi.route.execute` accepts a PubFi API key or the mutually exclusive accountless x402
+  metadata flow. An unsigned eligible call returns `PaymentRequired`; the paid retry supplies
+  `x402/payment`; the settled result supplies `x402/payment-response`.
+- Unrelated bounded MCP `_meta` entries can coexist with the flow. Only `x402/payment` carries
+  payment. Paid replay compares structured content and payment-response metadata, not raw JSON-RPC
+  bytes.
 
 ## Public-Safe Claims
 
@@ -123,7 +129,8 @@ upstream API.
 - PubFi has five Registry v2 MCP tools for search, planning, execution, explanation, and schema
   readback.
 - PubFi exposes a dynamic Registry catalog and Runtime OpenAPI for current executable operations.
-- PubFi supports separate registered API-key and accountless x402 HTTP execution modes.
+- PubFi supports separate registered API-key and accountless x402 execution modes over HTTP and
+  MCP.
 - Quantro owns provider-neutral purchase, settlement, receipt, and resulting allocation facts.
 
 ## Non-Claims

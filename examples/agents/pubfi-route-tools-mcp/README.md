@@ -8,9 +8,10 @@ instead of synthesizing a second handshake, running a retired TypeScript route-t
 implementation, or creating one public tool per provider. The direct HTTP and stdio views therefore
 carry the same tool-change flag, generation, and manifest identity.
 
-For hosted authenticated use, configure an MCP client for PubFi's Streamable HTTP endpoint at
-`https://mcp.pubfi.ai`. The hosted service uses the same five Registry v2 tools, requires a PubFi
-API key for tool calls, and keeps upstream provider credentials server-side.
+Configure an MCP client for PubFi's Streamable HTTP endpoint at `https://mcp.pubfi.ai`. The hosted
+service uses the same five Registry v2 tools and keeps upstream provider credentials server-side.
+`pubfi.route.execute` accepts either PubFi API-key admission or the mutually exclusive accountless
+x402 metadata flow.
 
 ## Tools
 
@@ -64,6 +65,12 @@ current catalog. Optional `PUBFI_MCP_SMOKE_QUERY` and `PUBFI_MCP_SMOKE_BODY` sup
 route input. `PUBFI_MCP_SMOKE_BODY` is the exact compact ASCII request body (for example,
 `{"limit":10}`), not a nested MCP JSON value. The smoke never invents a provider route or
 capability id.
+
+For accountless payment, use an official x402 MCP client. An unsigned eligible
+`pubfi.route.execute` call returns `PaymentRequired` in the MCP tool result. The retry carries the
+x402 V2 payment object at `params._meta["x402/payment"]`; the settled result carries
+`result._meta["x402/payment-response"]`. Do not pass a PubFi API key, private key, or
+`PAYMENT-SIGNATURE` HTTP header in this flow.
 
 The stdio bridge accepts only the exact production and staging roots
 (`https://mcp.pubfi.ai` and `https://mcp-stg.pubfi.ai`). It rejects userinfo, ports, alternate
