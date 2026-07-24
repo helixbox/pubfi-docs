@@ -98,6 +98,17 @@ The bounded `_meta` object can also contain unrelated MCP client metadata. Only
 Use an x402 MCP client that implements this flow. Do not convert the MCP challenge into a
 `PAYMENT-SIGNATURE` HTTP header yourself.
 
+A pinned runnable example uses `@x402/mcp`, `@x402/core`, `@x402/evm`, and the MCP SDK against
+`pubfi.route.execute`. It validates a bounded Base Sepolia payment, verifies the signed offer and
+receipt through PubFi's `did:web` document, and checks exact replay:
+
+```text
+https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepolia
+```
+
+The example never accepts a wallet key as a tool argument. The caller must inject the key into the
+client process through a wallet or secret manager.
+
 The wire shape is:
 
 ```json

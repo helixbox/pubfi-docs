@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added pinned, bounded public HTTP and MCP x402 paid examples with signed offer, signed receipt,
+  and exact replay verification.
 - Added accountless x402 to MCP `pubfi.route.execute` with the official payment metadata flow,
   shared HTTP/MCP execution authority, and Ed25519 `did:web` Signed Offers & Receipts guidance.
 - Replaced the retired fixed-capability and static provider examples with the signed Registry v2

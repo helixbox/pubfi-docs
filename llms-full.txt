@@ -72,6 +72,11 @@ upstream API.
   live challenge is the authority for route-specific payment terms.
 - PubFi uses one active private Ed25519 signer. Its `did:web` document can retain up to eight
   public verification keys so supported historical receipts remain verifiable after rotation.
+- A public pinned-client example for bounded HTTP and MCP payment, signed offer and receipt
+  verification, and exact replay is available at
+  https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepolia.
+- The example requires an independently approved expected payee and a buyer key injected by a
+  wallet or secret manager. It never accepts the key in an MCP tool argument or prompt.
 
 ## Runtime And Agent Surfaces
 
