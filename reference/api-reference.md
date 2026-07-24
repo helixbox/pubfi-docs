@@ -65,7 +65,7 @@ OpenAPI visibility does not make every route anonymous.
 | Catalog, OpenAPI, reference, health, version, and MCP discovery | No PubFi API key. |
 | Gateway through the API-key lane | API key with `invoke_provider`, active admission, and sufficient allocation. |
 | Gateway through the accountless x402 lane | No API key; exact x402-eligible route and valid V2 request-bound payment authorization. |
-| MCP `tools/call` | API key with `invoke_provider`; MCP does not support x402. |
+| MCP `pubfi.route.execute` | API key with `invoke_provider`, or no API key plus the official x402 metadata flow for an eligible route. |
 | Billing-account list | Authenticated human dashboard session. |
 | API-key management | Human Owner or Admin, or same-account API key with `manage_keys`. |
 | Usage and billing readback | Human account member, or same-account API key with `read_usage`. |

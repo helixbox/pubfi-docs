@@ -39,7 +39,7 @@ HTTP contract source. The MCP manifest is the agent-tool discovery surface.
 | Search the Registry through MCP | `pubfi.capabilities.search` |
 | Plan or explain an exact path and method | `pubfi.route.plan` or `pubfi.route.explain` |
 | Inspect current MCP schemas and dynamic routes | `pubfi.schema.get` or `tools/list` |
-| Execute through MCP | `pubfi.route.execute` with PubFi API-key auth |
+| Execute through MCP | `pubfi.route.execute` with API-key auth or accountless x402 |
 | Execute an eligible accountless HTTP route | x402 V2 with no PubFi API key |
 
 ## 4. Create Or Load An API Key
@@ -90,6 +90,11 @@ curl --include 'https://api.pubfi.ai/v1/gateway/quantro/health'
 
 Current x402 support uses Base Sepolia test USDC, not real-value Base mainnet USDC. Read
 [Accountless x402](/getting-started/x402) before signing.
+
+For MCP, call `pubfi.route.execute` without an API key. An eligible route returns the payment
+requirement in the MCP tool result. Retry the same call with
+`params._meta["x402/payment"]`. The settled tool result includes
+`result._meta["x402/payment-response"]`.
 
 ## 9. Check Readiness Before Execution
 

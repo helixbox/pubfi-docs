@@ -30,7 +30,7 @@ Runtime OpenAPI, and MCP metadata.
 | MCP discovery pointer | Product-site pointer to hosted MCP discovery. | `https://pubfi.ai/.well-known/mcp.json` |
 | MCP server card | Marketplace-oriented hosted MCP metadata. | `https://pubfi.ai/.well-known/mcp/server-card.json` |
 | MCP registry auth proof | Optional domain-ownership proof. | `https://pubfi.ai/.well-known/mcp-registry-auth` |
-| Accountless x402 guide | HTTP x402 V2 challenge, signing, privacy, and replay rules. | `https://docs.pubfi.ai/getting-started/x402` |
+| Accountless x402 guide | HTTP and MCP x402 V2 challenge, signing, receipt, privacy, and replay rules. | `https://docs.pubfi.ai/getting-started/x402` |
 | Payment mode guide | Boundary between API-key allowance, registered purchases, Credits, and x402. | `https://docs.pubfi.ai/concepts/payment-and-execution-modes` |
 | Public docs repository | Public source and contribution history. | `https://github.com/helixbox/pubfi-docs` |
 | Canonical docs site | Full long-form documentation. | `https://docs.pubfi.ai` |
@@ -53,8 +53,9 @@ convention.
 
 - HTTP gateway execution accepts only exact current `GET` or `POST` Registry operations.
 - API-key execution requires `invoke_provider`, active admission, and sufficient allocation.
-- An exact eligible HTTP operation can use accountless x402 V2 instead of a PubFi API key.
-- MCP `tools/call` always requires a PubFi API key and does not support x402.
+- An exact eligible HTTP or MCP operation can use accountless x402 V2 instead of a PubFi API key.
+- MCP `pubfi.route.execute` accepts API-key admission or the mutually exclusive official x402
+  metadata flow.
 - A successful HTTP gateway response is canonical provider JSON. API-key responses identify the
   Registry generation. Settled x402 responses include `PAYMENT-RESPONSE`. Neither lane uses a
   PubFi success envelope.
@@ -82,7 +83,8 @@ When a runtime contract or public page changes, maintainers should check:
 2. whether `/v1/capabilities` and Runtime OpenAPI still describe the same installed generation;
 3. whether the Agent interface guide matches MCP `tools/list` and tool input schemas;
 4. whether HTTP gateway examples use exact current Registry paths and methods;
-5. whether x402 docs still match the standard headers, supported network, and lane separation;
+5. whether x402 docs still match the standard HTTP headers, MCP metadata, Signed Offers &
+   Receipts fields, supported network, and lane separation;
 6. whether account and purchase docs still match route roles and scopes;
 7. whether README, docs navigation, and agent-readable indexes point to the canonical asset; and
 8. whether every example avoids private data and unsupported availability claims.

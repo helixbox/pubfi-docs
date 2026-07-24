@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added accountless x402 to MCP `pubfi.route.execute` with the official payment metadata flow,
+  shared HTTP/MCP execution authority, and Ed25519 `did:web` Signed Offers & Receipts guidance.
 - Replaced the retired fixed-capability and static provider examples with the signed Registry v2
   catalog, dynamic Runtime OpenAPI, and exact path-and-method execution contract.
 - Synchronized the public MCP stdio bridge and smoke with the current Registry v2 five-tool

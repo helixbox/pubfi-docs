@@ -50,7 +50,8 @@ static provider OpenAPI files as execution authority.
 - `https://pubfi.ai/.well-known/mcp-registry-auth`
 
 The registry-auth proof route is optional and can return `404`. MCP discovery and `tools/list` are
-public. Every `tools/call` requires PubFi API-key authentication. MCP does not support x402.
+public. `pubfi.route.execute` accepts PubFi API-key authentication or accountless x402 on an
+eligible route.
 
 ## Gateway Contract
 

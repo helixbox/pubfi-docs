@@ -90,8 +90,9 @@ Current endpoint families:
 - `GET /.well-known/mcp.json`.
 
 The handshake, ping, `tools/list`, resource listing, and prompt listing methods are public.
-Every `tools/call` requires a PubFi API key with `invoke_provider`. MCP execution uses the API-key
-and allocation lane. MCP does not use x402.
+`pubfi.route.execute` accepts either a PubFi API key with `invoke_provider` or the mutually
+exclusive official x402 metadata flow for an eligible route. Other tools keep their published
+public or authenticated contract.
 
 ## Web Host
 

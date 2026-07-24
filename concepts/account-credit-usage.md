@@ -48,5 +48,6 @@ Unsafe:
 Agents should never receive raw keys inside natural-language prompts. They should call PubFi tools
 through a runtime that injects credentials from a secret store.
 
-Accountless x402 is an HTTP gateway mode, not an MCP payment mode. See [Payment And Execution
+Accountless x402 is available over the HTTP gateway and MCP `pubfi.route.execute`. It does not
+create or consume account Credits. See [Payment And Execution
 Modes](/concepts/payment-and-execution-modes).
