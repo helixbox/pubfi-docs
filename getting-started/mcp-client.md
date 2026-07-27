@@ -140,7 +140,7 @@ The wire shape is:
   "params": {
     "name": "pubfi.route.execute",
     "arguments": {
-      "raw_path": "/v1/gateway/example",
+      "raw_path": "/v1/gateway/quantro/health",
       "method": "GET"
     },
     "_meta": {
