@@ -82,8 +82,17 @@ upstream API.
 - A public Staging-only pinned-client example for bounded Base Sepolia HTTP and MCP payment, signed
   offer and receipt verification, and exact replay is available at
   https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepolia.
-- The example requires an independently approved expected payee and a buyer key injected by a
-  wallet or secret manager. It never accepts the key in an MCP tool argument or prompt.
+- A separate Production example pins HTTP and MCP to
+  `https://api.pubfi.ai/v1/gateway/quantro/health`, Base mainnet `eip155:8453`, canonical Base
+  USDC, 1000 atomic units, and the published payee. It verifies signed offers, signed receipts,
+  and exact replay:
+  https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet.
+- The 2026-07-27 Production acceptance run completed both HTTP and MCP payments with verified
+  signed receipts and exact replay. Public Base transactions:
+  `0xb011351c24f40b597778ec1dd79807d2a4a01950ae219db3299f0c51f2cc594f` and
+  `0x25819c481c83ddc7dd028a8c3c6832ee7ba77a00b3b7300106bb6db5e73f9934`.
+- The examples require a buyer key injected by a wallet or secret manager. They never accept the
+  key in an MCP tool argument or prompt. The Production commands spend real USDC.
 
 ## Runtime And Agent Surfaces
 

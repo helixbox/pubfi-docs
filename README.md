@@ -118,6 +118,7 @@ pubfi-docs/
     └── agents/
         ├── capability-curl/
         ├── pubfi-route-tools-mcp/
+        ├── x402-base-mainnet/
         └── x402-base-sepolia/
 ```
 
@@ -127,6 +128,8 @@ Runnable public-safe examples live under [examples/](examples/README.md):
   MCP endpoint;
 - `examples/agents/capability-curl/`: no-auth Registry v2 catalog inspection;
 - `examples/agents/x402-base-sepolia/`: no-secret inspection of the current x402 challenge.
+- `examples/agents/x402-base-mainnet/`: Production HTTP and MCP clients pinned to the current Base
+  mainnet route, asset, amount, and payee.
 
 ## Shared Favicon
 

@@ -66,4 +66,7 @@ OpenAPI define executable paths and methods. API-key execution, registered purch
 and accountless x402 are separate modes. MCP `pubfi.route.execute` supports API-key admission or
 the mutually exclusive official x402 metadata flow. Public docs and reachability checks do not
 prove ranking, traffic, or AI citation success. Base Sepolia `eip155:84532` is the Staging x402
-test boundary. It does not prove current Production x402 availability.
+test boundary. The pinned Production HTTP and MCP example uses Base mainnet `eip155:8453`,
+canonical Base USDC, 1000 atomic units, and the published Production payee. Production commands
+spend real USDC. Production HTTP and MCP acceptance completed on 2026-07-27 with verified signed
+receipts and exact replay; see https://github.com/helixbox/pubfi-mono/actions/runs/30259030111.

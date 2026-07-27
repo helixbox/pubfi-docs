@@ -3,6 +3,10 @@
 ## Unreleased
 
 - Replaced the placeholder MCP execution path with the current public Quantro health route.
+- Added pinned Production Base mainnet HTTP and MCP x402 examples. They validate the exact route,
+  canonical USDC asset, 0.001 USDC amount, payee, signed offer, signed receipt, and exact replay.
+- Published the successful Production HTTP and MCP Base transaction evidence without exposing
+  buyer keys or full payment payloads.
 - Reorganized the docs into task-oriented Start Here, Integrate, Concepts, Use Cases, Reference,
   and Resources paths; removed duplicate rendered H1 headings; and added explicit reader
   transitions between evaluation, API-key, MCP, and x402 workflows.
