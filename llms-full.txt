@@ -12,11 +12,12 @@ upstream API.
 - https://docs.pubfi.ai/getting-started/quickstart
 - https://docs.pubfi.ai/getting-started/staging
 - https://docs.pubfi.ai/getting-started/api-key-runtime
-- https://docs.pubfi.ai/getting-started/x402
+- https://docs.pubfi.ai/reference/provider-gateway-examples
 - https://docs.pubfi.ai/getting-started/mcp-client
+- https://docs.pubfi.ai/getting-started/x402
+- https://docs.pubfi.ai/concepts/discovery
 - https://docs.pubfi.ai/concepts/payment-and-execution-modes
 - https://docs.pubfi.ai/reference/api-reference
-- https://docs.pubfi.ai/reference/provider-gateway-examples
 
 ## Canonical Docs Pages
 
@@ -25,27 +26,27 @@ upstream API.
 - https://docs.pubfi.ai/getting-started/quickstart
 - https://docs.pubfi.ai/getting-started/staging
 - https://docs.pubfi.ai/getting-started/api-key-runtime
-- https://docs.pubfi.ai/getting-started/x402
+- https://docs.pubfi.ai/reference/provider-gateway-examples
 - https://docs.pubfi.ai/getting-started/mcp-client
+- https://docs.pubfi.ai/getting-started/x402
 - https://docs.pubfi.ai/concepts/discovery
 - https://docs.pubfi.ai/concepts/capability-contracts
+- https://docs.pubfi.ai/concepts/provider-readiness
 - https://docs.pubfi.ai/concepts/route-planning
 - https://docs.pubfi.ai/concepts/payment-and-execution-modes
 - https://docs.pubfi.ai/concepts/account-credit-usage
-- https://docs.pubfi.ai/concepts/provider-readiness
 - https://docs.pubfi.ai/concepts/readiness-and-claim-safety
-- https://docs.pubfi.ai/agent-readable/surfaces
-- https://docs.pubfi.ai/use-cases/agent-wallet-balance
 - https://docs.pubfi.ai/use-cases/crypto-api-discovery
-- https://docs.pubfi.ai/use-cases/answer-engine-discovery
-- https://docs.pubfi.ai/use-cases/provider-integration-review
 - https://docs.pubfi.ai/use-cases/source-evaluation
-- https://docs.pubfi.ai/reference/architecture-map
+- https://docs.pubfi.ai/use-cases/provider-integration-review
+- https://docs.pubfi.ai/use-cases/answer-engine-discovery
+- https://docs.pubfi.ai/use-cases/agent-wallet-balance
 - https://docs.pubfi.ai/reference/api-reference
-- https://docs.pubfi.ai/reference/agent-interface
 - https://docs.pubfi.ai/reference/runtime-endpoints
-- https://docs.pubfi.ai/reference/provider-gateway-examples
+- https://docs.pubfi.ai/reference/agent-interface
 - https://docs.pubfi.ai/reference/public-surfaces
+- https://docs.pubfi.ai/agent-readable/surfaces
+- https://docs.pubfi.ai/reference/architecture-map
 - https://docs.pubfi.ai/reference/security-and-public-data
 - https://docs.pubfi.ai/faq
 - https://docs.pubfi.ai/glossary

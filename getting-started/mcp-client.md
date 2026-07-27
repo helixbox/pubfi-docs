@@ -3,8 +3,6 @@ title: MCP Client Setup
 description: Connect an MCP client to PubFi's hosted Registry v2 tools.
 ---
 
-# MCP Client Setup
-
 PubFi exposes generic route and capability tools over MCP.
 
 | Environment | Hosted endpoint | Discovery manifest |
@@ -14,6 +12,16 @@ PubFi exposes generic route and capability tools over MCP.
 
 Use the [Staging guide](/getting-started/staging) for the login, API-key, smoke, and Base Sepolia
 test flow.
+
+## Choose A Transport
+
+| Client capability | Transport |
+| --- | --- |
+| The client supports remote Streamable HTTP | Connect directly to the hosted endpoint for the selected environment. |
+| The client launches MCP servers as local commands | Use the repository's local stdio bridge. |
+
+The stdio bridge requires a checkout of this repository and a supported Node.js runtime. It
+forwards MCP requests to the hosted endpoint. It is not a local PubFi backend.
 
 ## Tools
 
@@ -44,6 +52,21 @@ Sending both authorities is a conflict. An invalid API key never falls back to x
 Do not pass upstream provider keys as MCP arguments. PubFi leases upstream credentials server-side
 when the selected route is callable and configured.
 
+## Recommended Agent Flow
+
+1. Call `pubfi.capabilities.search` with a query or exact path and method.
+2. Call `pubfi.route.plan` with the exact `raw_path` and `method`.
+3. Call `pubfi.route.explain` when the plan needs a reason readback.
+4. Call `pubfi.schema.get` before constructing execution input.
+5. Call `pubfi.route.execute` only for an exact ready `raw_path` and `method`.
+6. Select API-key admission or x402 payment. Never send both.
+
+## Inspect Tool Schemas
+
+Call hosted `tools/list` for current input schemas and dynamic Registry route metadata. Use the
+[Agent Interface Reference](/reference/agent-interface) for the stable tool-purpose and field
+summary. Do not copy an old schema into a client as permanent authority.
+
 ## Local Stdio Bridge
 
 The current public-safe local example lives in the source repository at:
@@ -73,14 +96,8 @@ export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
 node examples/agents/pubfi-route-tools-mcp/server.mjs
 ```
 
-## Recommended Agent Flow
-
-1. Call `pubfi.capabilities.search` with a query or exact path and method.
-2. Call `pubfi.route.plan` with the exact `raw_path` and `method`.
-3. Call `pubfi.route.explain` when the plan needs a reason readback.
-4. Call `pubfi.schema.get` before constructing execution input.
-5. Call `pubfi.route.execute` only for an exact ready `raw_path` and `method`.
-6. Select API-key admission or x402 payment. Never send both.
+See the [stdio bridge example](https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/pubfi-route-tools-mcp)
+for client configuration and smoke commands.
 
 ## Accountless x402 Tool Flow
 
@@ -141,19 +158,6 @@ and exact replay. A replay of the same paid tool call returns the retained resul
 response without a second provider call. Replay equivalence applies to `structuredContent` and
 `result._meta["x402/payment-response"]`, not to raw JSON-RPC response bytes.
 
-## Tool Inputs
-
-The hosted `tools/list` method publishes the current JSON Schema for each tool. The current public
-input fields are:
-
-| Tool | Input fields |
-| --- | --- |
-| `pubfi.capabilities.search` | `query`, `raw_path`, `method` |
-| `pubfi.route.plan` | `raw_path`, `method`, `objective`, `query` |
-| `pubfi.route.execute` | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id` |
-| `pubfi.route.explain` | `raw_path`, `method`, `objective`, `query` |
-| `pubfi.schema.get` | `tool` |
-
 ## Fail-Closed Behavior
 
 Unsupported paths, methods, non-ready operations, invalid exact query or body bytes, and supplier
@@ -162,3 +166,7 @@ procurement attempts return explicit gate readbacks rather than silently calling
 An unsupported route, invalid payment, mixed API-key and payment authorities, or changed replay
 binding fails closed before a second provider execution. SIWX and anonymous Credits are not part
 of the current MCP flow.
+
+For detailed tool contracts, continue to the [Agent Interface
+Reference](/reference/agent-interface). For payment metadata and replay policy, continue to
+[Accountless x402](/getting-started/x402).

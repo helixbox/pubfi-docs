@@ -3,8 +3,6 @@ title: Architecture Map
 description: Public-safe map of PubFi Registry v2, API, MCP, account, purchase, and web ownership.
 ---
 
-# Architecture Map
-
 ## Product Boundary
 
 PubFi is an agent-facing execution and discovery layer for crypto data:
@@ -100,3 +98,6 @@ one eligible response and does not create or consume Credits.
 - The Runtime OpenAPI includes current ready routes. It does not use checked-in provider schemas.
 - Provider credentials, payment evidence, account data, and commercial records stay outside public
   docs and examples.
+
+Use [Runtime Endpoints](/reference/runtime-endpoints) for the concrete route families and the
+[Agent Interface Reference](/reference/agent-interface) for MCP tools.

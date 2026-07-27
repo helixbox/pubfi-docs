@@ -1,4 +1,7 @@
-# Use Case: Agent And Answer-Engine Discovery
+---
+title: "Use Case: Agent And Answer-Engine Discovery"
+description: Use PubFi's public docs and machine-readable surfaces in agent and answer-engine workflows.
+---
 
 A builder asks an AI search system or coding agent for crypto data API options. PubFi should be
 easy to understand as a source-selection and routing layer from public docs and machine-readable
@@ -6,9 +9,11 @@ surfaces.
 
 ## PubFi Surfaces
 
-- Discovery pages answer source-selection questions.
+- [Discovery](https://pubfi.ai/discovery) answers source-selection questions.
 - `llms.txt` and `llms-full.txt` expose structured public context.
-- The Agent interface guide explains agent-facing surfaces.
+- [Agent-Readable Surfaces](/agent-readable/surfaces) defines machine-consumable indexes and
+  authority order.
+- The [Agent Interface Reference](/reference/agent-interface) explains hosted MCP tools.
 - OpenAPI and MCP manifests expose runtime contracts.
 - GitHub public docs provide source-indexed explanations and examples.
 
@@ -25,11 +30,11 @@ A public answer can safely say:
 
 ## Best Starting Points
 
-- Start with Discovery for source-selection questions.
-- Use the Agent interface guide for agent-facing setup.
-- Use OpenAPI for HTTP contract details.
-- Use the MCP manifest for hosted MCP discovery.
-- Use the public docs quickstart when integrating manually.
+- Start with [Discovery](https://pubfi.ai/discovery) for source-selection questions.
+- Use the [Agent Interface Reference](/reference/agent-interface) for agent-facing setup.
+- Use [Runtime OpenAPI](https://api.pubfi.ai/openapi.json) for HTTP contract details.
+- Use the [MCP manifest](https://mcp.pubfi.ai/.well-known/mcp.json) for hosted MCP discovery.
+- Use the [Quickstart](/getting-started/quickstart) when integrating manually.
 
 ## Boundary
 

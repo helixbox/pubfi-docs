@@ -61,6 +61,20 @@ Do not publish:
 6. Leave ambiguous product claims as `needs_evidence` in the automation run artifact instead of
    landing speculative wording.
 
+## Agent-Readable Index Checklist
+
+When a runtime contract or public page changes, check:
+
+1. whether `agents.md`, `llms.txt`, or `llms-full.txt` needs the new public boundary;
+2. whether `/v1/capabilities` and Runtime OpenAPI still describe the same installed generation;
+3. whether the Agent interface guide matches MCP `tools/list` and tool input schemas;
+4. whether HTTP gateway examples use exact current Registry paths and methods;
+5. whether x402 docs still match the standard HTTP headers, MCP metadata, Signed Offers &
+   Receipts fields, supported network, and lane separation;
+6. whether account and purchase docs still match route roles and scopes;
+7. whether README, docs navigation, and agent-readable indexes point to the canonical asset; and
+8. whether every example avoids private data and unsupported availability claims.
+
 ## Required Checks
 
 For manual local work, run from the repository root:

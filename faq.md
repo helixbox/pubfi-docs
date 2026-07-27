@@ -1,4 +1,7 @@
-# FAQ
+---
+title: FAQ
+description: Answers to common questions about Discovery, Registry execution, MCP, x402, Credits, and public docs.
+---
 
 ## Is Discovery the same as the gateway?
 

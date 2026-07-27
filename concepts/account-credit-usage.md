@@ -1,4 +1,7 @@
-# Account, Credits, Purchases, Usage, And Billing
+---
+title: Account, Credits, Purchases, Usage, And Billing
+description: Understand billing accounts, API-key scopes, allocations, Credits, purchases, usage, and billing reads.
+---
 
 PubFi billing accounts group API keys and product usage. Runtime admission protects provider
 execution from becoming a free-form public data proxy.

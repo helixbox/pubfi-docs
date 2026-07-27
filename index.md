@@ -7,76 +7,46 @@ PubFi is building an agent-native crypto data layer. It helps software teams and
 crypto data sources, plan exact Registry routes, inspect schemas, and use validated provider
 responses without binding every workflow directly to a different upstream API.
 
-## What To Read First
+## Start Here
 
-- [Project overview](/project-overview): what PubFi is and what it is not.
-- [Quickstart](/getting-started/quickstart): the shortest path through public docs and live
-  surfaces.
-- [Staging guide](/getting-started/staging): test the web, API, MCP, and Base Sepolia x402 flows
-  before a Production transition.
-- [API reference](/reference/api-reference): where to find the interactive HTTP reference and
-  OpenAPI schema.
-- [API key and runtime](/getting-started/api-key-runtime): how billing accounts, request allowance,
-  usage, and runtime
-  boundaries fit together.
-- [Accountless x402](/getting-started/x402): understand the eligible-route payment flow. Base
-  Sepolia is the Staging test boundary; this documentation does not claim current Production x402
-  availability.
-- [Payment and execution modes](/concepts/payment-and-execution-modes): understand API-key
-  allowance, registered purchases and Credits, and accountless x402.
-- [MCP client setup](/getting-started/mcp-client): connect an agent runtime to PubFi's generic
-  MCP tools.
-- [Discovery](/concepts/discovery): understand the public source-selection layer.
-- [Capability contracts](/concepts/capability-contracts): understand Registry v2 catalog,
-  readiness, OpenAPI, and response contracts.
-- [Agent-readable surfaces](/agent-readable/surfaces): understand `llms.txt`, `llms-full.txt`,
-  OpenAPI, MCP, and Discovery links.
+1. Read the [Project Overview](/project-overview) to understand PubFi's product boundary.
+2. Use the [Quickstart](/getting-started/quickstart) to choose an interface and execution lane.
+3. Use the [Staging Guide](/getting-started/staging) before you test an integration.
 
-## Public Surfaces
+## Choose Your Path
 
-| Surface | Purpose |
+| Goal | Start | Continue |
+| --- | --- | --- |
+| Evaluate PubFi or compare data sources | [Source Evaluation](/use-cases/source-evaluation) | [Discovery](https://pubfi.ai/discovery) |
+| Call a Registry route with an API key | [API Key And Runtime](/getting-started/api-key-runtime) | [Registry Gateway Examples](/reference/provider-gateway-examples) |
+| Connect an agent or MCP client | [MCP Client Setup](/getting-started/mcp-client) | [Agent Interface Reference](/reference/agent-interface) |
+| Test accountless x402 on Base Sepolia | [Staging Guide](/getting-started/staging#base-sepolia-test-boundary) | [Accountless x402](/getting-started/x402) |
+
+Explore concrete journeys through [Crypto API Discovery](/use-cases/crypto-api-discovery), [Source
+Evaluation](/use-cases/source-evaluation), [Provider Integration
+Review](/use-cases/provider-integration-review), [Agent And Answer-Engine
+Discovery](/use-cases/answer-engine-discovery), and [Agent Wallet
+Balance](/use-cases/agent-wallet-balance).
+
+## Contract Authority
+
+Use current runtime surfaces instead of saved routes or inferred provider URLs:
+
+| Contract | Purpose |
 | --- | --- |
-| [Product](https://pubfi.ai) | product, account, Discovery, and agent-readable product entry |
-| [Staging product](https://stg.pubfi.ai) | staging web, login, and dashboard entry |
-| [Staging API](https://api-stg.pubfi.ai/reference) | staging interactive API reference |
-| [Staging MCP](https://mcp-stg.pubfi.ai/.well-known/mcp.json) | staging MCP discovery manifest |
-| [Discovery](https://pubfi.ai/discovery) | public crypto data API index and source-selection surface |
-| [Discovery directory Markdown](https://pubfi.ai/discovery.md) | Markdown mirror for the Discovery directory |
-| [Provider Profile index](https://pubfi.ai/discovery/sources) | paginated public Discovery source index |
-| [Agents guide](https://pubfi.ai/agents.md) | machine-readable guide for PubFi agent setup and public boundaries |
-| [llms.txt](https://pubfi.ai/llms.txt) | concise site index for LLM and crawler discovery |
-| [llms-full.txt](https://pubfi.ai/llms-full.txt) | expanded Discovery export for answer-engine retrieval |
-| [Discovery capability-card JSON](https://pubfi.ai/discovery/agent-capabilities.json) | machine-readable Discovery source capability-card catalog |
-| [IndexNow verification key](https://pubfi.ai/50e4aa84-257b-4ff4-a822-5da3d567384c.txt) | crawler ownership verification file for IndexNow submission |
-| [API Reference](https://api.pubfi.ai/reference) | interactive API reference |
-| [OpenAPI](https://api.pubfi.ai/openapi.json) | API schema |
-| [API-host MCP manifest](https://api.pubfi.ai/.well-known/mcp.json) | API-host MCP discovery manifest |
-| [MCP manifest](https://mcp.pubfi.ai/.well-known/mcp.json) | MCP discovery manifest |
-| [MCP discovery pointer](https://pubfi.ai/.well-known/mcp.json) | product-site pointer to the hosted MCP endpoint |
-| [MCP server card](https://pubfi.ai/.well-known/mcp/server-card.json) | metadata card for hosted MCP discovery |
-| [Optional MCP registry auth proof](https://pubfi.ai/.well-known/mcp-registry-auth) | optional public proof route for MCP Registry ownership checks |
+| [Registry catalog](https://api.pubfi.ai/v1/capabilities) | all installed operations and their current readiness |
+| [Runtime OpenAPI](https://api.pubfi.ai/openapi.json) | executable HTTP schema for current `ready` operations |
+| [MCP manifest](https://mcp.pubfi.ai/.well-known/mcp.json) | hosted MCP discovery and tool metadata |
 
-## Claim Boundary
+Use [Public Surfaces](/reference/public-surfaces) for the complete human-facing URL inventory. Use
+[Agent-Readable Surfaces](/agent-readable/surfaces) for machine-consumable indexes and authority
+order.
+
+## Core Boundary
 
 Discovery inclusion does not mean gateway availability. A route plan does not authorize execution.
-Local SEO/GEO evidence does not prove ranking, traffic, or AI citation success. PubFi keeps those
-boundaries explicit so agents can choose routes safely. Base Sepolia identifies the Staging x402
-test boundary. Inspect current Production runtime evidence before you claim Production x402
-availability.
+The installed Registry and request-time gates determine whether a route can run.
 
-## Coverage Map
-
-| Area | Start here |
-| --- | --- |
-| Product positioning | [Project overview](/project-overview) |
-| Staging web, API, MCP, and x402 tests | [Staging guide](/getting-started/staging) |
-| HTTP API details | [API reference](/reference/api-reference) |
-| API key, billing account, allowance, and usage | [API key and runtime](/getting-started/api-key-runtime) |
-| Accountless pay-per-request execution | [Accountless x402](/getting-started/x402) |
-| Credits, purchases, and payment-mode boundaries | [Payment and execution modes](/concepts/payment-and-execution-modes) |
-| Agent/MCP interface | [MCP client setup](/getting-started/mcp-client) |
-| Discovery and source selection | [Discovery](/concepts/discovery) |
-| Provider readiness and certification | [Provider readiness](/concepts/provider-readiness) |
-| Agent-readable surfaces | [Agent-readable surfaces](/agent-readable/surfaces) |
-| Runtime endpoints | [Runtime endpoints](/reference/runtime-endpoints) |
-| Public/security boundary | [Security and public data](/reference/security-and-public-data) |
+Staging permits Base Sepolia `eip155:84532` for eligible x402 tests. Production permits Base
+mainnet `eip155:8453` only when x402 is enabled for the exact route. Environment policy does not
+prove current route or offer availability.

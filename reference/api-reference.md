@@ -3,8 +3,6 @@ title: API Reference
 description: Use PubFi's interactive API reference and Registry-derived Runtime OpenAPI.
 ---
 
-# API Reference
-
 PubFi publishes an interactive reference and a machine-readable Runtime OpenAPI:
 
 - [Interactive API Reference](https://api.pubfi.ai/reference)

@@ -3,8 +3,6 @@ title: Agent-Readable Surfaces
 description: Current public files and runtime schemas for PubFi agents and integration clients.
 ---
 
-# Agent-Readable Surfaces
-
 Use these public files and endpoints to inspect PubFi Discovery context, Registry v2 routes,
 Runtime OpenAPI, and MCP metadata.
 
@@ -90,20 +88,6 @@ These surfaces must not expose:
 - internal automation prompts; or
 - unsupported ranking, traffic, payment, uptime, or citation claims.
 
-## Change Checklist
-
-When a runtime contract or public page changes, maintainers should check:
-
-1. whether `agents.md`, `llms.txt`, or `llms-full.txt` needs the new public boundary;
-2. whether `/v1/capabilities` and Runtime OpenAPI still describe the same installed generation;
-3. whether the Agent interface guide matches MCP `tools/list` and tool input schemas;
-4. whether HTTP gateway examples use exact current Registry paths and methods;
-5. whether x402 docs still match the standard HTTP headers, MCP metadata, Signed Offers &
-   Receipts fields, supported network, and lane separation;
-6. whether account and purchase docs still match route roles and scopes;
-7. whether README, docs navigation, and agent-readable indexes point to the canonical asset; and
-8. whether every example avoids private data and unsupported availability claims.
-
 ## Reachability Evidence
 
 Record only narrow public-safe observations:
@@ -122,3 +106,9 @@ Record only narrow public-safe observations:
 
 These observations do not prove provider success, purchase-offer availability, payment settlement,
 uptime, ranking, traffic, or citations.
+
+## Related References
+
+- Use [Public Surfaces](/reference/public-surfaces) for the complete human-facing URL inventory.
+- Use the [API Reference](/reference/api-reference) for HTTP schema authority.
+- Use the [Agent Interface Reference](/reference/agent-interface) for hosted MCP tool contracts.
