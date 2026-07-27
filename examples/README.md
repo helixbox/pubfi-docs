@@ -8,8 +8,12 @@ Current examples:
   Registry v2 smoke for the hosted MCP endpoint. It has a no-secret smoke mode.
 - [Registry Catalog Curl](agents/capability-curl/README.md): no-auth inspection of the current
   Registry v2 catalog.
-- [Accountless x402](agents/x402-base-sepolia/README.md): no-secret challenge inspection plus
-  bounded official-client HTTP and MCP paid examples with signed receipt and replay verification.
+- [Accountless x402 on Base Sepolia](agents/x402-base-sepolia/README.md): Staging-only challenge
+  inspection plus bounded official-client HTTP and MCP paid examples with signed receipt and replay
+  verification.
+- [Accountless x402 on Base mainnet](agents/x402-base-mainnet/README.md): Production-only HTTP and
+  MCP examples pinned to the current route, canonical Base USDC, exact amount, and payee. These
+  commands spend real USDC.
 
 Public examples must not include upstream provider keys, PubFi API keys, account identifiers,
 private wallet data, raw production payloads, or unredacted readbacks.

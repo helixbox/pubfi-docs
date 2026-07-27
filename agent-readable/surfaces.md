@@ -34,6 +34,7 @@ Runtime OpenAPI, and MCP metadata.
 | Staging Runtime OpenAPI | Executable Staging HTTP schema for current `ready` Registry operations and API routes. | `https://api-stg.pubfi.ai/openapi.json` |
 | Staging hosted MCP manifest | Hosted Staging MCP discovery and current Registry metadata. | `https://mcp-stg.pubfi.ai/.well-known/mcp.json` |
 | Accountless x402 guide | HTTP and MCP x402 V2 challenge, signing, receipt, privacy, and replay rules. | `https://docs.pubfi.ai/getting-started/x402` |
+| Production x402 example | Pinned Base mainnet HTTP and MCP clients with signed offer, signed receipt, and exact replay validation. | `https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet` |
 | Payment mode guide | Boundary between API-key allowance, registered purchases, Credits, and x402. | `https://docs.pubfi.ai/concepts/payment-and-execution-modes` |
 | Public docs repository | Public source and contribution history. | `https://github.com/helixbox/pubfi-docs` |
 | Canonical docs site | Full long-form documentation. | `https://docs.pubfi.ai` |
