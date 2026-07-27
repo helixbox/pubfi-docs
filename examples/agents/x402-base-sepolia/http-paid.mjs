@@ -1,6 +1,10 @@
 import { createHash } from 'node:crypto';
 
 import { x402Client } from '@x402/core/client';
+import {
+  decodePaymentRequiredHeader,
+  decodePaymentResponseHeader,
+} from '@x402/core/http';
 import { toClientEvmSigner } from '@x402/evm';
 import { ExactEvmScheme } from '@x402/evm/exact/client';
 import { wrapFetchWithPayment } from '@x402/fetch';
@@ -14,6 +18,7 @@ import {
   expectedPaymentSelector,
   resourceUrl,
 } from './payment-policy.mjs';
+import { requireSignedOffer, requireSignedReceipt } from './signed-artifacts.mjs';
 
 const MAX_RESPONSE_BYTES = 1024 * 1024;
 let stage = 'configuration';
@@ -73,6 +78,7 @@ async function main() {
 
   let unsignedAttempts = 0;
   let signedAttempts = 0;
+  let signedOfferVerified = false;
   let signedRequest;
   const observingFetch = async (input, init) => {
     const request = new Request(input, init);
@@ -97,6 +103,14 @@ async function main() {
       }
     }
     const response = await fetch(request);
+    if (!request.headers.has('PAYMENT-SIGNATURE')) {
+      const paymentRequiredHeader = response.headers.get('PAYMENT-REQUIRED');
+      if (response.status !== 402 || !paymentRequiredHeader) {
+        throw new Error('unsigned response omitted the x402 challenge');
+      }
+      await requireSignedOffer(decodePaymentRequiredHeader(paymentRequiredHeader), resource);
+      signedOfferVerified = true;
+    }
     requirePrivateNoStore(response);
     return response;
   };
@@ -113,6 +127,11 @@ async function main() {
   if (!paymentResponse) {
     throw new Error('paid response omitted PAYMENT-RESPONSE');
   }
+  const receipt = await requireSignedReceipt(
+    decodePaymentResponseHeader(paymentResponse),
+    resource,
+    account.address,
+  );
   const paidBody = await boundedBody(paidResponse);
 
   stage = 'exact HTTP replay';
@@ -135,6 +154,10 @@ async function main() {
       initialStatus: 402,
       paidStatus: paidResponse.status,
       paymentResponseObserved: true,
+      signedOfferVerified,
+      signedReceiptVerified: true,
+      signerKeyId: receipt.keyId,
+      transaction: receipt.transaction,
       exactReplay: true,
       bodyBytes: paidBody.byteLength,
       bodySha256: createHash('sha256').update(paidBody).digest('hex'),

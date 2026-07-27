@@ -6,7 +6,7 @@
     "check": "node --check http-paid.mjs && node --check mcp-paid.mjs && node --check payment-policy.mjs && node --check signed-artifacts.mjs && npm test",
     "paid:http": "node http-paid.mjs",
     "paid:mcp": "node mcp-paid.mjs",
-    "test": "node --test payment-policy.test.mjs"
+    "test": "node --test payment-policy.test.mjs signed-artifacts.test.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.29.0",

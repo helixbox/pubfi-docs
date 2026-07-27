@@ -33,11 +33,10 @@ github.com/helixbox/pubfi-docs
 
 Snapshot sources:
 
-- `pubfi-mono` source snapshot at `7a1b8e13943d454db5f76d03a29e1ce8f65ee616`;
+- `pubfi-mono` source snapshot at `d0ee242963fc4a6477e79b2ece98ec3aece643ce`;
 - `quantro-mono` origin/main through `f5a4dec934f4a2a6e072149d694df7984391b74b`; and
-- public Runtime OpenAPI, Registry v2 catalog, MCP `tools/list`, and the Staging x402 challenge
-  observed on 2026-07-27. The observation date applies to the Staging challenge and does not claim
-  Production x402 availability.
+- public Runtime OpenAPI, Registry v2 catalog, MCP `tools/list`, Staging and Production x402
+  challenges, and the repository-access acceptance workflows observed on 2026-07-27.
 
 ## Start Here
 
@@ -187,7 +186,8 @@ Unsafe claims:
 - GitHub exposure alone proves search success;
 - PubFi performs supplier procurement, supplier payment, wallet custody, or live model-ranked
   routing by default.
-- Every gateway route supports x402, or the production API accepts real-value mainnet payments.
+- Every gateway route supports x402, or an old challenge or acceptance run proves current
+  Production availability without a current catalog and unsigned challenge.
 - A Base Sepolia Staging challenge proves that Production x402 is available.
 
 ## Appreciation

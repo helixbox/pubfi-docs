@@ -15,6 +15,9 @@ commercial, settlement, allocation, and receipt facts behind those product surfa
 | Registered purchase | authenticated account Owner or Admin | an available immutable purchase offer and provider-hosted Checkout | after verified settlement, creates a purchase-origin meter allocation shown by PubFi as Credits |
 | Accountless x402 over HTTP or MCP | wallet authorization; no PubFi account or API key | one valid x402 payment bound to one eligible request | buys that response only; it does not create or consume Credits |
 
+For accountless x402, the caller's USDC balance in the selected environment's wallet is the
+available payment balance. PubFi does not copy that value into an account or Credits balance.
+
 The free starter allocation is not Credits. PubFi uses **Credits** only for eligible,
 purchase-origin `request_count` units. Credits are service units, not money, a stored-value wallet,
 or a transferable token.
@@ -57,6 +60,9 @@ PubFi enforces these x402 environment boundaries:
 | Staging | `https://api-stg.pubfi.ai` and `https://mcp-stg.pubfi.ai` | Base Sepolia `eip155:84532` |
 | Production | `https://api.pubfi.ai` and `https://mcp.pubfi.ai` | Base mainnet `eip155:8453`, only when x402 is enabled for the exact route |
 
+The pinned Production health example currently requires canonical Base USDC and 0.001 USDC per
+request. This example value is not permanent payment authority.
+
 The environment boundary does not prove current route or offer availability. Use the selected
 environment's live Registry catalog as route authority. Use the route's live unsigned `402`
 challenge as the authority for the asset, amount, payee, timeout, and other payment terms.
@@ -79,9 +85,10 @@ PubFi binds the wallet authorization to the exact method, resource, request, and
 Before provider I/O, PubFi creates a durable execution fence. Only a validated, bounded provider
 success can be staged for settlement.
 
-PubFi returns the staged response only after settlement converges. A successful response includes
-`PAYMENT-RESPONSE`. Replaying the exact signed request returns the same staged response and the same
-payment response without a second provider call or charge.
+PubFi returns the staged response only after settlement converges. A successful HTTP response
+includes the `PAYMENT-RESPONSE` header. A successful MCP result includes the decoded response at
+`result._meta["x402/payment-response"]`. Replaying the exact signed request returns the same staged
+response and the same payment response without a second provider call or charge.
 
 Definite provider failures and ambiguous provider outcomes do not become billable x402 sales.
 Clients should retry the exact request and authorization when recovery is allowed instead of
@@ -107,9 +114,12 @@ Accountless x402 callers have no PubFi account balance, Credits balance, invoice
 dashboard. Their payment evidence is:
 
 - the wallet activity on the network in the accepted challenge;
-- the request-bound `PAYMENT-RESPONSE`;
+- the request-bound HTTP `PAYMENT-RESPONSE` or MCP `x402/payment-response`;
 - the paired signed offer and signed receipt; and
 - exact replay of the same signed request.
+
+The signed receipt is verifiable evidence for the settled payment and execution. It is not an
+account-balance, Credits, top-up, or deposit record.
 
 PubFi does not expose internal Quantro settlement records or payment payloads as public accountless
 billing data. SIWX, a public wallet-history service, and anonymous Credits are not part of the

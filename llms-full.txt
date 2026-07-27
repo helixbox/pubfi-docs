@@ -69,26 +69,41 @@ upstream API.
 - Registered purchase routes expose the currently available offers. The route existing does not
   prove that an offer is open for sale.
 - Accountless x402 buys one eligible HTTP or MCP response. It creates no PubFi account, API key,
-  Credits balance, or invoice.
+  Credits balance, or invoice. The caller's USDC in the environment-specific wallet is the payment
+  balance; PubFi does not mirror it as an account balance.
 - Staging x402 permits Base Sepolia `eip155:84532` only and uses the exact
   `https://api-stg.pubfi.ai` and `https://mcp-stg.pubfi.ai` origins. Production x402 permits Base
   mainnet `eip155:8453` only when x402 is enabled for the exact route. These rules do not prove
-  current route or offer availability.
+  current route or offer availability. Use separate dedicated wallets and private keys for the two
+  environments.
 - Enabled x402 routes use V2 `exact`, EIP-3009, the standard HTTP headers, official MCP payment
   metadata, and official Ed25519 Signed Offers & Receipts. The live catalog is route authority.
-  The live challenge is the authority for route-specific payment terms.
+  The live challenge is the authority for route-specific payment terms. It contains the Signed
+  Offer. A settled HTTP response carries `PAYMENT-RESPONSE`. A settled MCP result carries the
+  decoded response and Signed Receipt at `result._meta["x402/payment-response"]`.
+- A Signed Receipt is verifiable payment and execution evidence. It is not an account balance,
+  Credits, top-up, or deposit record. Exact replay reuses the original response, settlement, and
+  receipt without a second charge.
 - PubFi uses one active private Ed25519 signer. Its `did:web` document can retain up to eight
   public verification keys so supported historical receipts remain verifiable after rotation.
 - A public Staging-only pinned-client example for bounded Base Sepolia HTTP and MCP payment, signed
   offer and receipt verification, and exact replay is available at
   https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepolia.
+- The 2026-07-27 Staging acceptance run completed both official-client lanes with verified Signed
+  Offers, Signed Receipts, and exact replay:
+  https://github.com/helixbox/pubfi-mono/actions/runs/30258511212. The workflow link requires
+  source-repository access.
 - A separate Production example pins HTTP and MCP to
   `https://api.pubfi.ai/v1/gateway/quantro/health`, Base mainnet `eip155:8453`, canonical Base
-  USDC, 1000 atomic units, and the published payee. It verifies signed offers, signed receipts,
-  and exact replay:
+  USDC, 1000 atomic units or 0.001 USDC per request, and the published payee. It verifies signed
+  offers, signed receipts, and exact replay:
   https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet.
 - The 2026-07-27 Production acceptance run completed both HTTP and MCP payments with verified
-  signed receipts and exact replay. Public Base transactions:
+  signed receipts and exact replay:
+  https://github.com/helixbox/pubfi-mono/actions/runs/30259030111. The workflow link requires
+  source-repository access. Bounded read-only acceptance confirmed one `settled` settlement and one
+  signed receipt for each lane. Exact replay did not create a second charge. Public Base
+  transactions:
   `0xb011351c24f40b597778ec1dd79807d2a4a01950ae219db3299f0c51f2cc594f` and
   `0x25819c481c83ddc7dd028a8c3c6832ee7ba77a00b3b7300106bb6db5e73f9934`.
 - The examples require a buyer key injected by a wallet or secret manager. They never accept the
@@ -144,10 +159,13 @@ upstream API.
 - `tools/list` publishes the current generation, manifest, routes, and input schemas.
 - `pubfi.route.execute` accepts a PubFi API key or the mutually exclusive accountless x402
   metadata flow. An unsigned eligible call returns `PaymentRequired`; the paid retry supplies
-  `x402/payment`; the settled result supplies `x402/payment-response`.
+  `x402/payment`; the settled result supplies `x402/payment-response`. A wallet-capable agent can
+  complete this payment directly through MCP without a separate paid HTTP request.
 - Unrelated bounded MCP `_meta` entries can coexist with the flow. Only `x402/payment` carries
   payment. Paid replay compares structured content and payment-response metadata, not raw JSON-RPC
   bytes.
+- HTTP and MCP share the same Registry route, x402 `exact` payment, Quantro settlement, receipt, and
+  exact replay path.
 
 ## Public-Safe Claims
 
@@ -159,6 +177,8 @@ upstream API.
 - PubFi supports separate registered API-key and accountless x402 execution modes over HTTP and
   MCP.
 - Quantro owns provider-neutral purchase, settlement, receipt, and resulting allocation facts.
+  One request selects either the registered API-key and Credits lane or the accountless x402 lane;
+  it cannot debit both.
 
 ## Non-Claims
 

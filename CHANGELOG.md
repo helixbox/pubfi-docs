@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Aligned the x402 guides, examples, FAQ, and agent-readable indexes on environment-isolated
+  wallets, direct MCP payment, single-lane accounting, receipt meaning, no-charge exact replay, and
+  the Staging and Production acceptance results.
+- Added signed-offer and signed-receipt verification to the Staging HTTP x402 example.
+- Made both runnable signed-artifact verifiers authenticate JWS payload bytes before parsing them
+  and reject noncanonical payload JSON.
 - Replaced the placeholder MCP execution path with the current public Quantro health route.
 - Added pinned Production Base mainnet HTTP and MCP x402 examples. They validate the exact route,
   canonical USDC asset, 0.001 USDC amount, payee, signed offer, signed receipt, and exact replay.

@@ -64,9 +64,20 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 Discovery inclusion does not imply Registry readiness. The current Registry catalog and Runtime
 OpenAPI define executable paths and methods. API-key execution, registered purchases and Credits,
 and accountless x402 are separate modes. MCP `pubfi.route.execute` supports API-key admission or
-the mutually exclusive official x402 metadata flow. Public docs and reachability checks do not
-prove ranking, traffic, or AI citation success. Base Sepolia `eip155:84532` is the Staging x402
-test boundary. The pinned Production HTTP and MCP example uses Base mainnet `eip155:8453`,
-canonical Base USDC, 1000 atomic units, and the published Production payee. Production commands
-spend real USDC. Production HTTP and MCP acceptance completed on 2026-07-27 with verified signed
-receipts and exact replay; see https://github.com/helixbox/pubfi-mono/actions/runs/30259030111.
+the mutually exclusive official x402 metadata flow, so an agent can pay directly through MCP.
+Accountless x402 creates no PubFi account, API key, Credits, or invoice. The environment-specific
+wallet's USDC is the payment balance; keep separate wallets and private keys for Staging and
+Production. A Signed Receipt is payment and execution evidence, not a balance, top-up, or deposit
+record.
+
+Base Sepolia `eip155:84532` is the Staging x402 boundary. Staging HTTP and MCP acceptance completed
+on 2026-07-27 with Signed Offer and Signed Receipt verification and exact replay; see
+https://github.com/helixbox/pubfi-mono/actions/runs/30258511212 (source-repository access required).
+The pinned Production HTTP and MCP example uses Base mainnet `eip155:8453`, canonical Base USDC,
+1000 atomic units or 0.001 USDC per request, and the published Production payee. Production
+commands spend real USDC. Production acceptance completed on 2026-07-27; see
+https://github.com/helixbox/pubfi-mono/actions/runs/30259030111 (source-repository access required).
+HTTP and MCP share the same x402 `exact` settlement and replay path. Exact replay reuses the first
+settlement and receipt without a second charge. Quantro is the common accounting-fact authority,
+but one request cannot debit both the registered and x402 lanes. Public docs and reachability
+checks do not prove ranking, traffic, or AI citation success.

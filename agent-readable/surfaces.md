@@ -34,7 +34,10 @@ Runtime OpenAPI, and MCP metadata.
 | Staging Runtime OpenAPI | Executable Staging HTTP schema for current `ready` Registry operations and API routes. | `https://api-stg.pubfi.ai/openapi.json` |
 | Staging hosted MCP manifest | Hosted Staging MCP discovery and current Registry metadata. | `https://mcp-stg.pubfi.ai/.well-known/mcp.json` |
 | Accountless x402 guide | HTTP and MCP x402 V2 challenge, signing, receipt, privacy, and replay rules. | `https://docs.pubfi.ai/getting-started/x402` |
+| Staging x402 example | Pinned Base Sepolia HTTP and MCP clients with signed offer, signed receipt, and exact replay validation. | `https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepolia` |
+| Staging x402 acceptance | Source workflow for the 2026-07-27 Staging HTTP and MCP acceptance; repository access is required. | `https://github.com/helixbox/pubfi-mono/actions/runs/30258511212` |
 | Production x402 example | Pinned Base mainnet HTTP and MCP clients with signed offer, signed receipt, and exact replay validation. | `https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet` |
+| Production x402 acceptance | Source workflow for the 2026-07-27 Production HTTP and MCP acceptance; repository access is required. | `https://github.com/helixbox/pubfi-mono/actions/runs/30259030111` |
 | Payment mode guide | Boundary between API-key allowance, registered purchases, Credits, and x402. | `https://docs.pubfi.ai/concepts/payment-and-execution-modes` |
 | Public docs repository | Public source and contribution history. | `https://github.com/helixbox/pubfi-docs` |
 | Canonical docs site | Full long-form documentation. | `https://docs.pubfi.ai` |
@@ -48,6 +51,23 @@ Staging accountless x402 permits Base Sepolia `eip155:84532`. This environment p
 prove that a specific route is available. Confirm that the exact route and method are `ready` in
 the current Staging catalog. Then require a current unsigned `402` challenge before you sign a
 payment authorization.
+
+## x402 Interpretation Boundary
+
+- Staging uses Base Sepolia `eip155:84532`. Production uses Base mainnet `eip155:8453` only for an
+  exact enabled route. Use separate dedicated wallets and private keys.
+- The pinned Production health example currently requires canonical Base USDC and 0.001 USDC per
+  request. The live unsigned challenge remains the payment-term authority.
+- Accountless x402 creates no PubFi account, API key, invoice, or Credits. Wallet USDC is the
+  payment balance. An agent can pay directly through the official MCP metadata flow.
+- HTTP and MCP share one x402 `exact` payment, settlement, Signed Receipt, and replay path. The
+  challenge contains the Signed Offer. Settled HTTP responses carry `PAYMENT-RESPONSE`; settled MCP
+  results carry the decoded response and Signed Receipt at
+  `result._meta["x402/payment-response"]`.
+- A Signed Receipt is verifiable payment and execution evidence, not an account balance, Credits,
+  top-up, or deposit record. Exact replay reuses the settlement and receipt without another charge.
+- Quantro is the common accounting-fact authority. A request selects either the API-key and Credits
+  lane or the x402 wallet-payment lane. It cannot debit both.
 
 ## Authority Order
 
@@ -71,8 +91,8 @@ convention.
 - MCP `pubfi.route.execute` accepts API-key admission or the mutually exclusive official x402
   metadata flow.
 - A successful HTTP gateway response is canonical provider JSON. API-key responses identify the
-  Registry generation. Settled x402 responses include `PAYMENT-RESPONSE`. Neither lane uses a
-  PubFi success envelope.
+  Registry generation. Settled x402 HTTP responses include `PAYMENT-RESPONSE`; settled MCP results
+  include `x402/payment-response` metadata. Neither lane uses a PubFi success envelope.
 - Registered purchase APIs require a human dashboard session. Their presence does not prove that a
   current offer exists.
 

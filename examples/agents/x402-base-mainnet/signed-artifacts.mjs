@@ -21,10 +21,52 @@ function requiredString(object, field) {
   return value;
 }
 
+function requireValidUnicode(value) {
+  for (let index = 0; index < value.length; index += 1) {
+    const codeUnit = value.charCodeAt(index);
+    if (codeUnit >= 0xd800 && codeUnit <= 0xdbff) {
+      const next = value.charCodeAt(index + 1);
+      if (!(next >= 0xdc00 && next <= 0xdfff)) {
+        throw new Error('signed artifact contains a lone Unicode surrogate');
+      }
+      index += 1;
+    } else if (codeUnit >= 0xdc00 && codeUnit <= 0xdfff) {
+      throw new Error('signed artifact contains a lone Unicode surrogate');
+    }
+  }
+}
+
+export function canonicalJson(value) {
+  if (value === null || typeof value === 'boolean') {
+    return JSON.stringify(value);
+  }
+  if (typeof value === 'string') {
+    requireValidUnicode(value);
+    return JSON.stringify(value);
+  }
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) {
+      throw new Error('signed artifact contains a non-finite number');
+    }
+    return JSON.stringify(value);
+  }
+  if (Array.isArray(value)) {
+    return `[${value.map(canonicalJson).join(',')}]`;
+  }
+  if (typeof value === 'object') {
+    const keys = Object.keys(value);
+    keys.forEach(requireValidUnicode);
+    const members = keys
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`);
+    return `{${members.join(',')}}`;
+  }
+  throw new Error('signed artifact contains an unsupported JSON value');
+}
+
 async function verifiedJws(compact, resourceOrigin) {
   const [protectedHeader, payload, signature] = compactJws(compact);
   const header = JSON.parse(Buffer.from(protectedHeader, 'base64url').toString('utf8'));
-  const body = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
   const expectedDid = `did:web:${new URL(resourceOrigin).hostname}`;
   const keyId = requiredString(header, 'kid');
 
@@ -75,6 +117,11 @@ async function verifiedJws(compact, resourceOrigin) {
     throw new Error('signed artifact signature is invalid');
   }
 
+  const payloadBytes = Buffer.from(payload, 'base64url');
+  const body = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(payloadBytes));
+  if (!payloadBytes.equals(Buffer.from(canonicalJson(body), 'utf8'))) {
+    throw new Error('signed artifact payload is not canonical JSON');
+  }
   return { body, keyId };
 }
 
