@@ -1,4 +1,7 @@
-# Route Planning
+---
+title: Route Planning
+description: Resolve an exact path and method against the current Registry generation before execution.
+---
 
 Route planning resolves an exact path and HTTP method against the currently installed Registry v2
 generation. It can return a match, candidate list, rejection, or abstention without executing an
@@ -48,3 +51,6 @@ Hard filters can include:
 
 Route planning must not call providers, create x402 payment payloads, consume allocation, grant
 credentials, or hide rejected candidates and policy reasons.
+
+After planning, use [Registry Gateway Examples](/reference/provider-gateway-examples) for HTTP or
+[MCP Client Setup](/getting-started/mcp-client) for agent execution.

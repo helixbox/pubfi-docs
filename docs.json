@@ -20,20 +20,21 @@
   "navigation": {
     "groups": [
       {
-        "group": "Start",
+        "group": "Start Here",
         "pages": [
           "index",
-          "project-overview"
+          "project-overview",
+          "getting-started/quickstart",
+          "getting-started/staging"
         ]
       },
       {
-        "group": "Getting Started",
+        "group": "Integrate",
         "pages": [
-          "getting-started/quickstart",
-          "getting-started/staging",
           "getting-started/api-key-runtime",
-          "getting-started/x402",
-          "getting-started/mcp-client"
+          "reference/provider-gateway-examples",
+          "getting-started/mcp-client",
+          "getting-started/x402"
         ]
       },
       {
@@ -41,43 +42,37 @@
         "pages": [
           "concepts/discovery",
           "concepts/capability-contracts",
+          "concepts/provider-readiness",
           "concepts/route-planning",
           "concepts/payment-and-execution-modes",
           "concepts/account-credit-usage",
-          "concepts/provider-readiness",
           "concepts/readiness-and-claim-safety"
-        ]
-      },
-      {
-        "group": "Agent-Readable",
-        "pages": [
-          "agent-readable/surfaces"
         ]
       },
       {
         "group": "Use Cases",
         "pages": [
-          "use-cases/agent-wallet-balance",
           "use-cases/crypto-api-discovery",
-          "use-cases/answer-engine-discovery",
+          "use-cases/source-evaluation",
           "use-cases/provider-integration-review",
-          "use-cases/source-evaluation"
+          "use-cases/answer-engine-discovery",
+          "use-cases/agent-wallet-balance"
         ]
       },
       {
         "group": "Reference",
         "pages": [
-          "reference/architecture-map",
           "reference/api-reference",
-          "reference/agent-interface",
           "reference/runtime-endpoints",
-          "reference/provider-gateway-examples",
+          "reference/agent-interface",
           "reference/public-surfaces",
+          "agent-readable/surfaces",
+          "reference/architecture-map",
           "reference/security-and-public-data"
         ]
       },
       {
-        "group": "Project",
+        "group": "Resources",
         "pages": [
           "faq",
           "glossary"

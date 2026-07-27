@@ -3,8 +3,6 @@ title: Registry Gateway Examples
 description: Select and call current Registry v2 gateway operations without using stale provider routes.
 ---
 
-# Registry Gateway Examples
-
 PubFi executes provider-backed requests through the currently installed Registry v2 generation.
 There is no permanent provider URL pattern. Use the public catalog or Runtime OpenAPI before every
 integration or route refresh.
@@ -93,17 +91,25 @@ Do not copy a request body from another operation.
 ## 4. Use The Accountless x402 Lane When Eligible
 
 An exact gateway route can separately enable accountless x402. The public Base Sepolia example is
-Staging-only. Inspect the Staging catalog and select an exact ready path from that environment:
+Staging-only. Inspect the Staging catalog and Runtime OpenAPI, then select an exact ready path and
+method from that environment:
 
 ```sh
 curl --silent --show-error \
   'https://api-stg.pubfi.ai/v1/capabilities'
+
+curl --silent --show-error \
+  'https://api-stg.pubfi.ai/openapi.json'
 ```
 
-Then send the exact request without a PubFi API key or payment signature:
+Do not reuse a Production-selected path or method unless the current Staging contracts advertise
+the same operation as `ready`. Set new Staging values, then send the exact request without a PubFi
+API key or payment signature:
 
 ```sh
 export PUBFI_GATEWAY_ORIGIN='https://api-stg.pubfi.ai'
+export PUBFI_GATEWAY_PATH='<exact ready path from the Staging Runtime OpenAPI>'
+export PUBFI_GATEWAY_METHOD='GET'
 
 curl --include \
   --request "$PUBFI_GATEWAY_METHOD" \

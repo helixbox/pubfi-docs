@@ -3,8 +3,6 @@ title: Payment And Execution Modes
 description: How PubFi separates API-key usage, registered-account purchases, and accountless x402 payments.
 ---
 
-# Payment And Execution Modes
-
 PubFi has separate caller entry modes, but it does not maintain separate financial authorities for
 each mode. PubFi owns route execution and product presentation. Quantro owns the provider-neutral
 commercial, settlement, allocation, and receipt facts behind those product surfaces.

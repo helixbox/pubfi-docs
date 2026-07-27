@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Reorganized the docs into task-oriented Start Here, Integrate, Concepts, Use Cases, Reference,
+  and Resources paths; removed duplicate rendered H1 headings; and added explicit reader
+  transitions between evaluation, API-key, MCP, and x402 workflows.
 - Added a Staging guide for the separate web, API, and MCP roots, email OTP and API-key setup,
   catalog and OpenAPI inspection, authenticated HTTP and MCP smoke tests, Base Sepolia x402 test
   boundaries, troubleshooting, and Production transition.

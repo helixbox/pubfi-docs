@@ -3,8 +3,6 @@ title: Runtime Endpoints
 description: Current PubFi API, MCP, web, account, purchase, and Registry v2 endpoint families.
 ---
 
-# Runtime Endpoints
-
 This page lists the current public runtime endpoint families. It does not list internal webhook,
 operator, repair, or control-plane routes.
 

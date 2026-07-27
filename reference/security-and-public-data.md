@@ -3,8 +3,6 @@ title: Security And Public Data Boundary
 description: Public-safe rules for PubFi API, Registry, account, purchase, and x402 documentation.
 ---
 
-# Security And Public Data Boundary
-
 Public docs must explain PubFi without exposing caller credentials, payment evidence, private
 account data, or operator state.
 
@@ -108,3 +106,6 @@ A public route, OpenAPI operation, health result, or source listing does not pro
 Use the installed Registry catalog and Runtime OpenAPI for route authority. Use the current x402
 challenge for payment terms. Use authenticated offer and account responses only inside the caller's
 private application context.
+
+Apply these rules through [API Key And Runtime](/getting-started/api-key-runtime), [MCP Client
+Setup](/getting-started/mcp-client), and [Accountless x402](/getting-started/x402).

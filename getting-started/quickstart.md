@@ -1,122 +1,113 @@
-# Quickstart
+---
+title: Quickstart
+description: Choose a PubFi environment and execution path, inspect current contracts, and make a first request.
+---
 
-This quickstart shows how to orient around PubFi's public docs, Discovery surfaces, and agent
-interfaces.
+Use this quickstart to choose one environment and one execution lane. You do not need a PubFi API
+key to inspect public contracts or use an eligible accountless x402 route.
 
-## 1. Read The Public Index
+## 1. Choose An Environment
 
-Start with:
+| Environment | Web | API | MCP |
+| --- | --- | --- | --- |
+| Staging | `https://stg.pubfi.ai` | `https://api-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai` |
+| Production | `https://pubfi.ai` | `https://api.pubfi.ai` | `https://mcp.pubfi.ai` |
 
-```text
-https://pubfi.ai/discovery
-https://pubfi.ai/llms.txt
-https://pubfi.ai/llms-full.txt
-https://docs.pubfi.ai/reference/agent-interface
+Start in Staging. Keep the web, API, MCP, credentials, and payment network in the same environment.
+See the [Staging Guide](/getting-started/staging) for login and test details.
+
+## 2. Choose A Path
+
+| Goal | Interface or lane | PubFi API key |
+| --- | --- | --- |
+| Compare crypto data providers | [Discovery](https://pubfi.ai/discovery) | No |
+| Inspect routes and schemas | Registry catalog, Runtime OpenAPI, or MCP `tools/list` | No |
+| Execute through HTTP with account allocation | API-key lane | Yes |
+| Execute through MCP with account allocation | MCP API-key lane | Yes |
+| Buy one eligible response without an account | HTTP or MCP x402 lane | No |
+
+Do not combine a PubFi API key with x402 payment evidence.
+
+## 3. Inspect The Current Contract
+
+Set the API root for the selected environment. This example uses Staging:
+
+```sh
+export PUBFI_API_BASE='https://api-stg.pubfi.ai'
 ```
 
-Use Discovery to understand source categories, chains, providers, comparison pages, topic pages,
-and public claim-safe readiness.
+Fetch the complete Registry catalog and the executable HTTP schema:
 
-## 2. Inspect API And MCP Schemas
-
-Open:
-
-```text
-https://api.pubfi.ai/reference
-https://api.pubfi.ai/openapi.json
-https://mcp.pubfi.ai/.well-known/mcp.json
+```sh
+curl --fail --silent --show-error "${PUBFI_API_BASE}/v1/capabilities"
+curl --fail --silent --show-error "${PUBFI_API_BASE}/openapi.json"
 ```
 
-The API reference is the interactive HTTP reference. The OpenAPI schema is the machine-readable
-HTTP contract source. The MCP manifest is the agent-tool discovery surface.
+The catalog lists all installed operations and their readiness. Runtime OpenAPI includes current
+`ready` HTTP operations. Do not infer execution from Discovery, an old example, or a saved route
+from another environment or Registry generation.
 
-Use the [Staging guide](/getting-started/staging) when you test against the isolated Staging
-origins.
+## 4. Use The API-Key Lane
 
-## 3. Choose The Right Path
+Skip this section if you selected accountless x402.
 
-| Need | Path |
+Create an environment-specific key in **Manage application keys**. Store it outside prompts,
+source code, logs, and tracked client configuration. For Staging:
+
+```sh
+export STG_PUBFI_API_KEY='<Staging PubFi API key>'
+```
+
+Select an exact current path and method from the Staging catalog. Then send one supported auth
+header. For example:
+
+```sh
+curl --fail --silent --show-error \
+  --request GET \
+  --header "Authorization: Bearer ${STG_PUBFI_API_KEY}" \
+  "${PUBFI_API_BASE}/v1/gateway/quantro/health"
+```
+
+Confirm that the exact route is still `ready` before you call it. Continue with [API Key And
+Runtime](/getting-started/api-key-runtime) and [Registry Gateway
+Examples](/reference/provider-gateway-examples).
+
+## 5. Connect Through MCP
+
+Use [MCP Client Setup](/getting-started/mcp-client) to choose hosted Streamable HTTP or the local
+stdio bridge. MCP exposes search, planning, explanation, schema, and execution tools over the same
+Registry authority as the HTTP gateway.
+
+## 6. Or Use Accountless x402
+
+Skip API-key creation. Confirm that the selected Staging route and method are `ready`, then call
+the route without auth:
+
+```sh
+curl --include \
+  'https://api-stg.pubfi.ai/v1/gateway/quantro/health'
+```
+
+Only a current unsigned `402` response proves x402 availability for that exact request. Validate
+every payment term before you sign. Staging permits Base Sepolia `eip155:84532`. Production
+permits Base mainnet `eip155:8453` only when x402 is enabled for the exact route.
+
+Continue with [Accountless x402](/getting-started/x402) for wallet policy, payment, receipt, and
+replay rules.
+
+## 7. Check Readiness Before Execution
+
+A source page, schema, or route plan is not execution authority. Every call needs an exact `ready`
+operation and its request-time gates. The API-key lane also needs valid scope, fresh admission, and
+sufficient allocation. The x402 lane needs current route eligibility and a valid request-bound
+payment authorization.
+
+## Continue By Goal
+
+| Goal | Next page |
 | --- | --- |
-| Compare crypto data providers | Discovery pages |
-| Inspect the installed Registry v2 catalog | `GET /v1/capabilities` |
-| Search the Registry through MCP | `pubfi.capabilities.search` |
-| Plan or explain an exact path and method | `pubfi.route.plan` or `pubfi.route.explain` |
-| Inspect current MCP schemas and dynamic routes | `pubfi.schema.get` or `tools/list` |
-| Execute through MCP | `pubfi.route.execute` with API-key auth or accountless x402 |
-| Execute an eligible accountless HTTP route | x402 V2 with no PubFi API key |
-
-## 4. Create Or Load An API Key
-
-Open the PubFi dashboard, go to **Manage application keys**, and create a key for the
-environment or agent runtime you are wiring up. Name keys by where they run, such as
-`staging`, `production`, or `agent-runtime`.
-
-Copy the key when it is shown. PubFi keys use the `pf_sk_v1_` prefix and are shown only once after
-creation. Multiple keys under the same billing account share its request allowance and usage
-history.
-
-## 5. Keep Secrets Out Of Prompts
-
-PubFi API keys belong in a secret store or environment variable. Upstream provider keys stay
-server-side and must not be sent by agents.
-
-## 6. Inspect Current Routes
-
-The Registry catalog is public and does not require a PubFi API key:
-
-```bash
-curl --silent --show-error 'https://api.pubfi.ai/v1/capabilities'
-```
-
-Treat this response and the Runtime OpenAPI as current authority. Do not infer execution from a
-Discovery listing, an old provider example, or a static provider schema.
-
-## 7. Send A Minimal Gateway Request
-
-The current Registry includes this exact ready route:
-
-```bash
-curl --location 'https://api.pubfi.ai/v1/gateway/quantro/health' \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
-
-Use only paths and methods present in the current Registry generation.
-
-## 8. Or Use Accountless x402
-
-Omit the API key on an x402-enabled route to receive a `402 Payment Required` challenge. A paid
-retry uses `PAYMENT-SIGNATURE`; a settled success returns `PAYMENT-RESPONSE`.
-
-```bash
-curl --include 'https://api-stg.pubfi.ai/v1/gateway/quantro/health'
-```
-
-This public paid example is Staging-only. Staging permits Base Sepolia `eip155:84532`. Production
-permits Base mainnet `eip155:8453` only when the exact route has x402 enabled. These environment
-rules do not prove that a route or offer is currently available. Inspect the selected
-environment's live catalog and unsigned challenge before signing. Read
-[Accountless x402](/getting-started/x402) for the complete policy.
-
-For MCP, call `pubfi.route.execute` without an API key. An eligible route returns the payment
-requirement in the MCP tool result. Retry the same call with
-`params._meta["x402/payment"]`. The settled tool result includes
-`result._meta["x402/payment-response"]`.
-
-## 9. Check Readiness Before Execution
-
-Do not treat a source page, schema, or route plan as proof of live execution. Live execution also
-requires a ready route in the installed Registry generation and all route-owned preflight gates.
-The API-key lane also requires valid scope, fresh admission, and sufficient allocation. The x402
-lane instead requires an eligible route and a valid request-bound payment authorization.
-
-## Next
-
-- [API reference](/reference/api-reference)
-- [Staging guide](/getting-started/staging)
-- [Provider Gateway Examples](/reference/provider-gateway-examples)
-- [Accountless x402](/getting-started/x402)
-- [Payment and execution modes](/concepts/payment-and-execution-modes)
-- [MCP client setup](/getting-started/mcp-client)
-- [Capability contracts](/concepts/capability-contracts)
-- [Readiness and claim safety](/concepts/readiness-and-claim-safety)
-- [Public examples](https://github.com/helixbox/pubfi-docs/tree/main/examples)
+| Understand API schemas and auth families | [API Reference](/reference/api-reference) |
+| Connect an agent runtime | [Agent Interface Reference](/reference/agent-interface) |
+| Compare payment and execution lanes | [Payment And Execution Modes](/concepts/payment-and-execution-modes) |
+| Understand route authority and readiness | [Capability And Registry Contracts](/concepts/capability-contracts) |
+| Browse runnable examples | [Public examples](https://github.com/helixbox/pubfi-docs/tree/main/examples) |

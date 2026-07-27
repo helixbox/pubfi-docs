@@ -1,4 +1,7 @@
-# Use Case: Provider Integration Review
+---
+title: "Use Case: Provider Integration Review"
+description: Review whether a provider has enough public evidence and runtime readiness for PubFi integration.
+---
 
 A team wants to decide whether a provider should become callable through PubFi.
 
@@ -27,3 +30,5 @@ A team wants to decide whether a provider should become callable through PubFi.
 Public docs may describe the review path and public evidence requirements. They must not publish
 credentials, private vendor terms, procurement notes, or claim runtime availability before the
 Registry readiness gate passes.
+
+Use [Provider Readiness](/concepts/provider-readiness) for the evidence and runtime-gate model.

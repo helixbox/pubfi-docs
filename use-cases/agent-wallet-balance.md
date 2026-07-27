@@ -1,4 +1,7 @@
-# Use Case: Agent Wallet Balance
+---
+title: "Use Case: Agent Wallet Balance"
+description: Plan a wallet-balance workflow without inventing unsupported PubFi routes.
+---
 
 An agent needs a wallet balance for a supported chain. This page describes route selection. It does
 not claim that a wallet-balance operation is present in the current Registry.
@@ -7,6 +10,13 @@ not claim that a wallet-balance operation is present in the current Registry.
 
 "Read a wallet/account balance without embedding provider-specific endpoint logic or upstream keys
 in my agent."
+
+## Current Status
+
+At publication time, the public Registry does not advertise a wallet-balance route. Do not invent
+a route identifier or call an old provider-specific example. Use
+[Discovery](https://pubfi.ai/discovery) to research providers or request an integration until a
+suitable route becomes `ready`.
 
 ## Recommended PubFi Flow
 
@@ -18,10 +28,6 @@ in my agent."
 5. Execute it through the HTTP gateway or the authenticated MCP route tools.
 6. Validate the provider JSON against the advertised response schema.
 
-At publication time, the public Registry does not advertise a wallet-balance route. Do not invent
-a route identifier or call an old provider-specific example. Use Discovery to research providers
-or request an integration until a suitable route becomes `ready`.
-
 ## Why Not Call Provider Directly?
 
 Direct provider calls make the agent own provider auth, endpoint shape, response validation,
@@ -32,3 +38,6 @@ behind a reviewed execution plan while returning validated provider JSON.
 
 This use case is executable only when the current Registry lists the exact path and method as
 `ready`. A Discovery listing or integration request is not execution evidence.
+
+Use [Route Planning](/concepts/route-planning) for selection rules and [Registry Gateway
+Examples](/reference/provider-gateway-examples) for request construction.

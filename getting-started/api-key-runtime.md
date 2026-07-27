@@ -1,4 +1,7 @@
-# API Key And Runtime
+---
+title: API Key And Runtime
+description: Use PubFi API keys safely and understand account admission, allocation, usage, and runtime preflight.
+---
 
 This page explains how PubFi API-key auth, billing-account admission, request allowance, usage
 facts, and runtime execution fit together from a public-docs perspective.
@@ -73,12 +76,19 @@ A route can execute only when these gates pass:
 - source freshness evidence;
 - request input validation.
 
-## Public Docs Rule
+## Security Boundary
 
-Public docs may explain the auth, admission, allowance, usage, and billing-read model, but they must
-not publish real keys, account ids, usage rows, billing-provider payloads, customer data, or
-production financial records.
+Keep real keys, account ids, usage rows, billing-provider payloads, customer data, and production
+financial records out of prompts, source code, logs, and public artifacts.
 
 This API-key lane is separate from accountless x402. A request with `PAYMENT-SIGNATURE` must not
 also contain a PubFi API key. See [Payment And Execution
 Modes](/concepts/payment-and-execution-modes).
+
+## Next Steps
+
+- Use [Registry Gateway Examples](/reference/provider-gateway-examples) to select and call an exact
+  current operation.
+- Use the [API Reference](/reference/api-reference) for schemas and authentication requirements.
+- Use [Account, Credits, Purchases, Usage, And
+  Billing](/concepts/account-credit-usage) for detailed account and billing terminology.

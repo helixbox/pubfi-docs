@@ -1,4 +1,7 @@
-# Glossary
+---
+title: Glossary
+description: Definitions for PubFi Discovery, Registry, payment, readiness, and integration terms.
+---
 
 ## Agent-Native Crypto Data Layer
 
@@ -29,6 +32,20 @@ lane, or it can explicitly enable the accountless x402 lane over HTTP or MCP.
 Model Context Protocol. PubFi exposes generic route and capability tools through a hosted MCP
 endpoint.
 
+## `PAYMENT-REQUIRED`
+
+The x402 V2 response header that describes the exact payment requirement for an unpaid eligible
+request.
+
+## `PAYMENT-RESPONSE`
+
+The response header that carries the settled x402 payment result. Treat its full value as sensitive
+payment evidence.
+
+## `PAYMENT-SIGNATURE`
+
+The request header that carries an x402 payment authorization. It is sensitive payment evidence.
+
 ## Provenance
 
 Metadata describing which provider or resource backed a response.
@@ -55,20 +72,6 @@ Evidence about whether provider docs, API status, or source references are curre
 ## Starter Allocation
 
 The 1,000 free requests given to an eligible new billing account. It is not Credits.
-
-## `PAYMENT-REQUIRED`
-
-The x402 V2 response header that describes the exact payment requirement for an unpaid eligible
-request.
-
-## `PAYMENT-SIGNATURE`
-
-The request header that carries an x402 payment authorization. It is sensitive payment evidence.
-
-## `PAYMENT-RESPONSE`
-
-The response header that carries the settled x402 payment result. Treat its full value as sensitive
-payment evidence.
 
 ## x402
 

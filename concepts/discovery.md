@@ -1,4 +1,7 @@
-# Discovery
+---
+title: Discovery
+description: Understand PubFi's public source-selection layer and its boundary from runtime execution.
+---
 
 Discovery is PubFi's public source-selection layer for crypto data APIs.
 
@@ -48,3 +51,7 @@ credentials, billing records, dashboard data, or raw operational readbacks.
 Discovery records are reviewed content snapshots. Their count and status can change as sources are
 updated. They are not traffic, ranking, citation, or live execution metrics. Use
 `GET https://api.pubfi.ai/v1/capabilities` for the current executable route catalog.
+
+Continue with [Crypto API Discovery](/use-cases/crypto-api-discovery) to compare sources, or
+[Capability And Registry Contracts](/concepts/capability-contracts) when the workflow needs
+execution.

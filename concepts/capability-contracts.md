@@ -1,4 +1,7 @@
-# Capability And Registry Contracts
+---
+title: Capability And Registry Contracts
+description: Understand the Registry v2 catalog, readiness states, Runtime OpenAPI, and execution boundary.
+---
 
 PubFi's executable capability authority is the currently installed Registry v2 generation. The
 public catalog is:
@@ -47,3 +50,6 @@ A catalog entry is necessary but not sufficient for execution. Request-time chec
 
 Clients must refresh the catalog or Runtime OpenAPI instead of caching a route from an older
 generation as permanent authority.
+
+Continue with [Provider Readiness](/concepts/provider-readiness) for gate evidence and [Route
+Planning](/concepts/route-planning) for exact path-and-method selection.

@@ -3,20 +3,25 @@ title: Public Surfaces
 description: Current public PubFi product, Registry, API, MCP, and agent-readable URLs.
 ---
 
-# Public Surfaces
-
 This inventory lists current public contracts and public-facing route families. Some runtime
 operations still require account, API-key, or x402 authorization.
 
-## Staging
+## Environment Entry Points
 
-- `https://stg.pubfi.ai`
-- `https://stg.pubfi.ai/login`
-- `https://api-stg.pubfi.ai/reference`
-- `https://api-stg.pubfi.ai/openapi.json`
-- `https://api-stg.pubfi.ai/v1/capabilities`
-- `https://mcp-stg.pubfi.ai`
-- `https://mcp-stg.pubfi.ai/.well-known/mcp.json`
+| Environment | Web | API | MCP |
+| --- | --- | --- | --- |
+| Staging | `https://stg.pubfi.ai` | `https://api-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai` |
+| Production | `https://pubfi.ai` | `https://api.pubfi.ai` | `https://mcp.pubfi.ai` |
+
+The Staging login entry is `https://stg.pubfi.ai/login`.
+
+For the selected API root, use:
+
+- `/reference` for the interactive reference;
+- `/openapi.json` for Runtime OpenAPI; and
+- `/v1/capabilities` for the installed Registry catalog.
+
+For the selected MCP root, use `/.well-known/mcp.json` for discovery metadata.
 
 Staging is the Base Sepolia (`eip155:84532`) test boundary for eligible accountless x402 routes.
 The current staging catalog and challenge remain the availability and payment-term authority.

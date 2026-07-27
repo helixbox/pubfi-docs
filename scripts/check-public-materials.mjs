@@ -13,6 +13,7 @@ checkRouteShape();
 checkMarkdownLinks();
 checkDocsSiteLinks();
 checkCanonicalDocsUrls();
+checkCanonicalDocsIndex();
 checkTextHygiene();
 checkCurrentRuntimeContracts();
 checkExampleSyntax();
@@ -28,12 +29,54 @@ console.log("public materials check: pass");
 
 function checkNavigation() {
   const docsJson = JSON.parse(readFileSync(docsJsonPath, "utf8"));
+  const pages = navigationPages(docsJson);
+  const seenPages = new Set();
 
-  for (const page of navigationPages(docsJson)) {
+  for (const page of pages) {
     const target = path.join(root, `${page}.md`);
 
     if (!existsSync(target)) {
       failures.push(`missing docs.json navigation target: ${page}`);
+      continue;
+    }
+
+    if (seenPages.has(page)) {
+      failures.push(`duplicate docs.json navigation target: ${page}`);
+    }
+    seenPages.add(page);
+
+    const text = readFileSync(target, "utf8");
+    const frontmatter = text.match(/^---\n([\s\S]*?)\n---\n/);
+
+    if (
+      !frontmatter ||
+      !/^title:\s*.+$/m.test(frontmatter[1]) ||
+      !/^description:\s*.+$/m.test(frontmatter[1])
+    ) {
+      failures.push(`navigation page must set title and description frontmatter: ${page}`);
+    }
+
+    if (/^#\s+/m.test(text)) {
+      failures.push(`navigation page must use the frontmatter title as its only H1: ${page}`);
+    }
+  }
+
+  const expectedPages = [
+    "index",
+    "project-overview",
+    "faq",
+    "glossary",
+    ...["getting-started", "concepts", "agent-readable", "use-cases", "reference"].flatMap(
+      (directory) =>
+        readdirSync(path.join(root, directory), { withFileTypes: true })
+          .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+          .map((entry) => `${directory}/${entry.name.slice(0, -3)}`)
+    )
+  ];
+
+  for (const page of expectedPages) {
+    if (!seenPages.has(page)) {
+      failures.push(`public docs page is missing from docs.json navigation: ${page}`);
     }
   }
 
@@ -136,6 +179,31 @@ function checkCanonicalDocsUrls() {
         failures.push(`canonical docs URL must not include /docs: ${relative(file)}:${index + 1}`);
       }
     });
+  }
+}
+
+function checkCanonicalDocsIndex() {
+  const docsJson = JSON.parse(readFileSync(docsJsonPath, "utf8"));
+  const navigationUrls = navigationPages(docsJson).map((page) =>
+    page === "index" ? docsDomain : `${docsDomain}/${page}`
+  );
+  const llmsFull = readFileSync(path.join(root, "llms-full.txt"), "utf8");
+  const canonicalSection = llmsFull.match(
+    /## Canonical Docs Pages\n\n([\s\S]*?)(?=\n## |\s*$)/
+  );
+
+  if (!canonicalSection) {
+    failures.push("llms-full.txt must include a Canonical Docs Pages section");
+    return;
+  }
+
+  const canonicalUrls = [...canonicalSection[1].matchAll(/^- (https:\/\/docs\.pubfi\.ai\S*)$/gm)]
+    .map((match) => match[1]);
+
+  if (JSON.stringify(canonicalUrls) !== JSON.stringify(navigationUrls)) {
+    failures.push(
+      "llms-full.txt Canonical Docs Pages must match docs.json navigation order"
+    );
   }
 }
 

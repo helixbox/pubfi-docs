@@ -25,13 +25,13 @@ Executable paths, methods, matchers, schemas, metering, and readiness come from 
 installed signed Registry generation returned by `tools/list`. They are catalog data, not static
 MCP tool names or checked-in provider adapters.
 
-## Run
+## Run In Staging
 
 From the repository root:
 
 ```sh
-export PROD_PUBFI_API_KEY='<PubFi API key>'
-export PUBFI_MCP_ENDPOINT='https://mcp.pubfi.ai'
+export STG_PUBFI_API_KEY='<Staging PubFi API key>'
+export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
 node examples/agents/pubfi-route-tools-mcp/server.mjs
 ```
 
@@ -48,19 +48,21 @@ Example MCP client config:
 }
 ```
 
-## Staging
+Start the client from an environment that supplies these variables, or use its secret-store
+integration. Do not put the key in a tracked configuration file.
 
-Use the exact Staging endpoint and its matching key:
+## Move To Production
+
+Create a separate Production key and use the exact Production endpoint:
 
 ```sh
-export STG_PUBFI_API_KEY='<Staging PubFi API key>'
-export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
+export PROD_PUBFI_API_KEY='<Production PubFi API key>'
+export PUBFI_MCP_ENDPOINT='https://mcp.pubfi.ai'
 node examples/agents/pubfi-route-tools-mcp/server.mjs
 ```
 
-The client configuration above can use the same local command. Start the client from an
-environment that supplies these variables, or use its secret-store integration. Do not put the
-key in a tracked configuration file.
+The client configuration above uses the same local command. Do not send a Staging key to the
+Production endpoint.
 
 ## Smoke
 

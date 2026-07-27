@@ -1,4 +1,7 @@
-# Readiness And Claim Safety
+---
+title: Readiness And Claim Safety
+description: Use PubFi readiness terms and evidence without overstating runtime or public outcomes.
+---
 
 PubFi docs should make readiness explicit. This prevents public source-selection pages from
 overclaiming runtime execution.
@@ -47,3 +50,6 @@ Every strong claim should point to one of:
 - a public-safe release note.
 
 Private runtime data can inform internal decisions, but it should not be copied into public docs.
+
+Apply these terms with [Provider Readiness](/concepts/provider-readiness) and the [Security And
+Public Data Boundary](/reference/security-and-public-data).

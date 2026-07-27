@@ -1,4 +1,7 @@
-# Project Overview
+---
+title: Project Overview
+description: Understand PubFi's product layers, agent value, supported claims, and explicit non-claims.
+---
 
 ## Short Description
 
@@ -57,12 +60,9 @@ from Production.
 - PubFi does not promise that every route is x402-eligible.
 - An environment policy does not prove that a specific x402 route or offer is currently available.
 
-## Suggested Public README Blurb
+## Choose A Next Step
 
-```markdown
-PubFi is building an agent-native crypto data layer. Discovery exposes a public source-selection
-index for crypto data APIs, while Registry v2 gives agents an exact, fail-closed catalog for
-planning and executing ready routes. Registered callers use API keys and allocations. Explicitly
-eligible Staging HTTP or MCP routes can instead use accountless x402 on Base Sepolia. An enabled
-Production route must use Base mainnet.
-```
+- Evaluate source fit with [Crypto API Discovery](/use-cases/crypto-api-discovery) and [Source
+  Evaluation](/use-cases/source-evaluation).
+- Choose an integration lane in the [Quickstart](/getting-started/quickstart).
+- Test HTTP, MCP, or accountless x402 in the [Staging Guide](/getting-started/staging).

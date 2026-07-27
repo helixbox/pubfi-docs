@@ -3,8 +3,6 @@ title: Staging Guide
 description: Test PubFi web, API, MCP, and Base Sepolia x402 flows in the staging environment.
 ---
 
-# Staging Guide
-
 Use Staging to test a PubFi integration before you move it to Production. Staging has separate web,
 API, and MCP roots.
 
@@ -26,7 +24,22 @@ export PUBFI_API_BASE='https://api-stg.pubfi.ai'
 export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
 ```
 
+## Choose A Test Path
+
+| Goal | Required setup | Continue at |
+| --- | --- | --- |
+| Test an HTTP route with account allocation | Staging sign-in and API key | [Sign In And Create A Key](#sign-in-and-create-a-key) |
+| Run the documented MCP bridge smoke or API-key execution | Staging sign-in, API key, and MCP client | [Connect An MCP Client](#connect-an-mcp-client) |
+| Inspect or pay an eligible accountless x402 request | Test wallet and current unsigned challenge; no PubFi account or API key | [Base Sepolia Test Boundary](#base-sepolia-test-boundary) |
+
+All paths must inspect the current Staging catalog and Runtime OpenAPI. Accountless x402 testers
+can skip the sign-in and API-key sections.
+
 ## Sign In And Create A Key
+
+The key manager requires billing-account administration access. If the dashboard has no billing
+account, or if the key manager is not available, ask your billing-account owner or administrator
+for access before you start.
 
 1. Open [`https://stg.pubfi.ai/login`](https://stg.pubfi.ai/login).
 2. Enter the email address that owns your staging dashboard access.
@@ -38,10 +51,6 @@ export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
 7. Copy the full key when PubFi shows it. PubFi shows the secret only once.
 8. Store the key in a secret manager. Do not put it in source code, shell history, logs, screenshots,
    or a tracked MCP configuration file.
-
-The key manager requires billing-account administration access. If the dashboard has no billing
-account, or if the key manager is not available, ask your billing-account owner or administrator
-for access.
 
 Load the key into the current shell:
 
@@ -197,5 +206,5 @@ Treat Production as a separate environment:
    before you infer availability or sign.
 
 See [API Key And Runtime](/getting-started/api-key-runtime), [MCP Client
-Setup](/getting-started/mcp-client), and [Runtime Endpoints](/reference/runtime-endpoints) for the
-shared contracts.
+Setup](/getting-started/mcp-client), [Accountless x402](/getting-started/x402), and [Runtime
+Endpoints](/reference/runtime-endpoints) for the shared contracts.

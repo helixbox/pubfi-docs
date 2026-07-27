@@ -1,4 +1,7 @@
-# Provider Readiness
+---
+title: Provider Readiness
+description: Understand the evidence and gates that make a Registry operation callable.
+---
 
 Provider readiness determines when PubFi can safely say a source is callable through the gateway.
 
@@ -41,3 +44,6 @@ constraints.
 Discovery pages may show requestable, contract-ready, or candidate states. Those are editorial
 states. They must not imply runtime execution until the current Registry contains a matching
 `ready` operation.
+
+Use [Route Planning](/concepts/route-planning) after an operation becomes `ready`. Use [Readiness
+And Claim Safety](/concepts/readiness-and-claim-safety) when publishing its status.

@@ -1,4 +1,7 @@
-# Agent Interface Reference
+---
+title: Agent Interface Reference
+description: Reference PubFi's hosted MCP endpoint, generic tools, authentication, inputs, and execution rules.
+---
 
 ## Hosted MCP
 
@@ -45,3 +48,6 @@ MCP `pubfi.route.execute` supports the API-key/allocation lane and the mutually 
 accountless x402 lane. The unsigned x402 call returns `PaymentRequired` in a normal MCP tool
 result; the paid retry uses `_meta["x402/payment"]`; the settled result uses
 `_meta["x402/payment-response"]`.
+
+Use [MCP Client Setup](/getting-started/mcp-client) for transport configuration. Use [Accountless
+x402](/getting-started/x402) for payment validation and replay policy.
