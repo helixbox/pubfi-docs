@@ -3,10 +3,8 @@ export const BASE_SEPOLIA_USDC = '0x036cbd53842c5426634e7929541ec2318f3dcf7e';
 export const MAX_PAYMENT_MICRO_USDC = 10_000n;
 export const MAX_AUTHORIZATION_SECONDS = 300;
 
-const origins = new Map([
-  ['https://api-stg.pubfi.ai', 'https://mcp-stg.pubfi.ai'],
-  ['https://api.pubfi.ai', 'https://mcp.pubfi.ai'],
-]);
+const STAGING_API_ORIGIN = 'https://api-stg.pubfi.ai';
+const STAGING_MCP_ENDPOINT = 'https://mcp-stg.pubfi.ai';
 
 export function requiredEnvironment(name) {
   const value = process.env[name];
@@ -35,19 +33,22 @@ export function resourceUrl() {
   const parsed = new URL(value);
   if (
     parsed.href !== value ||
-    !origins.has(parsed.origin) ||
+    parsed.origin !== STAGING_API_ORIGIN ||
     !parsed.pathname.startsWith('/v1/gateway/') ||
     parsed.username ||
     parsed.password ||
     parsed.hash
   ) {
-    throw new Error('X402_RESOURCE_URL is outside a supported PubFi gateway origin');
+    throw new Error('X402_RESOURCE_URL is outside the PubFi Staging gateway origin');
   }
   return parsed;
 }
 
 export function mcpUrlForResource(resource) {
-  return new URL(origins.get(resource.origin));
+  if (resource?.origin !== STAGING_API_ORIGIN) {
+    throw new Error('x402 Base Sepolia MCP requests must use PubFi Staging');
+  }
+  return new URL(STAGING_MCP_ENDPOINT);
 }
 
 export function expectedPaymentSelector() {

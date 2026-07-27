@@ -12,13 +12,16 @@ responses without binding every workflow directly to a different upstream API.
 - [Project overview](/project-overview): what PubFi is and what it is not.
 - [Quickstart](/getting-started/quickstart): the shortest path through public docs and live
   surfaces.
+- [Staging guide](/getting-started/staging): test the web, API, MCP, and Base Sepolia x402 flows
+  before a Production transition.
 - [API reference](/reference/api-reference): where to find the interactive HTTP reference and
   OpenAPI schema.
 - [API key and runtime](/getting-started/api-key-runtime): how billing accounts, request allowance,
   usage, and runtime
   boundaries fit together.
-- [Accountless x402](/getting-started/x402): use an eligible gateway route with a Base Sepolia
-  wallet payment and no PubFi account or API key.
+- [Accountless x402](/getting-started/x402): understand the eligible-route payment flow. Base
+  Sepolia is the Staging test boundary; this documentation does not claim current Production x402
+  availability.
 - [Payment and execution modes](/concepts/payment-and-execution-modes): understand API-key
   allowance, registered purchases and Credits, and accountless x402.
 - [MCP client setup](/getting-started/mcp-client): connect an agent runtime to PubFi's generic
@@ -34,6 +37,9 @@ responses without binding every workflow directly to a different upstream API.
 | Surface | Purpose |
 | --- | --- |
 | [Product](https://pubfi.ai) | product, account, Discovery, and agent-readable product entry |
+| [Staging product](https://stg.pubfi.ai) | staging web, login, and dashboard entry |
+| [Staging API](https://api-stg.pubfi.ai/reference) | staging interactive API reference |
+| [Staging MCP](https://mcp-stg.pubfi.ai/.well-known/mcp.json) | staging MCP discovery manifest |
 | [Discovery](https://pubfi.ai/discovery) | public crypto data API index and source-selection surface |
 | [Discovery directory Markdown](https://pubfi.ai/discovery.md) | Markdown mirror for the Discovery directory |
 | [Provider Profile index](https://pubfi.ai/discovery/sources) | paginated public Discovery source index |
@@ -54,13 +60,16 @@ responses without binding every workflow directly to a different upstream API.
 
 Discovery inclusion does not mean gateway availability. A route plan does not authorize execution.
 Local SEO/GEO evidence does not prove ranking, traffic, or AI citation success. PubFi keeps those
-boundaries explicit so agents can choose routes safely.
+boundaries explicit so agents can choose routes safely. Base Sepolia identifies the Staging x402
+test boundary. Inspect current Production runtime evidence before you claim Production x402
+availability.
 
 ## Coverage Map
 
 | Area | Start here |
 | --- | --- |
 | Product positioning | [Project overview](/project-overview) |
+| Staging web, API, MCP, and x402 tests | [Staging guide](/getting-started/staging) |
 | HTTP API details | [API reference](/reference/api-reference) |
 | API key, billing account, allowance, and usage | [API key and runtime](/getting-started/api-key-runtime) |
 | Accountless pay-per-request execution | [Accountless x402](/getting-started/x402) |

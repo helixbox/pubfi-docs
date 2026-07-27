@@ -50,13 +50,21 @@ carries payment and selects the x402 lane.
 MCP is a transport adapter over the same route execution and x402 settlement owners as HTTP. It
 does not create a separate balance, ledger, provider route, or commercial authority.
 
-## Current x402 Scope
+## x402 Environment Scope
 
-Current public runtime evidence supports a bounded x402 V2 `exact` lane on eligible Registry v2
-routes with:
+PubFi enforces these x402 environment boundaries:
 
-- Base Sepolia network `eip155:84532`;
-- canonical Base Sepolia test USDC;
+| Environment | Exact origins | Permitted network |
+| --- | --- | --- |
+| Staging | `https://api-stg.pubfi.ai` and `https://mcp-stg.pubfi.ai` | Base Sepolia `eip155:84532` |
+| Production | `https://api.pubfi.ai` and `https://mcp.pubfi.ai` | Base mainnet `eip155:8453`, only when x402 is enabled for the exact route |
+
+The environment boundary does not prove current route or offer availability. Use the selected
+environment's live Registry catalog as route authority. Use the route's live unsigned `402`
+challenge as the authority for the asset, amount, payee, timeout, and other payment terms.
+
+An enabled route uses a bounded x402 V2 `exact` lane with:
+
 - EIP-3009 authorization;
 - fixed terms known before provider execution;
 - non-streaming, bounded responses; and
@@ -64,11 +72,8 @@ routes with:
 - the official Signed Offers & Receipts extension with Ed25519 `did:web` verification; and
 - the official MCP `x402/payment` and `x402/payment-response` metadata flow.
 
-The production PubFi API origin currently uses a **testnet payment rail**. Base Sepolia USDC has no
-financial value. PubFi does not currently publish a Base mainnet x402 payment route.
-
-Use the current `402` challenge as the payment-term authority. Do not hard-code a price, payee,
-timeout, or route from documentation.
+The public Base Sepolia example is Staging-only. Base Sepolia USDC has no financial value. See the
+[Staging guide](/getting-started/staging) for the endpoint and credential boundary.
 
 ## x402 Settlement And Replay
 
@@ -103,7 +108,7 @@ purchase, and billing readback.
 Accountless x402 callers have no PubFi account balance, Credits balance, invoice, or anonymous
 dashboard. Their payment evidence is:
 
-- the wallet's Base Sepolia activity;
+- the wallet activity on the network in the accepted challenge;
 - the request-bound `PAYMENT-RESPONSE`;
 - the paired signed offer and signed receipt; and
 - exact replay of the same signed request.

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added a Staging guide for the separate web, API, and MCP roots, email OTP and API-key setup,
+  catalog and OpenAPI inspection, authenticated HTTP and MCP smoke tests, Base Sepolia x402 test
+  boundaries, troubleshooting, and Production transition.
+- Added the PubFi product favicon to the docs configuration and documented its source snapshot.
 - Added pinned, bounded public HTTP and MCP x402 paid examples with signed offer, signed receipt,
   and exact replay verification.
 - Added accountless x402 to MCP `pubfi.route.execute` with the official payment metadata flow,
@@ -11,7 +15,7 @@
 - Synchronized the public MCP stdio bridge and smoke with the current Registry v2 five-tool
   contract, generation identity, endpoint policy, and exact response forwarding.
 - Documented the separate API-key allocation, registered purchase and Credits, and accountless x402
-  modes, including the current Base Sepolia V2 challenge and exact-replay contract.
+  modes, including the current Staging Base Sepolia V2 challenge and exact-replay contract.
 - Added semantic public-material gates for retired runtime routes, static provider schemas, the
   retired response envelope, old MCP input fields, and blanket no-x402 claims.
 - Aligned the public MCP reference and runnable smoke with the current five-tool surface by removing

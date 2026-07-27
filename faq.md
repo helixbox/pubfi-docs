@@ -22,6 +22,8 @@ The two modes cannot be combined.
 No. x402 is enabled per exact Registry route. Inspect the current catalog and the route's
 `402 Payment Required` response before you sign.
 
+For endpoint and credential separation, see the [Staging guide](/getting-started/staging).
+
 ## Does x402 require an account or API key?
 
 No. An eligible HTTP or MCP request uses a wallet authorization instead. It creates no PubFi
@@ -29,17 +31,18 @@ account, API key, Credits balance, invoice, or anonymous dashboard.
 
 ## How does an accountless caller see a balance or receipt?
 
-The wallet or chain explorer shows the wallet's Base Sepolia test USDC activity. The settled
-response includes the x402 payment response and an official Ed25519 signed receipt. An exact paid
-replay returns the same response and receipt. PubFi does not expose an accountless Credits balance
-because x402 buys one response and does not create Credits. SIWX wallet-history lookup is not part
-of the current release.
+The wallet or chain explorer shows activity on the network in the accepted challenge. The public
+Staging example uses Base Sepolia test USDC. The settled response includes the x402 payment
+response and an official Ed25519 signed receipt. An exact paid replay returns the same response and
+receipt. PubFi does not expose an accountless Credits balance because x402 buys one response and
+does not create Credits. SIWX wallet-history lookup is not part of the current release.
 
-## Is x402 using real money in Production?
+## Does Production x402 use Base Sepolia?
 
-The current PubFi application endpoint is Production, but its published x402 payment rail is Base
-Sepolia testnet. Testnet USDC has no financial value. PubFi does not currently publish a Base
-mainnet x402 route.
+No. Staging permits Base Sepolia `eip155:84532`. Production permits Base mainnet `eip155:8453` only
+when x402 is enabled for the exact route. This policy does not prove that a Production x402 route
+or offer is currently available. Inspect the Production catalog and the exact route's unsigned
+`402` challenge before you sign.
 
 ## Are the free starter requests Credits?
 

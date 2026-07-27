@@ -92,13 +92,22 @@ Do not copy a request body from another operation.
 
 ## 4. Use The Accountless x402 Lane When Eligible
 
-An exact gateway route can separately enable accountless x402. To inspect that lane, send the
-exact request without a PubFi API key or payment signature:
+An exact gateway route can separately enable accountless x402. The public Base Sepolia example is
+Staging-only. Inspect the Staging catalog and select an exact ready path from that environment:
 
 ```sh
+curl --silent --show-error \
+  'https://api-stg.pubfi.ai/v1/capabilities'
+```
+
+Then send the exact request without a PubFi API key or payment signature:
+
+```sh
+export PUBFI_GATEWAY_ORIGIN='https://api-stg.pubfi.ai'
+
 curl --include \
   --request "$PUBFI_GATEWAY_METHOD" \
-  "https://api.pubfi.ai${PUBFI_GATEWAY_PATH}"
+  "${PUBFI_GATEWAY_ORIGIN}${PUBFI_GATEWAY_PATH}"
 ```
 
 An eligible unpaid request returns `402 Payment Required`, a `PAYMENT-REQUIRED` header, and the
@@ -106,10 +115,16 @@ same current requirements in the JSON body. Validate that challenge before a wal
 
 The paid retry uses `PAYMENT-SIGNATURE`. A settled success returns `PAYMENT-RESPONSE`. Never send a
 PubFi API key and `PAYMENT-SIGNATURE` together. MCP `pubfi.route.execute` supports the same payment
-lane through `x402/payment` and `x402/payment-response` metadata.
+lane through `x402/payment` and `x402/payment-response` metadata. The Base Sepolia example uses
+`https://mcp-stg.pubfi.ai`.
 
-See [Accountless x402](/getting-started/x402) for the Base Sepolia safety boundary and exact replay
-rules.
+Staging permits Base Sepolia `eip155:84532`. Production permits Base mainnet `eip155:8453` only
+when the exact route has x402 enabled. The environment policy does not establish current
+availability. Treat the live catalog as route authority and the live challenge as payment-term
+authority.
+
+See [Accountless x402](/getting-started/x402) for the environment safety boundary and exact replay
+rules. See the [Staging guide](/getting-started/staging) for all Staging endpoints.
 
 ## Success Response
 

@@ -259,7 +259,11 @@ function checkExampleSyntax() {
     ["node", ["--check", "examples/agents/x402-base-sepolia/http-paid.mjs"]],
     ["node", ["--check", "examples/agents/x402-base-sepolia/mcp-paid.mjs"]],
     ["node", ["--check", "examples/agents/x402-base-sepolia/payment-policy.mjs"]],
-    ["node", ["--check", "examples/agents/x402-base-sepolia/signed-artifacts.mjs"]]
+    ["node", ["--check", "examples/agents/x402-base-sepolia/signed-artifacts.mjs"]],
+    [
+      "node",
+      ["--test", "examples/agents/x402-base-sepolia/payment-policy.test.mjs"]
+    ]
   ];
 
   for (const [command, args] of checks) {

@@ -3,6 +3,7 @@
   "theme": "mint",
   "name": "PubFi Docs",
   "description": "Public documentation for PubFi's agent-native crypto data layer.",
+  "favicon": "favicon.svg",
   "seo": {
     "indexing": "navigable",
     "metatags": {
@@ -29,6 +30,7 @@
         "group": "Getting Started",
         "pages": [
           "getting-started/quickstart",
+          "getting-started/staging",
           "getting-started/api-key-runtime",
           "getting-started/x402",
           "getting-started/mcp-client"

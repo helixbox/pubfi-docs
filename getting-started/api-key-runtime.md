@@ -11,6 +11,10 @@ facts, and runtime execution fit together from a public-docs perspective.
 | `mcp.pubfi.ai` | hosted MCP endpoint for generic PubFi route/capability tools |
 | `pubfi.ai` | product UI, Discovery, docs entry, and dashboard presentation |
 
+Staging uses the separate roots `api-stg.pubfi.ai`, `mcp-stg.pubfi.ai`, and `stg.pubfi.ai`.
+Create the key through the staging dashboard and load it as `STG_PUBFI_API_KEY` in the public
+examples. See the [Staging guide](/getting-started/staging).
+
 ## API Key Boundary
 
 PubFi API keys are caller credentials for Registry gateway and MCP execution. Depending on scope,

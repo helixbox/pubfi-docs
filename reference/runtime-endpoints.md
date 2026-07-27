@@ -8,11 +8,24 @@ description: Current PubFi API, MCP, web, account, purchase, and Registry v2 end
 This page lists the current public runtime endpoint families. It does not list internal webhook,
 operator, repair, or control-plane routes.
 
+## Environment Roots
+
+| Environment | Web | API | MCP |
+| --- | --- | --- | --- |
+| Staging | `https://stg.pubfi.ai` | `https://api-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai` |
+| Production | `https://pubfi.ai` | `https://api.pubfi.ai` | `https://mcp.pubfi.ai` |
+
+Use one row for a complete test. Do not mix a staging key or session with a Production root. See the
+[Staging guide](/getting-started/staging) for the complete test flow.
+
 ## API Host
 
 ```text
 https://api.pubfi.ai
 ```
+
+The corresponding Staging API root is `https://api-stg.pubfi.ai`. Fetch that environment's
+`/v1/capabilities` and `/openapi.json` before you select a route.
 
 ### Public Service And Registry Routes
 
@@ -81,6 +94,8 @@ routes does not prove that a purchase offer is currently available.
 https://mcp.pubfi.ai
 ```
 
+The corresponding Staging MCP root is `https://mcp-stg.pubfi.ai`.
+
 Current endpoint families:
 
 - `POST /` for MCP JSON-RPC;
@@ -99,6 +114,8 @@ public or authenticated contract.
 ```text
 https://pubfi.ai
 ```
+
+The corresponding Staging web root is `https://stg.pubfi.ai`.
 
 Current public endpoint families include:
 

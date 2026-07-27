@@ -5,17 +5,15 @@ description: Connect an MCP client to PubFi's hosted Registry v2 tools.
 
 # MCP Client Setup
 
-PubFi exposes generic route and capability tools over MCP. The hosted endpoint is:
+PubFi exposes generic route and capability tools over MCP.
 
-```text
-https://mcp.pubfi.ai
-```
+| Environment | Hosted endpoint | Discovery manifest |
+| --- | --- | --- |
+| Staging | `https://mcp-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai/.well-known/mcp.json` |
+| Production | `https://mcp.pubfi.ai` | `https://mcp.pubfi.ai/.well-known/mcp.json` |
 
-The discovery manifest is:
-
-```text
-https://mcp.pubfi.ai/.well-known/mcp.json
-```
+Use the [Staging guide](/getting-started/staging) for the login, API-key, smoke, and Base Sepolia
+test flow.
 
 ## Tools
 
@@ -67,6 +65,14 @@ export PUBFI_MCP_ENDPOINT='https://mcp.pubfi.ai'
 node examples/agents/pubfi-route-tools-mcp/server.mjs
 ```
 
+For Staging, use the exact staging endpoint and its environment-selected key:
+
+```sh
+export STG_PUBFI_API_KEY='<Staging PubFi API key>'
+export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
+node examples/agents/pubfi-route-tools-mcp/server.mjs
+```
+
 ## Recommended Agent Flow
 
 1. Call `pubfi.capabilities.search` with a query or exact path and method.
@@ -98,9 +104,9 @@ The bounded `_meta` object can also contain unrelated MCP client metadata. Only
 Use an x402 MCP client that implements this flow. Do not convert the MCP challenge into a
 `PAYMENT-SIGNATURE` HTTP header yourself.
 
-A pinned runnable example uses `@x402/mcp`, `@x402/core`, `@x402/evm`, and the MCP SDK against
-`pubfi.route.execute`. It validates a bounded Base Sepolia payment, verifies the signed offer and
-receipt through PubFi's `did:web` document, and checks exact replay:
+A pinned Staging-only runnable example uses `@x402/mcp`, `@x402/core`, `@x402/evm`, and the MCP SDK
+against `pubfi.route.execute`. It validates a bounded Base Sepolia payment, verifies the signed
+offer and receipt through PubFi's `did:web` document, and checks exact replay:
 
 ```text
 https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepolia
