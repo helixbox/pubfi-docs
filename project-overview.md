@@ -28,6 +28,9 @@ smaller agent-facing interface:
 4. execute only a supported current route through API-key admission or an eligible x402 challenge;
 5. preserve provider provenance, Registry identity, and request identity.
 
+Use the [Staging guide](/getting-started/staging) to keep test endpoints and credentials separate
+from Production.
+
 ## Safe Claims
 
 - PubFi has public Discovery pages and agent-readable exports for source selection and
@@ -38,7 +41,8 @@ smaller agent-facing interface:
   currently ready routes.
 - PubFi keeps provider identity, exact matchers, Registry generation, readiness, and request
   identity explicit.
-- PubFi supports a bounded Base Sepolia x402 lane on explicitly eligible routes.
+- PubFi enforces environment-matched x402 networks. Staging permits Base Sepolia `eip155:84532`.
+  Production permits Base mainnet `eip155:8453` only when x402 is enabled for the exact route.
 - Rust owns backend, account, gateway, capability, MCP, storage, and operations boundaries.
 
 ## Non-Claims
@@ -48,8 +52,10 @@ smaller agent-facing interface:
 - Contract-ready capability examples are not proof of live upstream execution.
 - SEO/GEO readbacks and local automation outputs are diagnostics, not ranking, traffic, or AI
   citation proof.
-- PubFi does not promise supplier procurement, supplier payment, wallet custody, Base mainnet x402,
-  universal x402 eligibility, or production model-ranked routing.
+- PubFi does not promise supplier procurement, supplier payment, wallet custody, or production
+  model-ranked routing.
+- PubFi does not promise that every route is x402-eligible.
+- An environment policy does not prove that a specific x402 route or offer is currently available.
 
 ## Suggested Public README Blurb
 
@@ -57,5 +63,6 @@ smaller agent-facing interface:
 PubFi is building an agent-native crypto data layer. Discovery exposes a public source-selection
 index for crypto data APIs, while Registry v2 gives agents an exact, fail-closed catalog for
 planning and executing ready routes. Registered callers use API keys and allocations. Explicitly
-eligible HTTP or MCP routes can instead use accountless x402 on Base Sepolia.
+eligible Staging HTTP or MCP routes can instead use accountless x402 on Base Sepolia. An enabled
+Production route must use Base mainnet.
 ```

@@ -30,10 +30,25 @@ Runtime OpenAPI, and MCP metadata.
 | MCP discovery pointer | Product-site pointer to hosted MCP discovery. | `https://pubfi.ai/.well-known/mcp.json` |
 | MCP server card | Marketplace-oriented hosted MCP metadata. | `https://pubfi.ai/.well-known/mcp/server-card.json` |
 | MCP registry auth proof | Optional domain-ownership proof. | `https://pubfi.ai/.well-known/mcp-registry-auth` |
+| Staging guide | Safe login, key, HTTP, MCP, and Base Sepolia test workflow. | `https://docs.pubfi.ai/getting-started/staging` |
+| Staging Registry catalog | Complete installed Staging catalog with each entry's readiness state. | `https://api-stg.pubfi.ai/v1/capabilities` |
+| Staging API reference | Interactive Staging HTTP reference. | `https://api-stg.pubfi.ai/reference` |
+| Staging Runtime OpenAPI | Executable Staging HTTP schema for current `ready` Registry operations and API routes. | `https://api-stg.pubfi.ai/openapi.json` |
+| Staging hosted MCP manifest | Hosted Staging MCP discovery and current Registry metadata. | `https://mcp-stg.pubfi.ai/.well-known/mcp.json` |
 | Accountless x402 guide | HTTP and MCP x402 V2 challenge, signing, receipt, privacy, and replay rules. | `https://docs.pubfi.ai/getting-started/x402` |
 | Payment mode guide | Boundary between API-key allowance, registered purchases, Credits, and x402. | `https://docs.pubfi.ai/concepts/payment-and-execution-modes` |
 | Public docs repository | Public source and contribution history. | `https://github.com/helixbox/pubfi-docs` |
 | Canonical docs site | Full long-form documentation. | `https://docs.pubfi.ai` |
+
+## Staging Boundary
+
+Use the Staging web, API, and MCP origins together. Do not send a Production key to a Staging
+origin.
+
+Staging accountless x402 permits Base Sepolia `eip155:84532`. This environment policy does not
+prove that a specific route is available. Confirm that the exact route and method are `ready` in
+the current Staging catalog. Then require a current unsigned `402` challenge before you sign a
+payment authorization.
 
 ## Authority Order
 

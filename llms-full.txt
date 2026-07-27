@@ -10,6 +10,7 @@ upstream API.
 - https://docs.pubfi.ai
 - https://docs.pubfi.ai/project-overview
 - https://docs.pubfi.ai/getting-started/quickstart
+- https://docs.pubfi.ai/getting-started/staging
 - https://docs.pubfi.ai/getting-started/api-key-runtime
 - https://docs.pubfi.ai/getting-started/x402
 - https://docs.pubfi.ai/getting-started/mcp-client
@@ -22,6 +23,7 @@ upstream API.
 - https://docs.pubfi.ai
 - https://docs.pubfi.ai/project-overview
 - https://docs.pubfi.ai/getting-started/quickstart
+- https://docs.pubfi.ai/getting-started/staging
 - https://docs.pubfi.ai/getting-started/api-key-runtime
 - https://docs.pubfi.ai/getting-started/x402
 - https://docs.pubfi.ai/getting-started/mcp-client
@@ -67,19 +69,29 @@ upstream API.
   prove that an offer is open for sale.
 - Accountless x402 buys one eligible HTTP or MCP response. It creates no PubFi account, API key,
   Credits balance, or invoice.
-- Current x402 support uses V2 `exact`, Base Sepolia USDC, EIP-3009, and the standard
-  HTTP headers, official MCP payment metadata, and official Ed25519 Signed Offers & Receipts. The
-  live challenge is the authority for route-specific payment terms.
+- Staging x402 permits Base Sepolia `eip155:84532` only and uses the exact
+  `https://api-stg.pubfi.ai` and `https://mcp-stg.pubfi.ai` origins. Production x402 permits Base
+  mainnet `eip155:8453` only when x402 is enabled for the exact route. These rules do not prove
+  current route or offer availability.
+- Enabled x402 routes use V2 `exact`, EIP-3009, the standard HTTP headers, official MCP payment
+  metadata, and official Ed25519 Signed Offers & Receipts. The live catalog is route authority.
+  The live challenge is the authority for route-specific payment terms.
 - PubFi uses one active private Ed25519 signer. Its `did:web` document can retain up to eight
   public verification keys so supported historical receipts remain verifiable after rotation.
-- A public pinned-client example for bounded HTTP and MCP payment, signed offer and receipt
-  verification, and exact replay is available at
+- A public Staging-only pinned-client example for bounded Base Sepolia HTTP and MCP payment, signed
+  offer and receipt verification, and exact replay is available at
   https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepolia.
 - The example requires an independently approved expected payee and a buyer key injected by a
   wallet or secret manager. It never accepts the key in an MCP tool argument or prompt.
 
 ## Runtime And Agent Surfaces
 
+- Staging guide: https://docs.pubfi.ai/getting-started/staging
+- Staging interactive API reference: https://api-stg.pubfi.ai/reference
+- Staging Runtime OpenAPI: https://api-stg.pubfi.ai/openapi.json
+- Staging Registry v2 catalog: https://api-stg.pubfi.ai/v1/capabilities
+- Staging MCP endpoint: https://mcp-stg.pubfi.ai
+- Staging MCP manifest: https://mcp-stg.pubfi.ai/.well-known/mcp.json
 - Interactive API reference: https://api.pubfi.ai/reference
 - Runtime OpenAPI: https://api.pubfi.ai/openapi.json
 - Current Registry v2 catalog: https://api.pubfi.ai/v1/capabilities
@@ -143,8 +155,8 @@ upstream API.
 - Discovery inclusion is not gateway availability.
 - A route plan is not execution authority by itself.
 - A route or purchase API existing is not proof of a current ready route or available offer.
-- Accountless x402 support does not imply that every route accepts x402 or that a real-value
-  mainnet rail is available.
+- Accountless x402 support and environment permission do not prove that every route accepts x402
+  or that a Production offer is currently available.
 - PubFi does not perform automatic supplier procurement, supplier payment, or wallet custody.
 - SEO/GEO readbacks and local automation outputs are diagnostics, not ranking, traffic, or AI
   citation proof.

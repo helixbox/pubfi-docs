@@ -1,7 +1,8 @@
-# x402 Base Sepolia HTTP And MCP
+# x402 Base Sepolia Staging HTTP And MCP
 
-This example can inspect PubFi's accountless x402 challenge or run one bounded paid request through
-the official HTTP or MCP client. Paid commands use Base Sepolia test USDC, not real-value USDC.
+This Staging-only example can inspect PubFi's accountless x402 challenge or run one bounded paid
+request through the official HTTP or MCP client. It accepts only `https://api-stg.pubfi.ai` and
+`https://mcp-stg.pubfi.ai`. Paid commands use Base Sepolia test USDC, not real-value USDC.
 
 ## Inspect Without A Wallet
 
@@ -12,11 +13,13 @@ sh examples/agents/x402-base-sepolia/show_challenge.sh
 The default resource is:
 
 ```text
-https://api.pubfi.ai/v1/gateway/quantro/health
+https://api-stg.pubfi.ai/v1/gateway/quantro/health
 ```
 
-An eligible unpaid request returns HTTP `402`, a `PAYMENT-REQUIRED` header, a JSON payment
-requirement, and `Cache-Control: private, no-store`.
+First inspect the live Staging catalog. The catalog must list the exact route as ready. If that
+route has x402 enabled, an eligible unpaid request returns HTTP `402`, a `PAYMENT-REQUIRED` header,
+a JSON payment requirement, and `Cache-Control: private, no-store`. Treat that live challenge as
+the authority for all payment terms.
 
 ## Install The Pinned Clients
 
@@ -36,7 +39,7 @@ Read the unsigned challenge first. Independently approve its current `payTo` add
 Set these nonsecret values:
 
 ```sh
-export X402_RESOURCE_URL='https://api.pubfi.ai/v1/gateway/quantro/health'
+export X402_RESOURCE_URL='https://api-stg.pubfi.ai/v1/gateway/quantro/health'
 export X402_EXPECTED_PAY_TO='<approved payTo address>'
 ```
 
@@ -67,9 +70,13 @@ seconds. Running both commands can spend up to 0.02 test USDC.
 ## Safety Rules
 
 - This is Base Sepolia testnet, not Base mainnet.
+- This example rejects the Production API and MCP origins.
 - Do not add a PubFi API key to an x402 request.
 - Do not place a buyer private key, `PAYMENT-SIGNATURE`, or `PAYMENT-RESPONSE` in source, logs, or
   prompts.
 - Use the live challenge for current terms, but compare its network, asset, payee, amount, and
   lifetime with an independently approved wallet policy before signing.
 - Use a dedicated test wallet with only the test USDC needed for the run.
+
+See the [Staging guide](https://docs.pubfi.ai/getting-started/staging) for the complete endpoint and
+credential boundary.

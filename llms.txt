@@ -7,6 +7,7 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 - Docs home: https://docs.pubfi.ai
 - Project overview: https://docs.pubfi.ai/project-overview
 - Quickstart: https://docs.pubfi.ai/getting-started/quickstart
+- Staging guide: https://docs.pubfi.ai/getting-started/staging
 - Accountless x402: https://docs.pubfi.ai/getting-started/x402
 - Payment and execution modes: https://docs.pubfi.ai/concepts/payment-and-execution-modes
 - Registry contracts: https://docs.pubfi.ai/concepts/capability-contracts
@@ -17,6 +18,9 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 
 ## Runtime References
 
+- Staging product and login: https://stg.pubfi.ai, https://stg.pubfi.ai/login
+- Staging API reference, OpenAPI, and catalog: https://api-stg.pubfi.ai/reference, https://api-stg.pubfi.ai/openapi.json, https://api-stg.pubfi.ai/v1/capabilities
+- Staging MCP endpoint and manifest: https://mcp-stg.pubfi.ai, https://mcp-stg.pubfi.ai/.well-known/mcp.json
 - Interactive API reference: https://api.pubfi.ai/reference
 - Runtime OpenAPI: https://api.pubfi.ai/openapi.json
 - Current Registry v2 catalog: https://api.pubfi.ai/v1/capabilities
@@ -56,4 +60,5 @@ Discovery inclusion does not imply Registry readiness. The current Registry cata
 OpenAPI define executable paths and methods. API-key execution, registered purchases and Credits,
 and accountless x402 are separate modes. MCP `pubfi.route.execute` supports API-key admission or
 the mutually exclusive official x402 metadata flow. Public docs and reachability checks do not
-prove ranking, traffic, or AI citation success.
+prove ranking, traffic, or AI citation success. Base Sepolia `eip155:84532` is the Staging x402
+test boundary. It does not prove current Production x402 availability.

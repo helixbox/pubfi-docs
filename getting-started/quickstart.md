@@ -30,6 +30,9 @@ https://mcp.pubfi.ai/.well-known/mcp.json
 The API reference is the interactive HTTP reference. The OpenAPI schema is the machine-readable
 HTTP contract source. The MCP manifest is the agent-tool discovery surface.
 
+Use the [Staging guide](/getting-started/staging) when you test against the isolated Staging
+origins.
+
 ## 3. Choose The Right Path
 
 | Need | Path |
@@ -85,11 +88,14 @@ Omit the API key on an x402-enabled route to receive a `402 Payment Required` ch
 retry uses `PAYMENT-SIGNATURE`; a settled success returns `PAYMENT-RESPONSE`.
 
 ```bash
-curl --include 'https://api.pubfi.ai/v1/gateway/quantro/health'
+curl --include 'https://api-stg.pubfi.ai/v1/gateway/quantro/health'
 ```
 
-Current x402 support uses Base Sepolia test USDC, not real-value Base mainnet USDC. Read
-[Accountless x402](/getting-started/x402) before signing.
+This public paid example is Staging-only. Staging permits Base Sepolia `eip155:84532`. Production
+permits Base mainnet `eip155:8453` only when the exact route has x402 enabled. These environment
+rules do not prove that a route or offer is currently available. Inspect the selected
+environment's live catalog and unsigned challenge before signing. Read
+[Accountless x402](/getting-started/x402) for the complete policy.
 
 For MCP, call `pubfi.route.execute` without an API key. An eligible route returns the payment
 requirement in the MCP tool result. Retry the same call with
@@ -106,6 +112,7 @@ lane instead requires an eligible route and a valid request-bound payment author
 ## Next
 
 - [API reference](/reference/api-reference)
+- [Staging guide](/getting-started/staging)
 - [Provider Gateway Examples](/reference/provider-gateway-examples)
 - [Accountless x402](/getting-started/x402)
 - [Payment and execution modes](/concepts/payment-and-execution-modes)

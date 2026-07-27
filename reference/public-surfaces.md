@@ -8,6 +8,21 @@ description: Current public PubFi product, Registry, API, MCP, and agent-readabl
 This inventory lists current public contracts and public-facing route families. Some runtime
 operations still require account, API-key, or x402 authorization.
 
+## Staging
+
+- `https://stg.pubfi.ai`
+- `https://stg.pubfi.ai/login`
+- `https://api-stg.pubfi.ai/reference`
+- `https://api-stg.pubfi.ai/openapi.json`
+- `https://api-stg.pubfi.ai/v1/capabilities`
+- `https://mcp-stg.pubfi.ai`
+- `https://mcp-stg.pubfi.ai/.well-known/mcp.json`
+
+Staging is the Base Sepolia (`eip155:84532`) test boundary for eligible accountless x402 routes.
+The current staging catalog and challenge remain the availability and payment-term authority.
+This boundary does not establish Production x402 availability. See the [Staging
+guide](/getting-started/staging).
+
 ## Product And Discovery
 
 - `https://pubfi.ai`
@@ -97,6 +112,7 @@ prove that a current offer exists.
 
 Health, readiness, version, and metrics are operational evidence only. They do not prove that a
 specific route, x402 offer, registered purchase offer, provider response, or payment is available.
+Apply the same rule to the corresponding Staging status surfaces.
 
 ## Public-Safe Rule
 

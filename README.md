@@ -33,16 +33,18 @@ github.com/helixbox/pubfi-docs
 
 Snapshot sources:
 
-- `pubfi-mono` main through `e8ade9e03da4c57cf7fd956c1c13855333030097`;
+- `pubfi-mono` source snapshot at `7a1b8e13943d454db5f76d03a29e1ce8f65ee616`;
 - `quantro-mono` origin/main through `f5a4dec934f4a2a6e072149d694df7984391b74b`; and
-- public Runtime OpenAPI, Registry v2 catalog, MCP `tools/list`, and x402 challenge observed on
-  2026-07-24.
+- public Runtime OpenAPI, Registry v2 catalog, MCP `tools/list`, and the Staging x402 challenge
+  observed on 2026-07-27. The observation date applies to the Staging challenge and does not claim
+  Production x402 availability.
 
 ## Start Here
 
 - [Docs home](index.md)
 - [Project overview](project-overview.md)
 - [Quickstart](getting-started/quickstart.md)
+- [Staging guide](getting-started/staging.md)
 - [Accountless x402](getting-started/x402.md)
 - [Payment and execution modes](concepts/payment-and-execution-modes.md)
 - [API Reference](reference/api-reference.md)
@@ -54,6 +56,9 @@ Snapshot sources:
 
 - Docs site: `https://docs.pubfi.ai`
 - Product site: `https://pubfi.ai`
+- Staging product site: `https://stg.pubfi.ai`
+- Staging API: `https://api-stg.pubfi.ai`
+- Staging MCP: `https://mcp-stg.pubfi.ai`
 - Pricing: `https://pubfi.ai/pricing`
 - Blog: `https://pubfi.ai/blog`
 - Product pages: `https://pubfi.ai/products/{product_slug}`
@@ -92,6 +97,7 @@ pubfi-docs/
 ├── CHANGELOG.md
 ├── llms.txt
 ├── llms-full.txt
+├── favicon.svg
 ├── index.md
 ├── project-overview.md
 ├── getting-started/
@@ -119,6 +125,12 @@ Runnable public-safe examples live under [examples/](examples/README.md):
   MCP endpoint;
 - `examples/agents/capability-curl/`: no-auth Registry v2 catalog inspection;
 - `examples/agents/x402-base-sepolia/`: no-secret inspection of the current x402 challenge.
+
+## Shared Favicon
+
+The root `favicon.svg` is copied from `pubfi-mono/apps/web/app/icon.svg` at
+`7a1b8e13943d454db5f76d03a29e1ce8f65ee616`. This source keeps the docs icon aligned with the
+PubFi product site.
 
 ## Local Preview
 
@@ -160,6 +172,7 @@ Safe claims:
 - PubFi is building an agent-native crypto data layer.
 - Discovery is an open index, demand engine, and source-selection surface for crypto data APIs.
 - PubFi exposes generic route/capability tooling for agents and MCP clients.
+- PubFi Staging uses separate web, API, and MCP roots and a Base Sepolia x402 test boundary.
 - Public Discovery and LLM exports are generated from checked-in public-safe curated data.
 
 Unsafe claims:
@@ -170,6 +183,7 @@ Unsafe claims:
 - PubFi performs supplier procurement, supplier payment, wallet custody, or live model-ranked
   routing by default.
 - Every gateway route supports x402, or the production API accepts real-value mainnet payments.
+- A Base Sepolia Staging challenge proves that Production x402 is available.
 
 ## Appreciation
 

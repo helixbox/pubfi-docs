@@ -48,12 +48,34 @@ Example MCP client config:
 }
 ```
 
+## Staging
+
+Use the exact Staging endpoint and its matching key:
+
+```sh
+export STG_PUBFI_API_KEY='<Staging PubFi API key>'
+export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
+node examples/agents/pubfi-route-tools-mcp/server.mjs
+```
+
+The client configuration above can use the same local command. Start the client from an
+environment that supplies these variables, or use its secret-store integration. Do not put the
+key in a tracked configuration file.
+
 ## Smoke
 
 ```sh
 node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs
 node --test examples/agents/pubfi-route-tools-mcp/bridge-response.test.mjs \
   examples/agents/pubfi-route-tools-mcp/endpoint-policy.test.mjs
+```
+
+For an authenticated Staging smoke:
+
+```sh
+export STG_PUBFI_API_KEY='<Staging PubFi API key>'
+export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
+node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs
 ```
 
 Without the endpoint-selected caller key, the smoke verifies initialize plus the missing-key gate.
@@ -65,6 +87,9 @@ current catalog. Optional `PUBFI_MCP_SMOKE_QUERY` and `PUBFI_MCP_SMOKE_BODY` sup
 route input. `PUBFI_MCP_SMOKE_BODY` is the exact compact ASCII request body (for example,
 `{"limit":10}`), not a nested MCP JSON value. The smoke never invents a provider route or
 capability id.
+
+See the [Staging guide](../../../getting-started/staging.md) for login, key creation, HTTP checks,
+the Base Sepolia test boundary, and the Production transition.
 
 For accountless payment, use an official x402 MCP client. An unsigned eligible
 `pubfi.route.execute` call returns `PaymentRequired` in the MCP tool result. The retry carries the
