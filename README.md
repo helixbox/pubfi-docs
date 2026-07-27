@@ -137,6 +137,9 @@ npx mint@latest validate
 
 The portable check validates Mintlify navigation targets, Markdown links, docs-site route links,
 trailing whitespace, secret patterns, unsafe SEO/GEO success phrases, and example syntax.
+The Mint command is for manual local work. Unattended automation runs the portable check locally
+and requires the GitHub `Docs` workflow to complete Mint validation and export before landing a
+change; it does not download an `@latest` package into the local automation environment.
 
 Authenticated examples require a PubFi API key and must load it from a secret store. Paid x402
 clients require a buyer wallet key that must also stay in a secret store. Do not commit
