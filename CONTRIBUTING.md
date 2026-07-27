@@ -49,3 +49,7 @@ Before opening a PR, also run from the repository root:
 npm run check
 npx --yes mint@latest validate
 ```
+
+These commands apply to manual local contributions. Unattended automation runs `npm ci` and
+`npm run check` locally, then requires the GitHub `Docs` workflow to pass Mint validation and
+export before it lands a change. It must not download an `@latest` package locally.

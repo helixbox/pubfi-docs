@@ -10,4 +10,9 @@
 - Do not publish credentials, account data, billing data, usage rows, production readbacks, private
   customer data, internal SEO/GEO strategy, or unsupported ranking, traffic, or answer-engine
   citation claims.
-- Run `npm run check` and `npx --yes mint@latest validate` before opening or landing docs changes.
+- For manual local work, run `npm run check` and `npx --yes mint@latest validate` before opening
+  or landing docs changes.
+- An unattended automation must not download and execute an `@latest` package locally. It must run
+  `npm ci` and `npm run check`, then require the GitHub `Docs` workflow to pass Mint validation and
+  export before it lands a docs change. A no-change run must prove the local check and clean,
+  unchanged repository readbacks.

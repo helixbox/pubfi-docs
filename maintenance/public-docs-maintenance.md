@@ -63,12 +63,18 @@ Do not publish:
 
 ## Required Checks
 
-Run from the repository root:
+For manual local work, run from the repository root:
 
 ```sh
 npm run check
 npx --yes mint@latest validate
 ```
+
+An unattended automation must not download and execute an `@latest` package locally. It must run
+`npm ci` and `npm run check` in the bound docs worktree. If it changes docs, it must open a pull
+request and require the GitHub `Docs` workflow to pass its Mint validation and export steps before
+landing. If it finds no change, it must require the local check and clean, unchanged readbacks for
+both bound repositories before it records `docs_current`.
 
 For changes that also depend on `pubfi-mono` public web surfaces, run the mono smoke checks from the
 mono repo:
