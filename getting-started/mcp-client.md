@@ -10,6 +10,9 @@ PubFi exposes generic route and capability tools over MCP.
 | Staging | `https://mcp-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai/.well-known/mcp.json` |
 | Production | `https://mcp.pubfi.ai` | `https://mcp.pubfi.ai/.well-known/mcp.json` |
 
+Use a separate wallet, private key, endpoint, and payment policy for each environment. Do not reuse
+Staging payment material in Production, or the reverse.
+
 Use the [Staging guide](/getting-started/staging) for the login, API-key, smoke, and Base Sepolia
 test flow.
 
@@ -48,6 +51,11 @@ can be called without a key.
   key in this mode.
 
 Sending both authorities is a conflict. An invalid API key never falls back to x402.
+
+An agent with a wallet-capable x402 MCP client can pay an eligible
+`pubfi.route.execute` call directly through MCP. It does not need a PubFi account, API key, or a
+separate paid HTTP request. The payment uses USDC from the selected wallet and does not create an
+invoice or Credits.
 
 Do not pass upstream provider keys as MCP arguments. PubFi leases upstream credentials server-side
 when the selected route is callable and configured.
@@ -163,9 +171,10 @@ The wire shape is:
 The string above marks the position of the object. Send the actual validated JSON object, not a
 string and not a private key.
 
-HTTP and MCP share the same Registry route, Quantro quote and claim, provider fence, settlement,
-and exact replay. A replay of the same paid tool call returns the retained result and payment
-response without a second provider call. Replay equivalence applies to `structuredContent` and
+HTTP and MCP share the same x402 V2 `exact` payment path: Registry route, Quantro quote and claim,
+provider fence, settlement, Signed Receipt, and exact replay. A replay of the same paid tool call
+returns the retained result and payment response without a second provider call, settlement, or
+wallet charge. Replay equivalence applies to `structuredContent` and
 `result._meta["x402/payment-response"]`, not to raw JSON-RPC response bytes.
 
 ## Fail-Closed Behavior

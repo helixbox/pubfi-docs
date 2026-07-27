@@ -79,11 +79,13 @@ Each paid command requires the exact 0.001 USDC offer and rejects an authorizati
 - Use the live challenge for current terms, but compare its network, asset, payee, amount, and
   lifetime with an independently approved wallet policy before signing.
 - Use a dedicated wallet with only the Base mainnet USDC needed for the run.
+- Do not reuse a Staging wallet, private key, or payment authorization for this Production example.
 
 ## Acceptance Evidence
 
 The [Production acceptance run](https://github.com/helixbox/pubfi-mono/actions/runs/30259030111)
-completed on 2026-07-27:
+completed on 2026-07-27. The workflow link requires access to the source repository; the Base
+transactions below are public:
 
 | Lane | Base transaction | Result |
 | --- | --- | --- |
@@ -93,6 +95,10 @@ completed on 2026-07-27:
 The run used `@x402/core@2.19.0`, `@x402/mcp@2.19.0`, and
 `@modelcontextprotocol/sdk@1.29.0`. Each request settled once for 0.001 USDC. The public evidence
 does not include the buyer private key, `PAYMENT-SIGNATURE`, or full `PAYMENT-RESPONSE`.
+
+A bounded Quantro read-only acceptance confirmed one `settled` settlement and one signed receipt
+for each lane. Exact replay reused them without another charge. The underlying Quantro records
+remain private.
 
 See [Accountless x402](https://docs.pubfi.ai/getting-started/x402) for the complete payment and
 credential boundary.

@@ -77,6 +77,14 @@ seconds. Running both commands can spend up to 0.02 test USDC.
 - Use the live challenge for current terms, but compare its network, asset, payee, amount, and
   lifetime with an independently approved wallet policy before signing.
 - Use a dedicated test wallet with only the test USDC needed for the run.
+- Do not reuse this wallet, private key, or payment authorization in Production.
+
+## Acceptance Evidence
+
+The [Staging acceptance run](https://github.com/helixbox/pubfi-mono/actions/runs/30258511212)
+completed both official-client lanes on 2026-07-27. The HTTP and MCP clients verified the Signed
+Offer, Signed Receipt, and exact replay. The workflow does not publish the buyer private key or
+full payment evidence. The workflow link requires access to the source repository.
 
 See the [Staging guide](https://docs.pubfi.ai/getting-started/staging) for the complete endpoint and
 credential boundary.

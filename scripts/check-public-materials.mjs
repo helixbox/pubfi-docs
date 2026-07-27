@@ -332,6 +332,10 @@ function checkExampleSyntax() {
       "node",
       ["--test", "examples/agents/x402-base-sepolia/payment-policy.test.mjs"]
     ],
+    [
+      "node",
+      ["--test", "examples/agents/x402-base-sepolia/signed-artifacts.test.mjs"]
+    ],
     ["sh", ["-n", "examples/agents/x402-base-mainnet/show_challenge.sh"]],
     ["node", ["--check", "examples/agents/x402-base-mainnet/http-paid.mjs"]],
     ["node", ["--check", "examples/agents/x402-base-mainnet/mcp-paid.mjs"]],
@@ -340,6 +344,10 @@ function checkExampleSyntax() {
     [
       "node",
       ["--test", "examples/agents/x402-base-mainnet/payment-policy.test.mjs"]
+    ],
+    [
+      "node",
+      ["--test", "examples/agents/x402-base-mainnet/signed-artifacts.test.mjs"]
     ]
   ];
 
