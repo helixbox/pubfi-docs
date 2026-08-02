@@ -9,21 +9,25 @@ integration or route refresh.
 
 ## 1. Inspect Current Authority
 
-Get the complete installed catalog:
+Get the first page of the installed catalog:
 
 ```sh
 curl --silent --show-error \
   'https://api.pubfi.ai/v1/capabilities'
 ```
 
-The response uses `pubfi.gateway.registry.catalog.v2`. It includes:
+The paginated response uses `pubfi.gateway.registry.capability-page.v4`. Each compact capability
+summary includes:
 
 - the exact generation, manifest, and compile time;
-- each route matcher and allowed method;
-- finite query, body, and response policies;
-- provider and upstream revisions;
-- the meter and maximum raw units; and
+- each capability ID, public provider key, matcher, and allowed method;
+- whether PubFi needs a configured upstream credential;
+- the current Credit cost; and
 - current `ready` or `blocked` readiness.
+
+Read each opaque `next_cursor` page to enumerate the complete installed generation. Keep the
+`provider_key` and `method` filters unchanged when you send a cursor. A saved first page is not the
+complete catalog.
 
 Use the Runtime OpenAPI when you need only current `ready` operations:
 
@@ -34,6 +38,46 @@ curl --silent --show-error \
 
 Do not infer execution from a Discovery listing, an old example, or a saved route from a different
 Registry generation.
+
+### Filter Subscan Or DeGov
+
+Use the exact public provider key to limit discovery. For example, select `subscan` or `degov`:
+
+```sh
+export PUBFI_PROVIDER_KEY='degov'
+
+curl --silent --show-error --get \
+  'https://api.pubfi.ai/v1/capabilities' \
+  --data-urlencode "provider_key=${PUBFI_PROVIDER_KEY}" \
+  --data-urlencode 'limit=1000' |
+jq '{
+  generation,
+  matching_capability_count,
+  next_cursor,
+  capabilities: [.capabilities[] | {
+    matcher,
+    methods,
+    readiness: .readiness.status,
+    credential_required,
+    credit_cost
+  }]
+}'
+```
+
+If `next_cursor` is present, request the next page with the same `provider_key` and `limit`, plus
+`cursor=<next_cursor>`. Continue until `next_cursor` is absent. Then select one `ready` operation
+and confirm the same path and method in the [Runtime OpenAPI](https://api.pubfi.ai/openapi.json).
+
+Use the live filtered catalogs for current operations:
+
+- [Subscan catalog](https://api.pubfi.ai/v1/capabilities?provider_key=subscan&limit=1000) and
+  [Subscan product context](https://pubfi.ai/products/subscan-api)
+- [DeGov catalog](https://api.pubfi.ai/v1/capabilities?provider_key=degov&limit=1000) and
+  [DeGov product context](https://pubfi.ai/products/degov-api)
+
+PubFi's DeGov routes use the DeGov Partner Agent API at `agent-api.degov.ai`.
+`atlas.degov.ai` is a UI and reference surface. It is not a second execution contract. Always
+invoke the PubFi gateway path from the live catalog; do not send an upstream provider credential.
 
 ## 2. Select An Exact Operation
 
@@ -48,7 +92,7 @@ Set placeholders from the current schema:
 
 ```sh
 export PUBFI_GATEWAY_PATH='<exact ready path from the Runtime OpenAPI>'
-export PUBFI_GATEWAY_METHOD='GET'
+export PUBFI_GATEWAY_METHOD='<GET or POST from the same Runtime OpenAPI operation>'
 ```
 
 ## 3. Execute With A PubFi API Key
