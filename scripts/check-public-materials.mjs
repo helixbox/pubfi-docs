@@ -273,6 +273,11 @@ function checkCurrentRuntimeContracts() {
       label: "retired MCP input or result field",
       pattern:
         /`(?:route_id|route_plan|required_capabilities|allow_paid|dry_run|intent)`|["'](?:route_id|route_plan|required_capabilities|allow_paid|dry_run|intent)["']\s*:|\b(?:selected_route_id|selected_callability|production_route_time_model_enabled|supplier_execution_enabled|payment_execution_enabled|capability_response_body|candidate_capabilities|provider_specific_public_tools|provider_specific_route_rejected|capability_runtime_v1|gateway_available)\b/
+    },
+    {
+      label: "retired MCP tool",
+      pattern:
+        /\bpubfi\.(?:capabilities\.search|route\.(?:plan|explain)|schema\.get)\b/
     }
   ];
   const retiredEnvelopePattern = /\bpubfi\.capability\.response\.v1\b/;
