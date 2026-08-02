@@ -8,22 +8,22 @@ instead of synthesizing a second handshake, running a retired TypeScript route-t
 implementation, or creating one public tool per provider. The direct HTTP and stdio views therefore
 carry the same tool-change flag, generation, and manifest identity.
 
-Configure an MCP client for PubFi's Streamable HTTP endpoint at `https://mcp.pubfi.ai`. The hosted
-service uses the same five Registry v2 tools and keeps upstream provider credentials server-side.
-`pubfi.route.execute` accepts either PubFi API-key admission or the mutually exclusive accountless
-x402 metadata flow.
+For hosted authenticated use, configure an MCP client for PubFi's Streamable HTTP endpoint at
+`https://mcp.pubfi.ai`. The hosted service uses the same three fixed Registry v2 tools. Catalog
+list/detail reads are public. Exact execution requires a PubFi API key or the eligible accountless
+x402 lane. Upstream provider credentials stay server-side.
 
 ## Tools
 
-- `pubfi.capabilities.search`
-- `pubfi.route.plan`
+- `pubfi.capabilities.list`
+- `pubfi.capabilities.get`
 - `pubfi.route.execute`
-- `pubfi.route.explain`
-- `pubfi.schema.get`
 
-Executable paths, methods, matchers, schemas, metering, and readiness come from the currently
-installed signed Registry generation returned by `tools/list`. They are catalog data, not static
-MCP tool names or checked-in provider adapters.
+`pubfi.capabilities.list` enumerates compact summaries with an opaque generation-bound cursor.
+`pubfi.capabilities.get` returns the full typed contract for one exact capability id. The client
+agent selects the capability; PubFi does not rank candidates or infer intent. Executable paths,
+methods, matchers, schemas, one-Credit cost, and readiness come only from the installed signed
+Registry generation.
 
 ## Run In Staging
 
@@ -80,10 +80,10 @@ export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
 node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs
 ```
 
-Without the endpoint-selected caller key, the smoke verifies initialize plus the missing-key gate.
-With `STG_PUBFI_API_KEY` for staging MCP endpoints or `PROD_PUBFI_API_KEY` for production MCP
-endpoints, it checks tool discovery, capability search, planning, explanation, schema readback,
-and current-generation identity against the Rust MCP endpoint. For a deliberate live request, set
+Without the endpoint-selected caller key, the smoke verifies initialization, the fixed tool list,
+complete catalog pagination, exact capability detail, and the execution credential gate. With
+`STG_PUBFI_API_KEY` for staging MCP endpoints or `PROD_PUBFI_API_KEY` for production MCP
+endpoints, the same catalog reads remain public. For a deliberate live request, set
 `PUBFI_MCP_EXECUTE_LIVE=1`, `PUBFI_MCP_SMOKE_RAW_PATH`, and `PUBFI_MCP_SMOKE_METHOD` from the
 current catalog. Optional `PUBFI_MCP_SMOKE_QUERY` and `PUBFI_MCP_SMOKE_BODY` supply the exact
 route input. `PUBFI_MCP_SMOKE_BODY` is the exact compact ASCII request body (for example,
@@ -113,9 +113,9 @@ npm run smoke:mcp-e2e --workspace apps/web -- --execute-live --json
 
 ## Execution Boundary
 
-`pubfi.route.execute` accepts an exact `raw_path` and `method` selected from `tools/list`. The Rust
-Data Plane resolves that pair through the installed Registry v2 matcher and uses the same typed
-executor, credential authority, metering, generation, and fail-closed readiness state as the HTTP
-gateway. A blocked or absent current-catalog route remains non-executable. This bridge does not add
-provider branches, compatibility route ids, supplier procurement, automatic payment, or a second
-catalog authority.
+`pubfi.route.execute` accepts an exact `raw_path` and `method` selected after list/detail catalog
+reads. The Rust Data Plane resolves that pair through the installed Registry v2 matcher and uses
+the same typed executor, credential authority, Credit accounting, generation, and fail-closed
+readiness state as the HTTP gateway. A blocked or absent current-catalog route remains
+non-executable. This bridge does not add provider branches, capability ranking, compatibility route
+ids, supplier procurement, automatic payment, or a second catalog authority.

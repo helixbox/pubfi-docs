@@ -9,7 +9,7 @@ test("stdio bridge preserves the exact direct initialize Registry identity", () 
     id: 1,
     result: {
       protocolVersion: "2025-11-25",
-      capabilities: { tools: { listChanged: true } },
+      capabilities: { tools: { listChanged: false } },
       serverInfo: { name: "pubfi-rust-mcp", version: "0.1.0" },
       _meta: {
         generation: { id: "generation-current", sequence: 12 },
@@ -22,17 +22,15 @@ test("stdio bridge preserves the exact direct initialize Registry identity", () 
   assert.deepEqual(exactDirectMcpResponse(1, direct), direct);
 });
 
-test("stdio bridge preserves the exact direct five-tool list and Registry identity", () => {
+test("stdio bridge preserves the exact direct three-tool list and Registry identity", () => {
   const direct = {
     jsonrpc: "2.0",
     id: 2,
     result: {
       tools: [
-        "pubfi.capabilities.search",
-        "pubfi.route.plan",
-        "pubfi.route.execute",
-        "pubfi.route.explain",
-        "pubfi.schema.get"
+        "pubfi.capabilities.list",
+        "pubfi.capabilities.get",
+        "pubfi.route.execute"
       ].map((name) => ({ name })),
       _meta: {
         generation: { id: "generation-current", sequence: 12 },

@@ -1,7 +1,7 @@
 # PubFi Docs Full Context
 
 PubFi is building an agent-native crypto data layer. It helps software teams and AI agents discover
-crypto data sources, inspect the installed signed Registry generation, plan exact routes, inspect
+crypto data sources, inspect the installed signed Registry generation, select exact routes, inspect
 schemas, and execute eligible operations without binding every workflow directly to a different
 upstream API.
 
@@ -151,13 +151,15 @@ upstream API.
 
 ## MCP Registry v2 Tools
 
-- `pubfi.capabilities.search`: optional `query`, `raw_path`, and `method`.
-- `pubfi.route.plan`: optional `raw_path`, `method`, `objective`, and `query`.
+- `pubfi.capabilities.list`: optional `limit`, opaque `cursor`, exact `provider_key`, and exact
+  `method`. Follow every `next_cursor` for one installed generation.
+- `pubfi.capabilities.get`: required exact `capability_id` returned by
+  `pubfi.capabilities.list`.
 - `pubfi.route.execute`: required `raw_path` and `method`; optional exact `query`, exact `body`,
   `idempotency_key`, and `request_id`.
-- `pubfi.route.explain`: optional `raw_path`, `method`, `objective`, and `query`.
-- `pubfi.schema.get`: `tool`.
-- `tools/list` publishes the current generation, manifest, routes, and input schemas.
+- `tools/list` publishes the current generation, manifest, and tool input and output schemas.
+- `pubfi.capabilities.list` and `pubfi.capabilities.get` are public Registry reads. The client
+  selects a capability; PubFi does not infer intent or rank candidates.
 - `pubfi.route.execute` accepts a PubFi API key or the mutually exclusive accountless x402
   metadata flow. An unsigned eligible call returns `PaymentRequired`; the paid retry supplies
   `x402/payment`; the settled result supplies `x402/payment-response`. A wallet-capable agent can
@@ -172,8 +174,8 @@ upstream API.
 
 - PubFi has public Discovery pages and agent-readable exports for source selection and
   answer-engine retrieval.
-- PubFi has five Registry v2 MCP tools for search, planning, execution, explanation, and schema
-  readback.
+- PubFi has three Registry v2 MCP tools for complete catalog listing, exact capability detail, and
+  execution.
 - PubFi exposes a dynamic Registry catalog and Runtime OpenAPI for current executable operations.
 - PubFi supports separate registered API-key and accountless x402 execution modes over HTTP and
   MCP.

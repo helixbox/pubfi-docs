@@ -20,14 +20,16 @@ https://api.pubfi.ai/openapi.json
 
 | Tool | Purpose | Public input fields |
 | --- | --- | --- |
-| `pubfi.capabilities.search` | Search the installed Registry v2 catalog without provider I/O or usage. | `query`, `raw_path`, `method` |
-| `pubfi.route.plan` | Plan an exact Registry route without provider I/O or usage. | `raw_path`, `method`, `objective`, `query` |
+| `pubfi.capabilities.list` | Enumerate deterministic compact pages from the installed Registry v2 catalog. PubFi does not rank, infer intent, or select a capability. | optional `limit`, opaque `cursor`, exact `provider_key`, exact `method` |
+| `pubfi.capabilities.get` | Return the full typed request, response, metering, and readiness contract for one exact capability. | required `capability_id` from `pubfi.capabilities.list` |
 | `pubfi.route.execute` | Execute one exact Registry path through the same data plane as the HTTP gateway. Use either a PubFi API key, which may consume allocation, or accountless x402 on an eligible route. | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id`; optional MCP `_meta["x402/payment"]` on a paid retry |
-| `pubfi.route.explain` | Explain a Registry route decision without provider I/O or usage. | `raw_path`, `method`, `objective`, `query` |
-| `pubfi.schema.get` | Return PubFi MCP input and output schema details for a named tool, especially `pubfi.route.execute`. This is read-only and intended for agent setup and validation before planning or execution. | `tool` |
 
 Durable provider-specific public tools are rejected. Provider identity belongs in route-result data,
 not tool names.
+
+`pubfi.capabilities.list` and `pubfi.capabilities.get` are public reads. Follow every opaque
+`next_cursor`, select a capability in the client, and fetch its exact detail before execution.
+Use `tools/list` for the current MCP input and output schemas.
 
 ## Auth
 

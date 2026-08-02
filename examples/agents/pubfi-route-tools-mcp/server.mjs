@@ -13,6 +13,10 @@ const mcpEndpoint = normalizePubfiMcpEndpoint(
 );
 const apiKeyEnvName = apiKeyEnvNameForEndpoint(mcpEndpoint);
 const apiKey = process.env[apiKeyEnvName] || "";
+const publicTools = new Set([
+  "pubfi.capabilities.list",
+  "pubfi.capabilities.get"
+]);
 let inputBuffer = Buffer.alloc(0);
 
 process.stdin.on("data", (chunk) => {
@@ -73,7 +77,7 @@ async function handleMessage(message) {
       await forwardToRustMcp(message);
       return;
     case "tools/call":
-      if (!apiKey) {
+      if (!apiKey && !publicTools.has(message.params?.name)) {
         writeJsonRpcError(
           message.id,
           -32001,

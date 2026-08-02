@@ -75,8 +75,8 @@ Use the surfaces in this order for runtime work:
 
 1. Use `/v1/capabilities` to inspect the complete installed Registry generation.
 2. Use Runtime OpenAPI to inspect schemas for current `ready` HTTP operations.
-3. Use MCP `tools/list` and `pubfi.schema.get` to inspect current MCP schemas and dynamic Registry
-   routes.
+3. Use MCP `tools/list` for current MCP schemas. Use `pubfi.capabilities.list` and
+   `pubfi.capabilities.get` for the current Registry generation and exact capability detail.
 4. Use Discovery only for source-selection and public evidence context.
 5. Use long-form docs for workflow, security, payment, and claim boundaries.
 

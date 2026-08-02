@@ -28,11 +28,9 @@ forwards MCP requests to the hosted endpoint. It is not a local PubFi backend.
 
 ## Tools
 
-- `pubfi.capabilities.search`
-- `pubfi.route.plan`
+- `pubfi.capabilities.list`
+- `pubfi.capabilities.get`
 - `pubfi.route.execute`
-- `pubfi.route.explain`
-- `pubfi.schema.get`
 
 Provider ids, exact paths, methods, request policies, response policies, and readiness appear as
 Registry catalog or route-result data. They are not public tool names.
@@ -62,16 +60,17 @@ when the selected route is callable and configured.
 
 ## Recommended Agent Flow
 
-1. Call `pubfi.capabilities.search` with a query or exact path and method.
-2. Call `pubfi.route.plan` with the exact `raw_path` and `method`.
-3. Call `pubfi.route.explain` when the plan needs a reason readback.
-4. Call `pubfi.schema.get` before constructing execution input.
-5. Call `pubfi.route.execute` only for an exact ready `raw_path` and `method`.
-6. Select API-key admission or x402 payment. Never send both.
+1. Call `pubfi.capabilities.list` and follow every opaque `next_cursor` for one installed
+   generation. Optional exact `provider_key` and `method` filters must remain unchanged across
+   pages.
+2. Select a capability in the client. PubFi does not rank or select one for you.
+3. Call `pubfi.capabilities.get` with its exact `capability_id` to read the full typed contract.
+4. Call `pubfi.route.execute` only for the selected ready `raw_path` and `method`.
+5. Select API-key admission or x402 payment. Never send both.
 
 ## Inspect Tool Schemas
 
-Call hosted `tools/list` for current input schemas and dynamic Registry route metadata. Use the
+Call hosted `tools/list` for current input and output schemas. Use the
 [Agent Interface Reference](/reference/agent-interface) for the stable tool-purpose and field
 summary. Do not copy an old schema into a client as permanent authority.
 

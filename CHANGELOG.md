@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replaced the retired five-tool MCP documentation and smoke contract with the current public
+  `pubfi.capabilities.list`, `pubfi.capabilities.get`, and `pubfi.route.execute` surface.
 - Aligned the x402 guides, examples, FAQ, and agent-readable indexes on environment-isolated
   wallets, direct MCP payment, single-lane accounting, receipt meaning, no-charge exact replay, and
   the Staging and Production acceptance results.
@@ -26,14 +28,14 @@
   shared HTTP/MCP execution authority, and Ed25519 `did:web` Signed Offers & Receipts guidance.
 - Replaced the retired fixed-capability and static provider examples with the signed Registry v2
   catalog, dynamic Runtime OpenAPI, and exact path-and-method execution contract.
-- Synchronized the public MCP stdio bridge and smoke with the current Registry v2 five-tool
+- Synchronized the public MCP stdio bridge and smoke with the current Registry v2 three-tool
   contract, generation identity, endpoint policy, and exact response forwarding.
 - Documented the separate API-key allocation, registered purchase and Credits, and accountless x402
   modes, including the current Staging Base Sepolia V2 challenge and exact-replay contract.
 - Added semantic public-material gates for retired runtime routes, static provider schemas, the
   retired response envelope, old MCP input fields, and blanket no-x402 claims.
-- Aligned the public MCP reference and runnable smoke with the current five-tool surface by removing
-  the retired `pubfi.pricing.quote` tool.
+- Aligned the public MCP reference and runnable smoke with the current fixed-tool surface by
+  removing the retired `pubfi.pricing.quote` tool.
 - Replaced stale non-crypto generic gateway readiness claims with the crypto/Web3/on-chain scope and
   current public catalog authority.
 - Updated account docs and runtime endpoint inventory to the billing-account-scoped admission,

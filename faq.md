@@ -15,8 +15,8 @@ only when the current `GET /v1/capabilities` catalog lists its exact path and me
 
 ## Can agents use PubFi through MCP?
 
-Yes, through generic MCP tools such as `pubfi.capabilities.search`, `pubfi.route.plan`, and
-`pubfi.route.execute`. Public MCP handshake and introspection methods are available without a
+Yes, through `pubfi.capabilities.list`, `pubfi.capabilities.get`, and `pubfi.route.execute`.
+The catalog reads and public MCP handshake and introspection methods are available without a
 PubFi API key. `pubfi.route.execute` accepts either API-key admission or accountless x402 payment.
 An agent with a wallet-capable x402 MCP client can pay directly through the official MCP metadata
 flow. It does not need a separate paid HTTP call. The two modes cannot be combined.
