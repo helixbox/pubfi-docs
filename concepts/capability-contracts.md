@@ -10,8 +10,11 @@ public catalog is:
 GET https://api.pubfi.ai/v1/capabilities
 ```
 
-It returns `pubfi.gateway.registry.catalog.v2`. Each entry identifies the exact route matcher,
-allowed method, provider, request policy, response policy, meter, maximum raw units, and readiness.
+It returns the paginated `pubfi.gateway.registry.capability-page.v4` schema. Each compact summary
+identifies the capability, public provider key, exact route matcher, allowed methods, credential
+requirement, current Credit cost, and readiness. Follow each opaque `next_cursor` to enumerate the
+complete installed generation. Use Runtime OpenAPI for the ready operation request and response
+schemas.
 
 ## Current Readiness
 

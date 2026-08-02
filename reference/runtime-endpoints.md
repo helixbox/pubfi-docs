@@ -35,14 +35,15 @@ The corresponding Staging API root is `https://api-stg.pubfi.ai`. Fetch that env
 | `GET` | `/metrics` | Operational metrics. This route is not product or route-availability evidence. |
 | `GET` | `/openapi.json` | Runtime OpenAPI generated from the installed Registry v2 snapshot. |
 | `GET` | `/reference` | Interactive API reference for `/openapi.json`. |
-| `GET` | `/v1/capabilities` | Public `pubfi.gateway.registry.catalog.v2` catalog. |
+| `GET` | `/v1/capabilities` | Public paginated `pubfi.gateway.registry.capability-page.v4` catalog. |
 | `GET` | `/.well-known/mcp.json` | API-host MCP discovery manifest. |
 | `GET` | `/.well-known/glama.json` | Public MCP connector ownership declaration. |
 | `POST` | `/` | MCP JSON-RPC endpoint. |
 
 `GET /v1/capabilities` is the catalog endpoint. It includes the exact Registry generation,
-manifest, route matcher, methods, request and response policies, meter, maximum raw units, and
-current `ready` or `blocked` state.
+manifest, compact capability summaries, and current `ready` or `blocked` state. Follow each opaque
+`next_cursor` for the complete generation. Use Runtime OpenAPI for ready operation request and
+response schemas.
 
 The Runtime OpenAPI includes only current `ready` Registry operations. If the API has no valid
 programmed snapshot, it marks the Registry as unavailable and does not use a static provider
