@@ -20,8 +20,9 @@ export PUBFI_API_BASE='https://api-stg.pubfi.ai'
 sh examples/agents/capability-curl/inspect_registry.sh
 ```
 
-The response uses `pubfi.gateway.registry.catalog.v2`. Select only a current `ready` operation and
-use its exact matcher and HTTP method. Refresh
+The response uses the paginated `pubfi.gateway.registry.capability-page.v4` schema. Follow each
+opaque `next_cursor`, then select only a current `ready` operation and use its exact matcher and
+HTTP method. Refresh
 the matching environment's OpenAPI before you construct an execution request because a new signed
 generation can change the route set:
 

@@ -55,8 +55,9 @@ upstream API.
 
 - Discovery is the editorial public source-selection layer. Discovery inclusion does not establish
   execution.
-- `GET https://api.pubfi.ai/v1/capabilities` returns the current
-  `pubfi.gateway.registry.catalog.v2` catalog.
+- `GET https://api.pubfi.ai/v1/capabilities` returns the current paginated
+  `pubfi.gateway.registry.capability-page.v4` catalog. Follow each opaque `next_cursor` for the
+  complete installed generation.
 - Runtime OpenAPI is generated from the installed Registry snapshot. It includes the current ready
   gateway operations. Separate static provider schemas are not execution authority.
 - Registry execution matches an exact path and method. A successful operation returns the validated
