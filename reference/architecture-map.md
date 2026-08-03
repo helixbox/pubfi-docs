@@ -11,7 +11,7 @@ PubFi is an agent-facing execution and discovery layer for crypto data:
 - Registry v2 owns executable path, method, request, response, meter, and readiness contracts.
 - The account service owns API keys, scopes, admission, allocation, and usage facts.
 - The HTTP gateway executes exact current Registry operations.
-- MCP exposes generic Registry search, planning, explanation, schema, and execution tools.
+- MCP exposes generic Registry catalog list and detail tools plus exact route execution.
 - Registered purchases can create purchase-origin service units after verified settlement.
 - Eligible HTTP and MCP routes can use an accountless x402 payment lane.
 
