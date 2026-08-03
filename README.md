@@ -47,6 +47,7 @@ Snapshot sources:
 - [API key and runtime](getting-started/api-key-runtime.md)
 - [Registry gateway examples](reference/provider-gateway-examples.md)
 - [MCP client setup](getting-started/mcp-client.md)
+- [MCP client guides](getting-started/mcp-clients.md)
 - [Accountless x402](getting-started/x402.md)
 - [Payment and execution modes](concepts/payment-and-execution-modes.md)
 - [API Reference](reference/api-reference.md)

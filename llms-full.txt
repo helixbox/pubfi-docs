@@ -14,6 +14,7 @@ upstream API.
 - https://docs.pubfi.ai/getting-started/api-key-runtime
 - https://docs.pubfi.ai/reference/provider-gateway-examples
 - https://docs.pubfi.ai/getting-started/mcp-client
+- https://docs.pubfi.ai/getting-started/mcp-clients
 - https://docs.pubfi.ai/getting-started/x402
 - https://docs.pubfi.ai/concepts/discovery
 - https://docs.pubfi.ai/concepts/payment-and-execution-modes
@@ -28,6 +29,7 @@ upstream API.
 - https://docs.pubfi.ai/getting-started/api-key-runtime
 - https://docs.pubfi.ai/reference/provider-gateway-examples
 - https://docs.pubfi.ai/getting-started/mcp-client
+- https://docs.pubfi.ai/getting-started/mcp-clients
 - https://docs.pubfi.ai/getting-started/x402
 - https://docs.pubfi.ai/concepts/discovery
 - https://docs.pubfi.ai/concepts/capability-contracts
@@ -133,6 +135,7 @@ upstream API.
 - Product LLM full export: https://pubfi.ai/llms-full.txt
 - Discovery capability-card JSON: https://pubfi.ai/discovery/agent-capabilities.json
 - Agent interface guide: https://docs.pubfi.ai/reference/agent-interface
+- MCP client guides: https://docs.pubfi.ai/getting-started/mcp-clients
 - Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
 - Product site: https://pubfi.ai
 - Pricing: https://pubfi.ai/pricing
@@ -169,6 +172,13 @@ upstream API.
   bytes.
 - HTTP and MCP share the same Registry route, x402 `exact` payment, Quantro settlement, receipt, and
   exact replay path.
+- Mainstream clients connect to the same hosted three-tool surface. Client-specific setup for
+  Codex, Claude, GitHub Copilot, VS Code, Cursor, Devin, Windsurf, Gemini CLI, Kiro, Continue,
+  Amazon Q Developer, Cline, Roo Code, Zed, JetBrains, Raycast, LM Studio, OpenCode, Warp,
+  LibreChat, goose, and Cherry Studio is indexed at
+  https://docs.pubfi.ai/getting-started/mcp-clients.
+- Subscan and DeGov are exact `provider_key` filters and Registry data, not provider-specific MCP
+  tool namespaces. An agent lists, gets, and then executes the exact selected current route.
 
 ## Public-Safe Claims
 
