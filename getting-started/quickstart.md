@@ -75,8 +75,10 @@ Examples](/reference/provider-gateway-examples).
 ## 5. Connect Through MCP
 
 Use [MCP Client Setup](/getting-started/mcp-client) to choose hosted Streamable HTTP or the local
-stdio bridge. MCP exposes catalog list and detail tools plus exact route execution over the same
-Registry authority as the HTTP gateway.
+stdio bridge. Then use [MCP Client Guides](/getting-started/mcp-clients) for exact configuration
+in Codex, Claude, GitHub Copilot, VS Code, Cursor, Gemini CLI, and other common clients. MCP
+exposes catalog list and detail tools plus exact route execution over the same Registry authority
+as the HTTP gateway.
 
 ## 6. Or Use Accountless x402
 

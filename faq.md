@@ -21,6 +21,16 @@ PubFi API key. `pubfi.route.execute` accepts either API-key admission or account
 An agent with a wallet-capable x402 MCP client can pay directly through the official MCP metadata
 flow. It does not need a separate paid HTTP call. The two modes cannot be combined.
 
+## Why does my agent see only three PubFi tools?
+
+This is the intended provider-neutral interface. Subscan and DeGov are exact `provider_key`
+filters in `pubfi.capabilities.list`, not tool namespaces. The agent lists current capabilities,
+gets one exact contract, and then calls `pubfi.route.execute` with its exact path and method. It
+should not look for `subscan.*` or `degov.*`.
+
+Use [MCP Client Guides](/getting-started/mcp-clients) for client configuration and safe
+verification prompts.
+
 ## Do all gateway routes support x402?
 
 No. x402 is enabled per exact Registry route. Inspect the current catalog and the route's

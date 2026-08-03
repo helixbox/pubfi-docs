@@ -34,6 +34,7 @@
           "getting-started/api-key-runtime",
           "reference/provider-gateway-examples",
           "getting-started/mcp-client",
+          "getting-started/mcp-clients",
           "getting-started/x402"
         ]
       },

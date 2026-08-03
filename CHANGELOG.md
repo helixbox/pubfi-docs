@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added source-backed PubFi MCP setup, credential handling, verification prompts, troubleshooting,
+  and explicit compatibility boundaries for major desktop, IDE, CLI, local-model, and hosted web
+  agent clients.
 - Replaced the retired five-tool MCP documentation and smoke contract with the current public
   `pubfi.capabilities.list`, `pubfi.capabilities.get`, and `pubfi.route.execute` surface.
 - Aligned the x402 guides, examples, FAQ, and agent-readable indexes on environment-isolated

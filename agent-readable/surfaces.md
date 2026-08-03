@@ -19,6 +19,7 @@ Runtime OpenAPI, and MCP metadata.
 | Robots policy | Crawler policy for public and private route boundaries. | `https://pubfi.ai/robots.txt` |
 | IndexNow verification key | Public ownership verification file. | `https://pubfi.ai/50e4aa84-257b-4ff4-a822-5da3d567384c.txt` |
 | Agent interface guide | Current MCP tools, fields, auth, and execution boundary. | `https://docs.pubfi.ai/reference/agent-interface` |
+| MCP client guides | Client-specific hosted HTTP, stdio bridge, credential, verification, and compatibility guidance. | `https://docs.pubfi.ai/getting-started/mcp-clients` |
 | Registry catalog | Complete installed Registry v2 catalog with each entry's readiness state. | `https://api.pubfi.ai/v1/capabilities` |
 | API reference | Interactive HTTP reference. | `https://api.pubfi.ai/reference` |
 | Runtime OpenAPI | Executable HTTP schema for current `ready` Registry operations and API routes. | `https://api.pubfi.ai/openapi.json` |
@@ -133,3 +134,4 @@ uptime, ranking, traffic, or citations.
 - Use [Public Surfaces](/reference/public-surfaces) for the complete human-facing URL inventory.
 - Use the [API Reference](/reference/api-reference) for HTTP schema authority.
 - Use the [Agent Interface Reference](/reference/agent-interface) for hosted MCP tool contracts.
+- Use [MCP Client Guides](/getting-started/mcp-clients) for client-specific configuration.

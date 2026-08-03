@@ -10,6 +10,7 @@ const failures = [];
 
 checkNavigation();
 checkRouteShape();
+checkMcpClientCoverage();
 checkMarkdownLinks();
 checkDocsSiteLinks();
 checkCanonicalDocsUrls();
@@ -103,6 +104,85 @@ function checkRouteShape() {
   for (const page of pages) {
     if (page === "docs" || page.startsWith("docs/") || page.startsWith("/")) {
       failures.push(`docs.json navigation target must map to root docs domain routes: ${page}`);
+    }
+  }
+}
+
+function checkMcpClientCoverage() {
+  const file = path.join(root, "getting-started/mcp-clients.md");
+  const text = readFileSync(file, "utf8");
+  const requiredSections = [
+    "## Codex CLI, Codex IDE, And ChatGPT Desktop",
+    "## Claude Code",
+    "## VS Code With GitHub Copilot",
+    "## GitHub Copilot CLI",
+    "## GitHub Copilot Coding Agent",
+    "## Cursor IDE And Cursor Agent",
+    "## Devin CLI And Devin Local",
+    "## Windsurf Legacy Cascade",
+    "## Gemini CLI",
+    "## Kiro IDE And Kiro CLI",
+    "## Amazon Q Developer IDE And CLI",
+    "## Continue",
+    "## Cline IDE And CLI",
+    "## Roo Code",
+    "## Zed",
+    "## Raycast AI",
+    "## LM Studio",
+    "## OpenCode",
+    "## Warp Local Agents",
+    "## LibreChat",
+    "### Claude Desktop",
+    "### JetBrains AI Assistant",
+    "### goose Desktop And CLI",
+    "### Cherry Studio",
+    "## Other MCP Clients",
+    "### ChatGPT Web",
+    "### Claude Web And Cloud Custom Connectors"
+  ];
+
+  for (const section of requiredSections) {
+    if (!text.includes(section)) {
+      failures.push(`MCP client guide is missing required coverage: ${section}`);
+    }
+  }
+
+  const requiredConfigMarkers = [
+    'bearer_token_env_var = "PROD_PUBFI_API_KEY"',
+    "${input:pubfi-production-api-key}",
+    "${env:PROD_PUBFI_API_KEY}",
+    "${COPILOT_MCP_PUBFI_API_KEY}",
+    '"httpUrl": "https://mcp.pubfi.ai"',
+    "${{ secrets.PROD_PUBFI_API_KEY }}",
+    '"type": "streamableHttp"',
+    '"type": "streamable-http"',
+    '"Authorization": "Bearer {env:PROD_PUBFI_API_KEY}"',
+    "examples/agents/pubfi-route-tools-mcp/server.mjs"
+  ];
+
+  for (const marker of requiredConfigMarkers) {
+    if (!text.includes(marker)) {
+      failures.push(`MCP client guide is missing required config marker: ${marker}`);
+    }
+  }
+
+  for (const tool of [
+    "pubfi.capabilities.list",
+    "pubfi.capabilities.get",
+    "pubfi.route.execute"
+  ]) {
+    if (!text.includes(tool)) {
+      failures.push(`MCP client guide is missing the current tool: ${tool}`);
+    }
+  }
+
+  const jsonBlocks = [...text.matchAll(/```json\n([\s\S]*?)\n```/g)];
+
+  for (const [index, block] of jsonBlocks.entries()) {
+    try {
+      JSON.parse(block[1]);
+    } catch (error) {
+      failures.push(`MCP client guide JSON block ${index + 1} is invalid: ${error.message}`);
     }
   }
 }

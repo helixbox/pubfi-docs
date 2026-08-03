@@ -19,7 +19,7 @@ responses without binding every workflow directly to a different upstream API.
 | --- | --- | --- |
 | Evaluate PubFi or compare data sources | [Source Evaluation](/use-cases/source-evaluation) | [Discovery](https://pubfi.ai/discovery) |
 | Call a Registry route with an API key | [API Key And Runtime](/getting-started/api-key-runtime) | [Registry Gateway Examples](/reference/provider-gateway-examples) |
-| Connect an agent or MCP client | [MCP Client Setup](/getting-started/mcp-client) | [Agent Interface Reference](/reference/agent-interface) |
+| Connect an agent or MCP client | [MCP Client Setup](/getting-started/mcp-client) | [MCP Client Guides](/getting-started/mcp-clients) |
 | Test accountless x402 on Base Sepolia | [Staging Guide](/getting-started/staging#base-sepolia-test-boundary) | [Accountless x402](/getting-started/x402) |
 
 Explore concrete journeys through [Crypto API Discovery](/use-cases/crypto-api-discovery), [Source

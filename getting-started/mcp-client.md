@@ -16,6 +16,11 @@ Staging payment material in Production, or the reverse.
 Use the [Staging guide](/getting-started/staging) for the login, API-key, smoke, and Base Sepolia
 test flow.
 
+Use [MCP Client Guides](/getting-started/mcp-clients) for exact setup in Codex, Claude, GitHub
+Copilot, VS Code, Cursor, Devin, Windsurf, Gemini CLI, Kiro, Continue, Cline, Roo Code, Zed,
+Amazon Q Developer, JetBrains, Raycast, LM Studio, OpenCode, Warp, LibreChat, goose, and Cherry
+Studio. The guide also states the current ChatGPT web and Claude web authentication boundaries.
+
 ## Choose A Transport
 
 | Client capability | Transport |
