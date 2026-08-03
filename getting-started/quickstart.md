@@ -75,7 +75,7 @@ Examples](/reference/provider-gateway-examples).
 ## 5. Connect Through MCP
 
 Use [MCP Client Setup](/getting-started/mcp-client) to choose hosted Streamable HTTP or the local
-stdio bridge. MCP exposes search, planning, explanation, schema, and execution tools over the same
+stdio bridge. MCP exposes catalog list and detail tools plus exact route execution over the same
 Registry authority as the HTTP gateway.
 
 ## 6. Or Use Accountless x402

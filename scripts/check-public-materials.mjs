@@ -278,6 +278,11 @@ function checkCurrentRuntimeContracts() {
       label: "retired MCP tool",
       pattern:
         /\bpubfi\.(?:capabilities\.search|route\.(?:plan|explain)|schema\.get)\b/
+    },
+    {
+      label: "retired MCP five-purpose tool list",
+      pattern:
+        /\bsearch, planning, explanation, schema, and execution tools\b/i
     }
   ];
   const retiredEnvelopePattern = /\bpubfi\.capability\.response\.v1\b/;
