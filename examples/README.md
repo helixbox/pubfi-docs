@@ -12,8 +12,9 @@ Current examples:
   inspection plus bounded official-client HTTP and MCP paid examples with signed offer, signed
   receipt, and replay verification.
 - [Accountless x402 on Base mainnet](agents/x402-base-mainnet/README.md): Production-only HTTP and
-  MCP examples pinned to the current route, canonical Base USDC, exact amount, and payee, with
-  signed offer, signed receipt, and replay verification. These commands spend real USDC.
+  MCP examples pinned to the 2026-07-27 accepted route, canonical Base USDC, exact amount, and
+  payee, with signed offer, signed receipt, and replay verification. Current catalog and challenge
+  checks are required before use. These commands spend real USDC when the route is available.
 
 Public examples must not include upstream provider keys, PubFi API keys, account identifiers,
 private wallet data, raw production payloads, or unredacted readbacks.

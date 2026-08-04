@@ -237,7 +237,10 @@ Lane admission can return more specific codes. For example:
   `x402.provider_timeout`, or `x402.unavailable`.
 
 A `402` response is not always an account-allocation failure. A `PAYMENT-REQUIRED` header identifies
-an unsigned x402 challenge. Inspect the header and error code before choosing the next action.
+an x402 challenge. A failed paid retry can also return a fresh standard challenge. Validate all of
+its terms before deciding whether to create a new authorization. MCP preserves the equivalent
+official `PaymentRequired` fields in the error result's `structuredContent` and adds an `error`
+message. Inspect the challenge and error before choosing the next action.
 
 ## Public-Safe Boundary
 

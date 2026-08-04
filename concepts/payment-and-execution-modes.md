@@ -60,8 +60,8 @@ PubFi enforces these x402 environment boundaries:
 | Staging | `https://api-stg.pubfi.ai` and `https://mcp-stg.pubfi.ai` | Base Sepolia `eip155:84532` |
 | Production | `https://api.pubfi.ai` and `https://mcp.pubfi.ai` | Base mainnet `eip155:8453`, only when x402 is enabled for the exact route |
 
-The pinned Production health example currently requires canonical Base USDC and 0.001 USDC per
-request. This example value is not permanent payment authority.
+The historical Production health acceptance on 2026-07-27 used canonical Base USDC and 0.001 USDC
+per request. Those values and that route are not current payment or availability authority.
 
 The environment boundary does not prove current route or offer availability. Use the selected
 environment's live Registry catalog as route authority. Use the route's live unsigned `402`

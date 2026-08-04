@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reclassified the pinned Production x402 example as historical acceptance evidence and documented
+  the fresh standard challenge returned after a rejected paid retry over HTTP or MCP.
 - Added source-backed PubFi MCP setup, credential handling, verification prompts, troubleshooting,
   and explicit compatibility boundaries for major desktop, IDE, CLI, local-model, and hosted web
   agent clients.

@@ -144,15 +144,17 @@ https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepol
 The example never accepts a wallet key as a tool argument. The caller must inject the key into the
 client process through a wallet or secret manager.
 
-A separate Production example pins `pubfi.route.execute` to the Production health route, Base
-mainnet, canonical Base USDC, 0.001 USDC, and the published Production payee. It verifies the
-signed offer and receipt and then checks exact MCP replay:
+A separate historical Production example pins `pubfi.route.execute` to the route, Base mainnet,
+canonical Base USDC, 0.001 USDC, and Production payee accepted on 2026-07-27. It verifies the
+signed offer and receipt and then checks exact MCP replay when the current catalog and challenge
+still advertise the exact operation:
 
 ```text
 https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet
 ```
 
-The Production example spends real USDC. It does not accept Staging origins or Base Sepolia.
+The Production example spends real USDC when the route is available. It does not accept Staging
+origins or Base Sepolia. Historical acceptance is not current route or payment authority.
 
 The wire shape is:
 

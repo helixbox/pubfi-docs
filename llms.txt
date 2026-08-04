@@ -74,9 +74,10 @@ record.
 Base Sepolia `eip155:84532` is the Staging x402 boundary. Staging HTTP and MCP acceptance completed
 on 2026-07-27 with Signed Offer and Signed Receipt verification and exact replay; see
 https://github.com/helixbox/pubfi-mono/actions/runs/30258511212 (source-repository access required).
-The pinned Production HTTP and MCP example uses Base mainnet `eip155:8453`, canonical Base USDC,
-1000 atomic units or 0.001 USDC per request, and the published Production payee. Production
-commands spend real USDC. Production acceptance completed on 2026-07-27; see
+The historical Production HTTP and MCP acceptance used Base mainnet `eip155:8453`, canonical Base
+USDC, 1000 atomic units or 0.001 USDC per request, and the published Production payee. Those values
+and that route are not current authority. Production commands spend real USDC when the current
+catalog and challenge permit them. Production acceptance completed on 2026-07-27; see
 https://github.com/helixbox/pubfi-mono/actions/runs/30259030111 (source-repository access required).
 HTTP and MCP share the same x402 `exact` settlement and replay path. Exact replay reuses the first
 settlement and receipt without a second charge. Quantro is the common accounting-fact authority,
