@@ -1,8 +1,10 @@
 # x402 Base mainnet Production HTTP And MCP
 
-This Production-only example can inspect PubFi's accountless x402 challenge or run one bounded paid
-request through the official HTTP or MCP client. It accepts only `https://api.pubfi.ai` and
-`https://mcp.pubfi.ai`. Paid commands spend real USDC on Base mainnet.
+This Production-only example records the route and payment policy accepted on 2026-07-27. It can
+inspect PubFi's accountless x402 challenge or run one bounded paid request through the official
+HTTP or MCP client only when the current public contract still advertises that exact operation.
+It accepts only `https://api.pubfi.ai` and `https://mcp.pubfi.ai`. Paid commands spend real USDC on
+Base mainnet.
 
 ## Inspect Without A Wallet
 
@@ -19,7 +21,8 @@ https://api.pubfi.ai/v1/gateway/quantro/health
 First inspect the live Production catalog. The catalog must list the exact route as ready. If that
 route has x402 enabled, an eligible unpaid request returns HTTP `402`, a `PAYMENT-REQUIRED` header,
 a JSON payment requirement, and `Cache-Control: private, no-store`. Treat that live challenge as
-the authority for all payment terms.
+the authority for all payment terms. If the route is absent or blocked, stop. The historical
+acceptance below does not authorize a payment.
 
 ## Install The Pinned Clients
 

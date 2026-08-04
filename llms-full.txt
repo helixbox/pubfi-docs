@@ -96,10 +96,11 @@ upstream API.
   Offers, Signed Receipts, and exact replay:
   https://github.com/helixbox/pubfi-mono/actions/runs/30258511212. The workflow link requires
   source-repository access.
-- A separate Production example pins HTTP and MCP to
+- A separate historical Production example pins HTTP and MCP to the 2026-07-27 acceptance route,
   `https://api.pubfi.ai/v1/gateway/quantro/health`, Base mainnet `eip155:8453`, canonical Base
   USDC, 1000 atomic units or 0.001 USDC per request, and the published payee. It verifies signed
-  offers, signed receipts, and exact replay:
+  offers, signed receipts, and exact replay when the current catalog and challenge permit the
+  operation. The pinned values are not current availability or payment authority:
   https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet.
 - The 2026-07-27 Production acceptance run completed both HTTP and MCP payments with verified
   signed receipts and exact replay:
@@ -172,6 +173,9 @@ upstream API.
   bytes.
 - HTTP and MCP share the same Registry route, x402 `exact` payment, Quantro settlement, receipt, and
   exact replay path.
+- A failed paid retry can return a fresh standard payment requirement. HTTP preserves
+  `PAYMENT-REQUIRED`; MCP preserves the official fields in `structuredContent` and adds an `error`
+  message. Validate the replacement requirement before signing again.
 - Mainstream clients connect to the same hosted three-tool surface. Client-specific setup for
   Codex, Claude, GitHub Copilot, VS Code, Cursor, Devin, Windsurf, Gemini CLI, Kiro, Continue,
   Amazon Q Developer, Cline, Roo Code, Zed, JetBrains, Raycast, LM Studio, OpenCode, Warp,

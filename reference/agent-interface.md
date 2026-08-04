@@ -49,7 +49,10 @@ fail closed with explicit reasons.
 MCP `pubfi.route.execute` supports the API-key/allocation lane and the mutually exclusive
 accountless x402 lane. The unsigned x402 call returns `PaymentRequired` in a normal MCP tool
 result; the paid retry uses `_meta["x402/payment"]`; the settled result uses
-`_meta["x402/payment-response"]`.
+`_meta["x402/payment-response"]`. If payment processing rejects a paid retry and supplies a new
+requirement, the error result preserves the official `PaymentRequired` fields in
+`structuredContent` and adds an `error` message. Validate it as a new challenge before signing
+again.
 
 Use [MCP Client Setup](/getting-started/mcp-client) for transport configuration. Use [Accountless
 x402](/getting-started/x402) for payment validation and replay policy.

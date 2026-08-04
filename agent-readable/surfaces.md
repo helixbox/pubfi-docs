@@ -57,14 +57,18 @@ payment authorization.
 
 - Staging uses Base Sepolia `eip155:84532`. Production uses Base mainnet `eip155:8453` only for an
   exact enabled route. Use separate dedicated wallets and private keys.
-- The pinned Production health example currently requires canonical Base USDC and 0.001 USDC per
-  request. The live unsigned challenge remains the payment-term authority.
+- The historical Production health acceptance on 2026-07-27 used canonical Base USDC and 0.001
+  USDC per request. The current catalog and live unsigned challenge remain the route and
+  payment-term authorities.
 - Accountless x402 creates no PubFi account, API key, invoice, or Credits. Wallet USDC is the
   payment balance. An agent can pay directly through the official MCP metadata flow.
 - HTTP and MCP share one x402 `exact` payment, settlement, Signed Receipt, and replay path. The
   challenge contains the Signed Offer. Settled HTTP responses carry `PAYMENT-RESPONSE`; settled MCP
   results carry the decoded response and Signed Receipt at
   `result._meta["x402/payment-response"]`.
+- A failed paid retry can return a fresh standard payment requirement. HTTP keeps the
+  `PAYMENT-REQUIRED` header. MCP keeps the official fields in `structuredContent` and adds an
+  `error` message. Validate every new term before signing again.
 - A Signed Receipt is verifiable payment and execution evidence, not an account balance, Credits,
   top-up, or deposit record. Exact replay reuses the settlement and receipt without another charge.
 - Quantro is the common accounting-fact authority. A request selects either the API-key and Credits

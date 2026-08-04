@@ -60,9 +60,9 @@ when x402 is enabled for the exact route. This policy does not prove that a Prod
 or offer is currently available. Inspect the Production catalog and the exact route's unsigned
 `402` challenge before you sign.
 
-The pinned Production health example currently requires canonical Base USDC and 0.001 USDC per
-request. Refresh the unsigned challenge before every new payment because it is the payment-term
-authority.
+The historical Production health acceptance on 2026-07-27 used canonical Base USDC and 0.001 USDC
+per request. That route and price are not current authority. Refresh the catalog and require a new
+unsigned challenge before every new payment.
 
 ## Are the free starter requests Credits?
 
