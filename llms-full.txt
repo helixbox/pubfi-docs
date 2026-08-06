@@ -65,6 +65,12 @@ upstream API.
   gateway operations. Separate static provider schemas are not execution authority.
 - Registry execution matches an exact path and method. A successful operation returns the validated
   provider JSON and PubFi request and Registry-generation headers.
+- An optional capability-level `free_rate_limit` and Runtime OpenAPI `x-pubfi-free-variant`
+  advertise an authenticated `:free` final-segment variant for an eligible credential-free `GET`
+  route with no request body. It uses the same PubFi API key and account identity, charges zero
+  Credits, and rejects anonymous or x402 admission. HTTP rate-limit rejection returns `429` with
+  `gateway.free_rate_limited` and `Retry-After`; successful MCP execution reports
+  `execution_status: registry_free_route_executed` and `credits_charged: 0`.
 - Registry readiness is `ready` or `blocked`. Editorial terms such as `requestable` and
   `contract_ready` do not make an operation executable.
 - Registered API-key execution consumes the account's applicable meter allocation.

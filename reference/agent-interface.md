@@ -22,7 +22,7 @@ https://api.pubfi.ai/openapi.json
 | --- | --- | --- |
 | `pubfi.capabilities.list` | Enumerate deterministic compact pages from the installed Registry v2 catalog. PubFi does not rank, infer intent, or select a capability. | optional `limit`, opaque `cursor`, exact `provider_key`, exact `method` |
 | `pubfi.capabilities.get` | Return the full typed request, response, method-specific billing, and readiness contract for one exact capability. | required `capability_id` from `pubfi.capabilities.list` |
-| `pubfi.route.execute` | Execute one exact Registry path through the same data plane as the HTTP gateway. Use either a PubFi API key, which may consume allocation, or accountless x402 on an eligible route. | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id`; optional MCP `_meta["x402/payment"]` on a paid retry |
+| `pubfi.route.execute` | Execute one exact Registry path through the same data plane as the HTTP gateway. Use a PubFi API key for priced execution or an advertised account-level `:free` variant, or use accountless x402 on an eligible route. | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id`; optional MCP `_meta["x402/payment"]` on a paid retry |
 
 Durable provider-specific public tools are rejected. Provider identity belongs in route-result data,
 not tool names.
@@ -51,6 +51,14 @@ Catalog and detail schema v5 expose billing under the selected method's `operati
 `quantro_priced` carries a positive `credit_cost` and independent x402 terms under one immutable
 price version. `free_health` is public and has no Credit or x402 charge. `pricing_unavailable`
 cannot enter a paid execution lane.
+
+An optional capability-level `free_rate_limit` advertises that the exact credential-free `GET`
+operation has an API-key-authenticated free variant. Its fields are `requests_per_window`,
+`window_seconds`, `max_concurrency`, and `permit_ttl_seconds`. Append `:free` to the final segment
+of `raw_path` only when that field is present. The same variant appears in Runtime OpenAPI as
+`x-pubfi-free-variant`. A successful MCP result has
+`execution_status: registry_free_route_executed` and `credits_charged: 0`; it does not reserve or
+emit Credit usage. Anonymous and x402 admissions cannot use this suffix.
 
 MCP `pubfi.route.execute` supports the API-key/allocation lane and the mutually exclusive
 accountless x402 lane. The unsigned x402 call returns `PaymentRequired` in a normal MCP tool

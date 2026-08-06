@@ -75,6 +75,14 @@ lanes. It uses the advertised path directly; there is no `:free` suffix. A `quan
 operation uses the method-specific positive `credit_cost` for API-key execution and the independent
 x402 terms from the same immutable price version.
 
+An eligible credential-free `GET` operation with no request body can also advertise an
+account-level free variant. The capability catalog exposes its effective `free_rate_limit`, and
+Runtime OpenAPI exposes `x-pubfi-free-variant` with the `:free` suffix and the same rate-limit
+policy. Append `:free` to the final path segment and send the normal
+`Authorization: Bearer <PubFi API key>` header. This variant charges zero Credits and does not use
+x402. A limit rejection returns `429`, error code `gateway.free_rate_limited`, and `Retry-After`.
+Do not append the suffix unless the current catalog or OpenAPI operation advertises it.
+
 ### Account And Purchase Routes
 
 | Method | Path | Access |
@@ -112,6 +120,11 @@ The handshake, ping, `tools/list`, resource listing, and prompt listing methods 
 `pubfi.route.execute` accepts either a PubFi API key with `invoke_provider` or the mutually
 exclusive official x402 metadata flow for an eligible route. Other tools keep their published
 public or authenticated contract.
+
+For an advertised free variant, `pubfi.route.execute` uses the same API-key admission and the same
+exact path with `:free` appended to its final segment. A successful result reports
+`execution_status: registry_free_route_executed` and `credits_charged: 0`. Anonymous and x402 MCP
+calls cannot use the suffix.
 
 ## Web Host
 

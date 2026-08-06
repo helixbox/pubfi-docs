@@ -27,6 +27,22 @@ Each `operations[]` entry pairs one HTTP method with one billing state:
 Do not read `credit_cost` from the capability root. For a priced operation, read it from the
 `operations[]` entry that matches the selected method. A new price uses a new `price_version`.
 
+## Free Variants
+
+A capability can also expose an optional top-level `free_rate_limit` with these effective
+account-level limits:
+
+- `requests_per_window` and `window_seconds` define one fixed request window;
+- `max_concurrency` bounds simultaneous upstream attempts; and
+- `permit_ttl_seconds` recovers an in-flight permit after an interrupted request.
+
+When this object is present, the exact credential-free `GET` route with no request body has a
+`:free` variant appended to its final path segment. It uses the
+same PubFi API key and billing-account identity but charges no Credits. The default policy is 60
+admitted requests per 60 seconds, 4 concurrent attempts, and a 120-second permit TTL. A
+route-specific policy can replace the API default; the two limits are not cumulative. This is
+separate from `free_health`, which uses its advertised exact path without a suffix or API key.
+
 ## Current Readiness
 
 Registry v2 exposes two execution readiness states:
@@ -44,6 +60,9 @@ context. They do not make a Registry operation executable.
 `https://api.pubfi.ai/openapi.json` is generated from the installed Registry snapshot. It includes
 only current ready gateway routes. PubFi does not publish separate static provider OpenAPI files as
 execution authority.
+
+An operation with an effective free policy includes `x-pubfi-free-variant`. That extension carries
+`suffix: ":free"` and the effective `rate_limit` object.
 
 ## Execution Response
 
