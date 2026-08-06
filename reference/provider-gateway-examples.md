@@ -39,6 +39,10 @@ curl --silent --show-error \
 Do not infer execution from a Discovery listing, an old example, or a saved route from a different
 Registry generation.
 
+For a free-capable route, the capability summary includes `free_rate_limit`. Runtime OpenAPI adds
+`x-pubfi-free-variant` to the same operation. These fields authorize the `:free` suffix; do not
+infer it from a provider name or billing mode.
+
 ### Filter Subscan Or DeGov
 
 Use the exact public provider key to limit discovery. For example, select `subscan` or `degov`:
@@ -134,7 +138,27 @@ curl --include \
 
 Do not copy a request body from another operation.
 
-## 4. Use The Accountless x402 Lane When Eligible
+## 4. Execute An Advertised Free Variant
+
+Only use this lane when the current capability has `free_rate_limit` or the matching Runtime
+OpenAPI operation has `x-pubfi-free-variant`. The underlying operation must be a credential-free
+`GET` with no request body. Append `:free` to its final path segment and use the same PubFi API key:
+
+```sh
+export PUBFI_GATEWAY_METHOD='GET'
+export PUBFI_FREE_PATH='<exact advertised path with :free appended to its final segment>'
+
+curl --include \
+  --request "$PUBFI_GATEWAY_METHOD" \
+  "https://api.pubfi.ai${PUBFI_FREE_PATH}" \
+  --header 'Authorization: Bearer <PubFi API key>'
+```
+
+The free variant is account-level rate-limited and charges zero Credits. It does not reserve,
+finalize, replay, or emit Quantro request usage. A limit rejection returns HTTP `429` with
+`gateway.free_rate_limited` and `Retry-After`. Do not send `PAYMENT-SIGNATURE` for this variant.
+
+## 5. Use The Accountless x402 Lane When Eligible
 
 An exact gateway route can separately enable accountless x402. The public Base Sepolia example is
 Staging-only. Inspect the Staging catalog and Runtime OpenAPI, then select an exact ready path and
@@ -231,6 +255,7 @@ The error body uses the standard PubFi error object:
 
 Lane admission can return more specific codes. For example:
 
+- An advertised free variant can return `gateway.free_rate_limited` with `Retry-After`.
 - API-key admission can return `gateway.insufficient_meter_escrow`,
   `gateway.billing_account_inactive`, `gateway.billing_admission_unknown`, or
   `gateway.billing_admission_stale`.

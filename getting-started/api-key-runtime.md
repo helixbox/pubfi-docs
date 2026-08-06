@@ -48,6 +48,8 @@ model at a high level:
 - `read_usage` can read usage and authoritative billing data for the same billing account.
 - A fresh active admission snapshot and sufficient allocation for the operation's current positive
   `credit_cost` are required before priced provider execution.
+- An advertised `:free` variant keeps the same API key and billing-account binding, but uses an
+  account-level rate limiter and charges zero Credits.
 - The free starter allocation provides 1,000 requests and is not Credits.
 - PubFi displays eligible purchase-origin `request_count` units as Credits. Credits are service
   units, not money or a PubFi-owned financial ledger.
@@ -76,6 +78,19 @@ A route can execute only when these gates pass:
 - server-side upstream credential configuration;
 - source freshness evidence;
 - request input validation.
+
+## Free Route Variant
+
+The current capability catalog can advertise `free_rate_limit` for an eligible credential-free
+`GET` route with no request body. Runtime OpenAPI represents the same contract as
+`x-pubfi-free-variant`. Only then, append `:free` to the final path segment and send the normal
+Bearer API key.
+
+The effective policy contains a fixed request window, a concurrency limit, and a permit TTL. A
+free request skips Credit admission, reservation, usage emission, and replay. If the account limit
+is reached, HTTP returns `429`, `gateway.free_rate_limited`, and `Retry-After`. This lane is not
+anonymous and is not x402. It is also distinct from an exact `free_health` operation, which uses
+its advertised path without the suffix or authentication.
 
 ## Security Boundary
 

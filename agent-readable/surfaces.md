@@ -81,7 +81,9 @@ Use the surfaces in this order for runtime work:
 1. Use `/v1/capabilities` to inspect the complete installed Registry generation.
 2. Match the selected method to schema v5 `operations[].billing`, then use Runtime OpenAPI to
    inspect schemas for current `ready` HTTP operations. A `quantro_priced` operation supplies its
-   positive API-key `credit_cost` and independent x402 terms; exact `free_health` is public.
+   positive API-key `credit_cost` and independent x402 terms; exact `free_health` is public. An
+   optional capability-level `free_rate_limit` and OpenAPI `x-pubfi-free-variant` advertise the
+   same API-key-authenticated, zero-Credit `:free` variant.
 3. Use MCP `tools/list` for current MCP schemas. Use `pubfi.capabilities.list` and
    `pubfi.capabilities.get` for the current Registry generation and exact capability detail.
 4. Use Discovery only for source-selection and public evidence context.
@@ -94,9 +96,12 @@ convention.
 
 - HTTP gateway execution accepts only exact current `GET` or `POST` Registry operations.
 - API-key execution requires `invoke_provider`, active admission, and sufficient allocation.
+- An advertised credential-free `GET` can append `:free` to its final path segment. It keeps the
+  API key and account identity, uses the published account-level limiter, and charges zero Credits.
 - An exact eligible HTTP or MCP operation can use accountless x402 V2 instead of a PubFi API key.
-- MCP `pubfi.route.execute` accepts API-key admission or the mutually exclusive official x402
-  metadata flow.
+- MCP `pubfi.route.execute` accepts API-key admission, including the advertised `:free` suffix, or
+  the mutually exclusive official x402 metadata flow. Anonymous and x402 calls cannot use the
+  suffix.
 - A successful HTTP gateway response is canonical provider JSON. API-key responses identify the
   Registry generation. Settled x402 HTTP responses include `PAYMENT-RESPONSE`; settled MCP results
   include `x402/payment-response` metadata. Neither lane uses a PubFi success envelope.

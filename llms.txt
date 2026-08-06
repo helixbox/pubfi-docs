@@ -64,7 +64,9 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 
 Discovery inclusion does not imply Registry readiness. The current Registry catalog and Runtime
 OpenAPI define executable paths and methods. API-key execution, registered purchases and Credits,
-and accountless x402 are separate modes. MCP `pubfi.route.execute` supports API-key admission or
+and accountless x402 are separate modes. An optional catalog `free_rate_limit` and OpenAPI
+`x-pubfi-free-variant` advertise an API-key-authenticated `:free` route variant that charges zero
+Credits. MCP `pubfi.route.execute` supports API-key admission, including that advertised suffix, or
 the mutually exclusive official x402 metadata flow, so an agent can pay directly through MCP.
 Accountless x402 creates no PubFi account, API key, Credits, or invoice. The environment-specific
 wallet's USDC is the payment balance; keep separate wallets and private keys for Staging and
