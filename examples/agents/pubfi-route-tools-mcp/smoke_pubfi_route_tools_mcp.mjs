@@ -78,7 +78,7 @@ try {
   assert.deepEqual(listed.tools[2].inputSchema.required, ["raw_path", "method"]);
   assert.equal(
     listed.tools[0].outputSchema.properties.schema_version.const,
-    "pubfi.gateway.registry.capability-page.v4"
+    "pubfi.gateway.registry.capability-page.v5"
   );
   assert.equal(
     listed.tools[2].inputSchema["x-pubfi-registry-routes"],
@@ -90,7 +90,7 @@ try {
   const capabilities = [];
   const seenCursors = new Set();
   const catalogPageLimit = 1_000;
-  const maximumRegistryGenerationRoutes = 32_768;
+  const maximumRegistryGenerationRoutes = 100_000;
   const maximumCatalogPages = Math.ceil(
     maximumRegistryGenerationRoutes / catalogPageLimit
   );
@@ -106,7 +106,7 @@ try {
 
     assert.equal(
       page.schema_version,
-      "pubfi.gateway.registry.capability-page.v4"
+      "pubfi.gateway.registry.capability-page.v5"
     );
     assert.ok(Array.isArray(page.capabilities));
     if (!catalogGeneration) {
@@ -132,34 +132,42 @@ try {
   assert.equal(cursor, undefined, "catalog pagination exceeded its bound");
   assert.equal(capabilities.length, totalCapabilityCount);
   assert.ok(capabilities.length > 0, "current Registry has no smoke capability");
-  assert.ok(
-    capabilities.every((capability) =>
-      capability.credit_cost === 1 &&
-      capability.meter_key === undefined &&
-      capability.maximum_raw_units === undefined &&
-      capability.charged_raw_units_after_admitted_attempt === undefined
-    ),
-    "public capability catalog did not use the exact one-Credit contract"
-  );
+  capabilities.forEach(requireOperationBilling);
 
-  const selected =
-    capabilities.find((capability) => capability.readiness?.status === "ready") ??
-    capabilities[0];
+  const selectedPair = capabilities.flatMap((capability) =>
+    capability.operations
+      .filter(
+        (operation) =>
+          capability.readiness?.status === "ready" &&
+          operation.billing?.mode === "quantro_priced" &&
+          (!configuredRawPath ||
+            (operation.method === configuredMethod &&
+              matcherMatchesRawPath(capability.matcher, configuredRawPath)))
+      )
+      .map((operation) => ({ capability, operation }))
+  )[0];
+  assert.ok(
+    selectedPair,
+    "current Registry has no matching ready Quantro-priced non-health smoke operation"
+  );
+  const selected = selectedPair.capability;
   const detail = await callTool("pubfi.capabilities.get", {
     capability_id: selected.capability_id
   });
 
   assert.equal(
     detail.schema_version,
-    "pubfi.gateway.registry.capability-detail.v4"
+    "pubfi.gateway.registry.capability-detail.v5"
   );
   assert.equal(detail.capability.capability_id, selected.capability_id);
   assert.deepEqual(detail.generation, catalogGeneration);
   assert.ok(detail.capability.request);
   assert.ok(detail.capability.response);
+  requireOperationBilling(detail.capability);
 
   const rawPath = configuredRawPath || materializeRawPath(selected.matcher);
-  const method = configuredRawPath ? configuredMethod : selected.methods[0];
+  const method = selectedPair.operation.method;
+  const expectedCreditCost = selectedPair.operation.billing.credit_cost;
   assert.ok(
     ["GET", "POST"].includes(method),
     "selected Registry capability method is unsupported"
@@ -189,12 +197,6 @@ try {
     if (!hasApiKey) {
       throw new Error(`PUBFI_MCP_EXECUTE_LIVE=1 requires ${apiKeyEnvName}.`);
     }
-    if (!configuredRawPath) {
-      throw new Error(
-        "Set PUBFI_MCP_SMOKE_RAW_PATH from the current Registry catalog before live execution."
-      );
-    }
-
     const execute = await callTool("pubfi.route.execute", {
       raw_path: rawPath,
       method,
@@ -205,7 +207,7 @@ try {
 
     assert.equal(execute.ok, true);
     assert.equal(execute.execution_authority, "typed_gateway_registry_v2");
-    assert.equal(execute.credits_charged, 1);
+    assert.equal(execute.credits_charged, expectedCreditCost);
     assert.equal(execute.metering, undefined);
     checks.push("route_execute_live_registry_v2");
   }
@@ -237,6 +239,52 @@ function materializeRawPath(matcher) {
     return matcher.namespace;
   }
   throw new Error("current Registry route has an unsupported matcher shape");
+}
+
+function matcherMatchesRawPath(matcher, rawPath) {
+  if (matcher?.kind === "exact") {
+    return matcher.path === rawPath;
+  }
+  if (matcher?.kind === "namespace_contract") {
+    const namespace = matcher.namespace?.replace(/\/$/, "");
+    return typeof namespace === "string" &&
+      (rawPath === namespace || rawPath.startsWith(`${namespace}/`));
+  }
+  if (matcher?.kind !== "template" || !Array.isArray(matcher.template)) {
+    return false;
+  }
+
+  const rawSegments = rawPath.split("/").filter(Boolean);
+  return rawSegments.length === matcher.template.length &&
+    matcher.template.every((segment, index) =>
+      segment.kind === "literal"
+        ? segment.value === rawSegments[index]
+        : segment.kind === "parameter" && rawSegments[index]?.length > 0
+    );
+}
+
+function requireOperationBilling(capability) {
+  for (const retired of [
+    "credit_cost",
+    "meter_key",
+    "maximum_raw_units",
+    "charged_raw_units_after_admitted_attempt"
+  ]) {
+    assert.equal(capability[retired], undefined, `capability exposes retired ${retired}`);
+  }
+  assert.equal(capability.operations.length, capability.methods.length);
+  capability.operations.forEach((operation, index) => {
+    assert.equal(operation.method, capability.methods[index]);
+    const billing = operation.billing;
+    if (billing.mode === "free_health" || billing.mode === "pricing_unavailable") {
+      assert.deepEqual(Object.keys(billing), ["mode"]);
+      return;
+    }
+    assert.equal(billing.mode, "quantro_priced");
+    assert.ok(Number.isSafeInteger(billing.credit_cost) && billing.credit_cost > 0);
+    assert.ok(Number.isSafeInteger(billing.price_version) && billing.price_version > 0);
+    assert.match(billing.x402.atomic_amount, /^[1-9][0-9]*$/);
+  });
 }
 
 async function callTool(name, args) {

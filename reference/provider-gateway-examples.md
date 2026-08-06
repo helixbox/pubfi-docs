@@ -16,13 +16,13 @@ curl --silent --show-error \
   'https://api.pubfi.ai/v1/capabilities'
 ```
 
-The paginated response uses `pubfi.gateway.registry.capability-page.v4`. Each compact capability
+The paginated response uses `pubfi.gateway.registry.capability-page.v5`. Each compact capability
 summary includes:
 
 - the exact generation, manifest, and compile time;
 - each capability ID, public provider key, matcher, and allowed method;
 - whether PubFi needs a configured upstream credential;
-- the current Credit cost; and
+- one billing state for each allowed method; and
 - current `ready` or `blocked` readiness.
 
 Read each opaque `next_cursor` page to enumerate the complete installed generation. Keep the
@@ -59,14 +59,17 @@ jq '{
     methods,
     readiness: .readiness.status,
     credential_required,
-    credit_cost
+    operations
   }]
 }'
 ```
 
 If `next_cursor` is present, request the next page with the same `provider_key` and `limit`, plus
 `cursor=<next_cursor>`. Continue until `next_cursor` is absent. Then select one `ready` operation
-and confirm the same path and method in the [Runtime OpenAPI](https://api.pubfi.ai/openapi.json).
+whose matching method has `billing.mode` set to `quantro_priced`, and read its positive
+`billing.credit_cost`. A `free_health` operation uses its exact path without authentication,
+Credits, or x402. A `pricing_unavailable` operation is not a paid execution target. Confirm the
+same path and method in the [Runtime OpenAPI](https://api.pubfi.ai/openapi.json).
 
 Use the live filtered catalogs for current operations:
 
@@ -97,11 +100,10 @@ export PUBFI_GATEWAY_METHOD='<GET or POST from the same Runtime OpenAPI operatio
 
 ## 3. Execute With A PubFi API Key
 
-Send one supported API-key header:
+Send the supported API-key header:
 
 ```text
 Authorization: Bearer <PubFi API key>
-X-PubFi-Api-Key: <PubFi API key>
 ```
 
 Example:
@@ -114,7 +116,7 @@ curl --include \
 ```
 
 The key must have `invoke_provider`. The billing account must also have active admission and enough
-allocation for the operation meter.
+allocation for the method-specific `credit_cost`. `X-PubFi-Api-Key` is not accepted.
 
 For a `POST` operation, use only the JSON fields that the current OpenAPI request body permits:
 

@@ -72,7 +72,6 @@ one eligible response and does not create or consume Credits.
 | `apps/pubfi-registry-credential-evaluator/` | Credential-readiness evaluation for Registry plans. |
 | `apps/pubfi-registry-health-evaluator/` | Route-health evaluation for Registry plans. |
 | `apps/pubfi-registry-reconciler/` | Registry desired-state reconciliation. |
-| `apps/pubfi-cli/` | Local operator CLI for supported catalog and operational workflows. |
 | `apps/web/` | Next.js public site, Discovery, dashboard presentation, text exports, and discovery manifests. |
 | `apps/web/src/data/discovery-static/` | Checked-in public-safe Discovery data. |
 | `packages/rust/account-service/` | API-key auth, scopes, admission, meter allocation, usage facts, and account contracts. |

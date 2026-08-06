@@ -839,7 +839,7 @@ another current ready capability and supply its exact required input, or stop.
 - Confirm that the client process can read the selected environment variable.
 - Confirm that the header begins with `Bearer ` and contains the matching environment key.
 - Do not send a Staging key to Production or a Production key to Staging.
-- Do not configure both `Authorization` and `X-PubFi-Api-Key`.
+- Configure `Authorization: Bearer <PubFi API key>`. `X-PubFi-Api-Key` is not accepted.
 - Rotate the key if it appeared in a prompt, log, shared file, or settings sync.
 
 ### The Agent Looks For `subscan.*` Or `degov.*`

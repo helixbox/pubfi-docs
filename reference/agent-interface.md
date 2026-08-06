@@ -21,7 +21,7 @@ https://api.pubfi.ai/openapi.json
 | Tool | Purpose | Public input fields |
 | --- | --- | --- |
 | `pubfi.capabilities.list` | Enumerate deterministic compact pages from the installed Registry v2 catalog. PubFi does not rank, infer intent, or select a capability. | optional `limit`, opaque `cursor`, exact `provider_key`, exact `method` |
-| `pubfi.capabilities.get` | Return the full typed request, response, metering, and readiness contract for one exact capability. | required `capability_id` from `pubfi.capabilities.list` |
+| `pubfi.capabilities.get` | Return the full typed request, response, method-specific billing, and readiness contract for one exact capability. | required `capability_id` from `pubfi.capabilities.list` |
 | `pubfi.route.execute` | Execute one exact Registry path through the same data plane as the HTTP gateway. Use either a PubFi API key, which may consume allocation, or accountless x402 on an eligible route. | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id`; optional MCP `_meta["x402/payment"]` on a paid retry |
 
 Durable provider-specific public tools are rejected. Provider identity belongs in route-result data,
@@ -35,8 +35,9 @@ Use `tools/list` for the current MCP input and output schemas.
 
 ```text
 Authorization: Bearer <PubFi API key>
-X-PubFi-Api-Key: <PubFi API key>
 ```
+
+`X-PubFi-Api-Key` is not accepted.
 
 Upstream provider keys remain server-side.
 
@@ -45,6 +46,11 @@ Upstream provider keys remain server-side.
 `pubfi.route.execute` executes only an exact ready path and method from the installed Registry
 generation. Unsupported paths, methods, non-ready operations, and invalid exact query or body bytes
 fail closed with explicit reasons.
+
+Catalog and detail schema v5 expose billing under the selected method's `operations[]` entry.
+`quantro_priced` carries a positive `credit_cost` and independent x402 terms under one immutable
+price version. `free_health` is public and has no Credit or x402 charge. `pricing_unavailable`
+cannot enter a paid execution lane.
 
 MCP `pubfi.route.execute` supports the API-key/allocation lane and the mutually exclusive
 accountless x402 lane. The unsigned x402 call returns `PaymentRequired` in a normal MCP tool

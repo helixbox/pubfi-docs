@@ -85,25 +85,22 @@ contains only current `ready` operations. Refresh both surfaces when the generat
 
 ## Make An API-Key Call
 
-At the 2026-07-27 source snapshot, the staging catalog included this ready test route:
-
-```text
-GET /v1/gateway/quantro/health
-```
-
-Confirm that the current catalog still contains the exact path and method before you call it. Then
-send the staging key:
+Select a current `ready` operation whose matching `operations[].billing.mode` is
+`quantro_priced`. Set its exact path and method, then send the staging key:
 
 ```sh
+export PUBFI_GATEWAY_PATH='<exact ready Quantro-priced path>'
+export PUBFI_GATEWAY_METHOD='<GET or POST>'
+
 curl --fail --silent --show-error \
-  --request GET \
+  --request "${PUBFI_GATEWAY_METHOD}" \
   --header "Authorization: Bearer ${STG_PUBFI_API_KEY}" \
-  "${PUBFI_API_BASE}/v1/gateway/quantro/health"
+  "${PUBFI_API_BASE}${PUBFI_GATEWAY_PATH}"
 ```
 
-You can use `X-PubFi-Api-Key` instead of `Authorization`. Do not send both auth headers. For a
-different route, copy the exact matcher and method from the current catalog. Follow its query,
-body, and response policy.
+`X-PubFi-Api-Key` is not accepted. For a different route, copy the exact matcher and method from
+the current catalog. Follow its query, body, response, and method-specific billing policy. Exact
+`free_health` operations are public and use their advertised path without a `:free` suffix.
 
 ## Connect An MCP Client
 
@@ -158,14 +155,16 @@ path and method.
 Staging is the PubFi Base Sepolia test boundary for accountless x402. The CAIP-2 network id is
 `eip155:84532`.
 
-To inspect a challenge, first confirm that the current catalog marks the route as ready. Then call
-the route without a PubFi API key:
+To inspect a challenge, select a current `ready` method whose catalog billing mode is
+`quantro_priced`. Then call its exact route without a PubFi API key:
 
 ```sh
+export PUBFI_X402_PATH='<exact ready Quantro-priced path>'
+
 curl --silent --show-error \
-  --request GET \
+  --request '<GET or POST>' \
   --dump-header - \
-  "${PUBFI_API_BASE}/v1/gateway/quantro/health"
+  "${PUBFI_API_BASE}${PUBFI_X402_PATH}"
 ```
 
 Treat only a current unsigned `402` response as x402 availability evidence for the exact route and

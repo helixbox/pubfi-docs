@@ -35,7 +35,7 @@ The corresponding Staging API root is `https://api-stg.pubfi.ai`. Fetch that env
 | `GET` | `/metrics` | Operational metrics. This route is not product or route-availability evidence. |
 | `GET` | `/openapi.json` | Runtime OpenAPI generated from the installed Registry v2 snapshot. |
 | `GET` | `/reference` | Interactive API reference for `/openapi.json`. |
-| `GET` | `/v1/capabilities` | Public paginated `pubfi.gateway.registry.capability-page.v4` catalog. |
+| `GET` | `/v1/capabilities` | Public paginated `pubfi.gateway.registry.capability-page.v5` catalog. |
 | `GET` | `/.well-known/mcp.json` | API-host MCP discovery manifest. |
 | `GET` | `/.well-known/glama.json` | Public MCP connector ownership declaration. |
 | `POST` | `/` | MCP JSON-RPC endpoint. |
@@ -69,6 +69,11 @@ The gateway has two separate caller lanes:
 | Accountless x402 | No PubFi API key; the exact route must be x402-eligible and the request must satisfy the current V2 payment challenge. |
 
 Do not send a PubFi API key and `PAYMENT-SIGNATURE` in the same request.
+
+An exact operation whose catalog billing mode is `free_health` is public and bypasses both caller
+lanes. It uses the advertised path directly; there is no `:free` suffix. A `quantro_priced`
+operation uses the method-specific positive `credit_cost` for API-key execution and the independent
+x402 terms from the same immutable price version.
 
 ### Account And Purchase Routes
 

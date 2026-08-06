@@ -79,7 +79,9 @@ payment authorization.
 Use the surfaces in this order for runtime work:
 
 1. Use `/v1/capabilities` to inspect the complete installed Registry generation.
-2. Use Runtime OpenAPI to inspect schemas for current `ready` HTTP operations.
+2. Match the selected method to schema v5 `operations[].billing`, then use Runtime OpenAPI to
+   inspect schemas for current `ready` HTTP operations. A `quantro_priced` operation supplies its
+   positive API-key `credit_cost` and independent x402 terms; exact `free_health` is public.
 3. Use MCP `tools/list` for current MCP schemas. Use `pubfi.capabilities.list` and
    `pubfi.capabilities.get` for the current Registry generation and exact capability detail.
 4. Use Discovery only for source-selection and public evidence context.

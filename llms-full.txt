@@ -58,8 +58,9 @@ upstream API.
 - Discovery is the editorial public source-selection layer. Discovery inclusion does not establish
   execution.
 - `GET https://api.pubfi.ai/v1/capabilities` returns the current paginated
-  `pubfi.gateway.registry.capability-page.v4` catalog. Follow each opaque `next_cursor` for the
-  complete installed generation.
+  `pubfi.gateway.registry.capability-page.v5` catalog. Follow each opaque `next_cursor` for the
+  complete installed generation. Match the selected method to `operations[].billing`; billing is
+  `free_health`, `pricing_unavailable`, or `quantro_priced`.
 - Runtime OpenAPI is generated from the installed Registry snapshot. It includes the current ready
   gateway operations. Separate static provider schemas are not execution authority.
 - Registry execution matches an exact path and method. A successful operation returns the validated
@@ -96,11 +97,12 @@ upstream API.
   Offers, Signed Receipts, and exact replay:
   https://github.com/helixbox/pubfi-mono/actions/runs/30258511212. The workflow link requires
   source-repository access.
-- A separate historical Production example pins HTTP and MCP to the 2026-07-27 acceptance route,
+- A separate historical Production archive records HTTP and MCP for the 2026-07-27 acceptance route,
   `https://api.pubfi.ai/v1/gateway/quantro/health`, Base mainnet `eip155:8453`, canonical Base
   USDC, 1000 atomic units or 0.001 USDC per request, and the published payee. It verifies signed
-  offers, signed receipts, and exact replay when the current catalog and challenge permit the
-  operation. The pinned values are not current availability or payment authority:
+  offers, signed receipts, and exact replay. Schema v5 classifies exact health operations as
+  `free_health`, so the archived paid commands must not be run. The pinned values are not current
+  availability or payment authority:
   https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet.
 - The 2026-07-27 Production acceptance run completed both HTTP and MCP payments with verified
   signed receipts and exact replay:
