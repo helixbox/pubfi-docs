@@ -10,14 +10,16 @@ request through the official HTTP or MCP client. It accepts only `https://api-st
 sh examples/agents/x402-base-sepolia/show_challenge.sh
 ```
 
-The default resource is:
+First inspect the complete Staging catalog and select a current `ready` method whose billing mode
+is `quantro_priced`. Supply its exact resource explicitly:
 
-```text
-https://api-stg.pubfi.ai/v1/gateway/quantro/health
+```sh
+export PUBFI_X402_RESOURCE_URL='https://api-stg.pubfi.ai<exact ready Quantro-priced path>'
+sh examples/agents/x402-base-sepolia/show_challenge.sh
 ```
 
-First inspect the live Staging catalog. The catalog must list the exact route as ready. If that
-route has x402 enabled, an eligible unpaid request returns HTTP `402`, a `PAYMENT-REQUIRED` header,
+Exact health operations are `free_health` and are not payment targets. If the selected priced
+route is x402 enabled, an eligible unpaid request returns HTTP `402`, a `PAYMENT-REQUIRED` header,
 a JSON payment requirement, and `Cache-Control: private, no-store`. Treat that live challenge as
 the authority for all payment terms.
 
@@ -39,7 +41,7 @@ Read the unsigned challenge first. Independently approve its current `payTo` add
 Set these nonsecret values:
 
 ```sh
-export X402_RESOURCE_URL='https://api-stg.pubfi.ai/v1/gateway/quantro/health'
+export X402_RESOURCE_URL='https://api-stg.pubfi.ai<exact ready Quantro-priced path>'
 export X402_EXPECTED_PAY_TO='<approved payTo address>'
 ```
 

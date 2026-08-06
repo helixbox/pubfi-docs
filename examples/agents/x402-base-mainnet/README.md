@@ -1,10 +1,10 @@
 # x402 Base mainnet Production HTTP And MCP
 
-This Production-only example records the route and payment policy accepted on 2026-07-27. It can
-inspect PubFi's accountless x402 challenge or run one bounded paid request through the official
-HTTP or MCP client only when the current public contract still advertises that exact operation.
-It accepts only `https://api.pubfi.ai` and `https://mcp.pubfi.ai`. Paid commands spend real USDC on
-Base mainnet.
+This archive records the Production route and payment policy accepted on 2026-07-27. The current
+schema v5 contract classifies exact health operations as `free_health`, so this pinned health route
+is not a current x402 payment target. Do not run the archived paid commands. Select a current ready
+non-health `quantro_priced` operation and approve a new bounded Base mainnet policy before making a
+Production payment.
 
 ## Inspect Without A Wallet
 
@@ -18,11 +18,9 @@ The default resource is:
 https://api.pubfi.ai/v1/gateway/quantro/health
 ```
 
-First inspect the live Production catalog. The catalog must list the exact route as ready. If that
-route has x402 enabled, an eligible unpaid request returns HTTP `402`, a `PAYMENT-REQUIRED` header,
-a JSON payment requirement, and `Cache-Control: private, no-store`. Treat that live challenge as
-the authority for all payment terms. If the route is absent or blocked, stop. The historical
-acceptance below does not authorize a payment.
+The command is retained only to inspect the historical resource. A current exact health operation
+returns through the free-health lane, not a payment challenge. The historical acceptance below does
+not authorize a payment.
 
 ## Install The Pinned Clients
 
@@ -51,26 +49,11 @@ Read the unsigned challenge first. The example accepts only this pinned policy:
 Inject `X402_BUYER_PRIVATE_KEY` into the command process with your wallet or secret manager. Do not
 put the value in this repository, a `.env` file, a prompt, shell history, or command output.
 
-## Run One Paid HTTP Request
+## Archived Paid Commands
 
-```sh
-npm run paid:http
-```
-
-The script requires one unsigned `402`, sends one authorization with `@x402/fetch`, requires
-`PAYMENT-RESPONSE`, and verifies an exact response replay.
-
-## Run One Paid MCP Tool Call
-
-```sh
-npm run paid:mcp
-```
-
-The script uses `@x402/mcp` with `pubfi.route.execute`. It verifies the Ed25519 `did:web` signed
-offer and receipt, then verifies exact structured-content and payment-response replay.
-
-Each paid command requires the exact 0.001 USDC offer and rejects an authorization lifetime above
-300 seconds. Running both commands spends 0.002 USDC if both requests settle.
+`paid:http` and `paid:mcp` reproduce the former pinned policy in source, but they are not current
+run instructions. Do not execute them. The current operation-level catalog and unsigned challenge
+must drive any new client policy.
 
 ## Safety Rules
 

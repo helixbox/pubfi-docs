@@ -10,11 +10,22 @@ public catalog is:
 GET https://api.pubfi.ai/v1/capabilities
 ```
 
-It returns the paginated `pubfi.gateway.registry.capability-page.v4` schema. Each compact summary
+It returns the paginated `pubfi.gateway.registry.capability-page.v5` schema. Each compact summary
 identifies the capability, public provider key, exact route matcher, allowed methods, credential
-requirement, current Credit cost, and readiness. Follow each opaque `next_cursor` to enumerate the
-complete installed generation. Use Runtime OpenAPI for the ready operation request and response
+requirement, method-specific billing, and readiness. Follow each opaque `next_cursor` to enumerate
+the complete installed generation. Use Runtime OpenAPI for the ready operation request and response
 schemas.
+
+Each `operations[]` entry pairs one HTTP method with one billing state:
+
+| Mode | Meaning |
+| --- | --- |
+| `free_health` | The exact health operation is public and bypasses account admission, Credits, x402, and usage emission. |
+| `pricing_unavailable` | Current pricing is not available, so the operation cannot enter a paid execution lane. |
+| `quantro_priced` | The immutable price version supplies a positive `credit_cost` for API-key execution and independent exact x402 terms. |
+
+Do not read `credit_cost` from the capability root. For a priced operation, read it from the
+`operations[]` entry that matches the selected method. A new price uses a new `price_version`.
 
 ## Current Readiness
 

@@ -76,7 +76,6 @@ Honor `Cache-Control: private, no-store` on x402 and purchase responses.
 Do not persist or replay sensitive headers through a shared cache. Redact at least:
 
 - `Authorization`;
-- `X-PubFi-Api-Key`;
 - `PAYMENT-SIGNATURE`;
 - `PAYMENT-RESPONSE`; and
 - account-bound checkout or purchase links.

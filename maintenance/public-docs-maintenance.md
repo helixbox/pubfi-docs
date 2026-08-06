@@ -109,8 +109,17 @@ npm run smoke:mcp-e2e --workspace apps/web
 
 - Use one focused branch per maintenance pass.
 - Include the source of truth for claim or route changes in the PR body.
-- Wait for local checks and remote checks before landing.
+- Commit and push only the maintenance branch, then create or update one pull request. A local
+  candidate or an open pull request is not a completed maintenance result.
+- Re-read the exact pull-request head after every push. Use `gh pr checks <url> --required --watch
+  --fail-fast` with bounded polling for the remote `Docs / check` workflow at that exact head;
+  use `gh pr view <url> --json headRefOid,statusCheckRollup` after each wait and discard results
+  from an older head. Leave the PR open with `checks_pending` if the bound expires.
+- If checks fail, attempt one focused repair. If they still fail, or GitHub reports a concurrent
+  update, leave the PR open with `checks_failed` or `merge_blocked` and the exact evidence.
 - Do not wait for human review when an automation change is mechanical, public-safe, and all checks
-  pass.
-- If checks fail, attempt one focused repair. If they still fail, leave the PR open with evidence
-  instead of landing.
+  pass. Land only with the protected `decodex land --manual-authority` command, binding the current
+  remote-main base OID and the validated PR head OID. Do not use a direct merge or GitHub auto-merge.
+- After landing, use `gh pr view <url> --json state,headRefOid,mergeCommit` and `git fetch origin
+  main` to re-read the PR and remote `main`. Require `MERGED`, an observed merge commit, and that
+  the merge commit is reachable from `main` before reporting `completed` or `docs_current`.

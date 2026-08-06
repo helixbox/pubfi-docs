@@ -58,14 +58,17 @@ source code, logs, and tracked client configuration. For Staging:
 export STG_PUBFI_API_KEY='<Staging PubFi API key>'
 ```
 
-Select an exact current path and method from the Staging catalog. Then send one supported auth
-header. For example:
+Select an exact current `ready` path and method whose matching `operations[].billing.mode` is
+`quantro_priced`. Set those values, then send the supported auth header:
 
 ```sh
+export PUBFI_GATEWAY_PATH='<exact ready Quantro-priced path>'
+export PUBFI_GATEWAY_METHOD='<GET or POST>'
+
 curl --fail --silent --show-error \
-  --request GET \
+  --request "${PUBFI_GATEWAY_METHOD}" \
   --header "Authorization: Bearer ${STG_PUBFI_API_KEY}" \
-  "${PUBFI_API_BASE}/v1/gateway/quantro/health"
+  "${PUBFI_API_BASE}${PUBFI_GATEWAY_PATH}"
 ```
 
 Confirm that the exact route is still `ready` before you call it. Continue with [API Key And
@@ -82,12 +85,14 @@ as the HTTP gateway.
 
 ## 6. Or Use Accountless x402
 
-Skip API-key creation. Confirm that the selected Staging route and method are `ready`, then call
-the route without auth:
+Skip API-key creation. Select a current `ready` Staging operation whose matching billing mode is
+`quantro_priced`, confirm its published x402 terms, then call that exact route without auth:
 
 ```sh
+export PUBFI_X402_PATH='<exact ready Quantro-priced path>'
+
 curl --include \
-  'https://api-stg.pubfi.ai/v1/gateway/quantro/health'
+  "${PUBFI_API_BASE}${PUBFI_X402_PATH}"
 ```
 
 Only a current unsigned `402` response proves x402 availability for that exact request. Validate

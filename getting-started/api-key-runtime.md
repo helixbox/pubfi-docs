@@ -28,12 +28,13 @@ dashboard session.
 Create keys from the PubFi dashboard under **Manage application keys**. Copy the key when it is
 shown, because the full secret is displayed only once.
 
-Supported public auth shapes:
+Supported public auth shape:
 
 ```text
 Authorization: Bearer <PubFi API key>
-X-PubFi-Api-Key: <PubFi API key>
 ```
+
+`X-PubFi-Api-Key` is not accepted.
 
 ## Billing Account And Usage Model
 
@@ -45,8 +46,8 @@ model at a high level:
 - `invoke_provider` is required for provider-backed gateway or MCP execution.
 - `manage_keys` can create, list, rename, and revoke keys for the same billing account.
 - `read_usage` can read usage and authoritative billing data for the same billing account.
-- A fresh active admission snapshot and sufficient meter-specific allocation are required before
-  provider execution.
+- A fresh active admission snapshot and sufficient allocation for the operation's current positive
+  `credit_cost` are required before priced provider execution.
 - The free starter allocation provides 1,000 requests and is not Credits.
 - PubFi displays eligible purchase-origin `request_count` units as Credits. Credits are service
   units, not money or a PubFi-owned financial ledger.

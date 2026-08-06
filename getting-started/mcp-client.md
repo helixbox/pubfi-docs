@@ -49,7 +49,7 @@ can be called without a key.
 `pubfi.route.execute` supports two mutually exclusive execution modes:
 
 - An API-key call uses account admission and allocation. Pass the key through the transport as
-  `Authorization: Bearer <PubFi API key>` or `X-PubFi-Api-Key: <PubFi API key>`.
+  `Authorization: Bearer <PubFi API key>`. `X-PubFi-Api-Key` is not accepted.
 - An accountless x402 call uses a wallet payment for one eligible request. Do not send a PubFi API
   key in this mode.
 
@@ -70,7 +70,9 @@ when the selected route is callable and configured.
    pages.
 2. Select a capability in the client. PubFi does not rank or select one for you.
 3. Call `pubfi.capabilities.get` with its exact `capability_id` to read the full typed contract.
-4. Call `pubfi.route.execute` only for the selected ready `raw_path` and `method`.
+4. Inspect the selected method's `operations[].billing`. Call `pubfi.route.execute` for the exact
+   ready `raw_path` and `method`. A priced API-key call consumes its positive `credit_cost`; an
+   exact `free_health` operation is public and has no Credit or x402 charge.
 5. Select API-key admission or x402 payment. Never send both.
 
 ## Inspect Tool Schemas
@@ -144,17 +146,16 @@ https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepol
 The example never accepts a wallet key as a tool argument. The caller must inject the key into the
 client process through a wallet or secret manager.
 
-A separate historical Production example pins `pubfi.route.execute` to the route, Base mainnet,
-canonical Base USDC, 0.001 USDC, and Production payee accepted on 2026-07-27. It verifies the
-signed offer and receipt and then checks exact MCP replay when the current catalog and challenge
-still advertise the exact operation:
+A separate historical Production example records the route, Base mainnet, canonical Base USDC,
+0.001 USDC, and Production payee accepted on 2026-07-27. Schema v5 now classifies exact health
+operations as `free_health`, so the pinned payment commands are archival and must not be run:
 
 ```text
 https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet
 ```
 
-The Production example spends real USDC when the route is available. It does not accept Staging
-origins or Base Sepolia. Historical acceptance is not current route or payment authority.
+Historical acceptance is not current route or payment authority. Select a current non-health
+`quantro_priced` operation before constructing a new Production payment policy.
 
 The wire shape is:
 

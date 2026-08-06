@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-PUBFI_X402_RESOURCE_URL="${PUBFI_X402_RESOURCE_URL:-https://api-stg.pubfi.ai/v1/gateway/quantro/health}"
+: "${PUBFI_X402_RESOURCE_URL:?Set PUBFI_X402_RESOURCE_URL to an exact ready Quantro-priced Staging gateway URL.}"
 
 case "${PUBFI_X402_RESOURCE_URL}" in
   https://api-stg.pubfi.ai/v1/gateway/*)
