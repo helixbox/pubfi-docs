@@ -46,7 +46,8 @@ Runtime OpenAPI, and MCP metadata.
 ## Staging Boundary
 
 Use the Staging web, API, and MCP origins together. Do not send a Production key to a Staging
-origin.
+origin. Each runtime assigns API-key environment at creation and accepts only its matching keys;
+clients cannot select the environment or request per-key scopes.
 
 Staging accountless x402 permits Base Sepolia `eip155:84532`. This environment policy does not
 prove that a specific route is available. Confirm that the exact route and method are `ready` in
@@ -95,7 +96,8 @@ convention.
 ## Execution Boundary
 
 - HTTP gateway execution accepts only exact current `GET` or `POST` Registry operations.
-- API-key execution requires `invoke_provider`, active admission, and sufficient allocation.
+- API-key execution requires a key for the endpoint environment, active admission, and sufficient
+  allocation. All keys use one fixed product-access model.
 - An advertised credential-free `GET` can append `:free` to its final path segment. It keeps the
   API key and account identity, uses the published account-level limiter, and charges zero Credits.
 - An exact eligible HTTP or MCP operation can use accountless x402 V2 instead of a PubFi API key.

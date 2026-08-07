@@ -15,18 +15,30 @@ facts, and runtime execution fit together from a public-docs perspective.
 | `pubfi.ai` | product UI, Discovery, docs entry, and dashboard presentation |
 
 Staging uses the separate roots `api-stg.pubfi.ai`, `mcp-stg.pubfi.ai`, and `stg.pubfi.ai`.
-Create the key through the staging dashboard and load it as `STG_PUBFI_API_KEY` in the public
-examples. See the [Staging guide](/getting-started/staging).
+Create the key through the Staging dashboard. The server assigns the Staging environment; the
+client does not select it. Load the key as `STG_PUBFI_API_KEY` in the public examples. See the
+[Staging guide](/getting-started/staging).
 
 ## API Key Boundary
 
-PubFi API keys are caller credentials for Registry gateway and MCP execution. Depending on scope,
-an API key can also manage keys for its own billing account or read that account's usage and
-billing data. Listing billing accounts and all purchase operations require an authenticated human
-dashboard session.
+PubFi API keys are caller credentials for Registry gateway and MCP execution. They can also read
+usage and billing data for their own billing account. PubFi uses one fixed product-access model;
+clients cannot request or inspect per-key scopes. Listing billing accounts, managing API keys, and
+all purchase operations require an authenticated human dashboard session. Key management requires
+Owner or Admin membership.
 
 Create keys from the PubFi dashboard under **Manage application keys**. Copy the key when it is
-shown, because the full secret is displayed only once.
+shown, because the full secret is displayed only once. The runtime assigns the key environment.
+The dashboard does not ask you to select one, and the create API accepts only a name:
+
+```json
+{
+  "name": "staging-agent"
+}
+```
+
+Create a separate key from each environment's dashboard. A Staging runtime creates and accepts
+Staging keys; a Production runtime creates and accepts Production keys.
 
 Supported public auth shape:
 
@@ -34,7 +46,8 @@ Supported public auth shape:
 Authorization: Bearer <PubFi API key>
 ```
 
-`X-PubFi-Api-Key` is not accepted.
+`X-PubFi-Api-Key` is not accepted. Its presence still selects the credential lane, so remove it
+before an accountless x402 request.
 
 ## Billing Account And Usage Model
 
@@ -42,10 +55,10 @@ PubFi groups API keys and product usage under billing accounts. Public docs shou
 model at a high level:
 
 - API keys authenticate the caller.
-- Scopes determine what the caller can do.
-- `invoke_provider` is required for provider-backed gateway or MCP execution.
-- `manage_keys` can create, list, rename, and revoke keys for the same billing account.
-- `read_usage` can read usage and authoritative billing data for the same billing account.
+- Every key uses the same fixed product-access model.
+- A key can execute through the gateway or MCP and read its own billing account's usage and
+  authoritative billing data.
+- Only an authenticated human Owner or Admin can create, list, rename, or revoke keys.
 - A fresh active admission snapshot and sufficient allocation for the operation's current positive
   `credit_cost` are required before priced provider execution.
 - An advertised `:free` variant keeps the same API key and billing-account binding, but uses an
@@ -70,8 +83,7 @@ the current offer response and proceed only when an offer is advertised as avail
 
 A route can execute only when these gates pass:
 
-- valid PubFi API key;
-- required scope;
+- valid PubFi API key for the selected environment;
 - fresh active billing admission and sufficient raw-unit allocation;
 - a matching path and method in the installed Registry generation;
 - current provider readiness;
@@ -98,7 +110,8 @@ Keep real keys, account ids, usage rows, billing-provider payloads, customer dat
 financial records out of prompts, source code, logs, and public artifacts.
 
 This API-key lane is separate from accountless x402. A request with `PAYMENT-SIGNATURE` must not
-also contain a PubFi API key. See [Payment And Execution
+also contain `Authorization` or `X-PubFi-Api-Key`. The legacy header is not valid authentication,
+but it is still a credential carrier and conflicts with payment. See [Payment And Execution
 Modes](/concepts/payment-and-execution-modes).
 
 ## Next Steps

@@ -37,7 +37,8 @@ Use `tools/list` for the current MCP input and output schemas.
 Authorization: Bearer <PubFi API key>
 ```
 
-`X-PubFi-Api-Key` is not accepted.
+`X-PubFi-Api-Key` is not accepted. Its presence still selects the credential lane, so an
+accountless x402 call must omit it as well as `Authorization`.
 
 Upstream provider keys remain server-side.
 

@@ -46,8 +46,8 @@ for access before you start.
 3. Request a sign-in code.
 4. Enter the six-digit code from the email in the same browser tab.
 5. Open the dashboard after sign-in.
-6. In **Manage application keys**, create a key. Select **Staging** and use a clear name such as
-   `staging-agent`.
+6. In **Manage application keys**, create a key with a clear name such as `staging-agent`. The
+   Staging runtime assigns the key environment; there is no environment selector.
 7. Copy the full key when PubFi shows it. PubFi shows the secret only once.
 8. Store the key in a secret manager. Do not put it in source code, shell history, logs, screenshots,
    or a tracked MCP configuration file.
@@ -98,9 +98,11 @@ curl --fail --silent --show-error \
   "${PUBFI_API_BASE}${PUBFI_GATEWAY_PATH}"
 ```
 
-`X-PubFi-Api-Key` is not accepted. For a different route, copy the exact matcher and method from
-the current catalog. Follow its query, body, response, and method-specific billing policy. Exact
-`free_health` operations are public and use their advertised path without a `:free` suffix.
+`X-PubFi-Api-Key` is not accepted. Remove it before an accountless x402 request because its
+presence still selects the credential lane. For a different route, copy the exact matcher and
+method from the current catalog. Follow its query, body, response, and method-specific billing
+policy. Exact `free_health` operations are public and use their advertised path without a `:free`
+suffix.
 
 ## Connect An MCP Client
 

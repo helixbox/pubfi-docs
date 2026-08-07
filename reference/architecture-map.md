@@ -9,7 +9,8 @@ PubFi is an agent-facing execution and discovery layer for crypto data:
 
 - Discovery provides public source-selection context.
 - Registry v2 owns executable path, method, request, response, meter, and readiness contracts.
-- The account service owns API keys, scopes, admission, allocation, and usage facts.
+- The account service owns API keys, fixed product access, environment binding, admission,
+  allocation, and usage facts.
 - The HTTP gateway executes exact current Registry operations.
 - MCP exposes generic Registry catalog list and detail tools plus exact route execution.
 - Registered purchases can create purchase-origin service units after verified settlement.
@@ -74,7 +75,7 @@ one eligible response and does not create or consume Credits.
 | `apps/pubfi-registry-reconciler/` | Registry desired-state reconciliation. |
 | `apps/web/` | Next.js public site, Discovery, dashboard presentation, text exports, and discovery manifests. |
 | `apps/web/src/data/discovery-static/` | Checked-in public-safe Discovery data. |
-| `packages/rust/account-service/` | API-key auth, scopes, admission, meter allocation, usage facts, and account contracts. |
+| `packages/rust/account-service/` | API-key auth, fixed product access, environment binding, admission, meter allocation, usage facts, and account contracts. |
 | `packages/rust/gateway-contracts/` | Typed Registry, matcher, request, response, auth, meter, and failure contracts. |
 | `packages/rust/gateway-registry-control/` | Registry control-plane domain and rollout contracts. |
 | `packages/rust/gateway-registry-runtime/` | Immutable serving snapshot, public catalog, readiness, and path lookup. |

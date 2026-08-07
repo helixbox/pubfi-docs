@@ -35,7 +35,7 @@ Hard filters can include:
 - request query and body bounds;
 - configured provider credential when required;
 - response content and status policy;
-- caller API-key scope and allocation for authenticated execution; and
+- caller API-key environment, admission, and allocation for authenticated execution; and
 - x402 eligibility for an accountless HTTP or MCP request.
 
 ## Outcomes

@@ -49,9 +49,10 @@ can be called without a key.
 `pubfi.route.execute` supports two mutually exclusive execution modes:
 
 - An API-key call uses account admission and allocation. Pass the key through the transport as
-  `Authorization: Bearer <PubFi API key>`. `X-PubFi-Api-Key` is not accepted.
-- An accountless x402 call uses a wallet payment for one eligible request. Do not send a PubFi API
-  key in this mode.
+  `Authorization: Bearer <PubFi API key>`. `X-PubFi-Api-Key` is not accepted, but its presence
+  still selects the credential lane.
+- An accountless x402 call uses a wallet payment for one eligible request. Do not send
+  `Authorization` or `X-PubFi-Api-Key` in this mode.
 
 Sending both authorities is a conflict. An invalid API key never falls back to x402.
 
@@ -102,7 +103,7 @@ export PUBFI_MCP_ENDPOINT='https://mcp.pubfi.ai'
 node examples/agents/pubfi-route-tools-mcp/server.mjs
 ```
 
-For Staging, use the exact staging endpoint and its environment-selected key:
+For Staging, use the exact staging endpoint and a key created by the Staging dashboard:
 
 ```sh
 export STG_PUBFI_API_KEY='<Staging PubFi API key>'

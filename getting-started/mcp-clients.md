@@ -18,8 +18,8 @@ For Staging, replace the endpoint with `https://mcp-stg.pubfi.ai` and replace
 
 ## Before You Start
 
-1. Create an environment-specific PubFi key as described in [API Key And
-   Runtime](/getting-started/api-key-runtime).
+1. Create a PubFi key from the selected environment's dashboard as described in [API Key And
+   Runtime](/getting-started/api-key-runtime). The server assigns the key environment.
 2. Store the key in a secret manager, a client secure-input store, or an environment variable:
 
    ```sh
@@ -837,7 +837,8 @@ another current ready capability and supply its exact required input, or stop.
 ### The Server Connects But Execution Returns An Auth Error
 
 - Confirm that the client process can read the selected environment variable.
-- Confirm that the header begins with `Bearer ` and contains the matching environment key.
+- Confirm that the header begins with `Bearer ` and contains a key created by the matching
+  environment's dashboard.
 - Do not send a Staging key to Production or a Production key to Staging.
 - Configure `Authorization: Bearer <PubFi API key>`. `X-PubFi-Api-Key` is not accepted.
 - Rotate the key if it appeared in a prompt, log, shared file, or settings sync.

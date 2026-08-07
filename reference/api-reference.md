@@ -61,17 +61,18 @@ OpenAPI visibility does not make every route anonymous.
 | Route family | Caller requirement |
 | --- | --- |
 | Catalog, OpenAPI, reference, health, version, and MCP discovery | No PubFi API key. |
-| Gateway through the API-key lane | API key with `invoke_provider`, active admission, and sufficient allocation. |
+| Gateway through the API-key lane | API key for this environment, active admission, and sufficient allocation. |
 | Gateway through the accountless x402 lane | No API key; exact x402-eligible route and valid V2 request-bound payment authorization. |
-| MCP `pubfi.route.execute` | API key with `invoke_provider`, or no API key plus the official x402 metadata flow for an eligible route. |
+| MCP `pubfi.route.execute` | API key for this environment, or no API-key carrier plus the official x402 metadata flow for an eligible route. |
 | Billing-account list | Authenticated human dashboard session. |
-| API-key management | Human Owner or Admin, or same-account API key with `manage_keys`. |
-| Usage and billing readback | Human account member, or same-account API key with `read_usage`. |
+| API-key management | Authenticated human Owner or Admin. API keys cannot manage keys. |
+| Usage and billing readback | Human account member, or an API key for the same account. |
 | Purchase offer, list, and status | Authenticated human account member. |
 | Purchase creation | Authenticated human Owner or Admin, current `offerKey`, and `Idempotency-Key`. |
 
-Do not combine a PubFi API key with `PAYMENT-SIGNATURE`. Purchase route visibility also does not
-prove that a current purchase offer exists.
+Do not combine an API-key carrier with `PAYMENT-SIGNATURE`. `X-PubFi-Api-Key` is not accepted, but
+its presence still selects the credential lane and conflicts with payment. Purchase route
+visibility also does not prove that a current purchase offer exists.
 
 ## Use These Docs
 
