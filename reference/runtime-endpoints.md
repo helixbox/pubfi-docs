@@ -65,10 +65,11 @@ The gateway has two separate caller lanes:
 
 | Lane | Requirement |
 | --- | --- |
-| API key | A PubFi API key with `invoke_provider`, active admission, and sufficient allocation. |
+| API key | A PubFi API key for this environment, active admission, and sufficient allocation. |
 | Accountless x402 | No PubFi API key; the exact route must be x402-eligible and the request must satisfy the current V2 payment challenge. |
 
-Do not send a PubFi API key and `PAYMENT-SIGNATURE` in the same request.
+Do not send `Authorization` or `X-PubFi-Api-Key` with `PAYMENT-SIGNATURE`. The legacy header is not
+accepted, but its presence still selects the credential lane.
 
 An exact operation whose catalog billing mode is `free_health` is public and bypasses both caller
 lanes. It uses the advertised path directly; there is no `:free` suffix. A `quantro_priced`
@@ -88,10 +89,10 @@ Do not append the suffix unless the current catalog or OpenAPI operation adverti
 | Method | Path | Access |
 | --- | --- | --- |
 | `GET` | `/v1/billing-accounts` | Authenticated human dashboard session. |
-| `GET|POST` | `/v1/billing-accounts/{billing_account_id}/api-keys` | Human Owner or Admin, or an API key for the same account with `manage_keys`. |
-| `PATCH|DELETE` | `/v1/billing-accounts/{billing_account_id}/api-keys/{id}` | Human Owner or Admin, or an API key for the same account with `manage_keys`. |
-| `GET` | `/v1/billing-accounts/{billing_account_id}/usage` | Human account member, or an API key for the same account with `read_usage`. |
-| `GET` | `/v1/billing-accounts/{billing_account_id}/billing` | Human account member, or an API key for the same account with `read_usage`. |
+| `GET|POST` | `/v1/billing-accounts/{billing_account_id}/api-keys` | Authenticated human Owner or Admin. API keys cannot manage keys. |
+| `PATCH|DELETE` | `/v1/billing-accounts/{billing_account_id}/api-keys/{id}` | Authenticated human Owner or Admin. API keys cannot manage keys. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/usage` | Human account member, or an API key for the same account. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/billing` | Human account member, or an API key for the same account. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchase-offers` | Human account member. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human account member. |
 | `POST` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human Owner or Admin. Requires `Idempotency-Key` and a current advertised `offerKey`. |
@@ -99,6 +100,10 @@ Do not append the suffix unless the current catalog or OpenAPI operation adverti
 
 Purchase responses are private and use `Cache-Control: private, no-store`. The presence of these
 routes does not prove that a purchase offer is currently available.
+
+API-key creation accepts only `{ "name": "..." }`. The runtime assigns `development`, `staging`,
+or `production` from its trusted environment and rejects a caller-supplied `environment` field.
+Key summaries still report the assigned environment.
 
 ## MCP Host
 
@@ -117,7 +122,7 @@ Current endpoint families:
 - `GET /.well-known/mcp.json`.
 
 The handshake, ping, `tools/list`, resource listing, and prompt listing methods are public.
-`pubfi.route.execute` accepts either a PubFi API key with `invoke_provider` or the mutually
+`pubfi.route.execute` accepts either a PubFi API key for the endpoint environment or the mutually
 exclusive official x402 metadata flow for an eligible route. Other tools keep their published
 public or authenticated contract.
 

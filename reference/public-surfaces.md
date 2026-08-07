@@ -79,9 +79,9 @@ eligible route.
 GET|POST https://api.pubfi.ai/v1/gateway/{*path}
 ```
 
-The exact current Registry matcher defines `{*path}`. API-key execution requires
-`invoke_provider`, active admission, and sufficient allocation. An explicitly eligible operation
-can instead return an accountless x402 V2 challenge when no API key is present.
+The exact current Registry matcher defines `{*path}`. API-key execution requires a key for the
+endpoint environment, active admission, and sufficient allocation. An explicitly eligible
+operation can instead return an accountless x402 V2 challenge when no API-key carrier is present.
 
 ## Authenticated Account And Purchase Families
 

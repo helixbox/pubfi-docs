@@ -74,6 +74,11 @@ upstream API.
 - Registry readiness is `ready` or `blocked`. Editorial terms such as `requestable` and
   `contract_ready` do not make an operation executable.
 - Registered API-key execution consumes the account's applicable meter allocation.
+- Each API runtime assigns the environment when it creates a key and accepts only matching keys.
+  Clients cannot select the environment or request per-key scopes. Only a human Owner or Admin can
+  manage keys; a key can read usage and billing data only for its own account.
+- `X-PubFi-Api-Key` is not accepted, but it remains a credential carrier. Remove it before an
+  accountless x402 request or the request stays in the credential lane.
 - The free starter allocation is 1,000 requests and is not Credits. PubFi uses Credits only for
   eligible purchase-origin `request_count` units.
 - Registered purchase routes expose the currently available offers. The route existing does not

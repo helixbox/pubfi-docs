@@ -1,6 +1,6 @@
 ---
 title: Account, Credits, Purchases, Usage, And Billing
-description: Understand billing accounts, API-key scopes, allocations, Credits, purchases, usage, and billing reads.
+description: Understand billing accounts, API-key access, allocations, Credits, purchases, usage, and billing reads.
 ---
 
 PubFi billing accounts group API keys and product usage. Runtime admission protects provider
@@ -11,7 +11,7 @@ execution from becoming a free-form public data proxy.
 | Concept | Meaning |
 | --- | --- |
 | API key | caller credential for gateway, capability, and MCP execution |
-| scope | permission such as `invoke_provider`, `read_usage`, or `manage_keys` |
+| API-key access | one fixed model for gateway or MCP execution and same-account usage and billing reads |
 | billing account | owner of API keys, membership, admission, and product usage |
 | starter allocation | 1,000 free `request_count` units; not Credits |
 | Credit | dashboard presentation of eligible purchase-origin `request_count` units |
@@ -26,6 +26,8 @@ execution from becoming a free-form public data proxy.
 Safe:
 
 - PubFi uses API-key auth for registered-account gateway and MCP execution.
+- Clients cannot request or inspect per-key scopes. Only a human Owner or Admin can manage keys.
+- The runtime assigns each key to its own environment and accepts only matching keys.
 - PubFi reserves a bounded amount from a fresh active allocation before provider execution, records
   actual raw-unit usage, and releases the unused remainder.
 - PubFi records immutable usage evidence; `GET /v1/billing-accounts/{billing_account_id}/billing`

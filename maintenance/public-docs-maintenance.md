@@ -71,7 +71,7 @@ When a runtime contract or public page changes, check:
 4. whether HTTP gateway examples use exact current Registry paths and methods;
 5. whether x402 docs still match the standard HTTP headers, MCP metadata, Signed Offers &
    Receipts fields, supported network, and lane separation;
-6. whether account and purchase docs still match route roles and scopes;
+6. whether account and purchase docs still match route roles and authorization boundaries;
 7. whether README, docs navigation, and agent-readable indexes point to the canonical asset; and
 8. whether every example avoids private data and unsupported availability claims.
 

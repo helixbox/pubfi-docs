@@ -11,7 +11,7 @@ commercial, settlement, allocation, and receipt facts behind those product surfa
 
 | Mode | Caller identity | What authorizes execution | Commercial effect |
 | --- | --- | --- | --- |
-| API key and allowance | registered billing account | PubFi API key, scope, active admission, and sufficient allocation | reserves and finalizes the selected meter allocation |
+| API key and allowance | registered billing account | PubFi API key for the endpoint environment, active admission, and sufficient allocation | reserves and finalizes the selected meter allocation |
 | Registered purchase | authenticated account Owner or Admin | an available immutable purchase offer and provider-hosted Checkout | after verified settlement, creates a purchase-origin meter allocation shown by PubFi as Credits |
 | Accountless x402 over HTTP or MCP | wallet authorization; no PubFi account or API key | one valid x402 payment bound to one eligible request | buys that response only; it does not create or consume Credits |
 
@@ -26,7 +26,7 @@ or a transferable token.
 
 For an x402-enabled gateway route:
 
-| API key | `PAYMENT-SIGNATURE` | Result |
+| API-key carrier | `PAYMENT-SIGNATURE` | Result |
 | --- | --- | --- |
 | present | absent | use the API-key and allocation lane |
 | absent | absent | return `402 Payment Required` with `PAYMENT-REQUIRED` |
@@ -34,7 +34,8 @@ For an x402-enabled gateway route:
 | present | present | reject the request because the payment lanes conflict |
 
 An invalid API key never falls back to x402. An x402 authorization never falls back to Credits.
-One request cannot debit both modes.
+One request cannot debit both modes. `Authorization` and the rejected legacy `X-PubFi-Api-Key`
+header both count as API-key carriers for this lane decision.
 
 ## MCP Lane Selection
 

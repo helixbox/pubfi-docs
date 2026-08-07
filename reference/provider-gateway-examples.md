@@ -119,8 +119,9 @@ curl --include \
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
-The key must have `invoke_provider`. The billing account must also have active admission and enough
-allocation for the method-specific `credit_cost`. `X-PubFi-Api-Key` is not accepted.
+The key must match the endpoint environment. The billing account must also have active admission
+and enough allocation for the method-specific `credit_cost`. `X-PubFi-Api-Key` is not accepted;
+remove it before accountless x402 because its presence still selects the credential lane.
 
 For a `POST` operation, use only the JSON fields that the current OpenAPI request body permits:
 

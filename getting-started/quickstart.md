@@ -51,8 +51,9 @@ from another environment or Registry generation.
 
 Skip this section if you selected accountless x402.
 
-Create an environment-specific key in **Manage application keys**. Store it outside prompts,
-source code, logs, and tracked client configuration. For Staging:
+Create a key in the selected environment's **Manage application keys** dashboard. The server
+assigns the key environment; the client does not select it. Store the key outside prompts, source
+code, logs, and tracked client configuration. For Staging:
 
 ```sh
 export STG_PUBFI_API_KEY='<Staging PubFi API key>'
@@ -105,9 +106,9 @@ replay rules.
 ## 7. Check Readiness Before Execution
 
 A source page, schema, or route plan is not execution authority. Every call needs an exact `ready`
-operation and its request-time gates. The API-key lane also needs valid scope, fresh admission, and
-sufficient allocation. The x402 lane needs current route eligibility and a valid request-bound
-payment authorization.
+operation and its request-time gates. The API-key lane also needs a key for the selected
+environment, fresh admission, and sufficient allocation. The x402 lane needs current route
+eligibility and a valid request-bound payment authorization.
 
 ## Continue By Goal
 
