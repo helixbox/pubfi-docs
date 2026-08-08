@@ -61,6 +61,12 @@ context. They do not make a Registry operation executable.
 only current ready gateway routes. PubFi does not publish separate static provider OpenAPI files as
 execution authority.
 
+Every generated gateway operation includes `x-pubfi-billing`. For `quantro_priced`, the same
+method price is also available as `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
+`x-pubfi-price-version`, and `x-pubfi-x402`. The x402 object contains `network`, `asset`,
+`atomic_amount`, and `offer_id`. The four top-level price extensions are absent for `free_health`
+and `pricing_unavailable`.
+
 An operation with an effective free policy includes `x-pubfi-free-variant`. That extension carries
 `suffix: ":free"` and the effective `rate_limit` object.
 
