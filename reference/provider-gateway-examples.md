@@ -43,6 +43,11 @@ For a free-capable route, the capability summary includes `free_rate_limit`. Run
 `x-pubfi-free-variant` to the same operation. These fields authorize the `:free` suffix; do not
 infer it from a provider name or billing mode.
 
+For a `quantro_priced` route, Runtime OpenAPI copies the matching method price from
+`x-pubfi-billing` into `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
+`x-pubfi-price-version`, and `x-pubfi-x402`. Use these fields only on the selected path and method.
+They are omitted for `free_health` and `pricing_unavailable` operations.
+
 ### Filter Subscan Or DeGov
 
 Use the exact public provider key to limit discovery. For example, select `subscan` or `degov`:
@@ -73,7 +78,8 @@ If `next_cursor` is present, request the next page with the same `provider_key` 
 whose matching method has `billing.mode` set to `quantro_priced`, and read its positive
 `billing.credit_cost`. A `free_health` operation uses its exact path without authentication,
 Credits, or x402. A `pricing_unavailable` operation is not a paid execution target. Confirm the
-same path and method in the [Runtime OpenAPI](https://api.pubfi.ai/openapi.json).
+same path and method in the [Runtime OpenAPI](https://api.pubfi.ai/openapi.json), where a priced
+operation repeats the method terms in the top-level `x-pubfi-*` price extensions.
 
 Use the live filtered catalogs for current operations:
 

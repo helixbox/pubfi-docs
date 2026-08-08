@@ -21,7 +21,20 @@ The document identifies its Registry authority with:
 - `x-pubfi-registry-manifest`.
 
 Each generated Registry operation can also describe the exact route, provider, upstream, matcher,
-readiness, request policy, response policy, meter, and maximum raw units.
+readiness, request policy, response policy, billing, meter, and maximum raw units.
+
+For an operation whose `x-pubfi-billing.mode` is `quantro_priced`, Runtime OpenAPI also copies the
+method price into these top-level extensions:
+
+| Extension | Value |
+| --- | --- |
+| `x-pubfi-credit-cost` | Positive Credit cost for API-key execution. |
+| `x-pubfi-price-policy-key` | Stable price-policy identity. |
+| `x-pubfi-price-version` | Immutable version shared by the Credit and x402 values. |
+| `x-pubfi-x402` | Exact `network`, `asset`, `atomic_amount`, and `offer_id` for x402 execution. |
+
+Runtime OpenAPI omits these four top-level price extensions for `free_health` and
+`pricing_unavailable` operations. Use `x-pubfi-billing` to read the billing mode.
 
 If no valid snapshot is programmed, the document reports that the Registry is unavailable. It
 does not advertise old gateway operations in that state.

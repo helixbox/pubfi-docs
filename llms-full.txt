@@ -62,7 +62,10 @@ upstream API.
   complete installed generation. Match the selected method to `operations[].billing`; billing is
   `free_health`, `pricing_unavailable`, or `quantro_priced`.
 - Runtime OpenAPI is generated from the installed Registry snapshot. It includes the current ready
-  gateway operations. Separate static provider schemas are not execution authority.
+  gateway operations. Each operation includes `x-pubfi-billing`. A `quantro_priced` operation also
+  repeats its method price in `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
+  `x-pubfi-price-version`, and `x-pubfi-x402`; non-priced operations omit these four fields.
+  Separate static provider schemas are not execution authority.
 - Registry execution matches an exact path and method. A successful operation returns the validated
   provider JSON and PubFi request and Registry-generation headers.
 - An optional capability-level `free_rate_limit` and Runtime OpenAPI `x-pubfi-free-variant`
