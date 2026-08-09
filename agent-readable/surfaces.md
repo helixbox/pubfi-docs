@@ -102,6 +102,8 @@ convention.
   allocation. All keys use one fixed product-access model.
 - An advertised credential-free `GET` can append `:free` to its final path segment. It keeps the
   API key and account identity, uses the published account-level limiter, and charges zero Credits.
+  The current product policy selects `/v1/gateway/degov/global/v1/daos:free`; require its current
+  catalog or OpenAPI advertisement before execution.
 - An exact eligible HTTP or MCP operation can use accountless x402 V2 instead of a PubFi API key.
 - MCP `pubfi.route.execute` accepts API-key admission, including the advertised `:free` suffix, or
   the mutually exclusive official x402 metadata flow. Anonymous and x402 calls cannot use the

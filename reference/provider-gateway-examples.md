@@ -153,7 +153,7 @@ OpenAPI operation has `x-pubfi-free-variant`. The underlying operation must be a
 
 ```sh
 export PUBFI_GATEWAY_METHOD='GET'
-export PUBFI_FREE_PATH='<exact advertised path with :free appended to its final segment>'
+export PUBFI_FREE_PATH='/v1/gateway/degov/global/v1/daos:free'
 
 curl --include \
   --request "$PUBFI_GATEWAY_METHOD" \
@@ -163,7 +163,9 @@ curl --include \
 
 The free variant is account-level rate-limited and charges zero Credits. It does not reserve,
 finalize, replay, or emit Quantro request usage. A limit rejection returns HTTP `429` with
-`gateway.free_rate_limited` and `Retry-After`. Do not send `PAYMENT-SIGNATURE` for this variant.
+`gateway.free_rate_limited` and `Retry-After`. The current product policy selects only the DeGov
+`GET /v1/daos` operation for this variant. Require its current catalog or OpenAPI advertisement
+before execution, and do not send `PAYMENT-SIGNATURE` for this variant.
 
 ## 5. Use The Accountless x402 Lane When Eligible
 
