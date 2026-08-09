@@ -73,7 +73,9 @@ upstream API.
   route with no request body. It uses the same PubFi API key and account identity, charges zero
   Credits, and rejects anonymous or x402 admission. HTTP rate-limit rejection returns `429` with
   `gateway.free_rate_limited` and `Retry-After`; successful MCP execution reports
-  `execution_status: registry_free_route_executed` and `credits_charged: 0`.
+  `execution_status: registry_free_route_executed` and `credits_charged: 0`. The current product
+  policy selects `/v1/gateway/degov/global/v1/daos:free`; require its current catalog or OpenAPI
+  advertisement before execution.
 - Registry readiness is `ready` or `blocked`. Editorial terms such as `requestable` and
   `contract_ready` do not make an operation executable.
 - Registered API-key execution consumes the account's applicable meter allocation.

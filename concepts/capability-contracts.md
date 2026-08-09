@@ -43,6 +43,10 @@ admitted requests per 60 seconds, 4 concurrent attempts, and a 120-second permit
 route-specific policy can replace the API default; the two limits are not cumulative. This is
 separate from `free_health`, which uses its advertised exact path without a suffix or API key.
 
+The current product policy selects only `GET /v1/gateway/degov/global/v1/daos` for this variant.
+Its free path is `/v1/gateway/degov/global/v1/daos:free`. Clients must still require the current
+catalog `free_rate_limit` or matching OpenAPI `x-pubfi-free-variant` before they use the suffix.
+
 ## Current Readiness
 
 Registry v2 exposes two execution readiness states:
