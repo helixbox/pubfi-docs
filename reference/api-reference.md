@@ -82,6 +82,8 @@ OpenAPI visibility does not make every route anonymous.
 | Usage and billing readback | Human account member, or an API key for the same account. |
 | Purchase offer, list, and status | Authenticated human account member. |
 | Purchase creation | Authenticated human Owner or Admin, current `offerKey`, and `Idempotency-Key`. |
+| Auto Top-Up state and payment-method setup status | Authenticated human account member. API keys are denied. |
+| Auto Top-Up policy or payment-method setup mutation | Authenticated human Owner or Admin and `Idempotency-Key`. API keys are denied. |
 
 Do not combine an API-key carrier with `PAYMENT-SIGNATURE`. `X-PubFi-Api-Key` is not accepted, but
 its presence still selects the credential lane and conflicts with payment. Purchase route
@@ -93,3 +95,9 @@ Use [Registry Gateway Examples](/reference/provider-gateway-examples) for reques
 success headers, and failure classes. Use [Payment And Execution
 Modes](/concepts/payment-and-execution-modes) for the boundary between API-key allowance,
 registered purchases, Credits, and accountless x402.
+
+The dashboard calls automatic Credit purchases **Auto Top-Up**. The API keeps the
+`credit-auto-reload` route name. Auto Top-Up is off until an Owner or Admin explicitly enables a
+complete policy with a current offer, an active payment method, exact accepted terms, and a finite
+UTC monthly limit. A temporary Auto Top-Up read conflict does not establish that the account's
+other dashboard data or manual Credit purchase is unavailable.

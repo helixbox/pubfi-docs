@@ -18,6 +18,7 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 - Provider readiness: https://docs.pubfi.ai/concepts/provider-readiness
 - Route planning: https://docs.pubfi.ai/concepts/route-planning
 - Payment and execution modes: https://docs.pubfi.ai/concepts/payment-and-execution-modes
+- Account, Credits, Auto Top-Up, usage, and billing: https://docs.pubfi.ai/concepts/account-credit-usage
 - API reference guide: https://docs.pubfi.ai/reference/api-reference
 - Agent interface: https://docs.pubfi.ai/reference/agent-interface
 - Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
@@ -76,6 +77,10 @@ Accountless x402 creates no PubFi account, API key, Credits, or invoice. The env
 wallet's USDC is the payment balance; keep separate wallets and private keys for Staging and
 Production. A Signed Receipt is payment and execution evidence, not a balance, top-up, or deposit
 record.
+Registered-account Auto Top-Up is off by default. It uses the account's shared payment method and
+buys a fixed whole-Credit quantity only under an explicitly enabled threshold and finite UTC
+monthly-limit policy. Human members can read its state; only an Owner or Admin can mutate it. The
+dashboard name is Auto Top-Up, while the stable API route name is `credit-auto-reload`.
 
 Base Sepolia `eip155:84532` is the Staging x402 boundary. Staging HTTP and MCP acceptance completed
 on 2026-07-27 with Signed Offer and Signed Receipt verification and exact replay; see
