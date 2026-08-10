@@ -91,9 +91,13 @@ operation can instead return an accountless x402 V2 challenge when no API-key ca
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/billing`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/purchase-offers`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/purchases`
+- `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/credit-auto-reload`
+- `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups`
+- `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups/{setup_id}`
 
 These URLs are public API contracts, but their data is private. Purchase route presence does not
-prove that a current offer exists.
+prove that a current offer exists. The dashboard calls the customer feature **Auto Top-Up**;
+`credit-auto-reload` is the stable API route name.
 
 ## Agent-Readable And Crawler Files
 

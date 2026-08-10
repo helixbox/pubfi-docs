@@ -88,6 +88,11 @@ upstream API.
   eligible purchase-origin `request_count` units.
 - Registered purchase routes expose the currently available offers. The route existing does not
   prove that an offer is open for sale.
+- Registered-account Auto Top-Up is off by default. It can buy a fixed whole-Credit quantity when
+  the available Credit balance falls below an explicitly enabled threshold, subject to a current
+  eligible offer, active shared payment method, accepted terms, and finite UTC monthly limit.
+  Human members can read its state; only an Owner or Admin can mutate it. The dashboard name is
+  Auto Top-Up, while the stable API route name is `credit-auto-reload`.
 - Accountless x402 buys one eligible HTTP or MCP response. It creates no PubFi account, API key,
   Credits balance, or invoice. The caller's USDC in the environment-specific wallet is the payment
   balance; PubFi does not mirror it as an account balance.

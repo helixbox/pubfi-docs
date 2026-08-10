@@ -75,6 +75,14 @@ The public API and dashboard support provider-neutral purchase offers and purcha
 Purchase creation requires an authenticated Owner or Admin. Availability is data-driven: if the
 current offer response is empty, no purchase offer is open for sale.
 
+## What is Auto Top-Up?
+
+Auto Top-Up is an optional registered-account policy for buying a fixed whole-Credit quantity when
+the available Credit balance falls below a chosen threshold. It is off by default. An Owner or
+Admin must provide an active shared payment method, accept the current Service Credit Terms, choose
+a current eligible offer, and set a finite UTC monthly limit. The dashboard name is **Auto
+Top-Up**; the API route name remains `credit-auto-reload`.
+
 ## Do Stripe and x402 debit the same balance?
 
 No. A registered purchase can create a purchase-origin allocation after verified settlement.

@@ -97,9 +97,15 @@ Do not append the suffix unless the current catalog or OpenAPI operation adverti
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human account member. |
 | `POST` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human Owner or Admin. Requires `Idempotency-Key` and a current advertised `offerKey`. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchases/{purchase_id}` | Human account member. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload` | Human account member. API keys are denied. |
+| `PUT` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload` | Human Owner or Admin. Requires `Idempotency-Key`. |
+| `POST` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups` | Human Owner or Admin. Requires `Idempotency-Key` and exact current Service Credit Terms. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups/{setup_id}` | Human account member. API keys are denied. |
 
-Purchase responses are private and use `Cache-Control: private, no-store`. The presence of these
-routes does not prove that a purchase offer is currently available.
+Purchase and Auto Top-Up responses are private and use `Cache-Control: private, no-store`. The
+presence of these routes does not prove that a purchase offer is currently available. The
+dashboard uses **Auto Top-Up** for the customer feature; `credit-auto-reload` is the stable API
+route name.
 
 API-key creation accepts only `{ "name": "..." }`. The runtime assigns `development`, `staging`,
 or `production` from its trusted environment and rejects a caller-supplied `environment` field.
