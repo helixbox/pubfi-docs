@@ -53,11 +53,12 @@ Catalog and detail schema v5 expose billing under the selected method's `operati
 price version. `free_health` is public and has no Credit or x402 charge. `pricing_unavailable`
 cannot enter a paid execution lane.
 
-An optional capability-level `free_rate_limit` advertises that the exact credential-free `GET`
-operation has an API-key-authenticated free variant. Its fields are `requests_per_window`,
-`window_seconds`, `max_concurrency`, and `permit_ttl_seconds`. Append `:free` to the final segment
-of `raw_path` only when that field is present. The same variant appears in Runtime OpenAPI as
-`x-pubfi-free-variant`. A successful MCP result has
+An optional capability-level `free_rate_limit` advertises that the exact `GET` or `POST` operation
+has an API-key-authenticated free variant. Its required fields are `requests_per_window`,
+`window_seconds`, `max_concurrency`, and `permit_ttl_seconds`; it can also include `quota`,
+`total_request_limit`, and `bucket_scope`. Append `:free` to the final segment of `raw_path` only
+when that field is present, and keep the exact query or body from the selected operation. The same
+variant appears in Runtime OpenAPI as `x-pubfi-free-variant`. A successful MCP result has
 `execution_status: registry_free_route_executed` and `credits_charged: 0`; it does not reserve or
 emit Credit usage. Anonymous and x402 admissions cannot use this suffix.
 

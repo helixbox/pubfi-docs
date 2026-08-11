@@ -69,13 +69,14 @@ upstream API.
 - Registry execution matches an exact path and method. A successful operation returns the validated
   provider JSON and PubFi request and Registry-generation headers.
 - An optional capability-level `free_rate_limit` and Runtime OpenAPI `x-pubfi-free-variant`
-  advertise an authenticated `:free` final-segment variant for an eligible credential-free `GET`
-  route with no request body. It uses the same PubFi API key and account identity, charges zero
-  Credits, and rejects anonymous or x402 admission. HTTP rate-limit rejection returns `429` with
-  `gateway.free_rate_limited` and `Retry-After`; successful MCP execution reports
-  `execution_status: registry_free_route_executed` and `credits_charged: 0`. The current product
-  policy selects `/v1/gateway/degov/global/v1/daos:free`; require its current catalog or OpenAPI
-  advertisement before execution.
+  advertise an authenticated `:free` final-segment variant for an eligible exact `GET` or `POST`.
+  It keeps the exact operation input, uses the same PubFi API key and account identity, charges zero
+  Credits, and rejects anonymous or x402 admission. The policy can include an independent quota,
+  cumulative limit, and shared bucket scope. Retryable rejection returns `429` with
+  `gateway.free_rate_limited` and `Retry-After`; a cumulative limit uses
+  `gateway.free_limit_reached` without `Retry-After`. Successful MCP execution reports
+  `execution_status: registry_free_route_executed` and `credits_charged: 0`. The checked-in Subscan
+  policy is provider-scoped; require the current catalog or OpenAPI advertisement before execution.
 - Registry readiness is `ready` or `blocked`. Editorial terms such as `requestable` and
   `contract_ready` do not make an operation executable.
 - Registered API-key execution consumes the account's applicable meter allocation.

@@ -34,18 +34,24 @@ account-level limits:
 
 - `requests_per_window` and `window_seconds` define one fixed request window;
 - `max_concurrency` bounds simultaneous upstream attempts; and
-- `permit_ttl_seconds` recovers an in-flight permit after an interrupted request.
+- `permit_ttl_seconds` recovers an in-flight permit after an interrupted request;
+- optional `quota` defines an independent longer fixed window;
+- optional `total_request_limit` defines a cumulative admitted-request cap; and
+- optional `bucket_scope` identifies whether eligible routes share one provider allowance.
 
-When this object is present, the exact credential-free `GET` route with no request body has a
-`:free` variant appended to its final path segment. It uses the
-same PubFi API key and billing-account identity but charges no Credits. The default policy is 60
-admitted requests per 60 seconds, 4 concurrent attempts, and a 120-second permit TTL. A
-route-specific policy can replace the API default; the two limits are not cumulative. This is
-separate from `free_health`, which uses its advertised exact path without a suffix or API key.
+When this object is present, append `:free` to the final path segment of the advertised exact `GET`
+or `POST` route. Use the same PubFi API key and billing-account identity. A free route can require
+a server-side provider credential and can have a request body; the current route schema remains
+authoritative for its input. The free lane charges no Credits. A route-specific policy can replace
+the API default; the two policies are not cumulative. This is separate from `free_health`, which
+uses its advertised exact path without a suffix or API key.
 
-The current product policy selects only `GET /v1/gateway/degov/global/v1/daos` for this variant.
-Its free path is `/v1/gateway/degov/global/v1/daos:free`. Clients must still require the current
-catalog `free_rate_limit` or matching OpenAPI `x-pubfi-free-variant` before they use the suffix.
+The checked-in Subscan Free Plan policy uses 2 requests per second, 2 concurrent attempts, a
+120-second permit TTL, and a provider-scoped quota of 20,000 requests per 86,400 seconds. Eligible
+exact Subscan routes share this allowance for one billing account. The policy excludes XCM,
+multi-chain, Pro, and `/api/v2/scan/accounts/net_assets` operations. It does not prove that any
+route is installed or ready. Clients must require the current catalog `free_rate_limit` or matching
+OpenAPI `x-pubfi-free-variant` before they use the suffix.
 
 ## Current Readiness
 

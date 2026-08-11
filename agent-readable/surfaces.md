@@ -100,10 +100,11 @@ convention.
 - HTTP gateway execution accepts only exact current `GET` or `POST` Registry operations.
 - API-key execution requires a key for the endpoint environment, active admission, and sufficient
   allocation. All keys use one fixed product-access model.
-- An advertised credential-free `GET` can append `:free` to its final path segment. It keeps the
-  API key and account identity, uses the published account-level limiter, and charges zero Credits.
-  The current product policy selects `/v1/gateway/degov/global/v1/daos:free`; require its current
-  catalog or OpenAPI advertisement before execution.
+- An advertised exact `GET` or `POST` can append `:free` to its final path segment. It keeps the API
+  key, account identity, and exact operation input, uses the published limiter, and charges zero
+  Credits. The checked-in Subscan policy shares its allowance across eligible routes for one
+  billing account. Policy presence does not prove route readiness; require the current catalog or
+  OpenAPI advertisement before execution.
 - An exact eligible HTTP or MCP operation can use accountless x402 V2 instead of a PubFi API key.
 - MCP `pubfi.route.execute` accepts API-key admission, including the advertised `:free` suffix, or
   the mutually exclusive official x402 metadata flow. Anonymous and x402 calls cannot use the

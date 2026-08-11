@@ -76,13 +76,14 @@ lanes. It uses the advertised path directly; there is no `:free` suffix. A `quan
 operation uses the method-specific positive `credit_cost` for API-key execution and the independent
 x402 terms from the same immutable price version.
 
-An eligible credential-free `GET` operation with no request body can also advertise an
-account-level free variant. The capability catalog exposes its effective `free_rate_limit`, and
-Runtime OpenAPI exposes `x-pubfi-free-variant` with the `:free` suffix and the same rate-limit
-policy. Append `:free` to the final path segment and send the normal
+An eligible exact `GET` or `POST` operation can also advertise an account-level free variant. The
+capability catalog exposes its effective `free_rate_limit`, and Runtime OpenAPI exposes
+`x-pubfi-free-variant` with the `:free` suffix and the same policy. Append `:free` to the final path
+segment, keep the operation's exact query or body, and send the normal
 `Authorization: Bearer <PubFi API key>` header. This variant charges zero Credits and does not use
-x402. A limit rejection returns `429`, error code `gateway.free_rate_limited`, and `Retry-After`.
-Do not append the suffix unless the current catalog or OpenAPI operation advertises it.
+x402. A retryable limit rejection returns `429`, `gateway.free_rate_limited`, and `Retry-After`.
+A cumulative limit returns `429` with `gateway.free_limit_reached` and no `Retry-After`. Do not
+append the suffix unless the current catalog or OpenAPI operation advertises it.
 
 ### Account And Purchase Routes
 
