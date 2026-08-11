@@ -148,12 +148,13 @@ Do not copy a request body from another operation.
 ## 4. Execute An Advertised Free Variant
 
 Only use this lane when the current capability has `free_rate_limit` or the matching Runtime
-OpenAPI operation has `x-pubfi-free-variant`. The underlying operation must be a credential-free
-`GET` with no request body. Append `:free` to its final path segment and use the same PubFi API key:
+OpenAPI operation has `x-pubfi-free-variant`. The underlying operation can be an exact `GET` or
+`POST`, can require a server-side provider credential, and can have a request body. Append `:free`
+to its final path segment, keep the exact current operation input, and use the same PubFi API key:
 
 ```sh
-export PUBFI_GATEWAY_METHOD='GET'
-export PUBFI_FREE_PATH='/v1/gateway/degov/global/v1/daos:free'
+export PUBFI_GATEWAY_METHOD='<GET or POST from the advertised operation>'
+export PUBFI_FREE_PATH='<advertised exact gateway path with :free appended>'
 
 curl --include \
   --request "$PUBFI_GATEWAY_METHOD" \
@@ -161,11 +162,17 @@ curl --include \
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
+For a `POST`, add `Content-Type: application/json` and a body that satisfies the selected current
+schema, as in the paid API-key example above.
+
 The free variant is account-level rate-limited and charges zero Credits. It does not reserve,
-finalize, replay, or emit Quantro request usage. A limit rejection returns HTTP `429` with
-`gateway.free_rate_limited` and `Retry-After`. The current product policy selects only the DeGov
-`GET /v1/daos` operation for this variant. Require its current catalog or OpenAPI advertisement
-before execution, and do not send `PAYMENT-SIGNATURE` for this variant.
+finalize, replay, or emit Quantro request usage. A retryable limit rejection returns HTTP `429`
+with `gateway.free_rate_limited` and `Retry-After`. A cumulative hard-limit rejection returns
+`gateway.free_limit_reached` without `Retry-After`. The checked-in Subscan policy shares a
+2-request-per-second and 20,000-request-per-day allowance across its eligible exact routes for one
+billing account. Policy presence does not prove current route readiness. Require the current
+catalog or OpenAPI advertisement before execution, and do not send `PAYMENT-SIGNATURE` for this
+variant.
 
 ## 5. Use The Accountless x402 Lane When Eligible
 
@@ -264,7 +271,8 @@ The error body uses the standard PubFi error object:
 
 Lane admission can return more specific codes. For example:
 
-- An advertised free variant can return `gateway.free_rate_limited` with `Retry-After`.
+- An advertised free variant can return `gateway.free_rate_limited` with `Retry-After`, or
+  `gateway.free_limit_reached` without it when a cumulative limit is exhausted.
 - API-key admission can return `gateway.insufficient_meter_escrow`,
   `gateway.billing_account_inactive`, `gateway.billing_admission_unknown`, or
   `gateway.billing_admission_stale`.

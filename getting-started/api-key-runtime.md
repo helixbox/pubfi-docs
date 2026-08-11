@@ -93,14 +93,17 @@ A route can execute only when these gates pass:
 
 ## Free Route Variant
 
-The current capability catalog can advertise `free_rate_limit` for an eligible credential-free
-`GET` route with no request body. Runtime OpenAPI represents the same contract as
-`x-pubfi-free-variant`. Only then, append `:free` to the final path segment and send the normal
-Bearer API key.
+The current capability catalog can advertise `free_rate_limit` for an eligible exact `GET` or
+`POST` route. Runtime OpenAPI represents the same contract as `x-pubfi-free-variant`. Only then,
+append `:free` to the final path segment and send the normal Bearer API key. Keep the exact query
+or body required by the current operation schema. A server-side provider credential does not make
+an advertised free variant ineligible.
 
-The effective policy contains a fixed request window, a concurrency limit, and a permit TTL. A
-free request skips Credit admission, reservation, usage emission, and replay. If the account limit
-is reached, HTTP returns `429`, `gateway.free_rate_limited`, and `Retry-After`. This lane is not
+The effective policy contains a fixed request window, a concurrency limit, a permit TTL, and can
+also advertise an independent quota window, a cumulative limit, or shared bucket scope. A free
+request skips Credit admission, reservation, usage emission, and replay. A retryable window or
+concurrency rejection returns `429`, `gateway.free_rate_limited`, and `Retry-After`. A cumulative
+limit returns `429` with `gateway.free_limit_reached` and no `Retry-After`. This lane is not
 anonymous and is not x402. It is also distinct from an exact `free_health` operation, which uses
 its advertised path without the suffix or authentication.
 
