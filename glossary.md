@@ -53,7 +53,8 @@ Metadata describing which provider or resource backed a response.
 ## Purchase Offer
 
 An immutable, server-owned commercial offer available to a registered billing account. The caller
-selects an advertised `offerKey`; verified settlement can create a purchase-origin allocation.
+submits its advertised key, exact catalog and terms identities, and an allowed amount. Verified
+settlement can create a purchase-origin allocation.
 
 ## Readiness
 

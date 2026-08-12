@@ -242,9 +242,23 @@ An x402 lane success instead includes `PAYMENT-RESPONSE` and
 The JSON fields depend on the selected operation response policy. Parse only the fields in the
 current Runtime OpenAPI.
 
+## Provider Error And Business Responses
+
+A bounded provider HTTP `4xx` or `5xx` response keeps its status and exact response bytes. PubFi
+normalizes a valid content type. It uses `application/octet-stream` when the provider content type
+is missing or malformed. A valid JSON success-status response whose configured success predicate
+is false is also relayed as the provider's business response.
+
+These completed provider responses are not PubFi gateway-error envelopes. Transport failure,
+redirects, oversized data, and unsafe or malformed responses remain gateway failures. In the
+API-key lane, an admitted provider attempt consumes the operation's selected `credit_cost`, even
+when the provider returns an error or the attempt times out. A free-variant provider response
+charges zero Credits.
+
 ## Registry Failure Classes
 
-Registry v2 uses one provider-neutral failure vocabulary:
+PubFi Registry failures use one provider-neutral vocabulary. Provider responses described above
+can use the same HTTP status numbers without a PubFi error code:
 
 | HTTP status | Error code |
 | --- | --- |

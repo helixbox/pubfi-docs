@@ -96,7 +96,7 @@ append the suffix unless the current catalog or OpenAPI operation advertises it.
 | `GET` | `/v1/billing-accounts/{billing_account_id}/billing` | Human account member, or an API key for the same account. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchase-offers` | Human account member. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human account member. |
-| `POST` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human Owner or Admin. Requires `Idempotency-Key` and a current advertised `offerKey`. |
+| `POST` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human Owner or Admin. Requires `Idempotency-Key`, current offer and catalog identities, a valid amount, and exact accepted terms identity. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchases/{purchase_id}` | Human account member. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload` | Human account member. API keys are denied. |
 | `PUT` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload` | Human Owner or Admin. Requires `Idempotency-Key`. |

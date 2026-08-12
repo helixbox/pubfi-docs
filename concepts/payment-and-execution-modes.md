@@ -99,8 +99,13 @@ creating a second authorization for the same attempt.
 
 The public API exposes provider-neutral purchase-offer, create, list, and status routes for
 registered billing accounts. Purchase creation requires an authenticated human Owner or Admin and
-an `Idempotency-Key`. The caller selects only an advertised `offerKey`; the server owns amount,
-currency, quantity, validity, provider, and effect.
+an `Idempotency-Key`. The caller submits the advertised `offerKey`, its exact catalog release and
+Service Credit Terms identities, and a shortest-canonical USD amount. PubFi accepts $1 through
+$1,000 in $0.10 increments only when the offer produces a whole-Credit quantity. Currency,
+quantity derivation, validity, provider, and effect remain server authority.
+
+The current checked-in pricing target uses a base offer of $1 for 1,000 Credits. This checked-in
+target does not prove that an offer is installed or open for sale in an environment.
 
 An API route existing does not prove that a production offer is available. Clients must inspect
 the current offer response. If no available offer is returned, the registered purchase lane is not

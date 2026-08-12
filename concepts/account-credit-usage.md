@@ -34,7 +34,10 @@ Safe:
 - PubFi records immutable usage evidence; `GET /v1/billing-accounts/{billing_account_id}/billing`
   is the sole authoritative billing read.
 - Registered human users can inspect available purchase offers and create an idempotent purchase
-  from an advertised `offerKey`.
+  with the advertised offer key, catalog release hash, amount, and exact accepted terms identity.
+- The current checked-in pricing target sets one Credit and 0.001 USDC for each priced Subscan and
+  DeGov operation. Its registered-purchase base is $1 for 1,000 Credits. The installed catalog,
+  Runtime OpenAPI, and current offer response remain the execution and availability authorities.
 - A verified purchase can create purchase-origin Credits. A browser redirect alone cannot.
 - Auto Top-Up is off by default. Human account members can read its state. Only an Owner or Admin
   can add or change the shared payment method, enable or replace the policy, or turn it off.

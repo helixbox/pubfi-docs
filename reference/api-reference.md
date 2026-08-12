@@ -67,6 +67,12 @@ instead includes `PAYMENT-RESPONSE` and `Cache-Control: private, no-store`.
 The exact JSON body depends on the current operation response policy. Inspect the Runtime OpenAPI
 before you parse it.
 
+A bounded provider HTTP `4xx` or `5xx` response keeps its provider status and exact body. A valid
+JSON success-status response can also remain a provider business response when its configured
+success predicate is false. These provider responses are not PubFi error envelopes. Transport
+failure, redirects, oversized data, and unsafe or malformed responses remain PubFi gateway
+failures.
+
 ## Authentication And Payment Boundary
 
 OpenAPI visibility does not make every route anonymous.
@@ -81,7 +87,7 @@ OpenAPI visibility does not make every route anonymous.
 | API-key management | Authenticated human Owner or Admin. API keys cannot manage keys. |
 | Usage and billing readback | Human account member, or an API key for the same account. |
 | Purchase offer, list, and status | Authenticated human account member. |
-| Purchase creation | Authenticated human Owner or Admin, current `offerKey`, and `Idempotency-Key`. |
+| Purchase creation | Authenticated human Owner or Admin, current offer key, exact catalog and terms identities, valid amount, and `Idempotency-Key`. |
 | Auto Top-Up state and payment-method setup status | Authenticated human account member. API keys are denied. |
 | Auto Top-Up policy or payment-method setup mutation | Authenticated human Owner or Admin and `Idempotency-Key`. API keys are denied. |
 
