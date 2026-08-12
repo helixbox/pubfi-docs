@@ -61,6 +61,9 @@ model at a high level:
 - Only an authenticated human Owner or Admin can create, list, rename, or revoke keys.
 - A fresh active admission snapshot and sufficient allocation for the operation's current positive
   `credit_cost` are required before priced provider execution.
+- The current checked-in pricing target sets `credit_cost: 1` for each priced Subscan and DeGov
+  operation. The same target sets x402 `atomic_amount: "1000"`, or 0.001 USDC. Confirm the
+  installed values in the current catalog and Runtime OpenAPI before execution.
 - An advertised `:free` variant keeps the same API key and billing-account binding, but uses an
   account-level rate limiter and charges zero Credits.
 - The free starter allocation provides 1,000 requests and is not Credits.
@@ -74,7 +77,21 @@ model at a high level:
 
 The Runtime OpenAPI includes provider-neutral purchase-offer, create, list, and status routes.
 Purchase creation requires an authenticated human Owner or Admin, `Idempotency-Key`, and the strict
-body `{ "offerKey": "..." }`. PubFi API keys cannot call purchase routes.
+body:
+
+```json
+{
+  "offerKey": "<current offer key>",
+  "catalogReleaseHash": "<hash from the offer>",
+  "amount": "<shortest canonical USD amount>",
+  "acceptedTermsVersion": "<terms version from the offer>",
+  "acceptedTermsHash": "<terms hash from the offer>"
+}
+```
+
+PubFi API keys cannot call purchase routes. The checked-in pricing target uses a base offer of
+$1 for 1,000 Credits. Purchase amounts must be from $1 through $1,000 in $0.10 increments and
+must produce a whole-Credit quantity.
 
 The API surface does not prove that a production offer is currently available. A client must use
 the current offer response and proceed only when an offer is advertised as available.

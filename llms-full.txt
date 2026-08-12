@@ -66,8 +66,15 @@ upstream API.
   repeats its method price in `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
   `x-pubfi-price-version`, and `x-pubfi-x402`; non-priced operations omit these four fields.
   Separate static provider schemas are not execution authority.
+- The current checked-in pricing target sets `credit_cost: 1` and x402
+  `atomic_amount: "1000"` (0.001 USDC) for every priced Subscan and DeGov operation. Confirm the
+  installed values in the selected environment before execution.
 - Registry execution matches an exact path and method. A successful operation returns the validated
   provider JSON and PubFi request and Registry-generation headers.
+- A bounded provider HTTP error keeps its status and exact body. A valid JSON success-status
+  business response can also be relayed when its configured success predicate is false. These are
+  provider responses, not PubFi gateway-error envelopes. Transport failure, redirects, oversized
+  data, and unsafe or malformed responses remain gateway failures.
 - An optional capability-level `free_rate_limit` and Runtime OpenAPI `x-pubfi-free-variant`
   advertise an authenticated `:free` final-segment variant for an eligible exact `GET` or `POST`.
   It keeps the exact operation input, uses the same PubFi API key and account identity, charges zero
@@ -89,6 +96,9 @@ upstream API.
   eligible purchase-origin `request_count` units.
 - Registered purchase routes expose the currently available offers. The route existing does not
   prove that an offer is open for sale.
+- Purchase creation requires the current offer key, exact catalog release hash, amount, accepted
+  terms version and hash, and `Idempotency-Key`. The checked-in pricing target uses a
+  $1/1,000-Credit base, but the current offer response remains availability authority.
 - Registered-account Auto Top-Up is off by default. It can buy a fixed whole-Credit quantity when
   the available Credit balance falls below an explicitly enabled threshold, subject to a current
   eligible offer, active shared payment method, accepted terms, and finite UTC monthly limit.

@@ -87,6 +87,9 @@ Use the surfaces in this order for runtime work:
    `x-pubfi-x402`; it omits these four fields for non-priced operations. Exact `free_health` is
    public. An optional capability-level `free_rate_limit` and OpenAPI `x-pubfi-free-variant`
    advertise the same API-key-authenticated, zero-Credit `:free` variant.
+   The current checked-in pricing target sets `credit_cost: 1` and x402
+   `atomic_amount: "1000"` (0.001 USDC) for every priced Subscan and DeGov operation. Confirm the
+   installed values in the selected environment before execution.
 3. Use MCP `tools/list` for current MCP schemas. Use `pubfi.capabilities.list` and
    `pubfi.capabilities.get` for the current Registry generation and exact capability detail.
 4. Use Discovery only for source-selection and public evidence context.
@@ -98,6 +101,10 @@ convention.
 ## Execution Boundary
 
 - HTTP gateway execution accepts only exact current `GET` or `POST` Registry operations.
+- A bounded provider HTTP error keeps its status and exact body. A valid JSON success-status
+  business response can also be relayed when the configured success predicate is false. These are
+  provider responses, not PubFi error envelopes. Transport failure, redirects, oversized data,
+  and unsafe or malformed responses remain gateway failures.
 - API-key execution requires a key for the endpoint environment, active admission, and sufficient
   allocation. All keys use one fixed product-access model.
 - An advertised exact `GET` or `POST` can append `:free` to its final path segment. It keeps the API
@@ -114,6 +121,9 @@ convention.
   include `x402/payment-response` metadata. Neither lane uses a PubFi success envelope.
 - Registered purchase APIs require a human dashboard session. Their presence does not prove that a
   current offer exists.
+- Purchase creation submits the current offer key, exact catalog release hash, amount, and exact
+  accepted terms version and hash. The checked-in pricing target uses a $1/1,000-Credit base, but
+  the current offer response remains availability authority.
 
 ## Public Boundary
 

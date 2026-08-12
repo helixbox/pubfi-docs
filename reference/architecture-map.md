@@ -54,7 +54,8 @@ accountless x402 lane. Both transports use the same typed Registry and provider 
 Registered purchases are separate from route execution:
 
 1. An authenticated human account member reads current provider-neutral offers.
-2. An Owner or Admin creates a purchase with an advertised `offerKey` and `Idempotency-Key`.
+2. An Owner or Admin creates a purchase with an advertised offer key, its exact catalog and terms
+   identities, a valid amount, and `Idempotency-Key`.
 3. The checkout provider completes the external payment flow.
 4. Verified settlement can create a purchase-origin `request_count` allocation that PubFi shows as
    Credits.

@@ -81,6 +81,14 @@ Registered-account Auto Top-Up is off by default. It uses the account's shared p
 buys a fixed whole-Credit quantity only under an explicitly enabled threshold and finite UTC
 monthly-limit policy. Human members can read its state; only an Owner or Admin can mutate it. The
 dashboard name is Auto Top-Up, while the stable API route name is `credit-auto-reload`.
+The current checked-in pricing target sets one Credit and 0.001 USDC for every priced Subscan and
+DeGov operation and uses a $1/1,000-Credit registered-purchase base. Confirm installed prices and
+offer availability from the current catalog, Runtime OpenAPI, and offer response. Purchase
+creation requires the current offer key, exact catalog release hash, amount, accepted terms
+version and hash, and `Idempotency-Key`.
+A bounded provider HTTP error keeps its status and exact body. A valid JSON success-status
+business response can also be relayed when its configured success predicate is false. These are
+provider responses, not PubFi gateway-error envelopes.
 
 Base Sepolia `eip155:84532` is the Staging x402 boundary. Staging HTTP and MCP acceptance completed
 on 2026-07-27 with Signed Offer and Signed Receipt verification and exact replay; see
