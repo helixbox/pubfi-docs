@@ -21,6 +21,7 @@ Runtime OpenAPI, and MCP metadata.
 | Agent interface guide | Current MCP tools, fields, auth, and execution boundary. | `https://docs.pubfi.ai/reference/agent-interface` |
 | MCP client guides | Client-specific hosted HTTP, stdio bridge, credential, verification, and compatibility guidance. | `https://docs.pubfi.ai/getting-started/mcp-clients` |
 | Registry catalog | Complete installed Registry v2 catalog with each entry's readiness state. | `https://api.pubfi.ai/v1/capabilities` |
+| Operation-pricing inventory | Complete no-store producer projection for approved operations; it contains no selected price and is not execution authority. | `https://api.pubfi.ai/v1/operation-pricing-inventory` |
 | API reference | Interactive HTTP reference. | `https://api.pubfi.ai/reference` |
 | Runtime OpenAPI | Executable HTTP schema for current `ready` Registry operations and API routes. | `https://api.pubfi.ai/openapi.json` |
 | API-host MCP manifest | MCP discovery for clients that start from the API domain. | `https://api.pubfi.ai/.well-known/mcp.json` |
@@ -31,6 +32,7 @@ Runtime OpenAPI, and MCP metadata.
 | MCP registry auth proof | Optional domain-ownership proof. | `https://pubfi.ai/.well-known/mcp-registry-auth` |
 | Staging guide | Safe login, key, HTTP, MCP, and Base Sepolia test workflow. | `https://docs.pubfi.ai/getting-started/staging` |
 | Staging Registry catalog | Complete installed Staging catalog with each entry's readiness state. | `https://api-stg.pubfi.ai/v1/capabilities` |
+| Staging operation-pricing inventory | Complete no-store Staging producer projection for approved operations. | `https://api-stg.pubfi.ai/v1/operation-pricing-inventory` |
 | Staging API reference | Interactive Staging HTTP reference. | `https://api-stg.pubfi.ai/reference` |
 | Staging Runtime OpenAPI | Executable Staging HTTP schema for current `ready` Registry operations and API routes. | `https://api-stg.pubfi.ai/openapi.json` |
 | Staging hosted MCP manifest | Hosted Staging MCP discovery and current Registry metadata. | `https://mcp-stg.pubfi.ai/.well-known/mcp.json` |
@@ -90,10 +92,13 @@ Use the surfaces in this order for runtime work:
    The current checked-in pricing target sets `credit_cost: 1` and x402
    `atomic_amount: "1000"` (0.001 USDC) for every priced Subscan and DeGov operation. Confirm the
    installed values in the selected environment before execution.
-3. Use MCP `tools/list` for current MCP schemas. Use `pubfi.capabilities.list` and
+3. Use `/v1/operation-pricing-inventory` only to inspect the complete producer-authorized pricing
+   projection. It contains no selected price, is not execution authority, and fails with `503`
+   instead of returning a partial projection.
+4. Use MCP `tools/list` for current MCP schemas. Use `pubfi.capabilities.list` and
    `pubfi.capabilities.get` for the current Registry generation and exact capability detail.
-4. Use Discovery only for source-selection and public evidence context.
-5. Use long-form docs for workflow, security, payment, and claim boundaries.
+5. Use Discovery only for source-selection and public evidence context.
+6. Use long-form docs for workflow, security, payment, and claim boundaries.
 
 Do not execute a saved path from an older generation. Do not create a provider URL from a naming
 convention.
@@ -109,8 +114,9 @@ convention.
   allocation. All keys use one fixed product-access model.
 - An advertised exact `GET` or `POST` can append `:free` to its final path segment. It keeps the API
   key, account identity, and exact operation input, uses the published limiter, and charges zero
-  Credits. The checked-in Subscan policy shares its allowance across eligible routes for one
-  billing account. Policy presence does not prove route readiness; require the current catalog or
+  Credits. The checked-in Subscan policy shares its allowance across eligible default and bounded
+  `{network}` routes for one billing account, including XCM, multi-chain, Pro, and `net_assets`
+  operations. Policy presence does not prove route readiness; require the current catalog or
   OpenAPI advertisement before execution.
 - An exact eligible HTTP or MCP operation can use accountless x402 V2 instead of a PubFi API key.
 - MCP `pubfi.route.execute` accepts API-key admission, including the advertised `:free` suffix, or

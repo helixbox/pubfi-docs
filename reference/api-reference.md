@@ -48,6 +48,10 @@ Use these surfaces together:
 | `GET /v1/capabilities` | Inspect all operations in the installed generation, including `ready` and `blocked` entries. |
 | `GET /openapi.json` | Inspect the executable HTTP schema for current `ready` operations. |
 | `GET /reference` | Explore the same OpenAPI in an interactive UI. |
+| `GET /v1/operation-pricing-inventory` | Inspect the complete public-safe producer projection used to construct one immutable pricing generation. It contains no selected price and is not execution authority. |
+
+The operation-pricing inventory uses `Cache-Control: no-store` and returns `503` instead of
+silently omitting a plan that cannot form the complete approved projection.
 
 A Discovery page is source-selection context. It is not Registry execution authority.
 
@@ -79,7 +83,7 @@ OpenAPI visibility does not make every route anonymous.
 
 | Route family | Caller requirement |
 | --- | --- |
-| Catalog, OpenAPI, reference, health, version, and MCP discovery | No PubFi API key. |
+| Catalog, operation-pricing inventory, OpenAPI, reference, health, version, and MCP discovery | No PubFi API key. |
 | Gateway through the API-key lane | API key for this environment, active admission, and sufficient allocation. |
 | Gateway through the accountless x402 lane | No API key; exact x402-eligible route and valid V2 request-bound payment authorization. |
 | MCP `pubfi.route.execute` | API key for this environment, or no API-key carrier plus the official x402 metadata flow for an eligible route. |

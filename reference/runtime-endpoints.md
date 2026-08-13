@@ -36,6 +36,7 @@ The corresponding Staging API root is `https://api-stg.pubfi.ai`. Fetch that env
 | `GET` | `/openapi.json` | Runtime OpenAPI generated from the installed Registry v2 snapshot. |
 | `GET` | `/reference` | Interactive API reference for `/openapi.json`. |
 | `GET` | `/v1/capabilities` | Public paginated `pubfi.gateway.registry.capability-page.v5` catalog. |
+| `GET` | `/v1/operation-pricing-inventory` | Public no-store `quantro.operation-pricing-inventory.v1` projection for the complete installed snapshot. |
 | `GET` | `/.well-known/mcp.json` | API-host MCP discovery manifest. |
 | `GET` | `/.well-known/glama.json` | Public MCP connector ownership declaration. |
 | `POST` | `/` | MCP JSON-RPC endpoint. |
@@ -44,6 +45,11 @@ The corresponding Staging API root is `https://api-stg.pubfi.ai`. Fetch that env
 manifest, compact capability summaries, and current `ready` or `blocked` state. Follow each opaque
 `next_cursor` for the complete generation. Use Runtime OpenAPI for ready operation request and
 response schemas.
+
+`GET /v1/operation-pricing-inventory` exposes canonical operation keys, route revisions and
+closures, request bounds, and `free_health` or `quantro_priced` classification for every approved
+typed plan. It contains no selected price and has no route-selection or execution authority. It
+returns `503` if the complete projection cannot be formed; it does not return a partial inventory.
 
 The Runtime OpenAPI includes only current `ready` Registry operations. If the API has no valid
 programmed snapshot, it marks the Registry as unavailable and does not use a static provider
