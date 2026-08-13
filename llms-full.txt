@@ -69,6 +69,11 @@ upstream API.
 - The current checked-in pricing target sets `credit_cost: 1` and x402
   `atomic_amount: "1000"` (0.001 USDC) for every priced Subscan and DeGov operation. Confirm the
   installed values in the selected environment before execution.
+- `GET https://api.pubfi.ai/v1/operation-pricing-inventory` returns the complete public-safe
+  `quantro.operation-pricing-inventory.v1` producer projection for the installed snapshot. It
+  contains canonical route facts and `free_health` or `quantro_priced` classification, but no
+  selected price or execution authority. It uses `Cache-Control: no-store` and returns `503`
+  instead of a partial inventory when the complete approved projection cannot be formed.
 - Registry execution matches an exact path and method. A successful operation returns the validated
   provider JSON and PubFi request and Registry-generation headers.
 - A bounded provider HTTP error keeps its status and exact body. A valid JSON success-status
@@ -83,7 +88,9 @@ upstream API.
   `gateway.free_rate_limited` and `Retry-After`; a cumulative limit uses
   `gateway.free_limit_reached` without `Retry-After`. Successful MCP execution reports
   `execution_status: registry_free_route_executed` and `credits_charged: 0`. The checked-in Subscan
-  policy is provider-scoped; require the current catalog or OpenAPI advertisement before execution.
+  policy is provider-scoped across eligible default and bounded `{network}` routes, including XCM,
+  multi-chain, Pro, and `net_assets` operations. Require the current catalog or OpenAPI
+  advertisement before execution.
 - Registry readiness is `ready` or `blocked`. Editorial terms such as `requestable` and
   `contract_ready` do not make an operation executable.
 - Registered API-key execution consumes the account's applicable meter allocation.
@@ -153,11 +160,13 @@ upstream API.
 - Staging interactive API reference: https://api-stg.pubfi.ai/reference
 - Staging Runtime OpenAPI: https://api-stg.pubfi.ai/openapi.json
 - Staging Registry v2 catalog: https://api-stg.pubfi.ai/v1/capabilities
+- Staging operation-pricing inventory: https://api-stg.pubfi.ai/v1/operation-pricing-inventory
 - Staging MCP endpoint: https://mcp-stg.pubfi.ai
 - Staging MCP manifest: https://mcp-stg.pubfi.ai/.well-known/mcp.json
 - Interactive API reference: https://api.pubfi.ai/reference
 - Runtime OpenAPI: https://api.pubfi.ai/openapi.json
 - Current Registry v2 catalog: https://api.pubfi.ai/v1/capabilities
+- Operation-pricing inventory: https://api.pubfi.ai/v1/operation-pricing-inventory
 - API-host Glama metadata: https://api.pubfi.ai/.well-known/glama.json
 - API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP endpoint: https://mcp.pubfi.ai

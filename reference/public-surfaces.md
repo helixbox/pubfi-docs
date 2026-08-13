@@ -19,7 +19,8 @@ For the selected API root, use:
 
 - `/reference` for the interactive reference;
 - `/openapi.json` for Runtime OpenAPI; and
-- `/v1/capabilities` for the installed Registry catalog.
+- `/v1/capabilities` for the installed Registry catalog; and
+- `/v1/operation-pricing-inventory` for the complete public-safe producer pricing projection.
 
 For the selected MCP root, use `/.well-known/mcp.json` for discovery metadata.
 
@@ -55,10 +56,15 @@ ready.
 - `https://api.pubfi.ai/reference`
 - `https://api.pubfi.ai/openapi.json`
 - `https://api.pubfi.ai/v1/capabilities`
+- `https://api.pubfi.ai/v1/operation-pricing-inventory`
 
 `/v1/capabilities` is the public catalog for the installed Registry v2 generation. Runtime OpenAPI
 is the executable HTTP schema for current `ready` operations. PubFi does not publish separate
 static provider OpenAPI files as execution authority.
+
+`/v1/operation-pricing-inventory` is a no-store projection of every approved typed plan in the
+same installed snapshot. It contains no selected price and is not route-execution authority. It
+returns `503` rather than a partial inventory when the complete projection cannot be formed.
 
 ## MCP Discovery
 

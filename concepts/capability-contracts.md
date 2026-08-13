@@ -48,10 +48,12 @@ uses its advertised exact path without a suffix or API key.
 
 The checked-in Subscan Free Plan policy uses 2 requests per second, 2 concurrent attempts, a
 120-second permit TTL, and a provider-scoped quota of 20,000 requests per 86,400 seconds. Eligible
-exact Subscan routes share this allowance for one billing account. The policy excludes XCM,
-multi-chain, Pro, and `/api/v2/scan/accounts/net_assets` operations. It does not prove that any
-route is installed or ready. Clients must require the current catalog `free_rate_limit` or matching
-OpenAPI `x-pubfi-free-variant` before they use the suffix.
+exact Subscan routes share this allowance for one billing account. This applies to the default
+Polkadot routes and bounded `{network}` routes, including XCM, multi-chain, Pro, and
+`/api/v2/scan/accounts/net_assets` operations. A network value must be an exact alias in the
+installed source-declared origin set; it does not create an arbitrary upstream hostname. The
+policy does not prove that any route is installed or ready. Clients must require the current
+catalog `free_rate_limit` or matching OpenAPI `x-pubfi-free-variant` before they use the suffix.
 
 ## Current Readiness
 
@@ -79,6 +81,18 @@ and `pricing_unavailable`.
 
 An operation with an effective free policy includes `x-pubfi-free-variant`. That extension carries
 `suffix: ":free"` and the effective `rate_limit` object.
+
+## Operation Pricing Inventory
+
+`GET https://api.pubfi.ai/v1/operation-pricing-inventory` projects every typed operation in the
+installed Registry snapshot into one public-safe `quantro.operation-pricing-inventory.v1`
+document. It identifies canonical operation keys, route revisions and closures, request bounds,
+and whether each operation is `free_health` or `quantro_priced`. It contains no selected Credit or
+x402 price and is not route-execution authority.
+
+The response uses `Cache-Control: no-store`. The complete projection fails with `503` when the
+snapshot is unavailable or includes an unapproved provider, unsupported matcher, duplicate route
+coordinate, or invalid plan. It does not silently omit an operation.
 
 ## Execution Response
 
