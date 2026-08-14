@@ -65,7 +65,10 @@ upstream API.
   gateway operations. Each operation includes `x-pubfi-billing`. A `quantro_priced` operation also
   repeats its method price in `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
   `x-pubfi-price-version`, and `x-pubfi-x402`; non-priced operations omit these four fields.
-  Separate static provider schemas are not execution authority.
+  Separate static provider schemas are not execution authority. OpenAPI query parameters are
+  source-declared request-construction metadata. HTTP execution preserves any RFC 3986-valid query
+  of at most 65,536 encoded bytes, including duplicate or undeclared fields. Request bodies remain
+  subject to the selected operation body policy.
 - The current checked-in pricing target sets `credit_cost: 1` and x402
   `atomic_amount: "1000"` (0.001 USDC) for every priced Subscan and DeGov operation. Confirm the
   installed values in the selected environment before execution.
@@ -204,6 +207,10 @@ upstream API.
   `pubfi.capabilities.list`.
 - `pubfi.route.execute`: required `raw_path` and `method`; optional exact `query`, exact `body`,
   `idempotency_key`, and `request_id`.
+- The optional execution `query` is preserved byte-for-byte when it is an RFC 3986-valid query
+  component of at most 65,536 encoded bytes. PubFi allows duplicate and undeclared query fields and
+  does not enforce source-declared query-value relationships. The optional `body` still follows the
+  selected operation body policy.
 - `tools/list` publishes the current generation, manifest, and tool input and output schemas.
 - `pubfi.capabilities.list` and `pubfi.capabilities.get` are public Registry reads. The client
   selects a capability; PubFi does not infer intent or rank candidates.
