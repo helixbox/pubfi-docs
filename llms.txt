@@ -70,6 +70,9 @@ and accountless x402 are separate modes. An optional catalog `free_rate_limit` a
 `x-pubfi-free-variant` advertise an API-key-authenticated `:free` route variant that charges zero
 Credits. MCP `pubfi.route.execute` supports API-key admission, including that advertised suffix, or
 the mutually exclusive official x402 metadata flow, so an agent can pay directly through MCP.
+OpenAPI query fields are source-declared request-construction metadata. HTTP and MCP execution
+preserve any RFC 3986-valid query of at most 65,536 encoded bytes, including duplicate or
+undeclared fields; request bodies still follow the selected operation body policy.
 Each API runtime assigns the environment when it creates a key and accepts only matching keys.
 Clients cannot select the environment or request per-key scopes; only a human Owner or Admin can
 manage keys. `X-PubFi-Api-Key` is not accepted, but it remains a credential carrier and must be

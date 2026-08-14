@@ -108,13 +108,19 @@ A route can execute only when these gates pass:
 - source freshness evidence;
 - request input validation.
 
+Runtime OpenAPI query parameters are source-declared guidance for constructing the provider
+request. The gateway preserves and forwards any RFC 3986-valid query exactly, including duplicate
+or undeclared fields, up to 65,536 encoded bytes. It does not enforce the declared query-field or
+value relationships at execution time. Request bodies still follow the selected operation's body
+policy.
+
 ## Free Route Variant
 
 The current capability catalog can advertise `free_rate_limit` for an eligible exact `GET` or
 `POST` route. Runtime OpenAPI represents the same contract as `x-pubfi-free-variant`. Only then,
 append `:free` to the final path segment and send the normal Bearer API key. Keep the exact query
-or body required by the current operation schema. A server-side provider credential does not make
-an advertised free variant ineligible.
+intended for the current provider operation, and keep the body required by the current operation
+schema. A server-side provider credential does not make an advertised free variant ineligible.
 
 The effective policy contains a fixed request window, a concurrency limit, a permit TTL, and can
 also advertise an independent quota window, a cumulative limit, or shared bucket scope. A free

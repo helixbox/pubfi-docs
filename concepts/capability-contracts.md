@@ -73,6 +73,12 @@ context. They do not make a Registry operation executable.
 only current ready gateway routes. PubFi does not publish separate static provider OpenAPI files as
 execution authority.
 
+OpenAPI query parameters describe the source-declared contract for discovery, examples, and client
+construction. At execution time, PubFi preserves and forwards the caller's query exactly. It does
+not reject duplicate or undeclared query fields or enforce declared query-value relationships. The
+query must still be a valid RFC 3986 query component and must not exceed 65,536 encoded bytes.
+Request bodies remain subject to the selected operation's body policy.
+
 Every generated gateway operation includes `x-pubfi-billing`. For `quantro_priced`, the same
 method price is also available as `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
 `x-pubfi-price-version`, and `x-pubfi-x402`. The x402 object contains `network`, `asset`,
@@ -105,7 +111,7 @@ It does not use a PubFi success envelope.
 A catalog entry is necessary but not sufficient for execution. Request-time checks still enforce:
 
 - the exact path and HTTP method;
-- request query and body policy;
+- the platform query byte and syntax bounds, plus the operation body policy;
 - provider and credential readiness;
 - route response policy;
 - caller authentication and allocation for the API-key lane; or

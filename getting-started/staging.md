@@ -101,8 +101,10 @@ curl --fail --silent --show-error \
 `X-PubFi-Api-Key` is not accepted. Remove it before an accountless x402 request because its
 presence still selects the credential lane. For a different route, copy the exact matcher and
 method from the current catalog. Follow its query, body, response, and method-specific billing
-policy. Exact `free_health` operations are public and use their advertised path without a `:free`
-suffix.
+metadata. OpenAPI query fields guide request construction, but the gateway preserves any valid
+bounded RFC 3986 query instead of enforcing source-declared field semantics. The body still must
+satisfy the operation body policy. Exact `free_health` operations are public and use their
+advertised path without a `:free` suffix.
 
 ## Connect An MCP Client
 

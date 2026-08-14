@@ -98,8 +98,10 @@ Copy the path and HTTP method from one current `ready` operation. Replace each d
 parameter with a value that satisfies its schema. The resulting concrete path is the gateway path.
 Do not add provider, network, or endpoint segments that are not present in the current schema.
 
-Only `GET` and `POST` are supported. The request query and body must satisfy the exact operation
-policy.
+Only `GET` and `POST` are supported. Use the operation's OpenAPI query parameters to construct the
+provider request. PubFi forwards a valid RFC 3986 query exactly as supplied, including duplicate or
+undeclared fields, up to 65,536 encoded bytes. It does not apply the source-declared query-value
+rules during execution. The request body must satisfy the exact operation body policy.
 
 Set placeholders from the current schema:
 
