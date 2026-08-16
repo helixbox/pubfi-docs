@@ -5,10 +5,10 @@ description: Connect an MCP client to PubFi's hosted Registry v2 tools.
 
 PubFi exposes generic route and capability tools over MCP.
 
-| Environment | Hosted endpoint | Discovery manifest |
-| --- | --- | --- |
-| Staging | `https://mcp-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai/.well-known/mcp.json` |
-| Production | `https://mcp.pubfi.ai` | `https://mcp.pubfi.ai/.well-known/mcp.json` |
+| Environment | Authenticated endpoint | Accountless x402 endpoint | Discovery manifest |
+| --- | --- | --- | --- |
+| Staging | `https://mcp-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai/x402` | `https://mcp-stg.pubfi.ai/.well-known/mcp.json` |
+| Production | `https://mcp.pubfi.ai` | `https://mcp.pubfi.ai/x402` | `https://mcp.pubfi.ai/.well-known/mcp.json` |
 
 Use a separate wallet, private key, endpoint, and payment policy for each environment. Do not reuse
 Staging payment material in Production, or the reverse.
@@ -46,15 +46,18 @@ Public handshake and introspection methods, such as `initialize`, `ping`, `tools
 `resources/list`, `resources/templates/list`, `prompts/list`, and `notifications/initialized`,
 can be called without a key.
 
-`pubfi.route.execute` supports two mutually exclusive execution modes:
+`pubfi.route.execute` supports two endpoint-separated execution modes:
 
-- An API-key call uses account admission and allocation. Pass the key through the transport as
-  `Authorization: Bearer <PubFi API key>`. `X-PubFi-Api-Key` is not accepted, but its presence
-  still selects the credential lane.
-- An accountless x402 call uses a wallet payment for one eligible request. Do not send
-  `Authorization` or `X-PubFi-Api-Key` in this mode.
+- The authenticated root accepts one Bearer credential: a `pf_sk_v1_` PubFi API key or a Supabase
+  OAuth access token. Both use account admission and allocation. Invalid credentials never fall
+  back to the other credential type or to x402. `X-PubFi-Api-Key` is not accepted.
+- The explicit `/x402` endpoint uses a wallet payment for one eligible request. It rejects
+  `Authorization`, `X-PubFi-Api-Key`, and every other Bearer carrier.
 
-Sending both authorities is a conflict. An invalid API key never falls back to x402.
+The discovery manifest publishes the OAuth authorization server and the
+`/.well-known/oauth-protected-resource` URL for the selected environment. A client that supports
+MCP OAuth can use that metadata. A static API-key client can continue to send
+`Authorization: Bearer <PubFi API key>` to the authenticated root.
 
 An agent with a wallet-capable x402 MCP client can pay an eligible
 `pubfi.route.execute` call directly through MCP. It does not need a PubFi account, API key, or a
@@ -74,7 +77,8 @@ when the selected route is callable and configured.
 4. Inspect the selected method's `operations[].billing`. Call `pubfi.route.execute` for the exact
    ready `raw_path` and `method`. A priced API-key call consumes its positive `credit_cost`; an
    exact `free_health` operation is public and has no Credit or x402 charge.
-5. Select API-key admission or x402 payment. Never send both.
+5. Select the authenticated root with an API key or OAuth access token, or select the `/x402`
+   endpoint without a Bearer credential. Never mix those lanes.
 
 ## Inspect Tool Schemas
 
@@ -116,10 +120,11 @@ for client configuration and smoke commands.
 
 ## Accountless x402 Tool Flow
 
-MCP uses the official x402 metadata flow. It does not return HTTP 402 on the MCP POST and does not
-use a JSON-RPC payment error.
+MCP uses the official x402 metadata flow on the explicit `/x402` endpoint. It does not return HTTP
+402 on the MCP POST and does not use a JSON-RPC payment error.
 
-1. Call `pubfi.route.execute` without API-key auth and without payment metadata.
+1. Connect to `https://mcp-stg.pubfi.ai/x402` or `https://mcp.pubfi.ai/x402`. Call
+   `pubfi.route.execute` without Bearer auth and without payment metadata.
 2. For an eligible route, require a normal JSON-RPC success whose `CallToolResult` has:
    - `isError: true`;
    - the exact x402 V2 `PaymentRequired` object in `structuredContent`; and
@@ -134,7 +139,7 @@ The bounded `_meta` object can also contain unrelated MCP client metadata. Only
 `_meta["x402/payment"]` is a payment carrier. Other `_meta` entries do not select the payment lane.
 
 Use an x402 MCP client that implements this flow. Do not convert the MCP challenge into a
-`PAYMENT-SIGNATURE` HTTP header yourself.
+`PAYMENT-SIGNATURE` HTTP header yourself. Do not send payment metadata to the authenticated root.
 
 A pinned Staging-only runnable example uses `@x402/mcp`, `@x402/core`, `@x402/evm`, and the MCP SDK
 against `pubfi.route.execute`. It validates a bounded Base Sepolia payment, verifies the signed
@@ -190,9 +195,9 @@ wallet charge. Replay equivalence applies to `structuredContent` and
 Unsupported paths, methods, non-ready operations, invalid exact query or body bytes, and supplier
 procurement attempts return explicit gate readbacks rather than silently calling upstream APIs.
 
-An unsupported route, invalid payment, mixed API-key and payment authorities, or changed replay
-binding fails closed before a second provider execution. SIWX and anonymous Credits are not part
-of the current MCP flow.
+An unsupported route, invalid payment, or changed replay binding fails closed before a second
+provider execution. The `/x402` endpoint rejects Bearer credentials. The authenticated root
+rejects payment metadata. SIWX and anonymous Credits are not part of the current MCP flow.
 
 For detailed tool contracts, continue to the [Agent Interface
 Reference](/reference/agent-interface). For payment metadata and replay policy, continue to

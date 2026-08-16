@@ -11,7 +11,8 @@ facts, and runtime execution fit together from a public-docs perspective.
 | Surface | Role |
 | --- | --- |
 | `api.pubfi.ai` | HTTP API for capabilities, gateway routes, account, usage, health, and OpenAPI |
-| `mcp.pubfi.ai` | hosted MCP endpoint for generic PubFi route/capability tools |
+| `mcp.pubfi.ai` | hosted MCP root for public reads and API-key or OAuth account execution |
+| `mcp.pubfi.ai/x402` | separate Bearer-free MCP endpoint for accountless x402 execution |
 | `pubfi.ai` | product UI, Discovery, docs entry, and dashboard presentation |
 
 Staging uses the separate roots `api-stg.pubfi.ai`, `mcp-stg.pubfi.ai`, and `stg.pubfi.ai`.

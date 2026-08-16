@@ -14,7 +14,7 @@ Provider readiness determines when PubFi can safely say a source is callable thr
 | Registry operation | Does the current signed generation contain the exact path and method? |
 | Operation readiness | Is that exact operation `ready` rather than `blocked`? |
 | Runtime credential | Is the upstream credential configured server-side? |
-| Caller gate | Does the caller have API-key admission, or is this exact route eligible for x402 over the selected transport? |
+| Caller gate | Does the caller have API-key or MCP OAuth account admission, or is this exact route eligible for x402 over HTTP or the MCP `/x402` endpoint? |
 | Execution gate | Can the request be validated and attempted safely now? |
 
 ## Certification

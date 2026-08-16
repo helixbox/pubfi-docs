@@ -27,6 +27,8 @@ Runtime OpenAPI, and MCP metadata.
 | API-host MCP manifest | MCP discovery for clients that start from the API domain. | `https://api.pubfi.ai/.well-known/mcp.json` |
 | MCP ownership declaration | Public connector ownership metadata. | `https://api.pubfi.ai/.well-known/glama.json` |
 | Hosted MCP manifest | Hosted MCP discovery and current Registry metadata. | `https://mcp.pubfi.ai/.well-known/mcp.json` |
+| MCP OAuth protected resource | OAuth resource metadata for the authenticated MCP root. | `https://mcp.pubfi.ai/.well-known/oauth-protected-resource` |
+| Accountless MCP x402 endpoint | Bearer-free MCP payment lane. | `https://mcp.pubfi.ai/x402` |
 | MCP discovery pointer | Product-site pointer to hosted MCP discovery. | `https://pubfi.ai/.well-known/mcp.json` |
 | MCP server card | Marketplace-oriented hosted MCP metadata. | `https://pubfi.ai/.well-known/mcp/server-card.json` |
 | MCP registry auth proof | Optional domain-ownership proof. | `https://pubfi.ai/.well-known/mcp-registry-auth` |
@@ -36,6 +38,7 @@ Runtime OpenAPI, and MCP metadata.
 | Staging API reference | Interactive Staging HTTP reference. | `https://api-stg.pubfi.ai/reference` |
 | Staging Runtime OpenAPI | Executable Staging HTTP schema for current `ready` Registry operations and API routes. | `https://api-stg.pubfi.ai/openapi.json` |
 | Staging hosted MCP manifest | Hosted Staging MCP discovery and current Registry metadata. | `https://mcp-stg.pubfi.ai/.well-known/mcp.json` |
+| Staging accountless MCP x402 endpoint | Bearer-free Staging MCP payment lane. | `https://mcp-stg.pubfi.ai/x402` |
 | Accountless x402 guide | HTTP and MCP x402 V2 challenge, signing, receipt, privacy, and replay rules. | `https://docs.pubfi.ai/getting-started/x402` |
 | Staging x402 example | Pinned Base Sepolia HTTP and MCP clients with signed offer, signed receipt, and exact replay validation. | `https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepolia` |
 | Staging x402 acceptance | Source workflow for the 2026-07-27 Staging HTTP and MCP acceptance; repository access is required. | `https://github.com/helixbox/pubfi-mono/actions/runs/30258511212` |
@@ -64,7 +67,8 @@ payment authorization.
   USDC per request. The current catalog and live unsigned challenge remain the route and
   payment-term authorities.
 - Accountless x402 creates no PubFi account, API key, invoice, or Credits. Wallet USDC is the
-  payment balance. An agent can pay directly through the official MCP metadata flow.
+  payment balance. An agent can pay directly through the official MCP metadata flow on the
+  explicit `/x402` endpoint.
 - HTTP and MCP share one x402 `exact` payment, settlement, Signed Receipt, and replay path. The
   challenge contains the Signed Offer. Settled HTTP responses carry `PAYMENT-RESPONSE`; settled MCP
   results carry the decoded response and Signed Receipt at
@@ -74,8 +78,8 @@ payment authorization.
   `error` message. Validate every new term before signing again.
 - A Signed Receipt is verifiable payment and execution evidence, not an account balance, Credits,
   top-up, or deposit record. Exact replay reuses the settlement and receipt without another charge.
-- Quantro is the common accounting-fact authority. A request selects either the API-key and Credits
-  lane or the x402 wallet-payment lane. It cannot debit both.
+- Quantro is the common accounting-fact authority. A request selects either the authenticated
+  account and Credits lane or the x402 wallet-payment lane. It cannot debit both.
 
 ## Authority Order
 
@@ -118,9 +122,11 @@ convention.
   `{network}` routes for one billing account, including XCM, multi-chain, Pro, and `net_assets`
   operations. Policy presence does not prove route readiness; require the current catalog or
   OpenAPI advertisement before execution.
-- An exact eligible HTTP or MCP operation can use accountless x402 V2 instead of a PubFi API key.
-- MCP `pubfi.route.execute` accepts API-key admission, including the advertised `:free` suffix, or
-  the mutually exclusive official x402 metadata flow. Anonymous and x402 calls cannot use the
+- An exact eligible HTTP operation or MCP `/x402` operation can use accountless x402 V2 instead of
+  authenticated account execution.
+- The authenticated MCP root accepts a PubFi API key or OAuth access token for
+  `pubfi.route.execute`, including an advertised `:free` suffix. It rejects payment metadata and
+  never falls back. The `/x402` endpoint rejects Bearer credentials and does not accept the
   suffix.
 - A successful HTTP gateway response is canonical provider JSON. API-key responses identify the
   Registry generation. Settled x402 HTTP responses include `PAYMENT-RESPONSE`; settled MCP results

@@ -8,10 +8,10 @@ operations still require account, API-key, or x402 authorization.
 
 ## Environment Entry Points
 
-| Environment | Web | API | MCP |
-| --- | --- | --- | --- |
-| Staging | `https://stg.pubfi.ai` | `https://api-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai` |
-| Production | `https://pubfi.ai` | `https://api.pubfi.ai` | `https://mcp.pubfi.ai` |
+| Environment | Web | API | Authenticated MCP | MCP x402 |
+| --- | --- | --- | --- | --- |
+| Staging | `https://stg.pubfi.ai` | `https://api-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai/x402` |
+| Production | `https://pubfi.ai` | `https://api.pubfi.ai` | `https://mcp.pubfi.ai` | `https://mcp.pubfi.ai/x402` |
 
 The Staging login entry is `https://stg.pubfi.ai/login`.
 
@@ -22,7 +22,9 @@ For the selected API root, use:
 - `/v1/capabilities` for the installed Registry catalog; and
 - `/v1/operation-pricing-inventory` for the complete public-safe producer pricing projection.
 
-For the selected MCP root, use `/.well-known/mcp.json` for discovery metadata.
+For the selected MCP root, use `/.well-known/mcp.json` for discovery metadata and
+`/.well-known/oauth-protected-resource` for OAuth resource metadata. Use `/x402` only for the
+Bearer-free accountless MCP payment lane.
 
 Staging is the Base Sepolia (`eip155:84532`) test boundary for eligible accountless x402 routes.
 The current staging catalog and challenge remain the availability and payment-term authority.
@@ -45,6 +47,8 @@ guide](/getting-started/staging).
 - `https://pubfi.ai/discovery/sources/page/{page}`
 - `https://pubfi.ai/discovery/topic/{slug}`
 - `https://pubfi.ai/login`
+- `https://pubfi.ai/oauth/consent` for OAuth continuation only; clients must not construct its
+  opaque `authorization_id`
 - `https://pubfi.ai/privacy-policy`
 - `https://pubfi.ai/terms-of-service`
 
@@ -71,13 +75,15 @@ returns `503` rather than a partial inventory when the complete projection canno
 - `https://api.pubfi.ai/.well-known/mcp.json`
 - `https://api.pubfi.ai/.well-known/glama.json`
 - `https://mcp.pubfi.ai/.well-known/mcp.json`
+- `https://mcp.pubfi.ai/.well-known/oauth-protected-resource`
+- `https://mcp.pubfi.ai/x402`
 - `https://pubfi.ai/.well-known/mcp.json`
 - `https://pubfi.ai/.well-known/mcp/server-card.json`
 - `https://pubfi.ai/.well-known/mcp-registry-auth`
 
 The registry-auth proof route is optional and can return `404`. MCP discovery and `tools/list` are
-public. `pubfi.route.execute` accepts PubFi API-key authentication or accountless x402 on an
-eligible route.
+public. On the authenticated root, `pubfi.route.execute` accepts a PubFi API key or OAuth access
+token. Eligible accountless x402 execution uses `/x402` without a Bearer credential.
 
 ## Gateway Contract
 

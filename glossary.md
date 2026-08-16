@@ -30,7 +30,7 @@ lane, or it can explicitly enable the accountless x402 lane over HTTP or MCP.
 ## MCP
 
 Model Context Protocol. PubFi exposes generic route and capability tools through a hosted MCP
-endpoint.
+authenticated root. Accountless payment uses the separate `/x402` MCP endpoint.
 
 ## `PAYMENT-REQUIRED`
 

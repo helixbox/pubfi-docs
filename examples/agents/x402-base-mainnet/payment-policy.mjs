@@ -5,7 +5,7 @@ export const PAYMENT_MICRO_USDC = 1_000n;
 export const MAX_AUTHORIZATION_SECONDS = 300;
 
 const PRODUCTION_API_ORIGIN = 'https://api.pubfi.ai';
-const PRODUCTION_MCP_ENDPOINT = 'https://mcp.pubfi.ai';
+const PRODUCTION_MCP_X402_ENDPOINT = 'https://mcp.pubfi.ai/x402';
 const PRODUCTION_RESOURCE = 'https://api.pubfi.ai/v1/gateway/quantro/health';
 
 export function requiredEnvironment(name) {
@@ -48,7 +48,7 @@ export function mcpUrlForResource(resource) {
   if (resource?.origin !== PRODUCTION_API_ORIGIN) {
     throw new Error('x402 Base mainnet MCP requests must use PubFi Production');
   }
-  return new URL(PRODUCTION_MCP_ENDPOINT);
+  return new URL(PRODUCTION_MCP_X402_ENDPOINT);
 }
 
 export function expectedPaymentSelector() {

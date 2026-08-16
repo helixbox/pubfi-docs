@@ -12,7 +12,8 @@ API, and MCP roots.
 | --- | --- |
 | Web and dashboard | `https://stg.pubfi.ai` |
 | HTTP API | `https://api-stg.pubfi.ai` |
-| MCP | `https://mcp-stg.pubfi.ai` |
+| Authenticated MCP | `https://mcp-stg.pubfi.ai` |
+| Accountless MCP x402 | `https://mcp-stg.pubfi.ai/x402` |
 
 Use only these exact HTTPS origins. Do not add a port, path, query, fragment, or user information to
 an origin.
@@ -177,7 +178,9 @@ testnet funds and a dedicated test wallet. Do not send a PubFi API key and `PAYM
 the same request.
 
 For MCP, use the official x402 metadata flow. Put the payment object in
-`params._meta["x402/payment"]`. Do not convert it into an HTTP header.
+`params._meta["x402/payment"]` and connect to `https://mcp-stg.pubfi.ai/x402`. Do not convert it
+into an HTTP header. The authenticated root rejects payment metadata, and the `/x402` endpoint
+rejects Bearer credentials.
 
 This staging boundary does not prove that x402 is available in Production. A checked-in route,
 OpenAPI path, or old challenge is not current availability evidence.

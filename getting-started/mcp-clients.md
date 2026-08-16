@@ -3,9 +3,10 @@ title: MCP Client Guides
 description: Configure PubFi in popular desktop, IDE, CLI, local-model, and hosted agent clients.
 ---
 
-This page gives client-specific setup for PubFi's hosted MCP endpoint. It covers the API-key
-execution lane. Use [MCP Client Setup](/getting-started/mcp-client) for the protocol, tool, and
-x402 contracts.
+This page gives client-specific setup for PubFi's hosted MCP endpoint. Its static configurations
+cover the API-key execution lane on the authenticated root. PubFi also advertises OAuth through
+protected-resource metadata. Use [MCP Client Setup](/getting-started/mcp-client) for the protocol,
+OAuth, tool, and explicit `/x402` endpoint contracts.
 
 The Production examples use:
 
@@ -547,7 +548,9 @@ Add this entry to the user configuration, normally `~/.config/opencode/opencode.
 }
 ```
 
-`oauth: false` prevents an unrelated OAuth attempt on the current PubFi API-key lane. Run
+`oauth: false` keeps this specific static-header configuration on the PubFi API-key lane. Remove it
+only when you intentionally configure the client's OAuth flow; do not combine OAuth and a static
+PubFi API key. Run
 `opencode mcp list` to check the connection. If needed, run `opencode mcp debug pubfi` to inspect
 the transport without copying the key into a prompt.
 
@@ -746,10 +749,11 @@ these connection forms:
   one. Otherwise keep the header only in a private, unsynced user setting.
 - **Local STDIO command:** use the checked-in bridge and inject the matching key into the bridge
   process environment.
-- **Remote URL without custom headers:** public discovery can work, but authenticated execution
-  through the current API-key lane is not established.
-- **OAuth-only hosted connector:** do not assume compatibility. Use a local client or wait for a
-  documented PubFi-compatible hosted authentication flow.
+- **Remote URL without custom headers:** public discovery can work. Authenticated execution
+  requires either the client's supported OAuth flow or a configured Bearer credential.
+- **OAuth-capable hosted connector:** use the authenticated root. PubFi publishes
+  `/.well-known/oauth-protected-resource` and the environment's authorization server. Do not send
+  OAuth or API-key Bearer credentials to the `/x402` endpoint.
 
 Always verify the three generic PubFi tools before you allow execution. A client that requires a
 provider-specific `subscan.*` or `degov.*` tool shape is not compatible with PubFi's current
@@ -763,10 +767,10 @@ ChatGPT web does not read local Codex MCP configuration. Current ChatGPT custom 
 remote MCP server from OpenAI infrastructure. The current official app guide documents OAuth but
 does not document a user-supplied static bearer header for every request.
 
-PubFi's anonymous handshake and capability tools can be scanned without a key, but this guide does
-not claim that ChatGPT web can execute the current PubFi API-key lane. Use Codex CLI, the Codex IDE
-extension, or ChatGPT desktop until PubFi exposes a compatible hosted auth flow or OpenAI
-documents a static-key mechanism for custom apps.
+PubFi's anonymous handshake and capability tools can be scanned without a key. The authenticated
+root now publishes OAuth protected-resource metadata and its authorization server. This
+repository contract does not prove that a particular ChatGPT web workspace has enabled or
+completed that connector flow.
 
 See the official [ChatGPT developer mode and MCP app
 guide](https://help.openai.com/en/articles/12584461-developer-mode-apps-and-full-mcp-connectors-in-chatgpt-beta).
@@ -777,9 +781,10 @@ Claude custom connectors run from Anthropic infrastructure. The current connecto
 remote URL and optional OAuth client credentials. It does not document an arbitrary static bearer
 header.
 
-The public capability tools can connect without a key, but this guide does not claim authenticated
-`pubfi.route.execute` compatibility through a Claude cloud connector. Use Claude Code or the
-Claude Desktop local stdio bridge for the current API-key lane.
+The public capability tools can connect without a key. The authenticated root now publishes OAuth
+protected-resource metadata and its authorization server. This repository contract does not prove
+that a particular Claude connector has enabled or completed that flow. Claude Code and the local
+stdio bridge can continue to use the API-key lane.
 
 See the official [Claude custom connector
 guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).

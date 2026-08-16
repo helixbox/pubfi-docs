@@ -8,10 +8,10 @@ key to inspect public contracts or use an eligible accountless x402 route.
 
 ## 1. Choose An Environment
 
-| Environment | Web | API | MCP |
-| --- | --- | --- | --- |
-| Staging | `https://stg.pubfi.ai` | `https://api-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai` |
-| Production | `https://pubfi.ai` | `https://api.pubfi.ai` | `https://mcp.pubfi.ai` |
+| Environment | Web | API | Authenticated MCP | MCP x402 |
+| --- | --- | --- | --- | --- |
+| Staging | `https://stg.pubfi.ai` | `https://api-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai` | `https://mcp-stg.pubfi.ai/x402` |
+| Production | `https://pubfi.ai` | `https://api.pubfi.ai` | `https://mcp.pubfi.ai` | `https://mcp.pubfi.ai/x402` |
 
 Start in Staging. Keep the web, API, MCP, credentials, and payment network in the same environment.
 See the [Staging Guide](/getting-started/staging) for login and test details.
@@ -23,8 +23,8 @@ See the [Staging Guide](/getting-started/staging) for login and test details.
 | Compare crypto data providers | [Discovery](https://pubfi.ai/discovery) | No |
 | Inspect routes and schemas | Registry catalog, Runtime OpenAPI, or MCP `tools/list` | No |
 | Execute through HTTP with account allocation | API-key lane | Yes |
-| Execute through MCP with account allocation | MCP API-key lane | Yes |
-| Buy one eligible response without an account | HTTP or MCP x402 lane | No |
+| Execute through MCP with account allocation | MCP API-key or OAuth lane | API key or OAuth access token |
+| Buy one eligible response without an account | HTTP or explicit MCP `/x402` lane | No |
 
 Do not combine a PubFi API key with x402 payment evidence.
 
