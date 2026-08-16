@@ -25,7 +25,8 @@ authority.
 | --- | --- |
 | `pubfi.ai` | Public site, Discovery, dashboard presentation, and agent-readable exports. |
 | `api.pubfi.ai` | Rust API for Registry catalog and execution, Runtime OpenAPI, accounts, API keys, usage, billing readback, and purchases. |
-| `mcp.pubfi.ai` | Streamable HTTP MCP endpoint for generic Registry tools. |
+| `mcp.pubfi.ai` | Streamable HTTP MCP root for public reads and API-key or OAuth account execution. |
+| `mcp.pubfi.ai/x402` | Separate Bearer-free MCP endpoint for eligible accountless x402 execution. |
 | `docs.pubfi.ai` | Long-form public product, integration, security, and reference documentation. |
 | `pubfi.ai/.well-known/mcp.json` | Product-site discovery pointer to the hosted MCP endpoint. |
 | `pubfi.ai/.well-known/mcp/server-card.json` | Hosted MCP metadata card. |
@@ -46,8 +47,9 @@ authority.
 8. The caller receives the canonical provider JSON. API-key responses identify the Registry
    generation. Settled x402 responses include the payment result.
 
-MCP `pubfi.route.execute` selects either the API-key/allocation lane or the mutually exclusive
-accountless x402 lane. Both transports use the same typed Registry and provider executor.
+MCP `pubfi.route.execute` uses API-key or OAuth account admission on the authenticated root. The
+separate `/x402` endpoint rejects Bearer credentials and owns accountless payment metadata. Both
+endpoints use the same typed Registry and provider executor.
 
 ## Registered Commerce Flow
 

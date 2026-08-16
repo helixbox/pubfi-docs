@@ -28,7 +28,8 @@ smaller agent-facing interface:
 1. search capabilities and sources;
 2. inspect the active Registry generation and ready route matchers;
 3. plan an exact path and method;
-4. execute only a supported current route through API-key admission or an eligible x402 challenge;
+4. execute only a supported current route through API-key or MCP OAuth account admission, or an
+   eligible x402 challenge;
 5. preserve provider provenance, Registry identity, and request identity.
 
 Use the [Staging guide](/getting-started/staging) to keep test endpoints and credentials separate

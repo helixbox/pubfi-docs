@@ -10,8 +10,9 @@ carry the same tool-change flag, generation, and manifest identity.
 
 For hosted authenticated use, configure an MCP client for PubFi's Streamable HTTP endpoint at
 `https://mcp.pubfi.ai`. The hosted service uses the same three fixed Registry v2 tools. Catalog
-list/detail reads are public. Exact execution requires a PubFi API key or the eligible accountless
-x402 lane. Upstream provider credentials stay server-side.
+list/detail reads are public. Exact execution on this root requires a PubFi API key or OAuth access
+token. Eligible accountless x402 execution uses `https://mcp.pubfi.ai/x402` without a Bearer
+credential. Upstream provider credentials stay server-side.
 
 ## Tools
 
@@ -94,7 +95,8 @@ See the [Staging guide](../../../getting-started/staging.md) for login, key crea
 the Base Sepolia test boundary, and the Production transition.
 
 For accountless payment, use an official x402 MCP client. An unsigned eligible
-`pubfi.route.execute` call returns `PaymentRequired` in the MCP tool result. The retry carries the
+`pubfi.route.execute` call on `https://mcp-stg.pubfi.ai/x402` or
+`https://mcp.pubfi.ai/x402` returns `PaymentRequired` in the MCP tool result. The retry carries the
 x402 V2 payment object at `params._meta["x402/payment"]`; the settled result carries
 `result._meta["x402/payment-response"]`. Do not pass a PubFi API key, private key, or
 `PAYMENT-SIGNATURE` HTTP header in this flow.

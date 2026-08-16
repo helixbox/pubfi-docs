@@ -86,7 +86,8 @@ OpenAPI visibility does not make every route anonymous.
 | Catalog, operation-pricing inventory, OpenAPI, reference, health, version, and MCP discovery | No PubFi API key. |
 | Gateway through the API-key lane | API key for this environment, active admission, and sufficient allocation. |
 | Gateway through the accountless x402 lane | No API key; exact x402-eligible route and valid V2 request-bound payment authorization. |
-| MCP `pubfi.route.execute` | API key for this environment, or no API-key carrier plus the official x402 metadata flow for an eligible route. |
+| MCP `pubfi.route.execute` on the root endpoint | API key or OAuth access token for this environment. Invalid credentials and x402 metadata do not fall back. |
+| MCP `pubfi.route.execute` on `/x402` | No Bearer carrier; exact x402-eligible route and official MCP payment metadata. |
 | Billing-account list | Authenticated human dashboard session. |
 | API-key management | Authenticated human Owner or Admin. API keys cannot manage keys. |
 | Usage and billing readback | Human account member, or an API key for the same account. |

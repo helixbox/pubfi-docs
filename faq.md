@@ -17,9 +17,10 @@ only when the current `GET /v1/capabilities` catalog lists its exact path and me
 
 Yes, through `pubfi.capabilities.list`, `pubfi.capabilities.get`, and `pubfi.route.execute`.
 The catalog reads and public MCP handshake and introspection methods are available without a
-PubFi API key. `pubfi.route.execute` accepts either API-key admission or accountless x402 payment.
-An agent with a wallet-capable x402 MCP client can pay directly through the official MCP metadata
-flow. It does not need a separate paid HTTP call. The two modes cannot be combined.
+PubFi API key. On the authenticated root, `pubfi.route.execute` accepts a PubFi API key or OAuth
+access token. Accountless x402 payment uses the separate `/x402` endpoint, which rejects Bearer
+credentials. An agent with a wallet-capable x402 MCP client can pay directly through the official
+MCP metadata flow on that endpoint. It does not need a separate paid HTTP call.
 
 ## Why does my agent see only three PubFi tools?
 

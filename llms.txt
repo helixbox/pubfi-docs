@@ -27,7 +27,7 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 
 - Staging product and login: https://stg.pubfi.ai, https://stg.pubfi.ai/login
 - Staging API reference, OpenAPI, catalog, and operation-pricing inventory: https://api-stg.pubfi.ai/reference, https://api-stg.pubfi.ai/openapi.json, https://api-stg.pubfi.ai/v1/capabilities, https://api-stg.pubfi.ai/v1/operation-pricing-inventory
-- Staging MCP endpoint and manifest: https://mcp-stg.pubfi.ai, https://mcp-stg.pubfi.ai/.well-known/mcp.json
+- Staging MCP root, x402 endpoint, and manifest: https://mcp-stg.pubfi.ai, https://mcp-stg.pubfi.ai/x402, https://mcp-stg.pubfi.ai/.well-known/mcp.json
 - Interactive API reference: https://api.pubfi.ai/reference
 - Runtime OpenAPI: https://api.pubfi.ai/openapi.json
 - Current Registry v2 catalog: https://api.pubfi.ai/v1/capabilities
@@ -35,6 +35,8 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 - API-host Glama metadata: https://api.pubfi.ai/.well-known/glama.json
 - API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
+- MCP OAuth protected resource: https://mcp.pubfi.ai/.well-known/oauth-protected-resource
+- MCP x402 endpoint: https://mcp.pubfi.ai/x402
 - MCP discovery pointer: https://pubfi.ai/.well-known/mcp.json
 - MCP server card: https://pubfi.ai/.well-known/mcp/server-card.json
 - Optional MCP registry auth proof route: https://pubfi.ai/.well-known/mcp-registry-auth
@@ -68,8 +70,10 @@ Discovery inclusion does not imply Registry readiness. The current Registry cata
 OpenAPI define executable paths and methods. API-key execution, registered purchases and Credits,
 and accountless x402 are separate modes. An optional catalog `free_rate_limit` and OpenAPI
 `x-pubfi-free-variant` advertise an API-key-authenticated `:free` route variant that charges zero
-Credits. MCP `pubfi.route.execute` supports API-key admission, including that advertised suffix, or
-the mutually exclusive official x402 metadata flow, so an agent can pay directly through MCP.
+Credits. The authenticated MCP root accepts a PubFi API key or OAuth access token for
+`pubfi.route.execute`, including that advertised suffix. It rejects payment metadata and does not
+fall back. The separate `/x402` endpoint rejects Bearer credentials and supports the official
+x402 metadata flow, so an agent can pay directly through MCP.
 OpenAPI query fields are source-declared request-construction metadata. HTTP and MCP execution
 preserve any RFC 3986-valid query of at most 65,536 encoded bytes, including duplicate or
 undeclared fields; request bodies still follow the selected operation body policy.

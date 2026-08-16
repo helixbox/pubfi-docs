@@ -2,7 +2,7 @@
 
 This Staging-only example can inspect PubFi's accountless x402 challenge or run one bounded paid
 request through the official HTTP or MCP client. It accepts only `https://api-stg.pubfi.ai` and
-`https://mcp-stg.pubfi.ai`. Paid commands use Base Sepolia test USDC, not real-value USDC.
+`https://mcp-stg.pubfi.ai/x402`. Paid commands use Base Sepolia test USDC, not real-value USDC.
 
 ## Inspect Without A Wallet
 
@@ -64,7 +64,8 @@ npm run paid:mcp
 ```
 
 The script uses `@x402/mcp` with `pubfi.route.execute`. It verifies the Ed25519 `did:web` signed
-offer and receipt, then verifies exact structured-content and payment-response replay.
+offer and receipt, then verifies exact structured-content and payment-response replay. It connects
+to the Bearer-free `https://mcp-stg.pubfi.ai/x402` endpoint.
 
 Each paid command rejects an offer above 0.01 test USDC or an authorization lifetime above 300
 seconds. Running both commands can spend up to 0.02 test USDC.

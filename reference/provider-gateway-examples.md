@@ -210,7 +210,7 @@ same current requirements in the JSON body. Validate that challenge before a wal
 The paid retry uses `PAYMENT-SIGNATURE`. A settled success returns `PAYMENT-RESPONSE`. Never send a
 PubFi API key and `PAYMENT-SIGNATURE` together. MCP `pubfi.route.execute` supports the same payment
 lane through `x402/payment` and `x402/payment-response` metadata. The Base Sepolia example uses
-`https://mcp-stg.pubfi.ai`.
+`https://mcp-stg.pubfi.ai/x402`, which rejects Bearer credentials.
 
 Staging permits Base Sepolia `eip155:84532`. Production permits Base mainnet `eip155:8453` only
 when the exact route has x402 enabled. The environment policy does not establish current

@@ -53,7 +53,7 @@ test('accepts only the exact PubFi Staging gateway and MCP origins', () => {
   withEnvironment({ X402_RESOURCE_URL: STAGING_RESOURCE }, () => {
     const resource = resourceUrl();
     assert.equal(resource.href, STAGING_RESOURCE);
-    assert.equal(mcpUrlForResource(resource).href, 'https://mcp-stg.pubfi.ai/');
+    assert.equal(mcpUrlForResource(resource).href, 'https://mcp-stg.pubfi.ai/x402');
   });
 
   for (const rejected of [

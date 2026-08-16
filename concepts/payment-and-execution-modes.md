@@ -11,7 +11,7 @@ commercial, settlement, allocation, and receipt facts behind those product surfa
 
 | Mode | Caller identity | What authorizes execution | Commercial effect |
 | --- | --- | --- | --- |
-| API key and allowance | registered billing account | PubFi API key for the endpoint environment, active admission, and sufficient allocation | reserves and finalizes the selected meter allocation |
+| Authenticated account execution | registered billing account | PubFi API key or MCP OAuth access token for the endpoint environment, active admission, and sufficient allocation | reserves and finalizes the selected meter allocation |
 | Registered purchase | authenticated account Owner or Admin | an available immutable purchase offer and provider-hosted Checkout | after verified settlement, creates a purchase-origin meter allocation shown by PubFi as Credits |
 | Accountless x402 over HTTP or MCP | wallet authorization; no PubFi account or API key | one valid x402 payment bound to one eligible request | buys that response only; it does not create or consume Credits |
 
@@ -39,12 +39,14 @@ header both count as API-key carriers for this lane decision.
 
 ## MCP Lane Selection
 
-`pubfi.route.execute` has the same two mutually exclusive authorities:
+`pubfi.route.execute` separates the two authorities by endpoint:
 
-- API-key transport auth selects the registered account/allocation lane.
-- `params._meta["x402/payment"]` selects the accountless x402 lane.
-- Sending both is a conflict.
-- Sending neither on an eligible paid route returns an MCP `CallToolResult` payment requirement.
+- The primary endpoint accepts a PubFi API key or OAuth access token and selects the registered
+  account/allocation lane. It rejects `x402/payment` and never falls back to x402.
+- The explicit `/x402` endpoint rejects every Bearer credential. On that endpoint,
+  `params._meta["x402/payment"]` carries payment and selects the accountless x402 lane.
+- Sending no payment on `/x402` for an eligible paid route returns an MCP `CallToolResult` payment
+  requirement.
 
 The bounded `_meta` object can contain unrelated MCP metadata. Only the `x402/payment` entry
 carries payment and selects the x402 lane.
@@ -58,8 +60,8 @@ PubFi enforces these x402 environment boundaries:
 
 | Environment | Exact origins | Permitted network |
 | --- | --- | --- |
-| Staging | `https://api-stg.pubfi.ai` and `https://mcp-stg.pubfi.ai` | Base Sepolia `eip155:84532` |
-| Production | `https://api.pubfi.ai` and `https://mcp.pubfi.ai` | Base mainnet `eip155:8453`, only when x402 is enabled for the exact route |
+| Staging | `https://api-stg.pubfi.ai` and `https://mcp-stg.pubfi.ai/x402` | Base Sepolia `eip155:84532` |
+| Production | `https://api.pubfi.ai` and `https://mcp.pubfi.ai/x402` | Base mainnet `eip155:8453`, only when x402 is enabled for the exact route |
 
 The historical Production health acceptance on 2026-07-27 used canonical Base USDC and 0.001 USDC
 per request. Those values and that route are not current payment or availability authority.

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Documented the MCP bearer contract: the authenticated root accepts PubFi API keys or OAuth
+  access tokens, while accountless payment uses the separate Bearer-free `/x402` endpoint. Updated
+  the public x402 MCP examples to connect to that endpoint.
 - Reclassified the pinned Production x402 example as historical acceptance evidence and documented
   the fresh standard challenge returned after a rejected paid retry over HTTP or MCP.
 - Added source-backed PubFi MCP setup, credential handling, verification prompts, troubleshooting,

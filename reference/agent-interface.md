@@ -7,8 +7,26 @@ description: Reference PubFi's hosted MCP endpoint, generic tools, authenticatio
 
 ```text
 https://mcp.pubfi.ai
+https://mcp.pubfi.ai/x402
 https://mcp.pubfi.ai/.well-known/mcp.json
+https://mcp.pubfi.ai/.well-known/oauth-protected-resource
 ```
+
+The root is the authenticated endpoint. The `/x402` endpoint is the separate accountless payment
+lane. Both expose the same fixed tools and public introspection methods.
+
+## OAuth Discovery
+
+| Environment | Protected resource metadata | Authorization server |
+| --- | --- | --- |
+| Staging | `https://mcp-stg.pubfi.ai/.well-known/oauth-protected-resource` | `https://qwcbvvgcwdlpumawlajf.supabase.co/auth/v1` |
+| Production | `https://mcp.pubfi.ai/.well-known/oauth-protected-resource` | `https://wuugpdblvlpptlgnxwoi.supabase.co/auth/v1` |
+
+The discovery manifest uses schema `pubfi.mcp.discovery.v4`. Its `auth` object advertises
+`pubfi_api_key` and `oauth_access_token`, sets `fallback: false`, and publishes the protected
+resource and authorization-server URLs. OAuth consent can redirect the signed-in user to the
+product site's `/oauth/consent` page. Treat the `authorization_id` as an opaque continuation value;
+do not construct or modify it.
 
 ## Public API Schema
 
@@ -22,7 +40,7 @@ https://api.pubfi.ai/openapi.json
 | --- | --- | --- |
 | `pubfi.capabilities.list` | Enumerate deterministic compact pages from the installed Registry v2 catalog. PubFi does not rank, infer intent, or select a capability. | optional `limit`, opaque `cursor`, exact `provider_key`, exact `method` |
 | `pubfi.capabilities.get` | Return the full typed request, response, method-specific billing, and readiness contract for one exact capability. | required `capability_id` from `pubfi.capabilities.list` |
-| `pubfi.route.execute` | Execute one exact Registry path through the same data plane as the HTTP gateway. Use a PubFi API key for priced execution or an advertised account-level `:free` variant, or use accountless x402 on an eligible route. | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id`; optional MCP `_meta["x402/payment"]` on a paid retry |
+| `pubfi.route.execute` | Execute one exact Registry path through the same data plane as the HTTP gateway. Use a PubFi API key or OAuth access token on the authenticated root, or use accountless x402 on the explicit `/x402` endpoint. | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id`; optional MCP `_meta["x402/payment"]` only on an `/x402` paid retry |
 
 Durable provider-specific public tools are rejected. Provider identity belongs in route-result data,
 not tool names.
@@ -34,11 +52,16 @@ Use `tools/list` for the current MCP input and output schemas.
 ## Auth
 
 ```text
-Authorization: Bearer <PubFi API key>
+Authorization: Bearer <PubFi API key or OAuth access token>
 ```
 
-`X-PubFi-Api-Key` is not accepted. Its presence still selects the credential lane, so an
-accountless x402 call must omit it as well as `Authorization`.
+The authenticated root classifies a token with the `pf_sk_v1_` prefix as a PubFi API key. It
+classifies every other Bearer token as an OAuth access token. The two credential types do not fall
+back to each other. A missing or invalid credential for `pubfi.route.execute` returns `401` with a
+`WWW-Authenticate` challenge that points to the environment's protected-resource metadata.
+
+`X-PubFi-Api-Key` is not accepted. Its presence is still a Bearer carrier. The `/x402` endpoint
+rejects every Bearer carrier, including `Authorization` and `X-PubFi-Api-Key`.
 
 Upstream provider keys remain server-side.
 
@@ -66,9 +89,14 @@ the body required by its body policy. The same variant appears in Runtime OpenAP
 `execution_status: registry_free_route_executed` and `credits_charged: 0`; it does not reserve or
 emit Credit usage. Anonymous and x402 admissions cannot use this suffix.
 
-MCP `pubfi.route.execute` supports the API-key/allocation lane and the mutually exclusive
-accountless x402 lane. The unsigned x402 call returns `PaymentRequired` in a normal MCP tool
-result; the paid retry uses `_meta["x402/payment"]`; the settled result uses
+On the authenticated root, MCP `pubfi.route.execute` accepts one PubFi API key or OAuth access
+token. It rejects x402 payment metadata and never falls back to payment. OAuth execution resolves
+the user to the same account admission boundary; an advertised `:free` variant remains
+account-bound.
+
+Accountless x402 uses the explicit `/x402` endpoint. That endpoint rejects Bearer credentials. An
+unsigned eligible call returns `PaymentRequired` in a normal MCP tool result; the paid retry uses
+`_meta["x402/payment"]`; the settled result uses
 `_meta["x402/payment-response"]`. If payment processing rejects a paid retry and supplies a new
 requirement, the error result preserves the official `PaymentRequired` fields in
 `structuredContent` and adds an `error` message. Validate it as a new challenge before signing

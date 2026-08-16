@@ -4,7 +4,7 @@ export const MAX_PAYMENT_MICRO_USDC = 10_000n;
 export const MAX_AUTHORIZATION_SECONDS = 300;
 
 const STAGING_API_ORIGIN = 'https://api-stg.pubfi.ai';
-const STAGING_MCP_ENDPOINT = 'https://mcp-stg.pubfi.ai';
+const STAGING_MCP_X402_ENDPOINT = 'https://mcp-stg.pubfi.ai/x402';
 
 export function requiredEnvironment(name) {
   const value = process.env[name];
@@ -48,7 +48,7 @@ export function mcpUrlForResource(resource) {
   if (resource?.origin !== STAGING_API_ORIGIN) {
     throw new Error('x402 Base Sepolia MCP requests must use PubFi Staging');
   }
-  return new URL(STAGING_MCP_ENDPOINT);
+  return new URL(STAGING_MCP_X402_ENDPOINT);
 }
 
 export function expectedPaymentSelector() {

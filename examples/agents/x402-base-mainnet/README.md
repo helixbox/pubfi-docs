@@ -59,6 +59,7 @@ must drive any new client policy.
 
 - This is Base mainnet and uses real-value USDC.
 - This example rejects Staging API and MCP origins.
+- Its archived MCP command uses the explicit `https://mcp.pubfi.ai/x402` endpoint.
 - Do not add a PubFi API key to an x402 request.
 - Do not place a buyer private key, `PAYMENT-SIGNATURE`, or `PAYMENT-RESPONSE` in source, logs, or
   prompts.

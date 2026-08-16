@@ -118,7 +118,7 @@ upstream API.
   Credits balance, or invoice. The caller's USDC in the environment-specific wallet is the payment
   balance; PubFi does not mirror it as an account balance.
 - Staging x402 permits Base Sepolia `eip155:84532` only and uses the exact
-  `https://api-stg.pubfi.ai` and `https://mcp-stg.pubfi.ai` origins. Production x402 permits Base
+  `https://api-stg.pubfi.ai` and `https://mcp-stg.pubfi.ai/x402` endpoints. Production x402 permits Base
   mainnet `eip155:8453` only when x402 is enabled for the exact route. These rules do not prove
   current route or offer availability. Use separate dedicated wallets and private keys for the two
   environments.
@@ -165,6 +165,7 @@ upstream API.
 - Staging Registry v2 catalog: https://api-stg.pubfi.ai/v1/capabilities
 - Staging operation-pricing inventory: https://api-stg.pubfi.ai/v1/operation-pricing-inventory
 - Staging MCP endpoint: https://mcp-stg.pubfi.ai
+- Staging MCP x402 endpoint: https://mcp-stg.pubfi.ai/x402
 - Staging MCP manifest: https://mcp-stg.pubfi.ai/.well-known/mcp.json
 - Interactive API reference: https://api.pubfi.ai/reference
 - Runtime OpenAPI: https://api.pubfi.ai/openapi.json
@@ -173,7 +174,9 @@ upstream API.
 - API-host Glama metadata: https://api.pubfi.ai/.well-known/glama.json
 - API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP endpoint: https://mcp.pubfi.ai
+- MCP x402 endpoint: https://mcp.pubfi.ai/x402
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
+- MCP OAuth protected resource: https://mcp.pubfi.ai/.well-known/oauth-protected-resource
 - MCP discovery pointer: https://pubfi.ai/.well-known/mcp.json
 - MCP server card: https://pubfi.ai/.well-known/mcp/server-card.json
 - Optional MCP registry auth proof route: https://pubfi.ai/.well-known/mcp-registry-auth
@@ -214,10 +217,12 @@ upstream API.
 - `tools/list` publishes the current generation, manifest, and tool input and output schemas.
 - `pubfi.capabilities.list` and `pubfi.capabilities.get` are public Registry reads. The client
   selects a capability; PubFi does not infer intent or rank candidates.
-- `pubfi.route.execute` accepts a PubFi API key or the mutually exclusive accountless x402
-  metadata flow. An unsigned eligible call returns `PaymentRequired`; the paid retry supplies
-  `x402/payment`; the settled result supplies `x402/payment-response`. A wallet-capable agent can
-  complete this payment directly through MCP without a separate paid HTTP request.
+- The authenticated MCP root accepts a PubFi API key or OAuth access token for
+  `pubfi.route.execute`. It rejects payment metadata, and invalid credentials do not fall back.
+  The explicit `/x402` endpoint rejects Bearer credentials. An unsigned eligible call there
+  returns `PaymentRequired`; the paid retry supplies `x402/payment`; the settled result supplies
+  `x402/payment-response`. A wallet-capable agent can complete this payment directly through MCP
+  without a separate paid HTTP request.
 - Unrelated bounded MCP `_meta` entries can coexist with the flow. Only `x402/payment` carries
   payment. Paid replay compares structured content and payment-response metadata, not raw JSON-RPC
   bytes.
@@ -241,11 +246,11 @@ upstream API.
 - PubFi has three Registry v2 MCP tools for complete catalog listing, exact capability detail, and
   execution.
 - PubFi exposes a dynamic Registry catalog and Runtime OpenAPI for current executable operations.
-- PubFi supports separate registered API-key and accountless x402 execution modes over HTTP and
-  MCP.
+- PubFi supports registered API-key and MCP OAuth account execution plus separate accountless x402
+  execution over HTTP and the explicit MCP `/x402` endpoint.
 - Quantro owns provider-neutral purchase, settlement, receipt, and resulting allocation facts.
-  One request selects either the registered API-key and Credits lane or the accountless x402 lane;
-  it cannot debit both.
+  One request selects either the authenticated account and Credits lane or the accountless x402
+  lane; it cannot debit both.
 
 ## Non-Claims
 

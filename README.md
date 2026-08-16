@@ -61,6 +61,7 @@ Snapshot sources:
 - Staging product site: `https://stg.pubfi.ai`
 - Staging API: `https://api-stg.pubfi.ai`
 - Staging MCP: `https://mcp-stg.pubfi.ai`
+- Staging MCP x402: `https://mcp-stg.pubfi.ai/x402`
 - Pricing: `https://pubfi.ai/pricing`
 - Blog: `https://pubfi.ai/blog`
 - Product pages: `https://pubfi.ai/products/{product_slug}`
@@ -81,6 +82,8 @@ Snapshot sources:
 - OpenAPI schema: `https://api.pubfi.ai/openapi.json`
 - API-host MCP manifest: `https://api.pubfi.ai/.well-known/mcp.json`
 - MCP manifest: `https://mcp.pubfi.ai/.well-known/mcp.json`
+- MCP OAuth protected resource: `https://mcp.pubfi.ai/.well-known/oauth-protected-resource`
+- MCP x402 endpoint: `https://mcp.pubfi.ai/x402`
 - MCP discovery pointer: `https://pubfi.ai/.well-known/mcp.json`
 - MCP server card: `https://pubfi.ai/.well-known/mcp/server-card.json`
 - Optional MCP registry auth proof route: `https://pubfi.ai/.well-known/mcp-registry-auth`
@@ -177,7 +180,9 @@ Safe claims:
 
 - PubFi is building an agent-native crypto data layer.
 - Discovery is an open index, demand engine, and source-selection surface for crypto data APIs.
-- PubFi exposes generic route/capability tooling for agents and MCP clients.
+- PubFi exposes generic route/capability tooling for agents and MCP clients. The authenticated MCP
+  root accepts API keys or OAuth access tokens; accountless payment uses the separate `/x402`
+  endpoint.
 - PubFi Staging uses separate web, API, and MCP roots and a Base Sepolia x402 test boundary.
 - Public Discovery and LLM exports are generated from checked-in public-safe curated data.
 

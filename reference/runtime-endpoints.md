@@ -129,16 +129,20 @@ The corresponding Staging MCP root is `https://mcp-stg.pubfi.ai`.
 
 Current endpoint families:
 
-- `POST /` for MCP JSON-RPC;
+- `POST /` for authenticated MCP JSON-RPC;
+- `POST /x402` for accountless x402 MCP JSON-RPC;
 - `GET /healthz`;
 - `GET /readyz`;
 - `GET /version`; and
-- `GET /.well-known/mcp.json`.
+- `GET /.well-known/mcp.json`; and
+- `GET /.well-known/oauth-protected-resource`.
 
 The handshake, ping, `tools/list`, resource listing, and prompt listing methods are public.
-`pubfi.route.execute` accepts either a PubFi API key for the endpoint environment or the mutually
-exclusive official x402 metadata flow for an eligible route. Other tools keep their published
-public or authenticated contract.
+On the root endpoint, `pubfi.route.execute` accepts a PubFi API key or OAuth access token for the
+endpoint environment. Invalid credentials do not fall back, and payment metadata is rejected. On
+the `/x402` endpoint, `pubfi.route.execute` accepts the official x402 metadata flow for an eligible
+route and rejects every Bearer credential. Other tools keep their published public or
+authenticated contract.
 
 For an advertised free variant, `pubfi.route.execute` uses the same API-key admission and the same
 exact path with `:free` appended to its final segment. A successful result reports
@@ -157,7 +161,7 @@ Current public endpoint families include:
 
 - `/`, `/pricing`, `/blog`, `/blog/{slug}`, and `/products/{slug}`;
 - `/discovery` and its source, category, chain, comparison, topic, and Markdown routes;
-- `/login`, `/privacy-policy`, and `/terms-of-service`;
+- `/login`, `/oauth/consent`, `/privacy-policy`, and `/terms-of-service`;
 - `/agents.md`, `/llms.txt`, and `/llms-full.txt`;
 - `/sitemap.xml` and `/robots.txt`;
 - `/discovery/agent-capabilities.json`;
