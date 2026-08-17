@@ -74,9 +74,10 @@ Credits. The authenticated MCP root accepts a PubFi API key or OAuth access toke
 `pubfi.route.execute`, including that advertised suffix. It rejects payment metadata and does not
 fall back. The separate `/x402` endpoint rejects Bearer credentials and supports the official
 x402 metadata flow, so an agent can pay directly through MCP.
-OpenAPI query fields are source-declared request-construction metadata. HTTP and MCP execution
-preserve any RFC 3986-valid query of at most 65,536 encoded bytes, including duplicate or
-undeclared fields; request bodies still follow the selected operation body policy.
+OpenAPI query and body fields are source-declared request-construction metadata. HTTP and MCP
+execution preserve any RFC 3986-valid query of at most 65,536 encoded bytes, including duplicate
+or undeclared fields. A non-empty POST body is forwarded byte-for-byte within the route-selected
+limit and media type; empty bodies are omitted and GET bodies are rejected.
 Each API runtime assigns the environment when it creates a key and accepts only matching keys.
 Clients cannot select the environment or request per-key scopes; only a human Owner or Admin can
 manage keys. `X-PubFi-Api-Key` is not accepted, but it remains a credential carrier and must be
@@ -94,12 +95,14 @@ DeGov operation and uses a $1/1,000-Credit registered-purchase base. Confirm ins
 offer availability from the current catalog, Runtime OpenAPI, and offer response. Purchase
 creation requires the current offer key, exact catalog release hash, amount, accepted terms
 version and hash, and `Idempotency-Key`.
-The public no-store operation-pricing inventory projects every approved typed plan in the installed
-snapshot. It contains no selected price, is not execution authority, and returns `503` instead of
-a partial inventory when the complete projection cannot be formed.
-A bounded provider HTTP error keeps its status and exact body. A valid JSON success-status
-business response can also be relayed when its configured success predicate is false. These are
-provider responses, not PubFi gateway-error envelopes.
+The public no-store `quantro.operation-pricing-inventory.v2` inventory projects every approved
+typed plan in the installed snapshot as `free_health` or `merchant_priced`. It contains no selected
+price, is not execution authority, and returns `503` instead of a partial inventory when the
+complete projection cannot be formed.
+Every bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and exact body. PubFi
+uses a safe parameter-free media type. These are provider responses, not PubFi gateway-error
+envelopes. MCP represents valid JSON as a JSON value, valid text as a string, other bytes as base64
+data, and an empty body as `null`.
 
 Base Sepolia `eip155:84532` is the Staging x402 boundary. Staging HTTP and MCP acceptance completed
 on 2026-07-27 with Signed Offer and Signed Receipt verification and exact replay; see

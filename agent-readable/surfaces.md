@@ -110,10 +110,11 @@ convention.
 ## Execution Boundary
 
 - HTTP gateway execution accepts only exact current `GET` or `POST` Registry operations.
-- A bounded provider HTTP error keeps its status and exact body. A valid JSON success-status
-  business response can also be relayed when the configured success predicate is false. These are
-  provider responses, not PubFi error envelopes. Transport failure, redirects, oversized data,
-  and unsafe or malformed responses remain gateway failures.
+- Every bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and exact body.
+  PubFi reduces a valid content type to its parameter-free media type and uses
+  `application/octet-stream` when it is missing or malformed. These are provider responses, not
+  PubFi error envelopes. Transport failure, redirects, oversized data, and unsupported final
+  status classes remain gateway failures.
 - API-key execution requires a key for the endpoint environment, active admission, and sufficient
   allocation. All keys use one fixed product-access model.
 - An advertised exact `GET` or `POST` can append `:free` to its final path segment. It keeps the API
@@ -128,9 +129,11 @@ convention.
   `pubfi.route.execute`, including an advertised `:free` suffix. It rejects payment metadata and
   never falls back. The `/x402` endpoint rejects Bearer credentials and does not accept the
   suffix.
-- A successful HTTP gateway response is canonical provider JSON. API-key responses identify the
-  Registry generation. Settled x402 HTTP responses include `PAYMENT-RESPONSE`; settled MCP results
-  include `x402/payment-response` metadata. Neither lane uses a PubFi success envelope.
+- A successful HTTP gateway response is the exact bounded provider body. API-key responses
+  identify the Registry generation. MCP exposes valid JSON as a JSON value, valid `text/*` as a
+  string, other bytes as base64 data, and an empty body as `null`. Settled x402 HTTP responses
+  include `PAYMENT-RESPONSE`; settled MCP results include `x402/payment-response` metadata.
+  Neither lane uses a PubFi success envelope.
 - Registered purchase APIs require a human dashboard session. Their presence does not prove that a
   current offer exists.
 - Purchase creation submits the current offer key, exact catalog release hash, amount, and exact

@@ -68,11 +68,17 @@ Upstream provider keys remain server-side.
 ## Execution Rule
 
 `pubfi.route.execute` executes only an exact ready path and method from the installed Registry
-generation. Unsupported paths, methods, non-ready operations, and invalid exact query or body bytes
-fail closed with explicit reasons. The optional `query` is forwarded byte-for-byte when it is a
+generation. Unsupported paths, methods, non-ready operations, and invalid or oversized query or
+body bytes fail closed with explicit reasons. The optional `query` is forwarded byte-for-byte when it is a
 valid RFC 3986 query component of at most 65,536 encoded bytes. Duplicate and undeclared fields are
-allowed; PubFi does not enforce source-declared query-field or value relationships. The optional
-`body` remains subject to the selected operation's body policy.
+allowed; PubFi does not enforce source-declared query-field or value relationships. A non-empty
+`POST` body is forwarded byte-for-byte within the selected route's body limit and uses the
+route-selected media type. PubFi does not apply the source schema to those bytes during execution.
+An empty body is omitted, and `GET` bodies are rejected.
+
+MCP adapts provider response bytes to JSON-RPC: valid JSON becomes a JSON value, valid `text/*`
+becomes a string, and other or invalid bytes become an object with `encoding: "base64"` and a
+`data` field. An empty provider body becomes `null`.
 
 Catalog and detail schema v5 expose billing under the selected method's `operations[]` entry.
 `quantro_priced` carries a positive `credit_cost` and independent x402 terms under one immutable
@@ -83,8 +89,8 @@ An optional capability-level `free_rate_limit` advertises that the exact `GET` o
 has an API-key-authenticated free variant. Its required fields are `requests_per_window`,
 `window_seconds`, `max_concurrency`, and `permit_ttl_seconds`; it can also include `quota`,
 `total_request_limit`, and `bucket_scope`. Append `:free` to the final segment of `raw_path` only
-when that field is present, keep the provider query intended for the selected operation, and keep
-the body required by its body policy. The same variant appears in Runtime OpenAPI as
+when that field is present, keep the provider query and bounded body intended for the selected
+operation. The same variant appears in Runtime OpenAPI as
 `x-pubfi-free-variant`. A successful MCP result has
 `execution_status: registry_free_route_executed` and `credits_charged: 0`; it does not reserve or
 emit Credit usage. Anonymous and x402 admissions cannot use this suffix.

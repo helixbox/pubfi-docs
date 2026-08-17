@@ -40,12 +40,13 @@ authority.
 3. `/v1/capabilities`, Runtime OpenAPI, MCP discovery, and MCP route tools derive from that same
    snapshot.
 4. An HTTP or MCP request supplies an exact path and method.
-5. The Data Plane performs the same matcher lookup and typed request validation for both entry
-   surfaces.
+5. The Data Plane performs the same matcher lookup, query bounds, and body method and byte checks
+   for both entry surfaces.
 6. The gateway selects either the API-key lane or an eligible accountless x402 lane.
-7. The typed executor calls the selected upstream and validates the response policy.
-8. The caller receives the canonical provider JSON. API-key responses identify the Registry
-   generation. Settled x402 responses include the payment result.
+7. The typed executor calls the selected upstream and bounds the response without applying an
+   OpenAPI payload schema.
+8. The caller receives the exact bounded provider response. API-key responses identify the
+   Registry generation. Settled x402 responses include the payment result.
 
 MCP `pubfi.route.execute` uses API-key or OAuth account admission on the authenticated root. The
 separate `/x402` endpoint rejects Bearer credentials and owns accountless payment metadata. Both
@@ -82,7 +83,7 @@ one eligible response and does not create or consume Credits.
 | `packages/rust/gateway-contracts/` | Typed Registry, matcher, request, response, auth, meter, and failure contracts. |
 | `packages/rust/gateway-registry-control/` | Registry control-plane domain and rollout contracts. |
 | `packages/rust/gateway-registry-runtime/` | Immutable serving snapshot, public catalog, readiness, and path lookup. |
-| `packages/rust/gateway-service/` | Provider-neutral typed execution, replay, response validation, and x402 route-policy binding. |
+| `packages/rust/gateway-service/` | Provider-neutral typed execution, replay, bounded response relay, and x402 route-policy binding. |
 | `packages/rust/mcp-service/` | MCP JSON-RPC tools over the live Registry catalog and execution delegate. |
 | `packages/rust/registry-worker-runtime/` | Shared runtime for Registry workers. |
 | `packages/rust/storage/` | SQLx/Postgres persistence for account, allocation, usage, integration, and x402 execution state. |

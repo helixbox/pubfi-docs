@@ -73,11 +73,13 @@ context. They do not make a Registry operation executable.
 only current ready gateway routes. PubFi does not publish separate static provider OpenAPI files as
 execution authority.
 
-OpenAPI query parameters describe the source-declared contract for discovery, examples, and client
-construction. At execution time, PubFi preserves and forwards the caller's query exactly. It does
-not reject duplicate or undeclared query fields or enforce declared query-value relationships. The
-query must still be a valid RFC 3986 query component and must not exceed 65,536 encoded bytes.
-Request bodies remain subject to the selected operation's body policy.
+OpenAPI query parameters and body schemas describe the source-declared contract for discovery,
+examples, and client construction. At execution time, PubFi preserves and forwards the caller's
+query exactly. It does not reject duplicate or undeclared query fields or enforce declared
+query-value relationships. The query must still be a valid RFC 3986 query component and must not
+exceed 65,536 encoded bytes. A non-empty `POST` body is bounded by the selected route and forwarded
+byte-for-byte with the route-selected media type. The source schema does not admit those bytes
+online. Empty bodies are omitted, and `GET` bodies are rejected.
 
 Every generated gateway operation includes `x-pubfi-billing`. For `quantro_priced`, the same
 method price is also available as `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
@@ -91,9 +93,9 @@ An operation with an effective free policy includes `x-pubfi-free-variant`. That
 ## Operation Pricing Inventory
 
 `GET https://api.pubfi.ai/v1/operation-pricing-inventory` projects every typed operation in the
-installed Registry snapshot into one public-safe `quantro.operation-pricing-inventory.v1`
+installed Registry snapshot into one public-safe `quantro.operation-pricing-inventory.v2`
 document. It identifies canonical operation keys, route revisions and closures, request bounds,
-and whether each operation is `free_health` or `quantro_priced`. It contains no selected Credit or
+and whether each operation is `free_health` or `merchant_priced`. It contains no selected Credit or
 x402 price and is not route-execution authority.
 
 The response uses `Cache-Control: no-store`. The complete projection fails with `503` when the
@@ -102,18 +104,19 @@ coordinate, or invalid plan. It does not silently omit an operation.
 
 ## Execution Response
 
-A successful Registry gateway request returns the validated provider JSON for that exact operation.
+A successful Registry gateway request returns the exact bounded provider body for that operation.
 The response also identifies the PubFi request and Registry generation through response headers.
-It does not use a PubFi success envelope.
+PubFi preserves bounded `2xx`, `4xx`, and `5xx` status/body pairs and does not use a success
+envelope.
 
 ## Execution Boundary
 
 A catalog entry is necessary but not sufficient for execution. Request-time checks still enforce:
 
 - the exact path and HTTP method;
-- the platform query byte and syntax bounds, plus the operation body policy;
+- the platform query syntax and byte bounds, plus the route-selected body byte limit and media type;
 - provider and credential readiness;
-- route response policy;
+- response byte bounds and relayable status classes;
 - caller authentication and allocation for the API-key lane; or
 - route-specific payment eligibility and valid authorization for the x402 lane.
 
