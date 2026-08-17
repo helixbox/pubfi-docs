@@ -32,7 +32,7 @@ suitable route becomes `ready`.
 
 Direct provider calls make the agent own provider auth, endpoint shape, response validation,
 freshness evidence, and usage accounting. A ready PubFi Registry operation keeps those concerns
-behind a reviewed execution plan while returning validated provider JSON.
+behind a reviewed execution plan while returning the exact bounded provider response.
 
 ## Claim Boundary
 

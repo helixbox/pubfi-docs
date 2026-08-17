@@ -107,13 +107,13 @@ A route can execute only when these gates pass:
 - current provider readiness;
 - server-side upstream credential configuration;
 - source freshness evidence;
-- request input validation.
+- query syntax and byte bounds, plus request-body method and byte bounds.
 
-Runtime OpenAPI query parameters are source-declared guidance for constructing the provider
-request. The gateway preserves and forwards any RFC 3986-valid query exactly, including duplicate
-or undeclared fields, up to 65,536 encoded bytes. It does not enforce the declared query-field or
-value relationships at execution time. Request bodies still follow the selected operation's body
-policy.
+Runtime OpenAPI query parameters and body schemas are source-declared guidance for constructing the
+provider request. The gateway preserves and forwards any RFC 3986-valid query exactly, including
+duplicate or undeclared fields, up to 65,536 encoded bytes. It does not enforce declared query
+semantics at execution time. A non-empty `POST` body is forwarded byte-for-byte within the
+route-selected limit and media type. Empty bodies are omitted, and `GET` bodies are rejected.
 
 ## Free Route Variant
 

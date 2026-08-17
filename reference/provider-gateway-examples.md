@@ -98,10 +98,12 @@ Copy the path and HTTP method from one current `ready` operation. Replace each d
 parameter with a value that satisfies its schema. The resulting concrete path is the gateway path.
 Do not add provider, network, or endpoint segments that are not present in the current schema.
 
-Only `GET` and `POST` are supported. Use the operation's OpenAPI query parameters to construct the
-provider request. PubFi forwards a valid RFC 3986 query exactly as supplied, including duplicate or
-undeclared fields, up to 65,536 encoded bytes. It does not apply the source-declared query-value
-rules during execution. The request body must satisfy the exact operation body policy.
+Only `GET` and `POST` are supported. Use the operation's OpenAPI query parameters and body schema
+to construct the provider request. PubFi forwards a valid RFC 3986 query exactly as supplied,
+including duplicate or undeclared fields, up to 65,536 encoded bytes. It does not apply the
+source-declared query-value rules during execution. A non-empty `POST` body is forwarded
+byte-for-byte within the route-selected limit and uses the route-selected media type. Empty bodies
+are omitted, and `GET` bodies are rejected.
 
 Set placeholders from the current schema:
 
@@ -131,7 +133,7 @@ The key must match the endpoint environment. The billing account must also have 
 and enough allocation for the method-specific `credit_cost`. `X-PubFi-Api-Key` is not accepted;
 remove it before accountless x402 because its presence still selects the credential lane.
 
-For a `POST` operation, use only the JSON fields that the current OpenAPI request body permits:
+For a JSON `POST` operation, construct the body from the current OpenAPI schema:
 
 ```sh
 export PUBFI_GATEWAY_METHOD='POST'
@@ -145,7 +147,8 @@ curl --include \
   --data "$PUBFI_GATEWAY_BODY"
 ```
 
-Do not copy a request body from another operation.
+OpenAPI guides client construction, but PubFi does not apply that source schema to the body bytes
+during execution. Do not copy a request body from another operation.
 
 ## 4. Execute An Advertised Free Variant
 
@@ -164,8 +167,8 @@ curl --include \
   --header 'Authorization: Bearer <PubFi API key>'
 ```
 
-For a `POST`, add `Content-Type: application/json` and a body that satisfies the selected current
-schema, as in the paid API-key example above.
+For a JSON `POST`, add the body constructed from the selected current schema, as in the paid
+API-key example above. PubFi selects the upstream media type from the route contract.
 
 The free variant is account-level rate-limited and charges zero Credits. It does not reserve,
 finalize, replay, or emit Quantro request usage. A retryable limit rejection returns HTTP `429`
@@ -222,13 +225,13 @@ rules. See the [Staging guide](/getting-started/staging) for all Staging endpoin
 
 ## Success Response
 
-A successful gateway request returns the validated canonical provider JSON. PubFi does not wrap
-the body in a stable success envelope.
+A successful gateway request returns the provider's exact bounded response bytes. PubFi does not
+wrap the body in a stable success envelope.
 
 Every success includes:
 
 ```text
-Content-Type: <validated response media type>
+Content-Type: <safe parameter-free response media type>
 x-pubfi-request-id: <request id>
 ```
 
@@ -241,18 +244,17 @@ x-pubfi-registry-generation: <generation id>
 An x402 lane success instead includes `PAYMENT-RESPONSE` and
 `Cache-Control: private, no-store`.
 
-The JSON fields depend on the selected operation response policy. Parse only the fields in the
-current Runtime OpenAPI.
+The response shape depends on the provider. Use Runtime OpenAPI to design the client, and handle
+the provider's advertised media types and response shapes.
 
 ## Provider Error And Business Responses
 
-A bounded provider HTTP `4xx` or `5xx` response keeps its status and exact response bytes. PubFi
-normalizes a valid content type. It uses `application/octet-stream` when the provider content type
-is missing or malformed. A valid JSON success-status response whose configured success predicate
-is false is also relayed as the provider's business response.
+A bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and exact response bytes.
+PubFi reduces a valid content type to its parameter-free media type. It uses
+`application/octet-stream` when the provider content type is missing or malformed.
 
 These completed provider responses are not PubFi gateway-error envelopes. Transport failure,
-redirects, oversized data, and unsafe or malformed responses remain gateway failures. In the
+redirects, oversized data, and unsupported final status classes remain gateway failures. In the
 API-key lane, an admitted provider attempt consumes the operation's selected `credit_cost`, even
 when the provider returns an error or the attempt times out. A free-variant provider response
 charges zero Credits.

@@ -46,7 +46,7 @@ Use these surfaces together:
 | Surface | Use |
 | --- | --- |
 | `GET /v1/capabilities` | Inspect all operations in the installed generation, including `ready` and `blocked` entries. |
-| `GET /openapi.json` | Inspect the executable HTTP schema for current `ready` operations. |
+| `GET /openapi.json` | Inspect request-construction metadata for current `ready` HTTP operations. |
 | `GET /reference` | Explore the same OpenAPI in an interactive UI. |
 | `GET /v1/operation-pricing-inventory` | Inspect the complete public-safe producer projection used to construct one immutable pricing generation. It contains no selected price and is not execution authority. |
 
@@ -57,7 +57,7 @@ A Discovery page is source-selection context. It is not Registry execution autho
 
 ## Response Contract
 
-A successful gateway request returns the validated canonical provider JSON for the selected
+A successful gateway request returns the provider's exact bounded response bytes for the selected
 operation. It is not wrapped in a PubFi success envelope.
 
 Every success includes:
@@ -68,14 +68,14 @@ Every success includes:
 An API-key lane success also includes `x-pubfi-registry-generation`. A settled x402 lane success
 instead includes `PAYMENT-RESPONSE` and `Cache-Control: private, no-store`.
 
-The exact JSON body depends on the current operation response policy. Inspect the Runtime OpenAPI
-before you parse it.
+The body and media type depend on the provider response. PubFi reduces a valid `Content-Type` to
+its parameter-free media type and uses `application/octet-stream` when the value is missing or
+malformed. Inspect Runtime OpenAPI for request construction and handle the advertised provider
+response shapes in your client.
 
-A bounded provider HTTP `4xx` or `5xx` response keeps its provider status and exact body. A valid
-JSON success-status response can also remain a provider business response when its configured
-success predicate is false. These provider responses are not PubFi error envelopes. Transport
-failure, redirects, oversized data, and unsafe or malformed responses remain PubFi gateway
-failures.
+A bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its provider status and exact body.
+These provider responses are not PubFi error envelopes. Transport failure, redirects, oversized
+data, and unsupported final status classes remain PubFi gateway failures.
 
 ## Authentication And Payment Boundary
 
