@@ -35,6 +35,10 @@ The corresponding Staging API root is `https://api-stg.pubfi.ai`. Fetch that env
 | `GET` | `/metrics` | Operational metrics. This route is not product or route-availability evidence. |
 | `GET` | `/openapi.json` | Runtime OpenAPI generated from the installed Registry v2 snapshot. |
 | `GET` | `/reference` | Interactive API reference for `/openapi.json`. |
+| `GET` | `/v1/status` | Public-safe PubFi component and Gateway summary using schema `pubfi.status.v1`. |
+| `GET` | `/v1/status/gateway` | Public-safe Gateway signals and provider summaries using schema `pubfi.status.gateway.v1`. |
+| `GET` | `/v1/status/gateway/providers/{provider_key}` | Public-safe status and operation detail for one active provider. |
+| `GET` | `/v1/status/gateway/operations/{capability_id}` | Public-safe status detail for one active Registry operation. |
 | `GET` | `/v1/capabilities` | Public paginated `pubfi.gateway.registry.capability-page.v5` catalog. |
 | `GET` | `/v1/operation-pricing-inventory` | Public no-store `quantro.operation-pricing-inventory.v2` projection for the complete installed snapshot. |
 | `GET` | `/.well-known/mcp.json` | API-host MCP discovery manifest. |
@@ -54,6 +58,12 @@ returns `503` if the complete projection cannot be formed; it does not return a 
 The Runtime OpenAPI includes only current `ready` Registry operations. If the API has no valid
 programmed snapshot, it marks the Registry as unavailable and does not use a static provider
 fallback.
+
+The status reads use `Cache-Control: no-store` and the states `operational`, `degraded`,
+`major_outage`, or `unknown`. Missing, stale, or incoherent evidence is `unknown`; it is not
+treated as healthy. Status is public-safe evidence about current PubFi components, Gateway probe
+coverage, providers, and active operations. It does not replace the Registry catalog as route
+authority or prove that a purchase offer or x402 challenge is available.
 
 ### Gateway Route
 
@@ -101,6 +111,8 @@ append the suffix unless the current catalog or OpenAPI operation advertises it.
 | `PATCH|DELETE` | `/v1/billing-accounts/{billing_account_id}/api-keys/{id}` | Authenticated human Owner or Admin. API keys cannot manage keys. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/usage` | Human account member, or an API key for the same account. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/billing` | Human account member, or an API key for the same account. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/credit-balance` | Human account member, or an API key for the same account. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/free-quotas` | Human account member, or an API key for the same account. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchase-offers` | Human account member. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human account member. |
 | `POST` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human Owner or Admin. Requires `Idempotency-Key`, current offer and catalog identities, a valid amount, and exact accepted terms identity. |
@@ -114,6 +126,13 @@ Purchase and Auto Top-Up responses are private and use `Cache-Control: private, 
 presence of these routes does not prove that a purchase offer is currently available. The
 dashboard uses **Auto Top-Up** for the customer feature; `credit-auto-reload` is the stable API
 route name.
+
+The focused account reads are also private and no-store. `credit-balance` returns only
+`billingAccountId`, `meterKey: "request_count"`, a canonical whole-number `creditBalance` string,
+and `generatedAt` from the authoritative Credit source. `free-quotas` returns the account and
+observation time plus compact per-provider bucket scope, primary and optional quota windows,
+concurrency, and an optional cumulative total. Its public counters are JavaScript-safe integers.
+Neither response exposes internal bucket keys, permit settings, payment state, or x402 state.
 
 API-key creation accepts only `{ "name": "..." }`. The runtime assigns `development`, `staging`,
 or `production` from its trusted environment and rejects a caller-supplied `environment` field.
@@ -159,7 +178,7 @@ The corresponding Staging web root is `https://stg.pubfi.ai`.
 
 Current public endpoint families include:
 
-- `/`, `/pricing`, `/blog`, `/blog/{slug}`, and `/products/{slug}`;
+- `/`, `/pricing`, `/status`, `/blog`, `/blog/{slug}`, and `/products/{slug}`;
 - `/discovery` and its source, category, chain, comparison, topic, and Markdown routes;
 - `/login`, `/oauth/consent`, `/privacy-policy`, and `/terms-of-service`;
 - `/agents.md`, `/llms.txt`, and `/llms-full.txt`;

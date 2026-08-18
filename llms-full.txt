@@ -101,7 +101,10 @@ upstream API.
 - Registered API-key execution consumes the account's applicable meter allocation.
 - Each API runtime assigns the environment when it creates a key and accepts only matching keys.
   Clients cannot select the environment or request per-key scopes. Only a human Owner or Admin can
-  manage keys; a key can read usage and billing data only for its own account.
+  manage keys; a key can read usage, detailed billing, authoritative available Credit balance,
+  and server-authoritative free-quota counters only for its own account. The focused reads are
+  private and no-store. Credit balance is a canonical whole-number string; free-quota counters are
+  JavaScript-safe integers and omit internal bucket keys and permit settings.
 - `X-PubFi-Api-Key` is not accepted, but it remains a credential carrier. Remove it before an
   accountless x402 request or the request stays in the credential lane.
 - The free starter allocation is 1,000 requests and is not Credits. PubFi uses Credits only for
@@ -173,6 +176,7 @@ upstream API.
 - Runtime OpenAPI: https://api.pubfi.ai/openapi.json
 - Current Registry v2 catalog: https://api.pubfi.ai/v1/capabilities
 - Operation-pricing inventory: https://api.pubfi.ai/v1/operation-pricing-inventory
+- Public status API: https://api.pubfi.ai/v1/status
 - API-host Glama metadata: https://api.pubfi.ai/.well-known/glama.json
 - API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP endpoint: https://mcp.pubfi.ai
@@ -191,6 +195,7 @@ upstream API.
 - Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
 - Product site: https://pubfi.ai
 - Pricing: https://pubfi.ai/pricing
+- Status: https://pubfi.ai/status
 - Partners: https://pubfi.ai/partners
 - Blog: https://pubfi.ai/blog
 - Product pages: https://pubfi.ai/products/subscan-api, https://pubfi.ai/products/degov-api, https://pubfi.ai/products/insight-api, https://pubfi.ai/products/defi-api
@@ -203,6 +208,11 @@ upstream API.
 - Discovery: https://pubfi.ai/discovery
 - Discovery directory Markdown: https://pubfi.ai/discovery.md
 - Provider Profile index: https://pubfi.ai/discovery/sources
+
+The public no-store status contracts use `pubfi.status.v1` and `pubfi.status.gateway.v1` with
+`operational`, `degraded`, `major_outage`, or `unknown`. Missing, stale, or incoherent evidence is
+`unknown`. Status is operational evidence, not Registry route authority or proof that a purchase
+or x402 offer is available.
 
 ## MCP Registry v2 Tools
 

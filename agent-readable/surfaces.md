@@ -22,6 +22,8 @@ Runtime OpenAPI, and MCP metadata.
 | MCP client guides | Client-specific hosted HTTP, stdio bridge, credential, verification, and compatibility guidance. | `https://docs.pubfi.ai/getting-started/mcp-clients` |
 | Registry catalog | Complete installed Registry v2 catalog with each entry's readiness state. | `https://api.pubfi.ai/v1/capabilities` |
 | Operation-pricing inventory | Complete no-store producer projection for approved operations; it contains no selected price and is not execution authority. | `https://api.pubfi.ai/v1/operation-pricing-inventory` |
+| Product status | Public component, Gateway, provider, and operation status presentation. Missing or stale evidence remains Unknown. | `https://pubfi.ai/status` |
+| Status API | No-store public-safe PubFi and Gateway status schemas. It does not replace Registry route authority. | `https://api.pubfi.ai/v1/status` |
 | API reference | Interactive HTTP reference. | `https://api.pubfi.ai/reference` |
 | Runtime OpenAPI | Executable HTTP schema for current `ready` Registry operations and API routes. | `https://api.pubfi.ai/openapi.json` |
 | API-host MCP manifest | MCP discovery for clients that start from the API domain. | `https://api.pubfi.ai/.well-known/mcp.json` |
@@ -99,10 +101,12 @@ Use the surfaces in this order for runtime work:
 3. Use `/v1/operation-pricing-inventory` only to inspect the complete producer-authorized pricing
    projection. It contains no selected price, is not execution authority, and fails with `503`
    instead of returning a partial projection.
-4. Use MCP `tools/list` for current MCP schemas. Use `pubfi.capabilities.list` and
+4. Use `/v1/status` and `/v1/status/gateway` for public-safe operational evidence. Treat
+   `unknown` as missing, stale, or incoherent evidence, not health or route availability.
+5. Use MCP `tools/list` for current MCP schemas. Use `pubfi.capabilities.list` and
    `pubfi.capabilities.get` for the current Registry generation and exact capability detail.
-5. Use Discovery only for source-selection and public evidence context.
-6. Use long-form docs for workflow, security, payment, and claim boundaries.
+6. Use Discovery only for source-selection and public evidence context.
+7. Use long-form docs for workflow, security, payment, and claim boundaries.
 
 Do not execute a saved path from an older generation. Do not create a provider URL from a naming
 convention.
