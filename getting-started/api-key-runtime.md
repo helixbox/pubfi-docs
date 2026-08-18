@@ -23,7 +23,8 @@ client does not select it. Load the key as `STG_PUBFI_API_KEY` in the public exa
 ## API Key Boundary
 
 PubFi API keys are caller credentials for Registry gateway and MCP execution. They can also read
-usage and billing data for their own billing account. PubFi uses one fixed product-access model;
+usage, billing, authoritative Credit-balance, and free-quota data for their own billing account.
+PubFi uses one fixed product-access model;
 clients cannot request or inspect per-key scopes. Listing billing accounts, managing API keys, and
 all purchase operations require an authenticated human dashboard session. Key management requires
 Owner or Admin membership.
@@ -57,8 +58,8 @@ model at a high level:
 
 - API keys authenticate the caller.
 - Every key uses the same fixed product-access model.
-- A key can execute through the gateway or MCP and read its own billing account's usage and
-  authoritative billing data.
+- A key can execute through the gateway or MCP and read its own billing account's usage,
+  authoritative billing data, available Credit balance, and free-quota counters.
 - Only an authenticated human Owner or Admin can create, list, rename, or revoke keys.
 - A fresh active admission snapshot and sufficient allocation for the operation's current positive
   `credit_cost` are required before priced provider execution.
@@ -71,8 +72,10 @@ model at a high level:
 - PubFi displays eligible purchase-origin `request_count` units as Credits. Credits are service
   units, not money or a PubFi-owned financial ledger.
 - Usage facts record immutable raw-unit observations and execution outcomes.
-- The billing-account `/billing` route is the authoritative billing read. PubFi usage rows are not
-  billing truth.
+- The billing-account `/billing` route is the detailed authoritative billing read. The focused
+  `/credit-balance` route returns the authoritative available whole-Credit balance, while
+  `/free-quotas` returns non-financial server-authoritative limiter state. PubFi usage rows are not
+  billing truth and do not supply either focused read.
 
 ## Registered Purchases
 

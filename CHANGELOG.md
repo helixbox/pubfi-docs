@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added the public PubFi status page and API families, including fail-closed `unknown` semantics,
+  and documented the focused authenticated Credit-balance and free-quota reads.
 - Documented the MCP bearer contract: the authenticated root accepts PubFi API keys or OAuth
   access tokens, while accountless payment uses the separate Bearer-free `/x402` endpoint. Updated
   the public x402 MCP examples to connect to that endpoint.

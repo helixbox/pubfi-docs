@@ -31,8 +31,9 @@ Safe:
 - The runtime assigns each key to its own environment and accepts only matching keys.
 - PubFi reserves a bounded amount from a fresh active allocation before provider execution, records
   actual raw-unit usage, and releases the unused remainder.
-- PubFi records immutable usage evidence; `GET /v1/billing-accounts/{billing_account_id}/billing`
-  is the sole authoritative billing read.
+- PubFi records immutable usage evidence. The account-scoped `/billing` route is the detailed
+  authoritative billing read, `/credit-balance` returns the authoritative available whole-Credit
+  balance, and `/free-quotas` returns non-financial server-authoritative limiter state.
 - Registered human users can inspect available purchase offers and create an idempotent purchase
   with the advertised offer key, catalog release hash, amount, and exact accepted terms identity.
 - The current checked-in pricing target sets one Credit and 0.001 USDC for each priced Subscan and
@@ -52,7 +53,7 @@ Safe:
 Unsafe:
 
 - exposing raw API keys;
-- exposing account balances or usage rows;
+- exposing private account balances or usage rows outside an authorized account response;
 - treating Credits as pricing, money, a stored-value wallet, or a PubFi-owned financial ledger;
 - inferring billing truth from PubFi usage facts;
 - implying that a purchase route means a production offer is currently available;

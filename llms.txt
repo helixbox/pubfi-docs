@@ -26,12 +26,13 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 ## Runtime References
 
 - Staging product and login: https://stg.pubfi.ai, https://stg.pubfi.ai/login
-- Staging API reference, OpenAPI, catalog, and operation-pricing inventory: https://api-stg.pubfi.ai/reference, https://api-stg.pubfi.ai/openapi.json, https://api-stg.pubfi.ai/v1/capabilities, https://api-stg.pubfi.ai/v1/operation-pricing-inventory
+- Staging API reference, OpenAPI, catalog, pricing inventory, and public status: https://api-stg.pubfi.ai/reference, https://api-stg.pubfi.ai/openapi.json, https://api-stg.pubfi.ai/v1/capabilities, https://api-stg.pubfi.ai/v1/operation-pricing-inventory, https://api-stg.pubfi.ai/v1/status
 - Staging MCP root, x402 endpoint, and manifest: https://mcp-stg.pubfi.ai, https://mcp-stg.pubfi.ai/x402, https://mcp-stg.pubfi.ai/.well-known/mcp.json
 - Interactive API reference: https://api.pubfi.ai/reference
 - Runtime OpenAPI: https://api.pubfi.ai/openapi.json
 - Current Registry v2 catalog: https://api.pubfi.ai/v1/capabilities
 - Operation-pricing inventory: https://api.pubfi.ai/v1/operation-pricing-inventory
+- Public status API: https://api.pubfi.ai/v1/status
 - API-host Glama metadata: https://api.pubfi.ai/.well-known/glama.json
 - API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
@@ -45,6 +46,7 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 
 - Product site: https://pubfi.ai
 - Pricing: https://pubfi.ai/pricing
+- Status: https://pubfi.ai/status
 - Partners: https://pubfi.ai/partners
 - Blog: https://pubfi.ai/blog
 - Product pages: https://pubfi.ai/products/subscan-api, https://pubfi.ai/products/degov-api, https://pubfi.ai/products/insight-api, https://pubfi.ai/products/defi-api
@@ -82,6 +84,9 @@ Each API runtime assigns the environment when it creates a key and accepts only 
 Clients cannot select the environment or request per-key scopes; only a human Owner or Admin can
 manage keys. `X-PubFi-Api-Key` is not accepted, but it remains a credential carrier and must be
 absent from accountless x402 requests.
+An API key can read its own account's usage, detailed billing, authoritative available Credit
+balance, and server-authoritative free-quota counters. The focused account routes are private and
+no-store. They do not expose payment or internal limiter state.
 Accountless x402 creates no PubFi account, API key, Credits, or invoice. The environment-specific
 wallet's USDC is the payment balance; keep separate wallets and private keys for Staging and
 Production. A Signed Receipt is payment and execution evidence, not a balance, top-up, or deposit
@@ -103,6 +108,9 @@ Every bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and
 uses a safe parameter-free media type. These are provider responses, not PubFi gateway-error
 envelopes. MCP represents valid JSON as a JSON value, valid text as a string, other bytes as base64
 data, and an empty body as `null`.
+The public no-store status APIs use `operational`, `degraded`, `major_outage`, or `unknown`.
+Missing, stale, or incoherent evidence stays `unknown`; status does not replace the Registry
+catalog as route authority.
 
 Base Sepolia `eip155:84532` is the Staging x402 boundary. Staging HTTP and MCP acceptance completed
 on 2026-07-27 with Signed Offer and Signed Receipt verification and exact replay; see

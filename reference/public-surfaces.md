@@ -19,6 +19,7 @@ For the selected API root, use:
 
 - `/reference` for the interactive reference;
 - `/openapi.json` for Runtime OpenAPI; and
+- `/v1/status` and `/v1/status/gateway` for public-safe service and Gateway status; and
 - `/v1/capabilities` for the installed Registry catalog; and
 - `/v1/operation-pricing-inventory` for the complete public-safe producer pricing projection.
 
@@ -35,6 +36,7 @@ guide](/getting-started/staging).
 
 - `https://pubfi.ai`
 - `https://pubfi.ai/pricing`
+- `https://pubfi.ai/status`
 - `https://pubfi.ai/blog`
 - `https://pubfi.ai/blog/{slug}`
 - `https://pubfi.ai/products/{slug}`
@@ -61,6 +63,10 @@ ready.
 - `https://api.pubfi.ai/openapi.json`
 - `https://api.pubfi.ai/v1/capabilities`
 - `https://api.pubfi.ai/v1/operation-pricing-inventory`
+- `https://api.pubfi.ai/v1/status`
+- `https://api.pubfi.ai/v1/status/gateway`
+- `https://api.pubfi.ai/v1/status/gateway/providers/{provider_key}`
+- `https://api.pubfi.ai/v1/status/gateway/operations/{capability_id}`
 
 `/v1/capabilities` is the public catalog for the installed Registry v2 generation. Runtime OpenAPI
 is the executable HTTP schema for current `ready` operations. PubFi does not publish separate
@@ -101,6 +107,8 @@ operation can instead return an accountless x402 V2 challenge when no API-key ca
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/api-keys`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/usage`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/billing`
+- `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/credit-balance`
+- `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/free-quotas`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/purchase-offers`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/purchases`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/credit-auto-reload`
@@ -134,6 +142,11 @@ prove that a current offer exists. The dashboard calls the customer feature **Au
 Health, readiness, version, and metrics are operational evidence only. They do not prove that a
 specific route, x402 offer, registered purchase offer, provider response, or payment is available.
 Apply the same rule to the corresponding Staging status surfaces.
+
+The public `/status` page presents the no-store `/v1/status` and `/v1/status/gateway` contracts.
+Provider detail comes from the provider status route. The status APIs report `unknown` when
+evidence is missing, stale, or incoherent; they do not convert missing evidence into an empty
+successful state. Status does not replace the current Registry catalog as execution authority.
 
 ## Public-Safe Rule
 
