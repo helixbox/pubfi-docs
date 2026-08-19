@@ -29,6 +29,8 @@ Safe:
 - PubFi uses API-key auth for registered-account gateway and MCP execution.
 - Clients cannot request or inspect per-key scopes. Only a human Owner or Admin can manage keys.
 - The runtime assigns each key to its own environment and accepts only matching keys.
+- An API key can read its existing execution principal and billing-account binding from
+  `/v1/auth/context`. This private, no-store read creates no account or billing state.
 - PubFi reserves a bounded amount from a fresh active allocation before provider execution, records
   actual raw-unit usage, and releases the unused remainder.
 - PubFi records immutable usage evidence. The account-scoped `/billing` route is the detailed

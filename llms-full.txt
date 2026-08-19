@@ -105,6 +105,10 @@ upstream API.
   and server-authoritative free-quota counters only for its own account. The focused reads are
   private and no-store. Credit balance is a canonical whole-number string; free-quota counters are
   JavaScript-safe integers and omit internal bucket keys and permit settings.
+- `GET /v1/auth/context` lets a valid environment-matched PubFi API key read its existing
+  provider-neutral execution context. The private, no-store response contains exactly
+  `principal_id`, `billing_account_id`, and nullable `actor_subject_id`; it creates no account or
+  billing state and does not accept OAuth fallback.
 - `X-PubFi-Api-Key` is not accepted, but it remains a credential carrier. Remove it before an
   accountless x402 request or the request stays in the credential lane.
 - The free starter allocation is 1,000 requests and is not Credits. PubFi uses Credits only for
@@ -177,6 +181,7 @@ upstream API.
 - Current Registry v2 catalog: https://api.pubfi.ai/v1/capabilities
 - Operation-pricing inventory: https://api.pubfi.ai/v1/operation-pricing-inventory
 - Public status API: https://api.pubfi.ai/v1/status
+- API-key auth context: https://api.pubfi.ai/v1/auth/context
 - API-host Glama metadata: https://api.pubfi.ai/.well-known/glama.json
 - API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP endpoint: https://mcp.pubfi.ai

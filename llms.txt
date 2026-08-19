@@ -33,6 +33,7 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 - Current Registry v2 catalog: https://api.pubfi.ai/v1/capabilities
 - Operation-pricing inventory: https://api.pubfi.ai/v1/operation-pricing-inventory
 - Public status API: https://api.pubfi.ai/v1/status
+- API-key auth context: https://api.pubfi.ai/v1/auth/context
 - API-host Glama metadata: https://api.pubfi.ai/.well-known/glama.json
 - API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
@@ -84,6 +85,9 @@ Each API runtime assigns the environment when it creates a key and accepts only 
 Clients cannot select the environment or request per-key scopes; only a human Owner or Admin can
 manage keys. `X-PubFi-Api-Key` is not accepted, but it remains a credential carrier and must be
 absent from accountless x402 requests.
+`GET /v1/auth/context` lets an environment-matched PubFi API key read its existing
+`principal_id`, bound `billing_account_id`, and nullable `actor_subject_id`. The response is
+private and no-store, creates no account or billing state, and does not accept OAuth fallback.
 An API key can read its own account's usage, detailed billing, authoritative available Credit
 balance, and server-authoritative free-quota counters. The focused account routes are private and
 no-store. They do not expose payment or internal limiter state.

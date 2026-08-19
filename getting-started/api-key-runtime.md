@@ -51,12 +51,35 @@ Authorization: Bearer <PubFi API key>
 `X-PubFi-Api-Key` is not accepted. Its presence still selects the credential lane, so remove it
 before an accountless x402 request.
 
+### Find The Key's Billing Account
+
+Use the API key with `GET /v1/auth/context` to get its provider-neutral execution context:
+
+```bash
+curl --fail-with-body \
+  --header "Authorization: Bearer ${PUBFI_API_KEY}" \
+  https://api.pubfi.ai/v1/auth/context
+```
+
+```json
+{
+  "principal_id": "<stable execution principal>",
+  "billing_account_id": "<billing account for this key>",
+  "actor_subject_id": null
+}
+```
+
+Use `billing_account_id` in the same-account usage, billing, Credit-balance, and free-quota paths.
+The route accepts only a valid PubFi API key for the selected environment. It does not accept an
+OAuth token as a fallback, and it rejects query parameters. The response is private and uses
+`Cache-Control: private, no-store`.
+
 ## Billing Account And Usage Model
 
 PubFi groups API keys and product usage under billing accounts. Public docs should describe the
 model at a high level:
 
-- API keys authenticate the caller.
+- API keys authenticate the caller and can read their existing execution context.
 - Every key uses the same fixed product-access model.
 - A key can execute through the gateway or MCP and read its own billing account's usage,
   authoritative billing data, available Credit balance, and free-quota counters.

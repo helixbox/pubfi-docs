@@ -121,6 +121,9 @@ convention.
   status classes remain gateway failures.
 - API-key execution requires a key for the endpoint environment, active admission, and sufficient
   allocation. All keys use one fixed product-access model.
+- An API-key client can call `GET /v1/auth/context` to get its stable execution `principal_id` and
+  bound `billing_account_id`. The private, no-store response has a nullable `actor_subject_id` and
+  creates no account or billing state.
 - An advertised exact `GET` or `POST` can append `:free` to its final path segment. It keeps the API
   key, account identity, and exact operation input, uses the published limiter, and charges zero
   Credits. The checked-in Subscan policy shares its allowance across eligible default and bounded

@@ -103,6 +103,7 @@ operation can instead return an accountless x402 V2 challenge when no API-key ca
 
 ## Authenticated Account And Purchase Families
 
+- `https://api.pubfi.ai/v1/auth/context`
 - `https://api.pubfi.ai/v1/billing-accounts`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/api-keys`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/usage`
@@ -115,8 +116,10 @@ operation can instead return an accountless x402 V2 challenge when no API-key ca
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups/{setup_id}`
 
-These URLs are public API contracts, but their data is private. Purchase route presence does not
-prove that a current offer exists. The dashboard calls the customer feature **Auto Top-Up**;
+These URLs are public API contracts, but their data is private. The auth-context route lets an API
+key read its existing execution principal and billing-account binding; it does not create account
+or billing state. Purchase route presence does not prove that a current offer exists. The dashboard
+calls the customer feature **Auto Top-Up**;
 `credit-auto-reload` is the stable API route name.
 
 ## Agent-Readable And Crawler Files
