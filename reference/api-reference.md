@@ -88,6 +88,7 @@ OpenAPI visibility does not make every route anonymous.
 | Gateway through the accountless x402 lane | No API key; exact x402-eligible route and valid V2 request-bound payment authorization. |
 | MCP `pubfi.route.execute` on the root endpoint | API key or OAuth access token for this environment. Invalid credentials and x402 metadata do not fall back. |
 | MCP `pubfi.route.execute` on `/x402` | No Bearer carrier; exact x402-eligible route and official MCP payment metadata. |
+| API-key auth context | API key for this environment. Returns only the existing execution principal and billing-account binding. |
 | Billing-account list | Authenticated human dashboard session. |
 | API-key management | Authenticated human Owner or Admin. API keys cannot manage keys. |
 | Usage, billing, Credit-balance, and free-quota readback | Human account member, or an API key for the same account. |
@@ -99,6 +100,10 @@ OpenAPI visibility does not make every route anonymous.
 Do not combine an API-key carrier with `PAYMENT-SIGNATURE`. `X-PubFi-Api-Key` is not accepted, but
 its presence still selects the credential lane and conflicts with payment. Purchase route
 visibility also does not prove that a current purchase offer exists.
+
+`GET /v1/auth/context` is private and no-store. Its response contains exactly `principal_id`,
+`billing_account_id`, and nullable `actor_subject_id`. Missing, invalid, OAuth, or
+environment-mismatched credentials return `401`; the route does not use OAuth fallback.
 
 ## Use These Docs
 

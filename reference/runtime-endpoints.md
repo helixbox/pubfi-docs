@@ -106,6 +106,7 @@ append the suffix unless the current catalog or OpenAPI operation advertises it.
 
 | Method | Path | Access |
 | --- | --- | --- |
+| `GET` | `/v1/auth/context` | PubFi API key for this environment. Returns the key's existing execution principal and billing-account binding. |
 | `GET` | `/v1/billing-accounts` | Authenticated human dashboard session. |
 | `GET|POST` | `/v1/billing-accounts/{billing_account_id}/api-keys` | Authenticated human Owner or Admin. API keys cannot manage keys. |
 | `PATCH|DELETE` | `/v1/billing-accounts/{billing_account_id}/api-keys/{id}` | Authenticated human Owner or Admin. API keys cannot manage keys. |
@@ -122,10 +123,15 @@ append the suffix unless the current catalog or OpenAPI operation advertises it.
 | `POST` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups` | Human Owner or Admin. Requires `Idempotency-Key` and exact current Service Credit Terms. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups/{setup_id}` | Human account member. API keys are denied. |
 
-Purchase and Auto Top-Up responses are private and use `Cache-Control: private, no-store`. The
-presence of these routes does not prove that a purchase offer is currently available. The
-dashboard uses **Auto Top-Up** for the customer feature; `credit-auto-reload` is the stable API
-route name.
+The auth-context response contains exactly `principal_id`, `billing_account_id`, and nullable
+`actor_subject_id`. It accepts only a valid PubFi API key, rejects query parameters, and does not
+fall back to OAuth. It creates no account or billing state. Use its `billing_account_id` in the
+same-account read paths below.
+
+Auth-context, purchase, and Auto Top-Up responses are private and use
+`Cache-Control: private, no-store`. The presence of these routes does not prove that a purchase
+offer is currently available. The dashboard uses **Auto Top-Up** for the customer feature;
+`credit-auto-reload` is the stable API route name.
 
 The focused account reads are also private and no-store. `credit-balance` returns only
 `billingAccountId`, `meterKey: "request_count"`, a canonical whole-number `creditBalance` string,

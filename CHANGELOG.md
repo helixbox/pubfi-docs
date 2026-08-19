@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Documented API-key auth-context self-inspection and the returned execution-principal and
+  billing-account binding.
 - Added the public PubFi status page and API families, including fail-closed `unknown` semantics,
   and documented the focused authenticated Credit-balance and free-quota reads.
 - Documented the MCP bearer contract: the authenticated root accepts PubFi API keys or OAuth
