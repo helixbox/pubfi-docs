@@ -149,7 +149,10 @@ Apply the same rule to the corresponding Staging status surfaces.
 The public `/status` page presents the no-store `/v1/status` and `/v1/status/gateway` contracts.
 Provider detail comes from the provider status route. The status APIs report `unknown` when
 evidence is missing, stale, or incoherent; they do not convert missing evidence into an empty
-successful state. Status does not replace the current Registry catalog as execution authority.
+successful state. Gateway summaries count source operations separately from Registry route
+variants. Operation detail binds source, route, and monitor identities, and signals identify the
+responsible owner layer. Incident state can be `suspect`, `open`, `recovering`, or `resolved`.
+Status does not replace the current Registry catalog as execution authority.
 
 ## Public-Safe Rule
 

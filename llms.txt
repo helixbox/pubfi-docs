@@ -114,7 +114,9 @@ envelopes. MCP represents valid JSON as a JSON value, valid text as a string, ot
 data, and an empty body as `null`.
 The public no-store status APIs use `operational`, `degraded`, `major_outage`, or `unknown`.
 Missing, stale, or incoherent evidence stays `unknown`; status does not replace the Registry
-catalog as route authority.
+catalog as route authority. Gateway summaries count source operations separately from Registry
+route variants. Operation signals identify the responsible owner layer, and incidents use
+`suspect`, `open`, `recovering`, or `resolved` state.
 
 Base Sepolia `eip155:84532` is the Staging x402 boundary. Staging HTTP and MCP acceptance completed
 on 2026-07-27 with Signed Offer and Signed Receipt verification and exact replay; see

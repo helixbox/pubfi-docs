@@ -65,6 +65,19 @@ treated as healthy. Status is public-safe evidence about current PubFi component
 coverage, providers, and active operations. It does not replace the Registry catalog as route
 authority or prove that a purchase offer or x402 challenge is available.
 
+Status counts one source operation for each provider, method, and canonical upstream path. One
+source operation can have more than one Registry route variant. In Gateway summaries,
+`active_operations` counts source operations and `active_route_variants` counts route variants.
+`operation_coverage` reports both counts and separates operations that are continuously monitored
+from operations without continuous monitoring. Provider summaries use the same distinction.
+
+Operation status includes `source_operation_key`, `source_revision_key`, `route_variant_key`, and
+an optional `monitor_target_key`. These values bind source, route, and monitoring evidence. They
+are not executable gateway paths. Each signal also identifies the responsible `owner` layer. The
+Gateway response can include incidents in `suspect`, `open`, `recovering`, or `resolved` state.
+Incident ownership and stage keep a provider failure separate from a PubFi Registry, credential,
+or gateway failure.
+
 ### Gateway Route
 
 ```text

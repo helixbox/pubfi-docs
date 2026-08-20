@@ -216,8 +216,11 @@ upstream API.
 
 The public no-store status contracts use `pubfi.status.v1` and `pubfi.status.gateway.v1` with
 `operational`, `degraded`, `major_outage`, or `unknown`. Missing, stale, or incoherent evidence is
-`unknown`. Status is operational evidence, not Registry route authority or proof that a purchase
-or x402 offer is available.
+`unknown`. Gateway summaries count source operations separately from Registry route variants.
+Operation status binds source, route, and monitor identities; signals identify the responsible
+owner layer. Incidents use `suspect`, `open`, `recovering`, or `resolved` state. Status is
+operational evidence, not Registry route authority or proof that a purchase or x402 offer is
+available.
 
 ## MCP Registry v2 Tools
 

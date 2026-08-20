@@ -102,7 +102,10 @@ Use the surfaces in this order for runtime work:
    projection. It contains no selected price, is not execution authority, and fails with `503`
    instead of returning a partial projection.
 4. Use `/v1/status` and `/v1/status/gateway` for public-safe operational evidence. Treat
-   `unknown` as missing, stale, or incoherent evidence, not health or route availability.
+   `unknown` as missing, stale, or incoherent evidence, not health or route availability. Status
+   counts source operations separately from Registry route variants. Operation signals identify
+   the responsible owner layer, and incidents move through `suspect`, `open`, `recovering`, or
+   `resolved`.
 5. Use MCP `tools/list` for current MCP schemas. Use `pubfi.capabilities.list` and
    `pubfi.capabilities.get` for the current Registry generation and exact capability detail.
 6. Use Discovery only for source-selection and public evidence context.
