@@ -20,6 +20,7 @@ Runtime OpenAPI, and MCP metadata.
 | IndexNow verification key | Public ownership verification file. | `https://pubfi.ai/50e4aa84-257b-4ff4-a822-5da3d567384c.txt` |
 | Agent interface guide | Current MCP tools, fields, auth, and execution boundary. | `https://docs.pubfi.ai/reference/agent-interface` |
 | MCP client guides | Client-specific hosted HTTP, stdio bridge, credential, verification, and compatibility guidance. | `https://docs.pubfi.ai/getting-started/mcp-clients` |
+| ChatGPT and Codex Plugin guide | Public Plugin installation, OAuth, catalog workflow, and product boundary. | https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin |
 | Registry catalog | Complete installed Registry v2 catalog with each entry's readiness state. | `https://api.pubfi.ai/v1/capabilities` |
 | Operation-pricing inventory | Complete no-store producer projection for approved operations; it contains no selected price and is not execution authority. | `https://api.pubfi.ai/v1/operation-pricing-inventory` |
 | Product status | Public component, Gateway, provider, and operation status presentation. Missing or stale evidence remains Unknown. | `https://pubfi.ai/status` |

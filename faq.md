@@ -32,6 +32,19 @@ should not look for `subscan.*` or `degov.*`.
 Use [MCP Client Guides](/getting-started/mcp-clients) for client configuration and safe
 verification prompts.
 
+## How do I use PubFi in ChatGPT or Codex?
+
+When the Plugin is available in the Universal Plugins Directory, search for PubFi, confirm the
+HelixboxLabs publisher, install it, and follow the OAuth linking prompt when a data query needs
+account execution. The [ChatGPT and Codex Plugin guide](/getting-started/chatgpt-codex-plugin)
+describes the discovery, inspection, and exact-route execution flow.
+
+## Where do I get help with the PubFi Plugin?
+
+Use this FAQ for connection, OAuth, capability discovery, execution, account entitlement, privacy,
+and terms questions. Do not send API keys, OAuth tokens, wallet secrets, or raw account responses
+to support.
+
 ## Do all gateway routes support x402?
 
 No. x402 is enabled per exact Registry route. Inspect the current catalog and the route's

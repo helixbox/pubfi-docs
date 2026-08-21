@@ -12,6 +12,7 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 - Registry gateway examples: https://docs.pubfi.ai/reference/provider-gateway-examples
 - MCP client setup: https://docs.pubfi.ai/getting-started/mcp-client
 - MCP client guides: https://docs.pubfi.ai/getting-started/mcp-clients
+- ChatGPT and Codex Plugin: https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin
 - Accountless x402: https://docs.pubfi.ai/getting-started/x402
 - Discovery concepts: https://docs.pubfi.ai/concepts/discovery
 - Registry contracts: https://docs.pubfi.ai/concepts/capability-contracts
@@ -81,6 +82,9 @@ OpenAPI query and body fields are source-declared request-construction metadata.
 execution preserve any RFC 3986-valid query of at most 65,536 encoded bytes, including duplicate
 or undeclared fields. A non-empty POST body is forwarded byte-for-byte within the route-selected
 limit and media type; empty bodies are omitted and GET bodies are rejected.
+The PubFi Plugin combines one workflow skill with the existing Account/OAuth MCP root. It discovers
+and inspects the current catalog before exact route execution, discloses published Credit cost
+before paid calls, and does not initiate commerce or switch to the independent payment lane.
 Each API runtime assigns the environment when it creates a key and accepts only matching keys.
 Clients cannot select the environment or request per-key scopes; only a human Owner or Admin can
 manage keys. `X-PubFi-Api-Key` is not accepted, but it remains a credential carrier and must be
