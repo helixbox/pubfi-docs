@@ -220,7 +220,9 @@ The public no-store status contracts use `pubfi.status.v1` and `pubfi.status.gat
 Operation status binds source, route, and monitor identities; signals identify the responsible
 owner layer. Incidents use `suspect`, `open`, `recovering`, or `resolved` state. Status is
 operational evidence, not Registry route authority or proof that a purchase or x402 offer is
-available.
+available. Gateway summaries expose `operation_pricing_status`; a known pricing outage blocks paid
+execution without replacing independent provider or PubFi proxy evidence, and missing pricing
+evidence remains `unknown`.
 
 ## MCP Registry v2 Tools
 
@@ -237,11 +239,18 @@ available.
   bodies are rejected.
 - MCP exposes valid provider JSON as a JSON value, valid `text/*` bytes as a string, other or
   invalid bytes as base64 data, and an empty provider body as `null`.
-- `tools/list` publishes the current generation, manifest, and tool input and output schemas.
+- `tools/list` publishes the current generation, manifest, and endpoint-specific tool metadata.
+  The authenticated root declares `noauth` for capability reads and `oauth2` with no scopes for
+  route execution, whose output schema includes free-health, account-free, and account-paid
+  outcomes. `/x402` declares `noauth` for every tool and exposes only free-health, x402 settlement,
+  payment-required, and x402 error outcomes.
 - `pubfi.capabilities.list` and `pubfi.capabilities.get` are public Registry reads. The client
   selects a capability; PubFi does not infer intent or rank candidates.
 - The authenticated MCP root accepts a PubFi API key or OAuth access token for
-  `pubfi.route.execute`. It rejects payment metadata, and invalid credentials do not fall back.
+  `pubfi.route.execute`. It rejects payment metadata, and invalid credentials do not fall back. A
+  missing or invalid OAuth execution credential returns HTTP `401` with protected-resource
+  discovery and `_meta["mcp/www_authenticate"]`; an invalid `pf_sk_v1_` API key uses the separate
+  API-key `401` response.
   The explicit `/x402` endpoint rejects Bearer credentials. An unsigned eligible call there
   returns `PaymentRequired`; the paid retry supplies `x402/payment`; the settled result supplies
   `x402/payment-response`. A wallet-capable agent can complete this payment directly through MCP

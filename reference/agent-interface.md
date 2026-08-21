@@ -13,7 +13,8 @@ https://mcp.pubfi.ai/.well-known/oauth-protected-resource
 ```
 
 The root is the authenticated endpoint. The `/x402` endpoint is the separate accountless payment
-lane. Both expose the same fixed tools and public introspection methods.
+lane. Both expose the same fixed tool names and public introspection methods. Their `tools/list`
+security, output, annotation, and execution descriptions are endpoint-specific.
 
 ## OAuth Discovery
 
@@ -47,7 +48,13 @@ not tool names.
 
 `pubfi.capabilities.list` and `pubfi.capabilities.get` are public reads. Follow every opaque
 `next_cursor`, select a capability in the client, and fetch its exact detail before execution.
-Use `tools/list` for the current MCP input and output schemas.
+Use `tools/list` on the endpoint that the client will call. On the authenticated root, the two
+capability tools declare `noauth`, while `pubfi.route.execute` declares `oauth2` with no scopes and
+exposes only free-health, account-free, and account-paid outcomes. On `/x402`, all three tools
+declare `noauth`, and route execution exposes only free-health, x402 settlement,
+payment-required, and x402 error outcomes. Capability reads are read-only, idempotent, and
+closed-world. Route execution is non-read-only, destructive, and non-idempotent; the authenticated
+surface is closed-world, while the x402 surface is open-world.
 
 ## Auth
 
@@ -57,8 +64,11 @@ Authorization: Bearer <PubFi API key or OAuth access token>
 
 The authenticated root classifies a token with the `pf_sk_v1_` prefix as a PubFi API key. It
 classifies every other Bearer token as an OAuth access token. The two credential types do not fall
-back to each other. A missing or invalid credential for `pubfi.route.execute` returns `401` with a
-`WWW-Authenticate` challenge that points to the environment's protected-resource metadata.
+back to each other. A missing credential or an invalid OAuth credential for
+`pubfi.route.execute` returns HTTP `401`, a protected-resource `WWW-Authenticate` header, and an
+MCP error tool result with `_meta["mcp/www_authenticate"]` so an OAuth-capable host can start or
+repair account linking. An invalid `pf_sk_v1_` API key returns the API-key `401` error without that
+tool result. Public methods reject a supplied invalid credential instead of ignoring it.
 
 `X-PubFi-Api-Key` is not accepted. Its presence is still a Bearer carrier. The `/x402` endpoint
 rejects every Bearer carrier, including `Authorization` and `X-PubFi-Api-Key`.
@@ -79,6 +89,11 @@ An empty body is omitted, and `GET` bodies are rejected.
 MCP adapts provider response bytes to JSON-RPC: valid JSON becomes a JSON value, valid `text/*`
 becomes a string, and other or invalid bytes become an object with `encoding: "base64"` and a
 `data` field. An empty provider body becomes `null`.
+
+An exact `free_health` execution uses `execution_status: free_health_executed` and
+`billing.mode: free_health` on either MCP endpoint. It is distinct from an authenticated
+account-free `:free` result, which uses `execution_status: registry_free_route_executed` and
+`credits_charged: 0`.
 
 Catalog and detail schema v5 expose billing under the selected method's `operations[]` entry.
 `quantro_priced` carries a positive `credit_cost` and independent x402 terms under one immutable

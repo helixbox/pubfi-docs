@@ -116,7 +116,15 @@ The public no-store status APIs use `operational`, `degraded`, `major_outage`, o
 Missing, stale, or incoherent evidence stays `unknown`; status does not replace the Registry
 catalog as route authority. Gateway summaries count source operations separately from Registry
 route variants. Operation signals identify the responsible owner layer, and incidents use
-`suspect`, `open`, `recovering`, or `resolved` state.
+`suspect`, `open`, `recovering`, or `resolved` state. `operation_pricing_status` reports whether
+paid execution pricing is available without replacing independent provider or PubFi proxy
+evidence.
+
+MCP `tools/list` is endpoint-specific. The authenticated root declares `oauth2` with no scopes for
+route execution and exposes free-health, account-free, and account-paid outcomes. `/x402` declares
+`noauth` for every tool and exposes only free-health or x402 outcomes. A missing or invalid OAuth
+execution credential returns HTTP `401` with protected-resource discovery and
+`_meta["mcp/www_authenticate"]`; an invalid `pf_sk_v1_` API key uses the separate API-key `401`.
 
 Base Sepolia `eip155:84532` is the Staging x402 boundary. Staging HTTP and MCP acceptance completed
 on 2026-07-27 with Signed Offer and Signed Receipt verification and exact replay; see
