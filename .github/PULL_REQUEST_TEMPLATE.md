@@ -5,7 +5,7 @@ Describe the public docs, examples, or materials changed.
 ## Checks
 
 - [ ] Local links checked
-- [ ] Docs framework preview/build checked
+- [ ] Local Mint validation/export checked when docs output changes
 - [ ] Example syntax checked when examples changed
 - [ ] No credentials, account data, billing data, or private readbacks
 - [ ] No ranking, traffic, or AI citation success claim without current evidence

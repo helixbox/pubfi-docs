@@ -1,0 +1,34 @@
+{
+  "name": "pubfi",
+  "version": "0.1.0",
+  "description": "Discover and query crypto data through PubFi.",
+  "author": {
+    "name": "HelixboxLabs",
+    "email": "hello@pubfi.ai",
+    "url": "https://pubfi.ai"
+  },
+  "homepage": "https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin",
+  "repository": "https://github.com/helixbox/pubfi-docs",
+  "license": "MIT",
+  "keywords": ["crypto-data", "mcp", "agents"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "PubFi",
+    "shortDescription": "Discover and query crypto data",
+    "longDescription": "Use PubFi's public capability catalog and a connected account to inspect exact crypto data capabilities and run selected data queries.",
+    "developerName": "HelixboxLabs",
+    "category": "Data & Analytics",
+    "capabilities": ["Read", "Account"],
+    "websiteURL": "https://pubfi.ai",
+    "privacyPolicyURL": "https://pubfi.ai/privacy-policy",
+    "termsOfServiceURL": "https://pubfi.ai/terms-of-service",
+    "defaultPrompt": [
+      "Find the PubFi capability for the crypto data I need.",
+      "Inspect this PubFi capability before I run it.",
+      "Query this exact PubFi crypto data route."
+    ],
+    "brandColor": "#0F766E",
+    "composerIcon": "./assets/logo.svg",
+    "logo": "./assets/logo.svg"
+  }
+}

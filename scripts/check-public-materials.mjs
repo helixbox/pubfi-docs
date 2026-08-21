@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readdirSync, readFileSync, existsSync } from "node:fs";
+import { readdirSync, readFileSync, existsSync, lstatSync } from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 
@@ -17,6 +17,8 @@ checkCanonicalDocsUrls();
 checkCanonicalDocsIndex();
 checkTextHygiene();
 checkCurrentRuntimeContracts();
+checkPluginPackageContract();
+checkPluginReviewMaterial();
 checkExampleSyntax();
 
 if (failures.length > 0) {
@@ -395,6 +397,220 @@ function checkCurrentRuntimeContracts() {
         failures.push(`blanket no-x402 claim: ${relative(file)}:${index + 1}`);
       }
     });
+  }
+}
+
+function checkPluginPackageContract() {
+  const pluginRoot = path.join(root, "plugins", "pubfi");
+  const submissionRoot = path.join(root, "submission", "pubfi");
+  const expectedPluginFiles = [
+    ".codex-plugin/plugin.json",
+    "LICENSE",
+    "assets/logo.svg",
+    "skills/pubfi-data/SKILL.md",
+    "skills/pubfi-data/agents/openai.yaml"
+  ];
+  const expectedSubmissionFiles = [
+    "legal-requirements.md",
+    "listing.md",
+    "release-notes.md",
+    "test-cases.md"
+  ];
+
+  if (!existsSync(pluginRoot)) {
+    failures.push("missing public PubFi plugin root: plugins/pubfi");
+    return;
+  }
+
+  const pluginFiles = collectPackageEntries(pluginRoot, "plugins/pubfi");
+  const expectedPluginPaths = expectedPluginFiles.map((file) => path.join("plugins/pubfi", file));
+  compareFileSets("installed PubFi plugin", pluginFiles, expectedPluginPaths);
+
+  if (existsSync(submissionRoot)) {
+    const submissionFiles = collectPackageEntries(submissionRoot, "submission/pubfi");
+    const expectedSubmissionPaths = expectedSubmissionFiles.map((file) =>
+      path.join("submission/pubfi", file)
+    );
+    compareFileSets("PubFi submission material", submissionFiles, expectedSubmissionPaths);
+  } else {
+    failures.push("missing PubFi submission material: submission/pubfi");
+  }
+
+  const manifestPath = path.join(pluginRoot, ".codex-plugin", "plugin.json");
+  const marketplacePath = path.join(root, ".agents", "plugins", "marketplace.json");
+  let manifest;
+  let marketplace;
+
+  try {
+    manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+  } catch (error) {
+    failures.push("invalid PubFi plugin manifest: " + error.message);
+  }
+
+  try {
+    marketplace = JSON.parse(readFileSync(marketplacePath, "utf8"));
+  } catch (error) {
+    failures.push("invalid PubFi marketplace manifest: " + error.message);
+  }
+
+  if (manifest) {
+    if (manifest.name !== "pubfi") {
+      failures.push("PubFi plugin manifest name must be pubfi");
+    }
+    if (manifest.skills !== "./skills/") {
+      failures.push("PubFi plugin manifest must point skills to ./skills/");
+    }
+    if (manifest.apps || manifest.mcpServers) {
+      failures.push("Public PubFi plugin must not include an app or MCP connection mapping");
+    }
+    if (manifest.license !== "MIT") {
+      failures.push("Public PubFi plugin must declare the MIT license");
+    }
+    if (manifest.author?.name !== "HelixboxLabs") {
+      failures.push("PubFi plugin author identity must be HelixboxLabs");
+    }
+    if (manifest.interface?.developerName !== "HelixboxLabs") {
+      failures.push("PubFi plugin developer identity must be HelixboxLabs");
+    }
+    if (manifest.interface?.websiteURL !== "https://pubfi.ai") {
+      failures.push("PubFi plugin website must be https://pubfi.ai");
+    }
+    if (manifest.interface?.privacyPolicyURL !== "https://pubfi.ai/privacy-policy") {
+      failures.push("PubFi plugin privacy URL must use the canonical PubFi policy");
+    }
+    if (manifest.interface?.termsOfServiceURL !== "https://pubfi.ai/terms-of-service") {
+      failures.push("PubFi plugin terms URL must use the canonical PubFi terms");
+    }
+    for (const assetPath of [manifest.interface?.composerIcon, manifest.interface?.logo]) {
+      if (assetPath && !existsSync(path.join(pluginRoot, assetPath.replace("./", "")))) {
+        failures.push("PubFi plugin asset is missing: " + assetPath);
+      }
+    }
+  }
+
+  if (marketplace) {
+    const entry = Array.isArray(marketplace.plugins)
+      ? marketplace.plugins.find((plugin) => plugin?.name === "pubfi")
+      : null;
+
+    if (!entry) {
+      failures.push("PubFi marketplace entry is missing");
+    } else {
+      if (entry.source?.source !== "local" || entry.source?.path !== "./plugins/pubfi") {
+        failures.push("PubFi marketplace source must be the relative local plugin path");
+      }
+      if (entry.policy?.installation !== "NOT_AVAILABLE") {
+        failures.push("PubFi marketplace installation policy must remain NOT_AVAILABLE");
+      }
+      if (entry.policy?.authentication !== "ON_INSTALL") {
+        failures.push("PubFi marketplace authentication policy must remain ON_INSTALL");
+      }
+      if (entry.category !== "Data & Analytics") {
+        failures.push("PubFi marketplace category must be Data & Analytics");
+      }
+    }
+  }
+
+  const inspectRoots = [pluginRoot, submissionRoot].filter((directory) => existsSync(directory));
+  for (const directory of inspectRoots) {
+    for (const file of collectPackageEntries(directory, relative(directory))) {
+      const text = readFileSync(path.join(root, file), "utf8");
+      if (/(?:plugin_)?asdk_app_[A-Za-z0-9]+|mcp-stg\\.pubfi\\.ai|api-stg\\.pubfi\\.ai|\\.app\\.json/.test(text)) {
+        failures.push("forbidden Staging or app mapping material: " + file);
+      }
+    }
+  }
+
+  for (const file of pluginFiles) {
+    const text = readFileSync(path.join(root, file), "utf8");
+    const lines = text.split("\n");
+    lines.forEach((line, index) => {
+      if (
+        /\b(?:x402|checkout|subscription|wallet|transfer|trade|investment|payment)\b/i.test(line) &&
+        !isExplicitNegativeContext(lines, index)
+      ) {
+        failures.push("PubFi plugin commerce boundary is not negative-only: " + file + ":" + (index + 1));
+      }
+    });
+  }
+}
+
+function checkPluginReviewMaterial() {
+  const file = path.join(root, "submission", "pubfi", "test-cases.md");
+  if (!existsSync(file)) {
+    return;
+  }
+
+  const text = readFileSync(file, "utf8");
+  const positiveSection = text.match(/## Positive cases\n([\s\S]*?)(?=\n## Negative cases\n|$)/);
+  const negativeSection = text.match(/## Negative cases\n([\s\S]*)$/);
+  const positiveCases = positiveSection ? positiveSection[1].match(/^### \d+\./gm) || [] : [];
+  const negativeCases = negativeSection ? negativeSection[1].match(/^### \d+\./gm) || [] : [];
+
+  if (positiveCases.length !== 5) {
+    failures.push("PubFi review material must contain exactly five positive cases, found " + positiveCases.length);
+  }
+  if (negativeCases.length !== 3) {
+    failures.push("PubFi review material must contain exactly three negative cases, found " + negativeCases.length);
+  }
+  if (text.includes("registry_free_route_executed")) {
+    failures.push("PubFi health review fixture must not use the old registry_free_route_executed placeholder");
+  }
+
+  for (const marker of [
+    "route-f39f3795eb94457fd48bae32811d4da1da9e62b24f066578136ba00dacf70d57",
+    "GET /v1/gateway/degov/global/health",
+    "free_health",
+    "free_health_executed",
+    "route-3d4fa0587ffa237d7a4bcd555bc406e3387c825a058c3e0f9b315ed4dbf632b0",
+    "GET /v1/gateway/degov/global/v2/meta/data-status",
+    "credit_cost: 1",
+    "registry_route_executed"
+  ]) {
+    if (!text.includes(marker)) {
+      failures.push("PubFi review material is missing fixture marker: " + marker);
+    }
+  }
+}
+
+function collectPackageEntries(directory, rootLabel) {
+  const files = [];
+
+  function visit(currentDirectory, relativeDirectory) {
+    for (const entry of readdirSync(currentDirectory, { withFileTypes: true })) {
+      const currentPath = path.join(currentDirectory, entry.name);
+      const relativePath = path.join(relativeDirectory, entry.name);
+      const stat = lstatSync(currentPath);
+
+      if (stat.isSymbolicLink()) {
+        failures.push("package boundary rejects symlink: " + relativePath);
+      } else if (stat.isDirectory()) {
+        visit(currentPath, relativePath);
+      } else if (stat.isFile()) {
+        files.push(relativePath);
+      } else {
+        failures.push("package boundary rejects non-regular entry: " + relativePath);
+      }
+    }
+  }
+
+  visit(directory, rootLabel);
+  return files.sort();
+}
+
+function compareFileSets(label, actual, expected) {
+  const actualSet = new Set(actual);
+  const expectedSet = new Set(expected);
+
+  for (const file of expectedSet) {
+    if (!actualSet.has(file)) {
+      failures.push(label + " is missing required file: " + file);
+    }
+  }
+  for (const file of actualSet) {
+    if (!expectedSet.has(file)) {
+      failures.push(label + " contains development or unexpected file: " + file);
+    }
   }
 }
 

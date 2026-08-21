@@ -86,6 +86,7 @@ returns `503` rather than a partial inventory when the complete projection canno
 - `https://pubfi.ai/.well-known/mcp.json`
 - `https://pubfi.ai/.well-known/mcp/server-card.json`
 - `https://pubfi.ai/.well-known/mcp-registry-auth`
+- https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin
 
 The registry-auth proof route is optional and can return `404`. MCP discovery and `tools/list` are
 public. On the authenticated root, `pubfi.route.execute` accepts a PubFi API key or OAuth access

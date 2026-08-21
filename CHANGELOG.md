@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added the public PubFi Plugin package, disabled repository marketplace entry, review fixtures,
+  and ChatGPT/Codex usage guide for the Account/OAuth MCP root.
 - Documented endpoint-specific MCP `tools/list` security, output, annotation, and OAuth-linking
   metadata for the authenticated and accountless x402 endpoints.
 - Documented the Status `operation_pricing_status` field and the separation between pricing

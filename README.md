@@ -7,7 +7,6 @@ Public documentation and examples for PubFi's agent-native crypto data layer.
 [![Docs](https://img.shields.io/badge/docs-docs.pubfi.ai-0F766E)](https://docs.pubfi.ai)
 [![API Reference](https://img.shields.io/badge/API-reference-0F172A)](https://api.pubfi.ai/reference)
 [![OpenAPI](https://img.shields.io/badge/OpenAPI-3.1-14B8A6)](https://api.pubfi.ai/openapi.json)
-[![Docs Check](https://github.com/helixbox/pubfi-docs/actions/workflows/docs.yml/badge.svg?branch=main)](https://github.com/helixbox/pubfi-docs/actions/workflows/docs.yml)
 [![Docs License](https://img.shields.io/badge/docs%20license-CC--BY--4.0-blue)](LICENSE-DOCS.md)
 [![Code License](https://img.shields.io/badge/code%20license-MIT-blue)](LICENSE-CODE.md)
 [![GitHub last commit](https://img.shields.io/github/last-commit/helixbox/pubfi-docs?color=red&style=plastic)](https://github.com/helixbox/pubfi-docs)
@@ -48,6 +47,7 @@ Snapshot sources:
 - [Registry gateway examples](reference/provider-gateway-examples.md)
 - [MCP client setup](getting-started/mcp-client.md)
 - [MCP client guides](getting-started/mcp-clients.md)
+- [ChatGPT and Codex Plugin](getting-started/chatgpt-codex-plugin.md)
 - [Accountless x402](getting-started/x402.md)
 - [Payment and execution modes](concepts/payment-and-execution-modes.md)
 - [API Reference](reference/api-reference.md)
@@ -141,7 +141,7 @@ The root `favicon.svg` is copied from `pubfi-mono/apps/web/app/icon.svg` at
 `7a1b8e13943d454db5f76d03a29e1ce8f65ee616`. This source keeps the docs icon aligned with the
 PubFi product site.
 
-## Local Preview
+## Local Development Preview
 
 ```sh
 npx mint@latest dev --no-open
@@ -152,15 +152,16 @@ The local preview serves the docs site at `http://localhost:3000`.
 ## Checks
 
 ```sh
+npm ci
 npm run check
 npx mint@latest validate
 ```
 
 The portable check validates Mintlify navigation targets, Markdown links, docs-site route links,
 trailing whitespace, secret patterns, unsafe SEO/GEO success phrases, and example syntax.
-The Mint command is for manual local work. Unattended automation runs the portable check locally
-and requires the GitHub `Docs` workflow to complete Mint validation and export before landing a
-change; it does not download an `@latest` package into the local automation environment.
+For docs output, navigation, or generated static asset changes, also run the Mint export and static
+assertions documented in `maintenance/public-docs-maintenance.md`. These checks run locally before
+the current GitHub pull request merge. Main-branch release workflows deploy the canonical site.
 
 Authenticated examples require a PubFi API key and must load it from a secret store. Paid x402
 clients require a buyer wallet key that must also stay in a secret store. Do not commit

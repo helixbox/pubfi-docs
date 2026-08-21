@@ -14,6 +14,7 @@ upstream API.
 - https://docs.pubfi.ai/getting-started/api-key-runtime
 - https://docs.pubfi.ai/reference/provider-gateway-examples
 - https://docs.pubfi.ai/getting-started/mcp-client
+- https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin
 - https://docs.pubfi.ai/getting-started/mcp-clients
 - https://docs.pubfi.ai/getting-started/x402
 - https://docs.pubfi.ai/concepts/discovery
@@ -29,6 +30,7 @@ upstream API.
 - https://docs.pubfi.ai/getting-started/api-key-runtime
 - https://docs.pubfi.ai/reference/provider-gateway-examples
 - https://docs.pubfi.ai/getting-started/mcp-client
+- https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin
 - https://docs.pubfi.ai/getting-started/mcp-clients
 - https://docs.pubfi.ai/getting-started/x402
 - https://docs.pubfi.ai/concepts/discovery
@@ -52,6 +54,16 @@ upstream API.
 - https://docs.pubfi.ai/reference/security-and-public-data
 - https://docs.pubfi.ai/faq
 - https://docs.pubfi.ai/glossary
+
+## ChatGPT And Codex Plugin
+
+The PubFi Plugin uses the existing universal Account/OAuth MCP root at
+https://mcp.pubfi.ai/. Catalog reads are public. The workflow calls
+pubfi.capabilities.list, inspects the exact selected capability with pubfi.capabilities.get, and
+calls pubfi.route.execute only with the current path and method returned by the catalog. It
+discloses the published credit_cost before paid calls and does not initiate commerce, wallet,
+transfer, trade, investment, or accountless payment actions. See
+https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 
 ## Concepts
 

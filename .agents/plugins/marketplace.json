@@ -1,0 +1,20 @@
+{
+  "name": "pubfi",
+  "interface": {
+    "displayName": "PubFi"
+  },
+  "plugins": [
+    {
+      "name": "pubfi",
+      "source": {
+        "source": "local",
+        "path": "./plugins/pubfi"
+      },
+      "policy": {
+        "installation": "NOT_AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Data & Analytics"
+    }
+  ]
+}
