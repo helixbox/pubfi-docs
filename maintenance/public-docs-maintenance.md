@@ -80,15 +80,30 @@ When a runtime contract or public page changes, check:
 For manual local work, run from the repository root:
 
 ```sh
+npm ci
 npm run check
 npx --yes mint@latest validate
 ```
 
-An unattended automation must not download and execute an `@latest` package locally. It must run
-`npm ci` and `npm run check` in the bound docs worktree. If it changes docs, it must open a pull
-request and require the GitHub `Docs` workflow to pass its Mint validation and export steps before
-landing. If it finds no change, it must require the local check and clean, unchanged readbacks for
-both bound repositories before it records `docs_current`.
+When a change affects docs output, navigation, or generated static assets, also run the local Mint
+export and the existing static assertions:
+
+```sh
+npx --yes mint@latest export --output export.zip
+rm -rf dist
+mkdir -p dist
+unzip -q export.zip -d dist
+npm run build:static-assets
+test -f dist/sitemap.xml
+test -f dist/robots.txt
+grep -q "https://docs.pubfi.ai/reference/api-reference" dist/sitemap.xml
+! grep -R "https://docs.pubfi.ai/src/_props" dist --include='*.html'
+```
+
+An unattended maintenance automation must run `npm ci` and `npm run check` in the bound docs
+worktree, plus the local Mint validation and export checks when the changed surface requires
+them. It must not depend on pull-request CI or preview deployment. Main-branch release workflows
+remain the hosted deployment authority.
 
 For changes that also depend on `pubfi-mono` public web surfaces, run the mono smoke checks from the
 mono repo:
@@ -111,15 +126,23 @@ npm run smoke:mcp-e2e --workspace apps/web
 - Include the source of truth for claim or route changes in the PR body.
 - Commit and push only the maintenance branch, then create or update one pull request. A local
   candidate or an open pull request is not a completed maintenance result.
-- Re-read the exact pull-request head after every push. Use `gh pr checks <url> --required --watch
-  --fail-fast` with bounded polling for the remote `Docs / check` workflow at that exact head;
-  use `gh pr view <url> --json headRefOid,statusCheckRollup` after each wait and discard results
-  from an older head. Leave the PR open with `checks_pending` if the bound expires.
-- If checks fail, attempt one focused repair. If they still fail, or GitHub reports a concurrent
-  update, leave the PR open with `checks_failed` or `merge_blocked` and the exact evidence.
-- Do not wait for human review when an automation change is mechanical, public-safe, and all checks
-  pass. Land only with the protected `decodex land --manual-authority` command, binding the current
-  remote-main base OID and the validated PR head OID. Do not use a direct merge or GitHub auto-merge.
-- After landing, use `gh pr view <url> --json state,headRefOid,mergeCommit` and `git fetch origin
-  main` to re-read the PR and remote `main`. Require `MERGED`, an observed merge commit, and that
-  the merge commit is reachable from `main` before reporting `completed` or `docs_current`.
+- Re-read the exact pull-request head after every push with
+  `gh pr view <url> --json headRefOid,baseRefOid,statusCheckRollup`. Discard any check result
+  from an older head. Repository-owned pull-request CI and preview workflows are not acceptance
+  requirements. If GitHub schedules an old or externally injected PR check, record its exact name,
+  workflow owner, and status without adding it to this repository contract.
+- If a local check fails, attempt one focused repair. If the repair still fails, or GitHub reports
+  a concurrent update, leave the PR open with the exact evidence.
+- Do not wait for human review when a mechanical, public-safe change has passed its local checks.
+  Before merging, read the current remote-main OID and validated pull-request head OID. Merge
+  through GitHub with an exact head match:
+
+  ```sh
+  gh pr merge <url> --merge --match-head-commit <validated-head-oid>
+  ```
+
+  Do not use an unbound merge or auto-merge.
+- After merging, use `gh pr view <url> --json state,headRefOid,mergeCommit` and `git fetch origin
+  main` to re-read the PR and remote `main`. Require `MERGED`, an observed merge commit, and
+  `git merge-base --is-ancestor <merge-commit> origin/main` before reporting `completed` or
+  `docs_current`.

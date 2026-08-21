@@ -46,10 +46,13 @@ find . -path './.git' -prune -o -path './.worktrees' -prune -o -path './node_mod
 Before opening a PR, also run from the repository root:
 
 ```sh
+npm ci
 npm run check
 npx --yes mint@latest validate
 ```
 
-These commands apply to manual local contributions. Unattended automation runs `npm ci` and
-`npm run check` locally, then requires the GitHub `Docs` workflow to pass Mint validation and
-export before it lands a change. It must not download an `@latest` package locally.
+When a change affects docs output, navigation, or generated static assets, also run the local Mint
+export and the existing static assertions documented in
+`maintenance/public-docs-maintenance.md`. These are local acceptance checks. The repository has no
+pull-request CI or preview deployment workflow; main-branch release workflows own hosted
+deployment.
