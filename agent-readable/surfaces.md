@@ -105,8 +105,11 @@ Use the surfaces in this order for runtime work:
    `unknown` as missing, stale, or incoherent evidence, not health or route availability. Status
    counts source operations separately from Registry route variants. Operation signals identify
    the responsible owner layer, and incidents move through `suspect`, `open`, `recovering`, or
-   `resolved`.
-5. Use MCP `tools/list` for current MCP schemas. Use `pubfi.capabilities.list` and
+   `resolved`. `operation_pricing_status` reports paid-execution pricing separately from provider
+   and PubFi proxy signals.
+5. Use MCP `tools/list` on the selected endpoint for current MCP schemas. The authenticated root
+   declares OAuth route execution and account outcomes; `/x402` declares no-auth tools and only
+   free-health or x402 outcomes. Use `pubfi.capabilities.list` and
    `pubfi.capabilities.get` for the current Registry generation and exact capability detail.
 6. Use Discovery only for source-selection and public evidence context.
 7. Use long-form docs for workflow, security, payment, and claim boundaries.
@@ -139,6 +142,9 @@ convention.
   `pubfi.route.execute`, including an advertised `:free` suffix. It rejects payment metadata and
   never falls back. The `/x402` endpoint rejects Bearer credentials and does not accept the
   suffix.
+- A missing or invalid OAuth execution credential returns HTTP `401` with protected-resource
+  discovery and `_meta["mcp/www_authenticate"]` so an OAuth-capable host can link the account. An
+  invalid `pf_sk_v1_` API key remains a separate API-key `401` without that MCP linking result.
 - A successful HTTP gateway response is the exact bounded provider body. API-key responses
   identify the Registry generation. MCP exposes valid JSON as a JSON value, valid `text/*` as a
   string, other bytes as base64 data, and an empty body as `null`. Settled x402 HTTP responses

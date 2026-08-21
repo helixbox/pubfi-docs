@@ -78,6 +78,10 @@ Gateway response can include incidents in `suspect`, `open`, `recovering`, or `r
 Incident ownership and stage keep a provider failure separate from a PubFi Registry, credential,
 or gateway failure.
 
+Gateway summaries expose `operation_pricing_status` separately from provider and PubFi proxy
+evidence. A known pricing outage is `major_outage` because paid execution is blocked, but it does
+not replace independent provider or proxy signals. Missing pricing evidence remains `unknown`.
+
 ### Gateway Route
 
 ```text
@@ -181,6 +185,14 @@ endpoint environment. Invalid credentials do not fall back, and payment metadata
 the `/x402` endpoint, `pubfi.route.execute` accepts the official x402 metadata flow for an eligible
 route and rejects every Bearer credential. Other tools keep their published public or
 authenticated contract.
+
+`tools/list` is endpoint-specific. The root declares `noauth` for capability reads and `oauth2`
+with no scopes for route execution, whose schema contains free-health, account-free, and
+account-paid outcomes. `/x402` declares `noauth` for every tool and limits route results to
+free-health, x402 settlement, payment-required, and x402 error outcomes. Missing or invalid OAuth
+execution credentials return HTTP `401` with protected-resource discovery and an MCP
+`_meta["mcp/www_authenticate"]` linking challenge. An invalid `pf_sk_v1_` API key keeps the
+separate API-key `401` response.
 
 For an advertised free variant, `pubfi.route.execute` uses the same API-key admission and the same
 exact path with `:free` appended to its final segment. A successful result reports

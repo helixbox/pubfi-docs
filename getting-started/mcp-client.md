@@ -59,6 +59,12 @@ The discovery manifest publishes the OAuth authorization server and the
 MCP OAuth can use that metadata. A static API-key client can continue to send
 `Authorization: Bearer <PubFi API key>` to the authenticated root.
 
+The authenticated root advertises `oauth2` with no scopes for `pubfi.route.execute`. If that tool
+is called without a credential or with an invalid OAuth credential, PubFi returns HTTP `401`, the
+protected-resource discovery header, and `_meta["mcp/www_authenticate"]` in the MCP error tool
+result so an OAuth-capable host can start or repair account linking. An invalid `pf_sk_v1_` API key
+uses the separate API-key `401` response and does not trigger OAuth linking.
+
 An agent with a wallet-capable x402 MCP client can pay an eligible
 `pubfi.route.execute` call directly through MCP. It does not need a PubFi account, API key, or a
 separate paid HTTP request. The payment uses USDC from the selected wallet and does not create an
@@ -82,7 +88,11 @@ when the selected route is callable and configured.
 
 ## Inspect Tool Schemas
 
-Call hosted `tools/list` for current input and output schemas. Use the
+Call hosted `tools/list` on the endpoint that the client will use. The authenticated root declares
+`noauth` for the capability reads and `oauth2` with no scopes for route execution. Its route output
+schema includes free-health, account-free, and account-paid outcomes. `/x402` declares `noauth` for
+all tools and includes only free-health, x402 settlement, payment-required, and x402 error
+outcomes. Use the
 [Agent Interface Reference](/reference/agent-interface) for the stable tool-purpose and field
 summary. Do not copy an old schema into a client as permanent authority.
 

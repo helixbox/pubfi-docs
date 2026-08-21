@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Documented endpoint-specific MCP `tools/list` security, output, annotation, and OAuth-linking
+  metadata for the authenticated and accountless x402 endpoints.
+- Documented the Status `operation_pricing_status` field and the separation between pricing
+  availability and independent provider or PubFi proxy evidence.
 - Documented API-key auth-context self-inspection and the returned execution-principal and
   billing-account binding.
 - Added the public PubFi status page and API families, including fail-closed `unknown` semantics,
