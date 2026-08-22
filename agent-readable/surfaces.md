@@ -30,6 +30,7 @@ Runtime OpenAPI, and MCP metadata.
 | API-host MCP manifest | MCP discovery for clients that start from the API domain. | `https://api.pubfi.ai/.well-known/mcp.json` |
 | MCP ownership declaration | Public connector ownership metadata. | `https://api.pubfi.ai/.well-known/glama.json` |
 | Hosted MCP manifest | Hosted MCP discovery and current Registry metadata. | `https://mcp.pubfi.ai/.well-known/mcp.json` |
+| OpenAI Apps domain ownership proof | Stable public plain-text proof for OpenAI Apps domain verification. | `https://mcp.pubfi.ai/.well-known/openai-apps-challenge` |
 | MCP OAuth protected resource | OAuth resource metadata for the authenticated MCP root. | `https://mcp.pubfi.ai/.well-known/oauth-protected-resource` |
 | Accountless MCP x402 endpoint | Bearer-free MCP payment lane. | `https://mcp.pubfi.ai/x402` |
 | MCP discovery pointer | Product-site pointer to hosted MCP discovery. | `https://pubfi.ai/.well-known/mcp.json` |

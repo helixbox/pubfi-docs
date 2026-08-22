@@ -199,6 +199,7 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - MCP endpoint: https://mcp.pubfi.ai
 - MCP x402 endpoint: https://mcp.pubfi.ai/x402
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
+- OpenAI Apps domain ownership proof: https://mcp.pubfi.ai/.well-known/openai-apps-challenge
 - MCP OAuth protected resource: https://mcp.pubfi.ai/.well-known/oauth-protected-resource
 - MCP discovery pointer: https://pubfi.ai/.well-known/mcp.json
 - MCP server card: https://pubfi.ai/.well-known/mcp/server-card.json
