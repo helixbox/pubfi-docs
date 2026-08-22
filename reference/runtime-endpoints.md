@@ -43,6 +43,7 @@ The corresponding Staging API root is `https://api-stg.pubfi.ai`. Fetch that env
 | `GET` | `/v1/operation-pricing-inventory` | Public no-store `quantro.operation-pricing-inventory.v2` projection for the complete installed snapshot. |
 | `GET` | `/.well-known/mcp.json` | API-host MCP discovery manifest. |
 | `GET` | `/.well-known/glama.json` | Public MCP connector ownership declaration. |
+| `GET` | `/.well-known/openai-apps-challenge` | Stable public plain-text proof for OpenAI Apps domain verification. |
 | `POST` | `/` | MCP JSON-RPC endpoint. |
 
 `GET /v1/capabilities` is the catalog endpoint. It includes the exact Registry generation,
@@ -175,8 +176,9 @@ Current endpoint families:
 - `POST /x402` for accountless x402 MCP JSON-RPC;
 - `GET /healthz`;
 - `GET /readyz`;
-- `GET /version`; and
-- `GET /.well-known/mcp.json`; and
+- `GET /version`;
+- `GET /.well-known/mcp.json`;
+- `GET /.well-known/openai-apps-challenge`; and
 - `GET /.well-known/oauth-protected-resource`.
 
 The handshake, ping, `tools/list`, resource listing, and prompt listing methods are public.

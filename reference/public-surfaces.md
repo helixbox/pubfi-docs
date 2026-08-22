@@ -81,6 +81,7 @@ returns `503` rather than a partial inventory when the complete projection canno
 - `https://api.pubfi.ai/.well-known/mcp.json`
 - `https://api.pubfi.ai/.well-known/glama.json`
 - `https://mcp.pubfi.ai/.well-known/mcp.json`
+- `https://mcp.pubfi.ai/.well-known/openai-apps-challenge`
 - `https://mcp.pubfi.ai/.well-known/oauth-protected-resource`
 - `https://mcp.pubfi.ai/x402`
 - `https://pubfi.ai/.well-known/mcp.json`
@@ -88,9 +89,10 @@ returns `503` rather than a partial inventory when the complete projection canno
 - `https://pubfi.ai/.well-known/mcp-registry-auth`
 - https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin
 
-The registry-auth proof route is optional and can return `404`. MCP discovery and `tools/list` are
-public. On the authenticated root, `pubfi.route.execute` accepts a PubFi API key or OAuth access
-token. Eligible accountless x402 execution uses `/x402` without a Bearer credential.
+The OpenAI Apps challenge is a stable public plain-text domain ownership proof. The registry-auth
+proof route is optional and can return `404`. MCP discovery and `tools/list` are public. On the
+authenticated root, `pubfi.route.execute` accepts a PubFi API key or OAuth access token. Eligible
+accountless x402 execution uses `/x402` without a Bearer credential.
 
 ## Gateway Contract
 

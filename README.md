@@ -82,6 +82,7 @@ Snapshot sources:
 - OpenAPI schema: `https://api.pubfi.ai/openapi.json`
 - API-host MCP manifest: `https://api.pubfi.ai/.well-known/mcp.json`
 - MCP manifest: `https://mcp.pubfi.ai/.well-known/mcp.json`
+- OpenAI Apps domain ownership proof: `https://mcp.pubfi.ai/.well-known/openai-apps-challenge`
 - MCP OAuth protected resource: `https://mcp.pubfi.ai/.well-known/oauth-protected-resource`
 - MCP x402 endpoint: `https://mcp.pubfi.ai/x402`
 - MCP discovery pointer: `https://pubfi.ai/.well-known/mcp.json`
