@@ -120,6 +120,13 @@ zero Credits and does not use x402. A retryable limit rejection returns `429`,
 A cumulative limit returns `429` with `gateway.free_limit_reached` and no `Retry-After`. Do not
 append the suffix unless the current catalog or OpenAPI operation advertises it.
 
+An eligible paid operation can separately advertise a direct-HTTP stream policy in the catalog
+and as `x-pubfi-stream-variant` in Runtime OpenAPI. Append its advertised `:stream` suffix only for
+the authenticated API-key lane. The policy publishes the response-byte ceiling, deadlines, permit
+TTL, concurrency limits, and `receipt_only` idempotency replay. The first request streams provider
+bytes and stores only a compact receipt; same-key replay returns that receipt without another
+provider request or Credit charge. MCP and accountless x402 do not support this suffix.
+
 ### Account And Purchase Routes
 
 | Method | Path | Access |
@@ -182,14 +189,15 @@ Current endpoint families:
 - `GET /.well-known/oauth-protected-resource`.
 
 The handshake, ping, `tools/list`, resource listing, and prompt listing methods are public.
-On the root endpoint, `pubfi.route.execute` accepts a PubFi API key or OAuth access token for the
-endpoint environment. Invalid credentials do not fall back, and payment metadata is rejected. On
+On the root endpoint, `pubfi.route.execute` and `pubfi.substrate.runtime_upgrade.verify` accept a
+PubFi API key or OAuth access token for the endpoint environment. Invalid credentials do not fall
+back, and payment metadata is rejected. On
 the `/x402` endpoint, `pubfi.route.execute` accepts the official x402 metadata flow for an eligible
-route and rejects every Bearer credential. Other tools keep their published public or
-authenticated contract.
+route and rejects every Bearer credential. `/x402` exposes only the three general Registry tools;
+it does not expose the runtime-upgrade verifier.
 
 `tools/list` is endpoint-specific. The root declares `noauth` for capability reads and `oauth2`
-with no scopes for route execution, whose schema contains free-health, account-free, and
+with no scopes for both execution tools. Route execution contains free-health, account-free, and
 account-paid outcomes. `/x402` declares `noauth` for every tool and limits route results to
 free-health, x402 settlement, payment-required, and x402 error outcomes. Missing or invalid OAuth
 execution credentials return HTTP `401` with protected-resource discovery and an MCP

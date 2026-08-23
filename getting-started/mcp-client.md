@@ -36,6 +36,7 @@ forwards MCP requests to the hosted endpoint. It is not a local PubFi backend.
 - `pubfi.capabilities.list`
 - `pubfi.capabilities.get`
 - `pubfi.route.execute`
+- `pubfi.substrate.runtime_upgrade.verify` on the authenticated root only
 
 Provider ids, exact paths, methods, request policies, response policies, and readiness appear as
 Registry catalog or route-result data. They are not public tool names.
@@ -46,20 +47,22 @@ Public handshake and introspection methods, such as `initialize`, `ping`, `tools
 `resources/list`, `resources/templates/list`, `prompts/list`, and `notifications/initialized`,
 can be called without a key.
 
-`pubfi.route.execute` supports two endpoint-separated execution modes:
+The endpoints separate account execution from payment execution:
 
-- The authenticated root accepts one Bearer credential: a `pf_sk_v1_` PubFi API key or a Supabase
-  OAuth access token. Both use account admission and allocation. Invalid credentials never fall
-  back to the other credential type or to x402. `X-PubFi-Api-Key` is not accepted.
+- The authenticated root accepts one Bearer credential for `pubfi.route.execute` and
+  `pubfi.substrate.runtime_upgrade.verify`: a `pf_sk_v1_` PubFi API key or a Supabase OAuth access
+  token. Both use account admission and allocation. Invalid credentials never fall back to the
+  other credential type or to x402. `X-PubFi-Api-Key` is not accepted.
 - The explicit `/x402` endpoint uses a wallet payment for one eligible request. It rejects
-  `Authorization`, `X-PubFi-Api-Key`, and every other Bearer carrier.
+  `Authorization`, `X-PubFi-Api-Key`, and every other Bearer carrier. It exposes only the three
+  general Registry tools and does not expose the runtime-upgrade verifier.
 
 The discovery manifest publishes the OAuth authorization server and the
 `/.well-known/oauth-protected-resource` URL for the selected environment. A client that supports
 MCP OAuth can use that metadata. A static API-key client can continue to send
 `Authorization: Bearer <PubFi API key>` to the authenticated root.
 
-The authenticated root advertises `oauth2` with no scopes for `pubfi.route.execute`. If that tool
+The authenticated root advertises `oauth2` with no scopes for both execution tools. If either tool
 is called without a credential or with an invalid OAuth credential, PubFi returns HTTP `401`, the
 protected-resource discovery header, and `_meta["mcp/www_authenticate"]` in the MCP error tool
 result so an OAuth-capable host can start or repair account linking. An invalid `pf_sk_v1_` API key
@@ -89,10 +92,10 @@ when the selected route is callable and configured.
 ## Inspect Tool Schemas
 
 Call hosted `tools/list` on the endpoint that the client will use. The authenticated root declares
-`noauth` for the capability reads and `oauth2` with no scopes for route execution. Its route output
-schema includes free-health, account-free, and account-paid outcomes. `/x402` declares `noauth` for
-all tools and includes only free-health, x402 settlement, payment-required, and x402 error
-outcomes. Use the
+`noauth` for the capability reads and `oauth2` with no scopes for both execution tools. Its route
+output schema includes free-health, account-free, and account-paid outcomes. Its runtime-upgrade
+tool returns a compact verification proof. `/x402` declares `noauth` for its three tools and
+includes only free-health, x402 settlement, payment-required, and x402 error outcomes. Use the
 [Agent Interface Reference](/reference/agent-interface) for the stable tool-purpose and field
 summary. Do not copy an old schema into a client as permanent authority.
 

@@ -96,7 +96,9 @@ Use the surfaces in this order for runtime work:
    in `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`, `x-pubfi-price-version`, and
    `x-pubfi-x402`; it omits these four fields for non-priced operations. Exact `free_health` is
    public. An optional capability-level `free_rate_limit` and OpenAPI `x-pubfi-free-variant`
-   advertise the same API-key-authenticated, zero-Credit `:free` variant.
+   advertise the same API-key-authenticated, zero-Credit `:free` variant. An optional catalog
+   `stream` policy and OpenAPI `x-pubfi-stream-variant` advertise an API-key-only direct-HTTP
+   `:stream` variant with receipt-only replay and published bounds.
    The current checked-in pricing target sets `credit_cost: 1` and x402
    `atomic_amount: "1000"` (0.001 USDC) for every priced Subscan and DeGov operation. Confirm the
    installed values in the selected environment before execution.
@@ -110,8 +112,9 @@ Use the surfaces in this order for runtime work:
    `resolved`. `operation_pricing_status` reports paid-execution pricing separately from provider
    and PubFi proxy signals.
 5. Use MCP `tools/list` on the selected endpoint for current MCP schemas. The authenticated root
-   declares OAuth route execution and account outcomes; `/x402` declares no-auth tools and only
-   free-health or x402 outcomes. Use `pubfi.capabilities.list` and
+   declares OAuth for both execution tools and includes compact runtime-upgrade proof outcomes;
+   `/x402` retains three no-auth tools and only free-health or x402 outcomes. Use
+   `pubfi.capabilities.list` and
    `pubfi.capabilities.get` for the current Registry generation and exact capability detail.
 6. Use Discovery only for source-selection and public evidence context.
 7. Use long-form docs for workflow, security, payment, and claim boundaries.
@@ -125,7 +128,8 @@ convention.
 - Every bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and exact body.
   PubFi reduces a valid content type to its parameter-free media type and uses
   `application/octet-stream` when it is missing or malformed. These are provider responses, not
-  PubFi error envelopes. Transport failure, redirects, oversized data, and unsupported final
+  PubFi error envelopes. Buffered overflow returns HTTP `502` with
+  `gateway.upstream_response_too_large`. Other transport failure, redirects, and unsupported final
   status classes remain gateway failures.
 - API-key execution requires a key for the endpoint environment, active admission, and sufficient
   allocation. All keys use one fixed product-access model.
@@ -138,12 +142,16 @@ convention.
   `{network}` routes for one billing account, including XCM, multi-chain, Pro, and `net_assets`
   operations. Policy presence does not prove route readiness; require the current catalog or
   OpenAPI advertisement before execution.
+- An advertised paid operation can append `:stream` only for authenticated API-key direct HTTP.
+  It streams the first response and retains only a compact receipt; same-key replay does not call
+  the provider or charge again. MCP and x402 reject the suffix.
 - An exact eligible HTTP operation or MCP `/x402` operation can use accountless x402 V2 instead of
   authenticated account execution.
 - The authenticated MCP root accepts a PubFi API key or OAuth access token for
-  `pubfi.route.execute`, including an advertised `:free` suffix. It rejects payment metadata and
-  never falls back. The `/x402` endpoint rejects Bearer credentials and does not accept the
-  suffix.
+  `pubfi.route.execute`, including an advertised `:free` suffix, and for
+  `pubfi.substrate.runtime_upgrade.verify`. It rejects payment metadata and never falls back. The
+  `/x402` endpoint rejects Bearer credentials, retains three tools, and accepts neither the
+  runtime-upgrade verifier nor `:stream`.
 - A missing or invalid OAuth execution credential returns HTTP `401` with protected-resource
   discovery and `_meta["mcp/www_authenticate"]` so an OAuth-capable host can link the account. An
   invalid `pf_sk_v1_` API key remains a separate API-key `401` without that MCP linking result.
