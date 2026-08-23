@@ -82,6 +82,11 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
   of at most 65,536 encoded bytes, including duplicate or undeclared fields. A non-empty `POST`
   body is forwarded byte-for-byte within the route-selected limit and media type. Empty bodies are
   omitted, and `GET` bodies are rejected.
+- An eligible paid operation can publish a catalog `stream` policy and Runtime OpenAPI
+  `x-pubfi-stream-variant`. Append its advertised `:stream` suffix only on authenticated API-key
+  direct HTTP. The policy publishes receipt-only replay, the response-byte ceiling, deadlines,
+  permit TTL, and account, provider, and global concurrency. Same-key replay returns a compact
+  receipt without another provider request or charge. MCP and x402 reject `:stream`.
 - The current checked-in pricing target sets `credit_cost: 1` and x402
   `atomic_amount: "1000"` (0.001 USDC) for every priced Subscan and DeGov operation. Confirm the
   installed values in the selected environment before execution.
@@ -97,6 +102,8 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
   `application/octet-stream` when it is missing or malformed. These are provider responses, not
   PubFi gateway-error envelopes. Transport failure, redirects, oversized data, and unsupported
   final status classes remain gateway failures.
+  Buffered overflow returns HTTP `502` with `gateway.upstream_response_too_large` and no provider
+  response body.
 - An optional capability-level `free_rate_limit` and Runtime OpenAPI `x-pubfi-free-variant`
   advertise an authenticated `:free` final-segment variant for an eligible exact `GET` or `POST`.
   It keeps the exact operation input, uses the same PubFi API key and account identity, charges zero
@@ -199,6 +206,7 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - MCP endpoint: https://mcp.pubfi.ai
 - MCP x402 endpoint: https://mcp.pubfi.ai/x402
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
+- OpenAI Apps domain ownership proof: https://mcp.pubfi.ai/.well-known/openai-apps-challenge
 - MCP OAuth protected resource: https://mcp.pubfi.ai/.well-known/oauth-protected-resource
 - MCP discovery pointer: https://pubfi.ai/.well-known/mcp.json
 - MCP server card: https://pubfi.ai/.well-known/mcp/server-card.json
@@ -244,6 +252,12 @@ evidence remains `unknown`.
   `pubfi.capabilities.list`.
 - `pubfi.route.execute`: required `raw_path` and `method`; optional exact `query`, exact `body`,
   `idempotency_key`, and `request_id`.
+- `pubfi.substrate.runtime_upgrade.verify` is available only on the authenticated root. It requires
+  `network`, `expected_authorized_code_hash`, and exactly one of `extrinsic_index` or
+  `extrinsic_hash`; `idempotency_key` and `request_id` are optional. The expected hash is the
+  Blake2b-256 hash of the FRAME System `AuthorizedUpgrade` code payload, not the active `:code`
+  hash at the apply block. The tool returns a compact proof and charges one Credit; identical
+  replay does not call the provider or charge again.
 - The optional execution `query` is preserved byte-for-byte when it is an RFC 3986-valid query
   component of at most 65,536 encoded bytes. PubFi allows duplicate and undeclared query fields and
   does not enforce source-declared query-value relationships. A non-empty `POST` body is forwarded
@@ -253,13 +267,15 @@ evidence remains `unknown`.
   invalid bytes as base64 data, and an empty provider body as `null`.
 - `tools/list` publishes the current generation, manifest, and endpoint-specific tool metadata.
   The authenticated root declares `noauth` for capability reads and `oauth2` with no scopes for
-  route execution, whose output schema includes free-health, account-free, and account-paid
-  outcomes. `/x402` declares `noauth` for every tool and exposes only free-health, x402 settlement,
-  payment-required, and x402 error outcomes.
+  both execution tools. Route execution includes free-health, account-free, and account-paid
+  outcomes. The runtime-upgrade tool returns only its compact proof. `/x402` declares `noauth` for
+  its three tools and exposes only free-health, x402 settlement, payment-required, and x402 error
+  outcomes.
 - `pubfi.capabilities.list` and `pubfi.capabilities.get` are public Registry reads. The client
   selects a capability; PubFi does not infer intent or rank candidates.
 - The authenticated MCP root accepts a PubFi API key or OAuth access token for
-  `pubfi.route.execute`. It rejects payment metadata, and invalid credentials do not fall back. A
+  `pubfi.route.execute` and `pubfi.substrate.runtime_upgrade.verify`. It rejects payment metadata,
+  and invalid credentials do not fall back. A
   missing or invalid OAuth execution credential returns HTTP `401` with protected-resource
   discovery and `_meta["mcp/www_authenticate"]`; an invalid `pf_sk_v1_` API key uses the separate
   API-key `401` response.
@@ -275,8 +291,10 @@ evidence remains `unknown`.
 - A failed paid retry can return a fresh standard payment requirement. HTTP preserves
   `PAYMENT-REQUIRED`; MCP preserves the official fields in `structuredContent` and adds an `error`
   message. Validate the replacement requirement before signing again.
-- Mainstream clients connect to the same hosted three-tool surface. Client-specific setup for
-  Codex, Claude, GitHub Copilot, VS Code, Cursor, Devin, Windsurf, Gemini CLI, Kiro, Continue,
+- Mainstream clients connect to the hosted endpoint selected for their execution mode. The
+  authenticated root has four tools; `/x402` retains the three general Registry tools.
+  Client-specific setup for Codex, Claude, GitHub Copilot, VS Code, Cursor, Devin, Windsurf,
+  Gemini CLI, Kiro, Continue,
   Amazon Q Developer, Cline, Roo Code, Zed, JetBrains, Raycast, LM Studio, OpenCode, Warp,
   LibreChat, goose, and Cherry Studio is indexed at
   https://docs.pubfi.ai/getting-started/mcp-clients.
@@ -287,8 +305,8 @@ evidence remains `unknown`.
 
 - PubFi has public Discovery pages and agent-readable exports for source selection and
   answer-engine retrieval.
-- PubFi has three Registry v2 MCP tools for complete catalog listing, exact capability detail, and
-  execution.
+- PubFi has three general Registry v2 MCP tools for complete catalog listing, exact capability
+  detail, and route execution, plus one authenticated-root Substrate runtime-upgrade verifier.
 - PubFi exposes a dynamic Registry catalog and Runtime OpenAPI for current executable operations.
 - PubFi supports registered API-key and MCP OAuth account execution plus separate accountless x402
   execution over HTTP and the explicit MCP `/x402` endpoint.

@@ -36,6 +36,12 @@ method price into these top-level extensions:
 Runtime OpenAPI omits these four top-level price extensions for `free_health` and
 `pricing_unavailable` operations. Use `x-pubfi-billing` to read the billing mode.
 
+An eligible paid operation can also publish `x-pubfi-stream-variant`. Its exact object advertises
+the `:stream` suffix, direct-HTTP delivery, receipt-only replay, response-byte ceiling, idle and
+total deadlines, permit TTL, and account, provider, and global concurrency limits. Use this
+variant only with the authenticated API-key HTTP lane. MCP and x402 do not support raw stream
+execution.
+
 If no valid snapshot is programmed, the document reports that the Registry is unavailable. It
 does not advertise old gateway operations in that state.
 
@@ -76,6 +82,8 @@ response shapes in your client.
 A bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its provider status and exact body.
 These provider responses are not PubFi error envelopes. Transport failure, redirects, oversized
 data, and unsupported final status classes remain PubFi gateway failures.
+Buffered response overflow returns HTTP `502` with
+`gateway.upstream_response_too_large`; it does not expose provider response bytes.
 
 ## Authentication And Payment Boundary
 

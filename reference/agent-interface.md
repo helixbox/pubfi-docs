@@ -13,8 +13,9 @@ https://mcp.pubfi.ai/.well-known/oauth-protected-resource
 ```
 
 The root is the authenticated endpoint. The `/x402` endpoint is the separate accountless payment
-lane. Both expose the same fixed tool names and public introspection methods. Their `tools/list`
-security, output, annotation, and execution descriptions are endpoint-specific.
+lane. The root exposes four fixed tools, while `/x402` exposes only the three general Registry
+tools. Both expose the same public introspection methods. Their `tools/list` security, output,
+annotation, and execution descriptions are endpoint-specific.
 
 ## OAuth Discovery
 
@@ -42,6 +43,7 @@ https://api.pubfi.ai/openapi.json
 | `pubfi.capabilities.list` | Enumerate deterministic compact pages from the installed Registry v2 catalog. PubFi does not rank, infer intent, or select a capability. | optional `limit`, opaque `cursor`, exact `provider_key`, exact `method` |
 | `pubfi.capabilities.get` | Return the full typed request, response, method-specific billing, and readiness contract for one exact capability. | required `capability_id` from `pubfi.capabilities.list` |
 | `pubfi.route.execute` | Execute one exact Registry path through the same data plane as the HTTP gateway. Use a PubFi API key or OAuth access token on the authenticated root, or use accountless x402 on the explicit `/x402` endpoint. | required `raw_path`, `method`; optional `query`, `body`, `idempotency_key`, `request_id`; optional MCP `_meta["x402/payment"]` only on an `/x402` paid retry |
+| `pubfi.substrate.runtime_upgrade.verify` | Verify one reviewed Substrate `System.apply_authorized_upgrade` extrinsic through the authenticated account lane. This tool is not available on `/x402`. | required `network`, `expected_authorized_code_hash`, and exactly one of `extrinsic_index` or `extrinsic_hash`; optional `idempotency_key`, `request_id` |
 
 Durable provider-specific public tools are rejected. Provider identity belongs in route-result data,
 not tool names.
@@ -49,8 +51,9 @@ not tool names.
 `pubfi.capabilities.list` and `pubfi.capabilities.get` are public reads. Follow every opaque
 `next_cursor`, select a capability in the client, and fetch its exact detail before execution.
 Use `tools/list` on the endpoint that the client will call. On the authenticated root, the two
-capability tools declare `noauth`, while `pubfi.route.execute` declares `oauth2` with no scopes and
-exposes only free-health, account-free, and account-paid outcomes. On `/x402`, all three tools
+capability tools declare `noauth`, while both execution tools declare `oauth2` with no scopes.
+Route execution exposes only free-health, account-free, and account-paid outcomes. The runtime-
+upgrade verifier is idempotent and returns only its compact proof. On `/x402`, all three tools
 declare `noauth`, and route execution exposes only free-health, x402 settlement,
 payment-required, and x402 error outcomes. Capability reads are read-only, idempotent, and
 closed-world. Route execution is non-read-only, destructive, and non-idempotent; the authenticated
@@ -64,8 +67,8 @@ Authorization: Bearer <PubFi API key or OAuth access token>
 
 The authenticated root classifies a token with the `pf_sk_v1_` prefix as a PubFi API key. It
 classifies every other Bearer token as an OAuth access token. The two credential types do not fall
-back to each other. A missing credential or an invalid OAuth credential for
-`pubfi.route.execute` returns HTTP `401`, a protected-resource `WWW-Authenticate` header, and an
+back to each other. A missing credential or an invalid OAuth credential for either execution tool
+returns HTTP `401`, a protected-resource `WWW-Authenticate` header, and an
 MCP error tool result with `_meta["mcp/www_authenticate"]` so an OAuth-capable host can start or
 repair account linking. An invalid `pf_sk_v1_` API key returns the API-key `401` error without that
 tool result. Public methods reject a supplied invalid credential instead of ignoring it.
@@ -110,6 +113,16 @@ operation. The same variant appears in Runtime OpenAPI as
 `execution_status: registry_free_route_executed` and `credits_charged: 0`; it does not reserve or
 emit Credit usage. Anonymous and x402 admissions cannot use this suffix.
 
+An optional capability-level `stream` object advertises an authenticated, paid direct-HTTP
+variant. Append its exact `path_suffix` (`:stream`) to the final path segment only when the current
+catalog or Runtime OpenAPI `x-pubfi-stream-variant` publishes it. The object also publishes
+`delivery: direct_http`, `idempotency_replay: receipt_only`, the response-byte ceiling, idle and
+total deadlines, permit TTL, and account, provider, and global concurrency limits. This lane uses
+a PubFi API key and the operation's Credit price. It commits one Credit before provider I/O,
+streams the first response with bounded backpressure, and stores only a compact receipt. A same-key
+replay returns that receipt without a second provider request or charge. MCP route execution and
+the accountless x402 lane reject `:stream`.
+
 On the authenticated root, MCP `pubfi.route.execute` accepts one PubFi API key or OAuth access
 token. It rejects x402 payment metadata and never falls back to payment. OAuth execution resolves
 the user to the same account admission boundary; an advertised `:free` variant remains
@@ -122,6 +135,19 @@ unsigned eligible call returns `PaymentRequired` in a normal MCP tool result; th
 requirement, the error result preserves the official `PaymentRequired` fields in
 `structuredContent` and adds an `error` message. Validate it as a new challenge before signing
 again.
+
+## Runtime Upgrade Verification
+
+`pubfi.substrate.runtime_upgrade.verify` is available only on the authenticated root. Supply one
+PubFi API key or OAuth access token, a lowercase network id, the expected Blake2b-256 hash of the
+FRAME System `AuthorizedUpgrade` code payload in `expected_authorized_code_hash`, and exactly one
+extrinsic locator. Do not supply the active `:code` hash at the apply block.
+
+The server reads at most 64 MiB of reviewed provider JSON, hashes the runtime code while decoding
+it, discards the provider bytes, and returns a compact proof. The neutral completed status is
+`runtime_upgrade_verification_completed`. Inspect `matches` and `extrinsic_success` independently;
+a hash mismatch or unsuccessful extrinsic is a completed negative proof. The operation charges one
+Credit, and an identical idempotent replay does not call the provider or charge again.
 
 Use [MCP Client Setup](/getting-started/mcp-client) for transport configuration. Use [Accountless
 x402](/getting-started/x402) for payment validation and replay policy.

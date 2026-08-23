@@ -38,6 +38,7 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 - API-host Glama metadata: https://api.pubfi.ai/.well-known/glama.json
 - API-host MCP manifest: https://api.pubfi.ai/.well-known/mcp.json
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
+- OpenAI Apps domain ownership proof: https://mcp.pubfi.ai/.well-known/openai-apps-challenge
 - MCP OAuth protected resource: https://mcp.pubfi.ai/.well-known/oauth-protected-resource
 - MCP x402 endpoint: https://mcp.pubfi.ai/x402
 - MCP discovery pointer: https://pubfi.ai/.well-known/mcp.json
@@ -75,9 +76,13 @@ OpenAPI define executable paths and methods. API-key execution, registered purch
 and accountless x402 are separate modes. An optional catalog `free_rate_limit` and OpenAPI
 `x-pubfi-free-variant` advertise an API-key-authenticated `:free` route variant that charges zero
 Credits. The authenticated MCP root accepts a PubFi API key or OAuth access token for
-`pubfi.route.execute`, including that advertised suffix. It rejects payment metadata and does not
-fall back. The separate `/x402` endpoint rejects Bearer credentials and supports the official
-x402 metadata flow, so an agent can pay directly through MCP.
+`pubfi.route.execute`, including that advertised suffix, and for the account-only
+`pubfi.substrate.runtime_upgrade.verify` tool. It rejects payment metadata and does not fall back.
+The separate `/x402` endpoint rejects Bearer credentials, exposes only the three general Registry
+tools, and supports the official x402 metadata flow, so an agent can pay directly through MCP.
+An optional catalog `stream` policy and OpenAPI `x-pubfi-stream-variant` advertise an API-key-only
+direct-HTTP `:stream` variant with receipt-only replay and published byte, deadline, permit, and
+concurrency bounds. MCP and x402 reject this suffix.
 OpenAPI query and body fields are source-declared request-construction metadata. HTTP and MCP
 execution preserve any RFC 3986-valid query of at most 65,536 encoded bytes, including duplicate
 or undeclared fields. A non-empty POST body is forwarded byte-for-byte within the route-selected
@@ -114,8 +119,9 @@ price, is not execution authority, and returns `503` instead of a partial invent
 complete projection cannot be formed.
 Every bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and exact body. PubFi
 uses a safe parameter-free media type. These are provider responses, not PubFi gateway-error
-envelopes. MCP represents valid JSON as a JSON value, valid text as a string, other bytes as base64
-data, and an empty body as `null`.
+envelopes. Buffered overflow returns HTTP `502` with
+`gateway.upstream_response_too_large`. MCP represents valid JSON as a JSON value, valid text as a
+string, other bytes as base64 data, and an empty body as `null`.
 The public no-store status APIs use `operational`, `degraded`, `major_outage`, or `unknown`.
 Missing, stale, or incoherent evidence stays `unknown`; status does not replace the Registry
 catalog as route authority. Gateway summaries count source operations separately from Registry
@@ -125,8 +131,9 @@ paid execution pricing is available without replacing independent provider or Pu
 evidence.
 
 MCP `tools/list` is endpoint-specific. The authenticated root declares `oauth2` with no scopes for
-route execution and exposes free-health, account-free, and account-paid outcomes. `/x402` declares
-`noauth` for every tool and exposes only free-health or x402 outcomes. A missing or invalid OAuth
+both execution tools and exposes free-health, account-free, account-paid, and compact runtime-
+upgrade verification outcomes. `/x402` declares `noauth` for its three tools and exposes only
+free-health or x402 outcomes. A missing or invalid OAuth
 execution credential returns HTTP `401` with protected-resource discovery and
 `_meta["mcp/www_authenticate"]`; an invalid `pf_sk_v1_` API key uses the separate API-key `401`.
 

@@ -273,6 +273,7 @@ can use the same HTTP status numbers without a PubFi error code:
 | `404` | `gateway.no_active_matching_route` |
 | `429` | `gateway.rate_reservation_or_budget_exceeded` |
 | `502` | `gateway.upstream_transport_or_response_failure` |
+| `502` | `gateway.upstream_response_too_large` |
 | `503` | `gateway.registry_credential_admission_or_health_unavailable` |
 | `504` | `gateway.upstream_timeout` |
 
