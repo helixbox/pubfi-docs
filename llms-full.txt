@@ -265,6 +265,9 @@ evidence remains `unknown`.
   bodies are rejected.
 - MCP exposes valid provider JSON as a JSON value, valid `text/*` bytes as a string, other or
   invalid bytes as base64 data, and an empty provider body as `null`.
+- The hosted MCP endpoints support current `2026-07-28` `server/discover` requests and legacy
+  `2025-11-25` initialize-era clients without protocol sessions. Modern requests carry complete
+  per-request metadata and mirrored MCP HTTP routing headers. The local stdio bridge is modern-only.
 - `tools/list` publishes the current generation, manifest, and endpoint-specific tool metadata.
   The authenticated root declares `noauth` for capability reads and `oauth2` with no scopes for
   both execution tools. Route execution includes free-health, account-free, and account-paid

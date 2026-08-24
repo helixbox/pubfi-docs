@@ -80,6 +80,8 @@ Credits. The authenticated MCP root accepts a PubFi API key or OAuth access toke
 `pubfi.substrate.runtime_upgrade.verify` tool. It rejects payment metadata and does not fall back.
 The separate `/x402` endpoint rejects Bearer credentials, exposes only the three general Registry
 tools, and supports the official x402 metadata flow, so an agent can pay directly through MCP.
+The hosted MCP endpoints support current `2026-07-28` discovery and legacy `2025-11-25`
+initialize-era clients without protocol sessions. The local stdio bridge is modern-only.
 An optional catalog `stream` policy and OpenAPI `x-pubfi-stream-variant` advertise an API-key-only
 direct-HTTP `:stream` variant with receipt-only replay and published byte, deadline, permit, and
 concurrency bounds. MCP and x402 reject this suffix.

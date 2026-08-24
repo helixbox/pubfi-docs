@@ -4,8 +4,24 @@ import test from "node:test";
 import {
   apiKeyEnvNameForEndpoint,
   normalizePubfiMcpEndpoint,
+  pubfiMcpProtocolVersion,
   rustMcpRequestInit
 } from "./endpoint-policy.mjs";
+
+function modernMessage(name = undefined) {
+  return {
+    jsonrpc: "2.0",
+    id: 7,
+    method: name === undefined ? "tools/list" : "tools/call",
+    params: {
+      ...(name === undefined ? {} : { name, arguments: {} }),
+      _meta: {
+        "io.modelcontextprotocol/protocolVersion": pubfiMcpProtocolVersion,
+        "io.modelcontextprotocol/clientCapabilities": {}
+      }
+    }
+  };
+}
 
 test("accepts only exact production and staging roots", () => {
   assert.equal(normalizePubfiMcpEndpoint("https://mcp.pubfi.ai"), "https://mcp.pubfi.ai");
@@ -51,15 +67,36 @@ test("selects a caller key only after exact endpoint validation", () => {
 });
 
 test("forbids redirects and forwards only the selected caller credential", () => {
-  const message = { jsonrpc: "2.0", id: 7, method: "tools/list", params: {} };
+  const message = modernMessage();
   const authenticated = rustMcpRequestInit(message, "scoped-key");
 
   assert.equal(authenticated.redirect, "error");
   assert.equal(authenticated.method, "POST");
   assert.equal(authenticated.headers.authorization, "Bearer scoped-key");
+  assert.equal(authenticated.headers["mcp-protocol-version"], "2026-07-28");
+  assert.equal(authenticated.headers["mcp-method"], "tools/list");
   assert.equal(authenticated.body, JSON.stringify(message));
 
   const anonymous = rustMcpRequestInit(message, "");
   assert.equal(anonymous.redirect, "error");
   assert.equal("authorization" in anonymous.headers, false);
+});
+
+test("mirrors and safely encodes modern named-request headers", () => {
+  const plain = rustMcpRequestInit(modernMessage("pubfi.capabilities.list"), "");
+  const encoded = rustMcpRequestInit(modernMessage("工具 name"), "");
+
+  assert.equal(plain.headers["mcp-method"], "tools/call");
+  assert.equal(plain.headers["mcp-name"], "pubfi.capabilities.list");
+  assert.equal(encoded.headers["mcp-name"], "=?base64?5bel5YW3IG5hbWU=?=");
+});
+
+test("rejects legacy or incomplete stdio requests before HTTP", () => {
+  for (const message of [
+    { jsonrpc: "2.0", id: 1, method: "initialize", params: {} },
+    { jsonrpc: "2.0", id: null, method: "tools/list", params: {} },
+    { jsonrpc: "2.0", id: 2, method: "tools/list", params: {} }
+  ]) {
+    assert.throws(() => rustMcpRequestInit(message, ""), /modern|2026-07-28/);
+  }
 });

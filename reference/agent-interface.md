@@ -17,6 +17,21 @@ lane. The root exposes four fixed tools, while `/x402` exposes only the three ge
 tools. Both expose the same public introspection methods. Their `tools/list` security, output,
 annotation, and execution descriptions are endpoint-specific.
 
+## Protocol Contract
+
+The discovery manifest uses schema `pubfi.mcp.discovery.v6`. Its protocol object identifies MCP
+`2026-07-28` as the current version and MCP `2025-11-25` as the supported legacy version. PubFi
+does not create protocol sessions.
+
+| Protocol | Entry method | Request contract | Result contract |
+| --- | --- | --- | --- |
+| `2026-07-28` | `server/discover` | Complete per-request protocol and client capability metadata, `MCP-Protocol-Version`, `Mcp-Method`, and `Mcp-Name` when the method addresses a named object | Complete-result encoding |
+| `2025-11-25` | `initialize` | Initialize-era lifecycle and `MCP-Protocol-Version` after initialization | Initialize-era encoding |
+
+`server/discover` advertises only the modern version. The hosted endpoint still accepts the
+legacy lifecycle (`initialize`, `notifications/initialized`, and `ping`) for compatible clients.
+The local stdio bridge is modern-only; legacy clients connect directly to the hosted endpoint.
+
 ## OAuth Discovery
 
 | Environment | Protected resource metadata | Authorization server |
@@ -24,11 +39,10 @@ annotation, and execution descriptions are endpoint-specific.
 | Staging | `https://mcp-stg.pubfi.ai/.well-known/oauth-protected-resource` | `https://qwcbvvgcwdlpumawlajf.supabase.co/auth/v1` |
 | Production | `https://mcp.pubfi.ai/.well-known/oauth-protected-resource` | `https://wuugpdblvlpptlgnxwoi.supabase.co/auth/v1` |
 
-The discovery manifest uses schema `pubfi.mcp.discovery.v4`. Its `auth` object advertises
-`pubfi_api_key` and `oauth_access_token`, sets `fallback: false`, and publishes the protected
-resource and authorization-server URLs. OAuth consent can redirect the signed-in user to the
-product site's `/oauth/consent` page. Treat the `authorization_id` as an opaque continuation value;
-do not construct or modify it.
+The manifest's `auth` object advertises `pubfi_api_key` and `oauth_access_token`, sets
+`fallback: false`, and publishes the protected-resource and authorization-server URLs. OAuth
+consent can redirect the signed-in user to the product site's `/oauth/consent` page. Treat the
+`authorization_id` as an opaque continuation value; do not construct or modify it.
 
 ## Public API Schema
 
