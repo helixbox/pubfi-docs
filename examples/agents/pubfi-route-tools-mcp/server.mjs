@@ -71,9 +71,11 @@ async function handleMessage(message) {
   }
 
   switch (message.method) {
-    case "initialize":
-    case "ping":
+    case "server/discover":
     case "tools/list":
+    case "resources/list":
+    case "resources/templates/list":
+    case "prompts/list":
       await forwardToRustMcp(message);
       return;
     case "tools/call":
@@ -108,7 +110,7 @@ async function forwardToRustMcp(message) {
     const code = body?.error?.code || "pubfi.mcp.http_error";
     const messageText = body?.error?.message || `Rust MCP returned HTTP ${response.status}.`;
 
-    writeJsonRpcError(message.id, -32002, `${code}: ${messageText}`);
+    writeJsonRpcError(message.id, -32011, `${code}: ${messageText}`);
     return;
   }
 

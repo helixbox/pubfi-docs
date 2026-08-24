@@ -3,13 +3,15 @@
 This public example is a local, dependency-free MCP-compatible stdio bridge and smoke fixture for
 the PubFi hosted MCP endpoint.
 
-The bridge forwards `initialize`, `ping`, `tools/list`, and `tools/call` to the Rust MCP endpoint
-instead of synthesizing a second handshake, running a retired TypeScript route-tool
-implementation, or creating one public tool per provider. The direct HTTP and stdio views therefore
-carry the same tool-change flag, generation, and manifest identity.
+The bridge forwards modern `server/discover`, list, and `tools/call` requests to the Rust MCP
+endpoint instead of synthesizing a second handshake, running a retired TypeScript route-tool
+implementation, or creating one public tool per provider. Every request carries complete MCP
+`2026-07-28` metadata and the bridge mirrors the standard HTTP routing headers. PubFi does not
+create protocol sessions. The bridge itself accepts only modern input; clients that need MCP
+`2025-11-25` initialize-era compatibility connect directly to the same hosted endpoint.
 
 For hosted authenticated use, configure an MCP client for PubFi's Streamable HTTP endpoint at
-`https://mcp.pubfi.ai`. The hosted service uses the same three fixed Registry v2 tools. Catalog
+`https://mcp.pubfi.ai`. The hosted authenticated service uses four fixed Registry v2 tools. Catalog
 list/detail reads are public. Exact execution on this root requires a PubFi API key or OAuth access
 token. Eligible accountless x402 execution uses `https://mcp.pubfi.ai/x402` without a Bearer
 credential. Upstream provider credentials stay server-side.
@@ -19,12 +21,13 @@ credential. Upstream provider credentials stay server-side.
 - `pubfi.capabilities.list`
 - `pubfi.capabilities.get`
 - `pubfi.route.execute`
+- `pubfi.substrate.runtime_upgrade.verify`
 
 `pubfi.capabilities.list` enumerates compact summaries with an opaque generation-bound cursor.
 `pubfi.capabilities.get` returns the full typed contract for one exact capability id. The client
 agent selects the capability; PubFi does not rank candidates or infer intent. Executable paths,
-methods, matchers, schemas, one-Credit cost, and readiness come only from the installed signed
-Registry generation.
+methods, matchers, schemas, method-specific Quantro pricing, and readiness come only from the
+installed signed Registry generation.
 
 ## Run In Staging
 
@@ -81,7 +84,7 @@ export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
 node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs
 ```
 
-Without the endpoint-selected caller key, the smoke verifies initialization, the fixed tool list,
+Without the endpoint-selected caller key, the smoke verifies modern discovery, the fixed tool list,
 complete catalog pagination, exact capability detail, and the execution credential gate. With
 `STG_PUBFI_API_KEY` for staging MCP endpoints or `PROD_PUBFI_API_KEY` for production MCP
 endpoints, the same catalog reads remain public. For a deliberate live request, set

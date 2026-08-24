@@ -5,12 +5,13 @@ import { once } from "node:events";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { apiKeyEnvNameForEndpoint } from "./endpoint-policy.mjs";
+import { apiKeyEnvNameForEndpoint, pubfiMcpProtocolVersion } from "./endpoint-policy.mjs";
 
 const expectedTools = [
   "pubfi.capabilities.list",
   "pubfi.capabilities.get",
-  "pubfi.route.execute"
+  "pubfi.route.execute",
+  "pubfi.substrate.runtime_upgrade.verify"
 ];
 const configuredRawPath = process.env.PUBFI_MCP_SMOKE_RAW_PATH || "";
 const configuredMethod = (process.env.PUBFI_MCP_SMOKE_METHOD || "GET").toUpperCase();
@@ -54,27 +55,23 @@ server.on("exit", (code, signal) => {
 });
 
 try {
-  const initialized = await request("initialize", {
-    protocolVersion: "2025-11-25",
-    capabilities: {},
-    clientInfo: {
-      name: "pubfi-route-tools-smoke",
-      version: "0.1.0"
-    }
-  });
+  const discovered = await request("server/discover", {});
 
-  notify("notifications/initialized");
-
-  assert.equal(initialized.protocolVersion, "2025-11-25");
-  assert.equal(initialized.serverInfo.name, "pubfi-rust-mcp");
-  assert.equal(initialized.capabilities.tools.listChanged, false);
-  assert.ok(initialized._meta?.generation, "initialize omitted Registry generation");
-  assert.ok(initialized._meta?.manifest, "initialize omitted Registry manifest");
+  assert.equal(discovered.resultType, "complete");
+  assert.deepEqual(discovered.supportedVersions, [pubfiMcpProtocolVersion]);
+  assert.equal(discovered._meta?.["io.modelcontextprotocol/serverInfo"]?.name, "pubfi-rust-mcp");
+  assert.equal(discovered.capabilities.tools.listChanged, false);
+  assert.ok(discovered._meta?.generation, "server/discover omitted Registry generation");
+  assert.ok(discovered._meta?.manifest, "server/discover omitted Registry manifest");
+  assert.equal(discovered.cacheScope, "public");
+  assert.ok(Number.isInteger(discovered.ttlMs) && discovered.ttlMs >= 0);
 
   const listed = await request("tools/list", {});
   const toolNames = listed.tools.map((tool) => tool.name);
 
   assert.deepEqual(toolNames, expectedTools);
+  assert.equal(listed.resultType, "complete");
+  assert.equal(listed.cacheScope, "public");
   assert.deepEqual(listed.tools[2].inputSchema.required, ["raw_path", "method"]);
   assert.equal(
     listed.tools[0].outputSchema.properties.schema_version.const,
@@ -84,8 +81,8 @@ try {
     listed.tools[2].inputSchema["x-pubfi-registry-routes"],
     undefined
   );
-  assert.deepEqual(initialized._meta.generation, listed._meta.generation);
-  assert.deepEqual(initialized._meta.manifest, listed._meta.manifest);
+  assert.deepEqual(discovered._meta.generation, listed._meta.generation);
+  assert.deepEqual(discovered._meta.manifest, listed._meta.manifest);
 
   const capabilities = [];
   const seenCursors = new Set();
@@ -173,7 +170,7 @@ try {
     "selected Registry capability method is unsupported"
   );
   const checks = [
-    "initialize",
+    "server_discover",
     "tools_list",
     "complete_capability_pagination",
     "exact_capability_detail"
@@ -312,7 +309,18 @@ function requestAllowError(method, params) {
     jsonrpc: "2.0",
     id,
     method,
-    params
+    params: {
+      ...params,
+      _meta: {
+        ...(params?._meta ?? {}),
+        "io.modelcontextprotocol/protocolVersion": pubfiMcpProtocolVersion,
+        "io.modelcontextprotocol/clientInfo": {
+          name: "pubfi-route-tools-smoke",
+          version: "1.0.0"
+        },
+        "io.modelcontextprotocol/clientCapabilities": {}
+      }
+    }
   };
 
   server.stdin.write(frame(message));
@@ -335,16 +343,6 @@ function requestAllowError(method, params) {
       }
     });
   });
-}
-
-function notify(method, params = {}) {
-  server.stdin.write(
-    frame({
-      jsonrpc: "2.0",
-      method,
-      params
-    })
-  );
 }
 
 function readFrames() {

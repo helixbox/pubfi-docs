@@ -28,6 +28,18 @@ Studio. The guide also states the current ChatGPT web and Claude web authenticat
 | The client supports remote Streamable HTTP | Connect directly to the hosted endpoint for the selected environment. |
 | The client launches MCP servers as local commands | Use the repository's local stdio bridge. |
 
+## Protocol Compatibility
+
+The hosted endpoints support MCP `2026-07-28` and MCP `2025-11-25` without protocol sessions.
+Modern clients use `server/discover`, include complete protocol and client capability metadata on
+each request, and send the required `MCP-Protocol-Version`, `Mcp-Method`, and, for named objects,
+`Mcp-Name` HTTP headers. Legacy clients use `initialize`, `notifications/initialized`, and `ping`,
+then send `MCP-Protocol-Version` on later requests. The discovery manifest identifies
+`2026-07-28` as current and lists both supported versions.
+
+The local stdio bridge accepts only the modern `2026-07-28` request shape. Connect a legacy client
+directly to the hosted Streamable HTTP endpoint.
+
 The stdio bridge requires a checkout of this repository and a supported Node.js runtime. It
 forwards MCP requests to the hosted endpoint. It is not a local PubFi backend.
 
@@ -43,9 +55,10 @@ Registry catalog or route-result data. They are not public tool names.
 
 ## Execution Modes
 
-Public handshake and introspection methods, such as `initialize`, `ping`, `tools/list`,
-`resources/list`, `resources/templates/list`, `prompts/list`, and `notifications/initialized`,
-can be called without a key.
+Public discovery, legacy lifecycle, and introspection methods, such as `server/discover`,
+`initialize`, `ping`, `tools/list`, `resources/list`, `resources/templates/list`, `prompts/list`,
+and `notifications/initialized`, can be called without a key when they use the matching protocol
+era.
 
 The endpoints separate account execution from payment execution:
 
@@ -109,10 +122,11 @@ examples/agents/pubfi-route-tools-mcp/
 
 PubFi's MCP server is hosted at `https://mcp.pubfi.ai`. The local file is not a second MCP backend
 and it does not run provider logic locally. It is a dependency-free stdio bridge for MCP clients
-that launch tools as local commands. The bridge forwards `initialize`, `ping`, `tools/list`, and
-authenticated `tools/call` requests to the hosted Rust MCP endpoint, then writes the response back
-to stdio. Other hosted public introspection methods remain available on `https://mcp.pubfi.ai`;
-the local bridge keeps its stdio surface intentionally small.
+that launch tools as local commands. It forwards modern `server/discover`, list, and authenticated
+`tools/call` requests to the hosted Rust MCP endpoint, then writes each response back to stdio.
+The bridge adds the exact modern HTTP routing headers. Other hosted public introspection methods
+and legacy initialize-era compatibility remain available on `https://mcp.pubfi.ai`; the local
+bridge keeps its stdio surface intentionally small.
 
 ```sh
 export PROD_PUBFI_API_KEY='<PubFi API key>'
