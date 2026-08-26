@@ -2,8 +2,8 @@ FROM node:24.19.0-alpine3.24@sha256:d32cdf619f63fe0471182d08996dd516c6275bb5fd31
 
 WORKDIR /app
 
-COPY server.mjs ./server.mjs
+COPY server.ts bridge-response.ts endpoint-policy.ts json.ts ./
 
 ENV PUBFI_MCP_ENDPOINT=https://mcp.pubfi.ai
 
-CMD ["node", "server.mjs"]
+CMD ["node", "server.ts"]

@@ -48,6 +48,9 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 ## Product Surfaces
 
 - Product site: https://pubfi.ai
+- About: https://pubfi.ai/about
+- Developers: https://pubfi.ai/developers
+- Products: https://pubfi.ai/products
 - Pricing: https://pubfi.ai/pricing
 - Status: https://pubfi.ai/status
 - Partners: https://pubfi.ai/partners
@@ -62,6 +65,12 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 - Login: https://pubfi.ai/login
 - Privacy policy: https://pubfi.ai/privacy-policy
 - Terms of service: https://pubfi.ai/terms-of-service
+- Homepage Markdown: https://pubfi.ai/index.md
+- About Markdown: https://pubfi.ai/about.md
+- Developers Markdown: https://pubfi.ai/developers.md
+- Products Markdown: https://pubfi.ai/products.md
+- Pricing and access Markdown: https://pubfi.ai/pricing.md
+- Authentication Markdown: https://pubfi.ai/auth.md
 - Agents guide: https://pubfi.ai/agents.md
 - Product LLM index: https://pubfi.ai/llms.txt
 - Product LLM full export: https://pubfi.ai/llms-full.txt
@@ -82,9 +91,10 @@ The separate `/x402` endpoint rejects Bearer credentials, exposes only the three
 tools, and supports the official x402 metadata flow, so an agent can pay directly through MCP.
 The hosted MCP endpoints support current `2026-07-28` discovery and legacy `2025-11-25`
 initialize-era clients without protocol sessions. The local stdio bridge is modern-only.
-An optional catalog `stream` policy and OpenAPI `x-pubfi-stream-variant` advertise an API-key-only
-direct-HTTP `:stream` variant with receipt-only replay and published byte, deadline, permit, and
-concurrency bounds. MCP and x402 reject this suffix.
+Direct-HTTP response delivery is automatic on the normal authenticated paid or `:free` route. The
+catalog and Runtime OpenAPI publish no stream-policy field or caller-selected `:stream` suffix.
+The platform ceiling is 128 MiB, with 10-second idle and 120-second body deadlines and
+heavy-transfer concurrency limits of 1 per account, 4 per provider, and 8 globally.
 OpenAPI query and body fields are source-declared request-construction metadata. HTTP and MCP
 execution preserve any RFC 3986-valid query of at most 65,536 encoded bytes, including duplicate
 or undeclared fields. A non-empty POST body is forwarded byte-for-byte within the route-selected
@@ -123,14 +133,18 @@ Every bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and
 uses a safe parameter-free media type. These are provider responses, not PubFi gateway-error
 envelopes. Buffered overflow returns HTTP `502` with
 `gateway.upstream_response_too_large`. MCP represents valid JSON as a JSON value, valid text as a
-string, other bytes as base64 data, and an empty body as `null`.
+string, other bytes as base64 data, and an empty body as `null` at or below 1 MiB. A larger MCP
+result returns one HTTPS `resource_link` and compact status, media type, byte count, SHA-256,
+expiry, and URI metadata without inline provider bytes.
 The public no-store status APIs use `operational`, `degraded`, `major_outage`, or `unknown`.
 Missing, stale, or incoherent evidence stays `unknown`; status does not replace the Registry
 catalog as route authority. Gateway summaries count source operations separately from Registry
 route variants. Operation signals identify the responsible owner layer, and incidents use
-`suspect`, `open`, `recovering`, or `resolved` state. `operation_pricing_status` reports whether
-paid execution pricing is available without replacing independent provider or PubFi proxy
-evidence.
+`suspect`, `open`, `recovering`, or `resolved` state. Schema `pubfi.status.gateway.v2` separates
+offered and unoffered operations and reports monitoring coverage, nullable health, and evidence
+status. Deliberately inapplicable monitoring is not unknown health. `operation_pricing_status`
+reports whether paid execution pricing is available without replacing independent provider or
+PubFi proxy evidence.
 
 MCP `tools/list` is endpoint-specific. The authenticated root declares `oauth2` with no scopes for
 both execution tools and exposes free-health, account-free, account-paid, and compact runtime-

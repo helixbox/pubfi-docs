@@ -598,11 +598,11 @@ The checked-in bridge is for clients that launch a local MCP command or do not d
 custom HTTP-header configuration. It forwards to PubFi's hosted MCP endpoint. It does not run a
 second PubFi backend.
 
-Clone the [PubFi Docs repository](https://github.com/helixbox/pubfi-docs), install a supported
-Node.js runtime, and use the absolute path to:
+Clone the [PubFi Docs repository](https://github.com/helixbox/pubfi-docs), install Node.js
+24.19.0 or a later Node.js 24 release, and use the absolute path to:
 
 ```text
-examples/agents/pubfi-route-tools-mcp/server.mjs
+examples/agents/pubfi-route-tools-mcp/server.ts
 ```
 
 The bridge reads `PROD_PUBFI_API_KEY` or `STG_PUBFI_API_KEY` from its process environment. It also
@@ -618,7 +618,7 @@ Replace `/absolute/path/to/pubfi-docs` with the checkout path:
     "pubfi": {
       "command": "node",
       "args": [
-        "/absolute/path/to/pubfi-docs/examples/agents/pubfi-route-tools-mcp/server.mjs"
+        "/absolute/path/to/pubfi-docs/examples/agents/pubfi-route-tools-mcp/server.ts"
       ],
       "env": {
         "PUBFI_MCP_ENDPOINT": "https://mcp.pubfi.ai",
@@ -655,7 +655,7 @@ paste:
     "pubfi": {
       "command": "node",
       "args": [
-        "/absolute/path/to/pubfi-docs/examples/agents/pubfi-route-tools-mcp/server.mjs"
+        "/absolute/path/to/pubfi-docs/examples/agents/pubfi-route-tools-mcp/server.ts"
       ]
     }
   }
@@ -682,7 +682,7 @@ pubfi:
   enabled: true
   cmd: node
   args:
-    - /absolute/path/to/pubfi-docs/examples/agents/pubfi-route-tools-mcp/server.mjs
+    - /absolute/path/to/pubfi-docs/examples/agents/pubfi-route-tools-mcp/server.ts
   env_keys:
     - PROD_PUBFI_API_KEY
   envs:
@@ -706,7 +706,7 @@ Open **Settings → MCP Server → Add Server** and enter:
 - Name: `pubfi`
 - Type: **STDIO**
 - Command: `node`, or the absolute path to the Node.js executable
-- Arguments: the absolute path to `examples/agents/pubfi-route-tools-mcp/server.mjs`
+- Arguments: the absolute path to `examples/agents/pubfi-route-tools-mcp/server.ts`
 
 Supply `PUBFI_MCP_ENDPOINT=https://mcp.pubfi.ai` and `PROD_PUBFI_API_KEY` through the private
 per-user server environment or start Cherry Studio from a secret-injected environment. Do not put
@@ -726,7 +726,7 @@ Use this user-level `settings.json` entry when local policy forbids a static HTT
     "pubfi": {
       "command": "node",
       "args": [
-        "/absolute/path/to/pubfi-docs/examples/agents/pubfi-route-tools-mcp/server.mjs"
+        "/absolute/path/to/pubfi-docs/examples/agents/pubfi-route-tools-mcp/server.ts"
       ],
       "env": {
         "PUBFI_MCP_ENDPOINT": "https://mcp.pubfi.ai",

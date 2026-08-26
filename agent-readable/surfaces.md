@@ -10,6 +10,12 @@ Runtime OpenAPI, and MCP metadata.
 
 | Asset | Canonical purpose | Public URL |
 | --- | --- | --- |
+| Homepage Markdown | Concise overview of source discovery, live contracts, route selection, and execution. | `https://pubfi.ai/index.md` |
+| About Markdown | Platform boundary, intended users, and explicit non-goals. | `https://pubfi.ai/about.md` |
+| Developers Markdown | Live catalog, capability detail, Runtime OpenAPI, hosted MCP, and execution entry points. | `https://pubfi.ai/developers.md` |
+| Products Markdown | Discovery, Registry-backed API access, hosted MCP, custom delivery, and provider-guide index. | `https://pubfi.ai/products.md` |
+| Pricing and access Markdown | Public, registered-account Credit, accountless x402, and custom-delivery access paths. | `https://pubfi.ai/pricing.md` |
+| Authentication Markdown | Public reads, API keys, MCP OAuth, account-bound free routes, and accountless x402. | `https://pubfi.ai/auth.md` |
 | `agents.md` | Public guide for Discovery, Registry, OpenAPI, MCP, and execution boundaries. | `https://pubfi.ai/agents.md` |
 | `llms.txt` | Concise public site and Discovery index. | `https://pubfi.ai/llms.txt` |
 | `llms-full.txt` | Expanded public retrieval corpus. | `https://pubfi.ai/llms-full.txt` |
@@ -51,6 +57,13 @@ Runtime OpenAPI, and MCP metadata.
 | Payment mode guide | Boundary between API-key allowance, registered purchases, Credits, and x402. | `https://docs.pubfi.ai/concepts/payment-and-execution-modes` |
 | Public docs repository | Public source and contribution history. | `https://github.com/helixbox/pubfi-docs` |
 | Canonical docs site | Full long-form documentation. | `https://docs.pubfi.ai` |
+
+The landing, About, Developers, Products, and Pricing HTML pages share their content with these
+Markdown companions. External `GET` and `HEAD` requests can also select Markdown on the canonical
+HTML path with `Accept: text/markdown`. HTML is the default, equal preference resolves to HTML,
+and a request that accepts neither HTML nor Markdown receives `406`. Negotiated responses are
+private and no-store and set `Vary: Accept`. Unknown public paths return representation-aware
+`404` responses with safe recovery links; private application paths retain their normal handling.
 
 ## Staging Boundary
 
@@ -96,9 +109,9 @@ Use the surfaces in this order for runtime work:
    in `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`, `x-pubfi-price-version`, and
    `x-pubfi-x402`; it omits these four fields for non-priced operations. Exact `free_health` is
    public. An optional capability-level `free_rate_limit` and OpenAPI `x-pubfi-free-variant`
-   advertise the same API-key-authenticated, zero-Credit `:free` variant. An optional catalog
-   `stream` policy and OpenAPI `x-pubfi-stream-variant` advertise an API-key-only direct-HTTP
-   `:stream` variant with receipt-only replay and published bounds.
+   advertise the same API-key-authenticated, zero-Credit `:free` variant. Response delivery is
+   automatic on the normal route; there is no catalog stream policy, OpenAPI stream extension, or
+   caller-selected `:stream` suffix.
    The current checked-in pricing target sets `credit_cost: 1` and x402
    `atomic_amount: "1000"` (0.001 USDC) for every priced Subscan and DeGov operation. Confirm the
    installed values in the selected environment before execution.
@@ -109,8 +122,10 @@ Use the surfaces in this order for runtime work:
    `unknown` as missing, stale, or incoherent evidence, not health or route availability. Status
    counts source operations separately from Registry route variants. Operation signals identify
    the responsible owner layer, and incidents move through `suspect`, `open`, `recovering`, or
-   `resolved`. `operation_pricing_status` reports paid-execution pricing separately from provider
-   and PubFi proxy signals.
+   `resolved`. Schema `pubfi.status.gateway.v2` separates offered and unoffered operations and
+   reports monitoring coverage, nullable health, and evidence status. Deliberately inapplicable
+   monitoring is not unknown health. `operation_pricing_status` reports paid-execution pricing
+   separately from provider and PubFi proxy signals.
 5. Use MCP `tools/list` on the selected endpoint for current MCP schemas. The authenticated root
    declares OAuth for both execution tools and includes compact runtime-upgrade proof outcomes;
    `/x402` retains three no-auth tools and only free-health or x402 outcomes. Use
@@ -142,22 +157,25 @@ convention.
   `{network}` routes for one billing account, including XCM, multi-chain, Pro, and `net_assets`
   operations. Policy presence does not prove route readiness; require the current catalog or
   OpenAPI advertisement before execution.
-- An advertised paid operation can append `:stream` only for authenticated API-key direct HTTP.
-  It streams the first response and retains only a compact receipt; same-key replay does not call
-  the provider or charge again. MCP and x402 reject the suffix.
+- Authenticated paid and `:free` direct HTTP automatically use bounded response delivery on the
+  normal route. The platform ceiling is 128 MiB, with 10-second idle and 120-second body deadlines
+  and heavy-transfer concurrency limits of 1 per account, 4 per provider, and 8 globally. A route
+  can impose a stricter budget.
 - An exact eligible HTTP operation or MCP `/x402` operation can use accountless x402 V2 instead of
   authenticated account execution.
 - The authenticated MCP root accepts a PubFi API key or OAuth access token for
   `pubfi.route.execute`, including an advertised `:free` suffix, and for
   `pubfi.substrate.runtime_upgrade.verify`. It rejects payment metadata and never falls back. The
-  `/x402` endpoint rejects Bearer credentials, retains three tools, and accepts neither the
-  runtime-upgrade verifier nor `:stream`.
+  `/x402` endpoint rejects Bearer credentials, retains three tools, and does not expose the
+  runtime-upgrade verifier.
 - A missing or invalid OAuth execution credential returns HTTP `401` with protected-resource
   discovery and `_meta["mcp/www_authenticate"]` so an OAuth-capable host can link the account. An
   invalid `pf_sk_v1_` API key remains a separate API-key `401` without that MCP linking result.
 - A successful HTTP gateway response is the exact bounded provider body. API-key responses
   identify the Registry generation. MCP exposes valid JSON as a JSON value, valid `text/*` as a
-  string, other bytes as base64 data, and an empty body as `null`. Settled x402 HTTP responses
+  string, other bytes as base64 data, and an empty body as `null` at or below 1 MiB. A larger MCP
+  result returns exactly one HTTPS `resource_link` plus status, media type, byte count, SHA-256,
+  expiry, and URI fallback metadata without inline provider bytes. Settled x402 HTTP responses
   include `PAYMENT-RESPONSE`; settled MCP results include `x402/payment-response` metadata.
   Neither lane uses a PubFi success envelope.
 - Registered purchase APIs require a human dashboard session. Their presence does not prove that a

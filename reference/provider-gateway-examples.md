@@ -247,6 +247,13 @@ An x402 lane success instead includes `PAYMENT-RESPONSE` and
 The response shape depends on the provider. Use Runtime OpenAPI to design the client, and handle
 the provider's advertised media types and response shapes.
 
+Authenticated paid and `:free` direct-HTTP requests use automatic bounded response delivery on the
+normal route. Do not append a `:stream` suffix. The platform ceiling is 128 MiB, with a 10-second
+idle deadline, a 120-second total body deadline, and heavy-transfer concurrency limits of 1 per
+account, 4 per provider, and 8 globally. A route can impose a stricter budget. When you supply an
+explicit idempotency key, PubFi retains the encrypted response for exact replay for 24 hours. An
+expired replay returns `410` without another provider request or charge.
+
 ## Provider Error And Business Responses
 
 A bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and exact response bytes.

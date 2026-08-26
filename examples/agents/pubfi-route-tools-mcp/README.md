@@ -1,7 +1,7 @@
 # PubFi MCP Stdio Bridge Smoke Fixture
 
 This public example is a local, dependency-free MCP-compatible stdio bridge and smoke fixture for
-the PubFi hosted MCP endpoint.
+the PubFi hosted MCP endpoint. Run it with Node.js 24.19.0 or a later Node.js 24 release.
 
 The bridge forwards modern `server/discover`, list, and `tools/call` requests to the Rust MCP
 endpoint instead of synthesizing a second handshake, running a retired TypeScript route-tool
@@ -36,7 +36,7 @@ From the repository root:
 ```sh
 export STG_PUBFI_API_KEY='<Staging PubFi API key>'
 export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
-node examples/agents/pubfi-route-tools-mcp/server.mjs
+node examples/agents/pubfi-route-tools-mcp/server.ts
 ```
 
 Example MCP client config:
@@ -46,7 +46,7 @@ Example MCP client config:
   "mcpServers": {
     "pubfi-route-tools": {
       "command": "node",
-      "args": ["examples/agents/pubfi-route-tools-mcp/server.mjs"]
+      "args": ["examples/agents/pubfi-route-tools-mcp/server.ts"]
     }
   }
 }
@@ -62,7 +62,7 @@ Create a separate Production key and use the exact Production endpoint:
 ```sh
 export PROD_PUBFI_API_KEY='<Production PubFi API key>'
 export PUBFI_MCP_ENDPOINT='https://mcp.pubfi.ai'
-node examples/agents/pubfi-route-tools-mcp/server.mjs
+node examples/agents/pubfi-route-tools-mcp/server.ts
 ```
 
 The client configuration above uses the same local command. Do not send a Staging key to the
@@ -71,9 +71,9 @@ Production endpoint.
 ## Smoke
 
 ```sh
-node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs
-node --test examples/agents/pubfi-route-tools-mcp/bridge-response.test.mjs \
-  examples/agents/pubfi-route-tools-mcp/endpoint-policy.test.mjs
+node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.ts
+node --test examples/agents/pubfi-route-tools-mcp/bridge-response.test.ts \
+  examples/agents/pubfi-route-tools-mcp/endpoint-policy.test.ts
 ```
 
 For an authenticated Staging smoke:
@@ -81,7 +81,7 @@ For an authenticated Staging smoke:
 ```sh
 export STG_PUBFI_API_KEY='<Staging PubFi API key>'
 export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
-node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs
+node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.ts
 ```
 
 Without the endpoint-selected caller key, the smoke verifies modern discovery, the fixed tool list,

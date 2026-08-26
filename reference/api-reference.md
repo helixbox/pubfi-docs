@@ -36,11 +36,11 @@ method price into these top-level extensions:
 Runtime OpenAPI omits these four top-level price extensions for `free_health` and
 `pricing_unavailable` operations. Use `x-pubfi-billing` to read the billing mode.
 
-An eligible paid operation can also publish `x-pubfi-stream-variant`. Its exact object advertises
-the `:stream` suffix, direct-HTTP delivery, receipt-only replay, response-byte ceiling, idle and
-total deadlines, permit TTL, and account, provider, and global concurrency limits. Use this
-variant only with the authenticated API-key HTTP lane. MCP and x402 do not support raw stream
-execution.
+Response delivery is automatic and is not a catalog field or caller-selected path suffix.
+Authenticated paid and `:free` direct-HTTP requests use the normal operation path with bounded
+backpressure. The platform ceiling is 128 MiB, with a 10-second idle deadline, a 120-second total
+body deadline, and heavy-transfer concurrency limits of 1 per account, 4 per provider, and 8
+globally. A route can impose a stricter budget.
 
 If no valid snapshot is programmed, the document reports that the Registry is unavailable. It
 does not advertise old gateway operations in that state.
@@ -78,6 +78,12 @@ The body and media type depend on the provider response. PubFi reduces a valid `
 its parameter-free media type and uses `application/octet-stream` when the value is missing or
 malformed. Inspect Runtime OpenAPI for request construction and handle the advertised provider
 response shapes in your client.
+
+MCP keeps provider bodies at or below 1 MiB inline. A larger result contains exactly one HTTPS
+`resource_link` and compact fallback metadata with the upstream status, content type, byte count,
+SHA-256 digest, expiry, and URI. It does not inject the provider body into model context. Follow
+the returned capability URI before it expires; it is private, no-store, and preserves the original
+status, media type, and exact bytes.
 
 A bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its provider status and exact body.
 These provider responses are not PubFi error envelopes. Transport failure, redirects, oversized

@@ -71,12 +71,13 @@ one eligible response and does not create or consume Credits.
 
 | Path | Public explanation |
 | --- | --- |
-| `apps/pubfi-api-server/` | Rust HTTP API, Runtime OpenAPI, Registry Data Plane binding, gateway, account routes, purchases, and API-host MCP entrypoint. |
-| `apps/pubfi-registry-control-plane/` | Registry generation and rollout authority. |
-| `apps/pubfi-registry-data-plane-bootstrap/` | Data Plane bootstrap and serving-snapshot installation. |
-| `apps/pubfi-registry-credential-evaluator/` | Credential-readiness evaluation for Registry plans. |
-| `apps/pubfi-registry-health-evaluator/` | Route-health evaluation for Registry plans. |
-| `apps/pubfi-registry-reconciler/` | Registry desired-state reconciliation. |
+| `apps/pubfi-api-server/` | Rust HTTP API, Runtime OpenAPI, Registry Data Plane binding, gateway, account routes, purchases, and API-host MCP entrypoint. The package and release image contain one executable. |
+| `apps/pubfi-registry/` | One hosted Registry dispatcher. Each deployment selects exactly one of five roles: Control Plane, source refresher, reconciler, credential evaluator, or health evaluator. |
+| `apps/pubfi-registry-control-plane/` | Control Plane and managed-source implementation library used by the shared Registry dispatcher. |
+| `apps/pubfi-registry-credential-evaluator/` | Credential-readiness implementation library used by the shared Registry dispatcher. |
+| `apps/pubfi-registry-health-evaluator/` | Route-health implementation library used by the shared Registry dispatcher. |
+| `apps/pubfi-registry-reconciler/` | Registry desired-state implementation library used by the shared Registry dispatcher. |
+| `apps/pubfi-registry-token-agent/` | Separate minimal Data Plane stream-token workload. |
 | `apps/web/` | Next.js public site, Discovery, dashboard presentation, text exports, and discovery manifests. |
 | `apps/web/src/data/discovery-static/` | Checked-in public-safe Discovery data. |
 | `packages/rust/account-service/` | API-key auth, fixed product access, environment binding, admission, meter allocation, usage facts, and account contracts. |
@@ -90,6 +91,13 @@ one eligible response and does not create or consume Credits.
 | `packages/rust/discovery-contracts/` | Discovery source-selection and editorial route-planning models. |
 | `vendor/quantro-integration/` | Pinned provider-neutral purchase and x402 integration contract. |
 | `examples/agents/` | Public-safe agent and HTTP examples. |
+| `tools/pubfi-ops/` | Offline production-operations CLI. It is not a runtime image or a general-purpose client. |
+
+The normal PubFi backend release publishes exactly three runtime images: `pubfi-api-server`,
+`pubfi-registry`, and `pubfi-registry-token-agent`. The five Registry deployments keep separate
+workload identities, configuration, probes, and failure boundaries while sharing the one
+`pubfi-registry` image. The source refresher is one of those long-running hosted roles; it is not
+an offline operations command.
 
 ## Ownership Rules
 

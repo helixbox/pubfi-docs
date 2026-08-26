@@ -82,11 +82,11 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
   of at most 65,536 encoded bytes, including duplicate or undeclared fields. A non-empty `POST`
   body is forwarded byte-for-byte within the route-selected limit and media type. Empty bodies are
   omitted, and `GET` bodies are rejected.
-- An eligible paid operation can publish a catalog `stream` policy and Runtime OpenAPI
-  `x-pubfi-stream-variant`. Append its advertised `:stream` suffix only on authenticated API-key
-  direct HTTP. The policy publishes receipt-only replay, the response-byte ceiling, deadlines,
-  permit TTL, and account, provider, and global concurrency. Same-key replay returns a compact
-  receipt without another provider request or charge. MCP and x402 reject `:stream`.
+- Direct-HTTP response delivery is automatic on the normal authenticated paid or `:free` route.
+  The catalog and Runtime OpenAPI publish no stream-policy field or caller-selected `:stream`
+  suffix. The platform ceiling is 128 MiB, with 10-second idle and 120-second body deadlines and
+  heavy-transfer concurrency limits of 1 per account, 4 per provider, and 8 globally. A route can
+  impose a stricter budget.
 - The current checked-in pricing target sets `credit_cost: 1` and x402
   `atomic_amount: "1000"` (0.001 USDC) for every priced Subscan and DeGov operation. Confirm the
   installed values in the selected environment before execution.
@@ -104,6 +104,11 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
   final status classes remain gateway failures.
   Buffered overflow returns HTTP `502` with `gateway.upstream_response_too_large` and no provider
   response body.
+- MCP keeps provider response bodies at or below 1 MiB inline. A larger result returns exactly one
+  HTTPS `resource_link` plus compact fallback metadata with `status`, `content_type`, `bytes`,
+  `sha256`, `expiry`, and `uri`, but no inline body. The returned capability URI is private and
+  no-store and preserves the original status, media type, and exact bytes until expiry. PubFi does
+  not add generic artifact resources, templates, or resource-read execution.
 - An optional capability-level `free_rate_limit` and Runtime OpenAPI `x-pubfi-free-variant`
   advertise an authenticated `:free` final-segment variant for an eligible exact `GET` or `POST`.
   It keeps the exact operation input, uses the same PubFi API key and account identity, charges zero
@@ -219,6 +224,9 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - MCP client guides: https://docs.pubfi.ai/getting-started/mcp-clients
 - Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
 - Product site: https://pubfi.ai
+- About: https://pubfi.ai/about
+- Developers: https://pubfi.ai/developers
+- Products: https://pubfi.ai/products
 - Pricing: https://pubfi.ai/pricing
 - Status: https://pubfi.ai/status
 - Partners: https://pubfi.ai/partners
@@ -230,19 +238,27 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - Login: https://pubfi.ai/login
 - Privacy policy: https://pubfi.ai/privacy-policy
 - Terms of service: https://pubfi.ai/terms-of-service
+- Homepage Markdown: https://pubfi.ai/index.md
+- About Markdown: https://pubfi.ai/about.md
+- Developers Markdown: https://pubfi.ai/developers.md
+- Products Markdown: https://pubfi.ai/products.md
+- Pricing and access Markdown: https://pubfi.ai/pricing.md
+- Authentication Markdown: https://pubfi.ai/auth.md
 - Discovery: https://pubfi.ai/discovery
 - Discovery directory Markdown: https://pubfi.ai/discovery.md
 - Provider Profile index: https://pubfi.ai/discovery/sources
 
-The public no-store status contracts use `pubfi.status.v1` and `pubfi.status.gateway.v1` with
+The public no-store status contracts use `pubfi.status.v1` and `pubfi.status.gateway.v2` with
 `operational`, `degraded`, `major_outage`, or `unknown`. Missing, stale, or incoherent evidence is
 `unknown`. Gateway summaries count source operations separately from Registry route variants.
 Operation status binds source, route, and monitor identities; signals identify the responsible
-owner layer. Incidents use `suspect`, `open`, `recovering`, or `resolved` state. Status is
-operational evidence, not Registry route authority or proof that a purchase or x402 offer is
-available. Gateway summaries expose `operation_pricing_status`; a known pricing outage blocks paid
-execution without replacing independent provider or PubFi proxy evidence, and missing pricing
-evidence remains `unknown`.
+owner layer. Schema v2 separates offered and unoffered operations and reports monitoring coverage,
+nullable health, and evidence status. Deliberately inapplicable monitoring is not unknown health.
+Incidents use `suspect`, `open`, `recovering`, or `resolved` state. Status is operational evidence,
+not Registry route authority or proof that a purchase or x402 offer is available. Gateway
+summaries expose `operation_pricing_status`; a known pricing outage blocks paid execution without
+replacing independent provider or PubFi proxy evidence, and missing pricing evidence remains
+`unknown`.
 
 ## MCP Registry v2 Tools
 

@@ -35,7 +35,10 @@ guide](/getting-started/staging).
 ## Product And Discovery
 
 - `https://pubfi.ai`
+- `https://pubfi.ai/about`
+- `https://pubfi.ai/developers`
 - `https://pubfi.ai/pricing`
+- `https://pubfi.ai/products`
 - `https://pubfi.ai/status`
 - `https://pubfi.ai/blog`
 - `https://pubfi.ai/blog/{slug}`
@@ -56,6 +59,13 @@ guide](/getting-started/staging).
 
 Discovery describes source fit and public evidence. It does not prove that a Registry operation is
 ready.
+
+The landing, About, Developers, Products, and Pricing pages return HTML by default. An external
+`GET` or `HEAD` request can select the shared Markdown representation with
+`Accept: text/markdown`. Those negotiated responses are private and no-store and set
+`Vary: Accept`. The stable `.md` companions below do not require content negotiation. An
+unsupported `Accept` value returns `406`. Unknown public paths preserve the same HTML or Markdown
+preference with a `404`; private application paths do not use that fallback.
 
 ## Runtime Schemas And Catalogs
 
@@ -128,6 +138,12 @@ calls the customer feature **Auto Top-Up**;
 ## Agent-Readable And Crawler Files
 
 - `https://pubfi.ai/agents.md`
+- `https://pubfi.ai/index.md`
+- `https://pubfi.ai/about.md`
+- `https://pubfi.ai/developers.md`
+- `https://pubfi.ai/products.md`
+- `https://pubfi.ai/pricing.md`
+- `https://pubfi.ai/auth.md`
 - `https://pubfi.ai/llms.txt`
 - `https://pubfi.ai/llms-full.txt`
 - `https://pubfi.ai/discovery.md`
@@ -149,11 +165,14 @@ Health, readiness, version, and metrics are operational evidence only. They do n
 specific route, x402 offer, registered purchase offer, provider response, or payment is available.
 Apply the same rule to the corresponding Staging status surfaces.
 
-The public `/status` page presents the no-store `/v1/status` and `/v1/status/gateway` contracts.
+The public `/status` page presents the no-store `pubfi.status.v1` and
+`pubfi.status.gateway.v2` contracts from `/v1/status` and `/v1/status/gateway`.
 Provider detail comes from the provider status route. The status APIs report `unknown` when
 evidence is missing, stale, or incoherent; they do not convert missing evidence into an empty
 successful state. Gateway summaries count source operations separately from Registry route
-variants. Operation detail binds source, route, and monitor identities, and signals identify the
+variants and separate offered operations from unoffered operations. Operation detail binds source,
+route, and monitor identities and distinguishes monitoring coverage, nullable health, and evidence
+status. Deliberately inapplicable monitoring is not unknown health. Signals identify the
 responsible owner layer. Incident state can be `suspect`, `open`, `recovering`, or `resolved`.
 Status does not replace the current Registry catalog as execution authority.
 
