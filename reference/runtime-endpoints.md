@@ -36,7 +36,7 @@ The corresponding Staging API root is `https://api-stg.pubfi.ai`. Fetch that env
 | `GET` | `/openapi.json` | Runtime OpenAPI generated from the installed Registry v2 snapshot. |
 | `GET` | `/reference` | Interactive API reference for `/openapi.json`. |
 | `GET` | `/v1/status` | Public-safe PubFi component and Gateway summary using schema `pubfi.status.v1`. |
-| `GET` | `/v1/status/gateway` | Public-safe Gateway signals and provider summaries using schema `pubfi.status.gateway.v1`. |
+| `GET` | `/v1/status/gateway` | Public-safe Gateway signals and provider summaries using schema `pubfi.status.gateway.v2`. |
 | `GET` | `/v1/status/gateway/providers/{provider_key}` | Public-safe status and operation detail for one active provider. |
 | `GET` | `/v1/status/gateway/operations/{capability_id}` | Public-safe status detail for one active Registry operation. |
 | `GET` | `/v1/capabilities` | Public paginated `pubfi.gateway.registry.capability-page.v5` catalog. |
@@ -69,12 +69,17 @@ authority or prove that a purchase offer or x402 challenge is available.
 Status counts one source operation for each provider, method, and canonical upstream path. One
 source operation can have more than one Registry route variant. In Gateway summaries,
 `active_operations` counts source operations and `active_route_variants` counts route variants.
-`operation_coverage` reports both counts and separates operations that are continuously monitored
-from operations without continuous monitoring. Provider summaries use the same distinction.
+`operation_coverage` reports both counts, separates `offered` from `not_offered`, and classifies
+monitoring as `continuous`, `manual`, `not_applicable`, or `unreviewed`. Provider summaries use the
+same distinctions.
 
 Operation status includes `source_operation_key`, `source_revision_key`, `route_variant_key`, and
 an optional `monitor_target_key`. These values bind source, route, and monitoring evidence. They
-are not executable gateway paths. Each signal also identifies the responsible `owner` layer. The
+are not executable gateway paths. `support_status` is `offered` or `not_offered`;
+`monitoring_coverage` names the monitoring class; nullable `health_status` is present only for
+continuous monitoring; and `evidence_status` is `current`, `missing`, `stale`,
+`missing_or_stale`, or `not_applicable`. A deliberately unoffered or inapplicable operation does
+not become an unknown health claim. Each signal also identifies the responsible `owner` layer. The
 Gateway response can include incidents in `suspect`, `open`, `recovering`, or `resolved` state.
 Incident ownership and stage keep a provider failure separate from a PubFi Registry, credential,
 or gateway failure.
@@ -120,12 +125,10 @@ zero Credits and does not use x402. A retryable limit rejection returns `429`,
 A cumulative limit returns `429` with `gateway.free_limit_reached` and no `Retry-After`. Do not
 append the suffix unless the current catalog or OpenAPI operation advertises it.
 
-An eligible paid operation can separately advertise a direct-HTTP stream policy in the catalog
-and as `x-pubfi-stream-variant` in Runtime OpenAPI. Append its advertised `:stream` suffix only for
-the authenticated API-key lane. The policy publishes the response-byte ceiling, deadlines, permit
-TTL, concurrency limits, and `receipt_only` idempotency replay. The first request streams provider
-bytes and stores only a compact receipt; same-key replay returns that receipt without another
-provider request or Credit charge. MCP and accountless x402 do not support this suffix.
+Direct-HTTP response delivery is automatic on the normal authenticated paid or `:free` route. The
+catalog and Runtime OpenAPI do not publish a stream-policy field or a caller-selected `:stream`
+suffix. The runtime applies the platform response ceiling, deadlines, and heavy-transfer
+concurrency limits without changing the selected gateway path.
 
 ### Account And Purchase Routes
 
@@ -219,9 +222,11 @@ The corresponding Staging web root is `https://stg.pubfi.ai`.
 
 Current public endpoint families include:
 
-- `/`, `/pricing`, `/status`, `/blog`, `/blog/{slug}`, and `/products/{slug}`;
+- `/`, `/about`, `/developers`, `/products`, `/pricing`, `/status`, `/blog`, `/blog/{slug}`, and
+  `/products/{slug}`;
 - `/discovery` and its source, category, chain, comparison, topic, and Markdown routes;
 - `/login`, `/oauth/consent`, `/privacy-policy`, and `/terms-of-service`;
+- `/index.md`, `/about.md`, `/developers.md`, `/products.md`, `/pricing.md`, and `/auth.md`;
 - `/agents.md`, `/llms.txt`, and `/llms-full.txt`;
 - `/sitemap.xml` and `/robots.txt`;
 - `/discovery/agent-capabilities.json`;
@@ -230,6 +235,13 @@ Current public endpoint families include:
 - `/.well-known/mcp-registry-auth`, which is optional and can return `404`.
 
 Legacy `/docs` routes redirect to `https://docs.pubfi.ai`.
+
+External `GET` and `HEAD` requests to `/`, `/about`, `/developers`, `/products`, and `/pricing`
+can select the shared Markdown representation with `Accept: text/markdown`. HTML remains the
+default. These responses set `Vary: Accept`; negotiated Markdown is private and no-store. A request
+that accepts neither HTML nor Markdown returns `406`. Unknown public paths return an HTML or
+Markdown `404` according to the same preference, while Next.js internal navigation and private
+application paths retain normal handling.
 
 ## Public-Safe Rule
 

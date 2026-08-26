@@ -131,7 +131,7 @@ bridge keeps its stdio surface intentionally small.
 ```sh
 export PROD_PUBFI_API_KEY='<PubFi API key>'
 export PUBFI_MCP_ENDPOINT='https://mcp.pubfi.ai'
-node examples/agents/pubfi-route-tools-mcp/server.mjs
+node examples/agents/pubfi-route-tools-mcp/server.ts
 ```
 
 For Staging, use the exact staging endpoint and a key created by the Staging dashboard:
@@ -139,7 +139,7 @@ For Staging, use the exact staging endpoint and a key created by the Staging das
 ```sh
 export STG_PUBFI_API_KEY='<Staging PubFi API key>'
 export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
-node examples/agents/pubfi-route-tools-mcp/server.mjs
+node examples/agents/pubfi-route-tools-mcp/server.ts
 ```
 
 See the [stdio bridge example](https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/pubfi-route-tools-mcp)

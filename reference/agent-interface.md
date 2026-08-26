@@ -17,6 +17,11 @@ lane. The root exposes four fixed tools, while `/x402` exposes only the three ge
 tools. Both expose the same public introspection methods. Their `tools/list` security, output,
 annotation, and execution descriptions are endpoint-specific.
 
+The product-site server card at `https://pubfi.ai/.well-known/mcp/server-card.json` publishes its
+`version` from the current web package and sets both `serverUrl` and `transport.endpoint` to the
+resolved hosted MCP origin. Staging resolves both endpoint fields to `https://mcp-stg.pubfi.ai`;
+Production resolves them to `https://mcp.pubfi.ai`.
+
 ## Protocol Contract
 
 The discovery manifest uses schema `pubfi.mcp.discovery.v6`. Its protocol object identifies MCP
@@ -105,7 +110,14 @@ An empty body is omitted, and `GET` bodies are rejected.
 
 MCP adapts provider response bytes to JSON-RPC: valid JSON becomes a JSON value, valid `text/*`
 becomes a string, and other or invalid bytes become an object with `encoding: "base64"` and a
-`data` field. An empty provider body becomes `null`.
+`data` field. An empty provider body becomes `null`. These inline forms are limited to 1 MiB.
+
+A larger result returns exactly one HTTPS `resource_link` plus compact text and
+`structuredContent.upstream_response` fallback metadata. The metadata contains `status`,
+`content_type`, `bytes`, `sha256`, `expiry`, and `uri`, but no inline `body`. The link has the
+provider media type, byte size, and `audience: ["user"]`. Follow the capability URI before expiry
+to receive the original status, media type, and exact bytes. PubFi does not publish generic
+artifact resources, templates, or a resource-read tool.
 
 An exact `free_health` execution uses `execution_status: free_health_executed` and
 `billing.mode: free_health` on either MCP endpoint. It is distinct from an authenticated
@@ -127,15 +139,13 @@ operation. The same variant appears in Runtime OpenAPI as
 `execution_status: registry_free_route_executed` and `credits_charged: 0`; it does not reserve or
 emit Credit usage. Anonymous and x402 admissions cannot use this suffix.
 
-An optional capability-level `stream` object advertises an authenticated, paid direct-HTTP
-variant. Append its exact `path_suffix` (`:stream`) to the final path segment only when the current
-catalog or Runtime OpenAPI `x-pubfi-stream-variant` publishes it. The object also publishes
-`delivery: direct_http`, `idempotency_replay: receipt_only`, the response-byte ceiling, idle and
-total deadlines, permit TTL, and account, provider, and global concurrency limits. This lane uses
-a PubFi API key and the operation's Credit price. It commits one Credit before provider I/O,
-streams the first response with bounded backpressure, and stores only a compact receipt. A same-key
-replay returns that receipt without a second provider request or charge. MCP route execution and
-the accountless x402 lane reject `:stream`.
+Direct-HTTP response delivery is automatic on the normal authenticated paid or `:free` route. Do
+not append a `:stream` suffix; the catalog and Runtime OpenAPI do not publish stream-policy
+metadata. The runtime uses a 128 MiB platform ceiling, 10-second idle deadline, 120-second total
+body deadline, and heavy-transfer concurrency limits of 1 per account, 4 per provider, and 8
+globally. A route can impose a stricter budget. Caller-explicit idempotency retains the encrypted
+response for exact replay for 24 hours; an expired replay returns `410` without another provider
+request or charge.
 
 On the authenticated root, MCP `pubfi.route.execute` accepts one PubFi API key or OAuth access
 token. It rejects x402 payment metadata and never falls back to payment. OAuth execution resolves

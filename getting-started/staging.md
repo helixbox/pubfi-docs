@@ -123,7 +123,7 @@ PubFi also provides a dependency-free local stdio bridge in
 ```sh
 export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
 export STG_PUBFI_API_KEY='<Staging PubFi API key>'
-node examples/agents/pubfi-route-tools-mcp/server.mjs
+node examples/agents/pubfi-route-tools-mcp/server.ts
 ```
 
 Use this MCP client shape for the bridge:
@@ -133,7 +133,7 @@ Use this MCP client shape for the bridge:
   "mcpServers": {
     "pubfi-staging": {
       "command": "node",
-      "args": ["examples/agents/pubfi-route-tools-mcp/server.mjs"]
+      "args": ["examples/agents/pubfi-route-tools-mcp/server.ts"]
     }
   }
 }
@@ -148,13 +148,13 @@ Run the safe smoke:
 ```sh
 export PUBFI_MCP_ENDPOINT='https://mcp-stg.pubfi.ai'
 export STG_PUBFI_API_KEY='<Staging PubFi API key>'
-node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs
+node examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.ts
 ```
 
-With the key, this smoke checks initialization, tool discovery, capability search, route planning,
-route explanation, schema readback, and Registry generation identity. It does not execute a
-provider route unless you explicitly set `PUBFI_MCP_EXECUTE_LIVE=1` and supply an exact current
-path and method.
+With the key, this smoke checks modern discovery, the fixed tool list, complete capability
+pagination, exact capability detail, and Registry generation identity. It does not execute a
+provider route unless you explicitly set `PUBFI_MCP_EXECUTE_LIVE=1`. You can constrain the
+current-catalog selection with an exact current path and method.
 
 ## Base Sepolia Test Boundary
 

@@ -159,7 +159,7 @@ function checkMcpClientCoverage() {
     '"type": "streamableHttp"',
     '"type": "streamable-http"',
     '"Authorization": "Bearer {env:PROD_PUBFI_API_KEY}"',
-    "examples/agents/pubfi-route-tools-mcp/server.mjs"
+    "examples/agents/pubfi-route-tools-mcp/server.ts"
   ];
 
   for (const marker of requiredConfigMarkers) {
@@ -250,7 +250,7 @@ function checkDocsSiteLinks() {
 
 function checkCanonicalDocsUrls() {
   const textFiles = walk(root).filter((file) =>
-    [".md", ".json", ".mjs", ".txt", ".yml", ".yaml"].includes(path.extname(file))
+    [".md", ".json", ".mjs", ".ts", ".txt", ".yml", ".yaml"].includes(path.extname(file))
   );
 
   for (const file of textFiles) {
@@ -291,7 +291,7 @@ function checkCanonicalDocsIndex() {
 
 function checkTextHygiene() {
   const textFiles = walk(root).filter((file) =>
-    [".md", ".json", ".mjs", ".sh", ".txt", ".yml", ".yaml"].includes(path.extname(file))
+    [".md", ".json", ".mjs", ".ts", ".sh", ".txt", ".yml", ".yaml"].includes(path.extname(file))
   );
   const secretPattern =
     /sk-[A-Za-z0-9]{20,}|pf_sk_v1_[A-Za-z0-9_\-]{16,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA|OPENSSH|EC|PRIVATE) KEY-----|password\s*=|secret\s*=/;
@@ -335,7 +335,7 @@ function checkTextHygiene() {
 function checkCurrentRuntimeContracts() {
   const textFiles = walk(root).filter(
     (file) =>
-      [".md", ".json", ".mjs", ".sh", ".txt", ".yml", ".yaml"].includes(path.extname(file)) &&
+      [".md", ".json", ".mjs", ".ts", ".sh", ".txt", ".yml", ".yaml"].includes(path.extname(file)) &&
       !["CHANGELOG.md", "scripts/check-public-materials.mjs"].includes(relative(file))
   );
   const retiredContractPatterns = [
@@ -365,6 +365,14 @@ function checkCurrentRuntimeContracts() {
       label: "retired MCP five-purpose tool list",
       pattern:
         /\bsearch, planning, explanation, schema, and execution tools\b/i
+    },
+    {
+      label: "retired caller-selected stream variant",
+      pattern: /x-pubfi-stream-variant|catalog `stream` policy/
+    },
+    {
+      label: "retired Gateway status schema",
+      pattern: /pubfi\.status\.gateway\.v1/
     }
   ];
   const retiredEnvelopePattern = /\bpubfi\.capability\.response\.v1\b/;
@@ -616,16 +624,17 @@ function compareFileSets(label, actual, expected) {
 
 function checkExampleSyntax() {
   const checks = [
-    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/server.mjs"]],
-    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/bridge-response.mjs"]],
-    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/endpoint-policy.mjs"]],
-    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.mjs"]],
+    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/server.ts"]],
+    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/bridge-response.ts"]],
+    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/endpoint-policy.ts"]],
+    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/json.ts"]],
+    ["node", ["--check", "examples/agents/pubfi-route-tools-mcp/smoke_pubfi_route_tools_mcp.ts"]],
     [
       "node",
       [
         "--test",
-        "examples/agents/pubfi-route-tools-mcp/bridge-response.test.mjs",
-        "examples/agents/pubfi-route-tools-mcp/endpoint-policy.test.mjs"
+        "examples/agents/pubfi-route-tools-mcp/bridge-response.test.ts",
+        "examples/agents/pubfi-route-tools-mcp/endpoint-policy.test.ts"
       ]
     ],
     ["sh", ["-n", "examples/agents/capability-curl/inspect_registry.sh"]],
