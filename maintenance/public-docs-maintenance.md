@@ -50,6 +50,19 @@ Do not publish:
 
 ## Change Workflow
 
+Use the existing docs maintainer for these changes. Keep the Quickstart focused on one complete
+free HTTP request, and maintain shared guides for authentication, quotas, and errors. Link the
+public API Reference for operation parameters and responses. Do not create a cookbook page,
+copied schema catalog, or example project for each API.
+
+Retain `capability_id` and `free_rate_limit` in catalog examples. An independently advertised
+`:free` variant can work when paid pricing is unavailable. Empty or binary-only schemas describe
+transport, not provider JSON fields. Report missing source information; do not invent fields.
+
+Inspect the affected source and docs incrementally. Do not rebuild unchanged mono code for a
+docs-only correction. Use the existing required checks for affected surfaces. Do not add scheduled
+whole-catalog calls or another documentation CI workflow.
+
 1. Classify the change as link repair, navigation repair, reference sync, example sync, wording
    cleanup, or new public-safe material.
 2. Search before editing so duplicate pages or examples are not created.
@@ -146,3 +159,9 @@ npm run smoke:mcp-e2e --workspace apps/web
   main` to re-read the PR and remote `main`. Require `MERGED`, an observed merge commit, and
   `git merge-base --is-ancestor <merge-commit> origin/main` before reporting `completed` or
   `docs_current`.
+
+## Environment Promotion
+
+Merging to `main` updates Staging. Production deployment requires an explicit manual run of
+`Deploy production` for the approved revision. A documentation maintenance run must not dispatch
+Production deployment without separate authorization.

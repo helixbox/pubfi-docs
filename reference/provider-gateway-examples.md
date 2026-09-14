@@ -64,22 +64,28 @@ jq '{
   matching_capability_count,
   next_cursor,
   capabilities: [.capabilities[] | {
+    capability_id,
     matcher,
     methods,
     readiness: .readiness.status,
     credential_required,
+    free_rate_limit,
     operations
   }]
 }'
 ```
 
 If `next_cursor` is present, request the next page with the same `provider_key` and `limit`, plus
-`cursor=<next_cursor>`. Continue until `next_cursor` is absent. Then select one `ready` operation
-whose matching method has `billing.mode` set to `quantro_priced`, and read its positive
-`billing.credit_cost`. A `free_health` operation uses its exact path without authentication,
-Credits, or x402. A `pricing_unavailable` operation is not a paid execution target. Confirm the
-same path and method in the [Runtime OpenAPI](https://api.pubfi.ai/openapi.json), where a priced
-operation repeats the method terms in the top-level `x-pubfi-*` price extensions.
+`cursor=<next_cursor>`. Continue until `next_cursor` is absent. Select a `ready` operation and read its exact detail at
+`GET /v1/capabilities/{capability_id}`. Choose access separately:
+
+- **Free account request:** require `free_rate_limit`, append `:free`, and use a PubFi API key.
+  `pricing_unavailable` describes paid execution; it does not disable this advertised variant.
+- **Paid account request:** require the matching method's `billing.mode` to be `quantro_priced`
+  and inspect its `billing.credit_cost` before execution.
+- **Public health request:** `free_health` uses its exact path without a key or Credits.
+
+Confirm the same operation in the [Runtime OpenAPI](https://api.pubfi.ai/openapi.json).
 
 Use the live filtered catalogs for current operations:
 
@@ -104,6 +110,11 @@ including duplicate or undeclared fields, up to 65,536 encoded bytes. It does no
 source-declared query-value rules during execution. A non-empty `POST` body is forwarded
 byte-for-byte within the route-selected limit and uses the route-selected media type. Empty bodies
 are omitted, and `GET` bodies are rejected.
+
+If the body schema is empty or only `string / binary`, the provider fields are not described.
+Use the exact upstream operation documentation or report the missing schema. Do not interpret a
+transport size limit as a complete JSON contract. The [Quickstart](/getting-started/quickstart)
+contains a complete first request; the templates below apply to other selected operations.
 
 Set placeholders from the current schema:
 

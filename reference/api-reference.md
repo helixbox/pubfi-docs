@@ -61,6 +61,17 @@ silently omitting a plan that cannot form the complete approved projection.
 
 A Discovery page is source-selection context. It is not Registry execution authority.
 
+## Request And Response Schemas
+
+Use the fields and examples published for the exact operation. An empty schema or a
+`string / binary` body can describe transport only; it does not tell you which JSON fields the
+provider requires. Use the exact upstream operation documentation when fields are missing, and
+report the gap. Do not guess a body from another operation.
+
+Source schemas guide request construction. They do not imply that PubFi validates every field
+or business result. PubFi authentication, paths, free access, and transport limits come from the
+installed gateway contract. Upstream API keys and hosts are not PubFi caller instructions.
+
 ## Response Contract
 
 A successful gateway request returns the provider's exact bounded response bytes for the selected

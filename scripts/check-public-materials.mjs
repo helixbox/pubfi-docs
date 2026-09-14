@@ -341,7 +341,7 @@ function checkCurrentRuntimeContracts() {
   const retiredContractPatterns = [
     {
       label: "retired capability execution route",
-      pattern: /\/v1\/capabilities\/(?:\{[^}]+\}|[A-Za-z0-9._:-]+)/
+      pattern: /\bPOST\s+(?:https:\/\/[^/\s]+)?\/v1\/capabilities\/(?:\{[^}]+\}|[A-Za-z0-9._:-]+)/
     },
     {
       label: "retired gateway catalog route",
