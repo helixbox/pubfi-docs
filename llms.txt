@@ -165,3 +165,10 @@ HTTP and MCP share the same x402 `exact` settlement and replay path. Exact repla
 settlement and receipt without a second charge. Quantro is the common accounting-fact authority,
 but one request cannot debit both the registered and x402 lanes. Public docs and reachability
 checks do not prove ranking, traffic, or AI citation success.
+
+## First HTTP Request
+
+Start with https://docs.pubfi.ai/getting-started/quickstart for a complete free request.
+An advertised `:free` variant requires a PubFi API key and charges zero Credits, even when
+paid execution reports `pricing_unavailable`. Empty or binary-only request schemas do not
+describe provider JSON fields; use the exact upstream documentation or report the gap.

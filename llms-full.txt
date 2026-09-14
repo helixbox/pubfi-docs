@@ -344,3 +344,10 @@ replacing independent provider or PubFi proxy evidence, and missing pricing evid
 - SEO/GEO readbacks and local automation outputs are diagnostics, not ranking, traffic, or AI
   citation proof.
 - Public docs do not prove supplier settlement or production model-ranked routing.
+
+## First HTTP Request
+
+Start with https://docs.pubfi.ai/getting-started/quickstart for a complete free request.
+An advertised `:free` variant requires a PubFi API key and charges zero Credits, even when
+paid execution reports `pricing_unavailable`. Empty or binary-only request schemas do not
+describe provider JSON fields; use the exact upstream documentation or report the gap.

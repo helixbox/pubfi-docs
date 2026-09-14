@@ -9,9 +9,9 @@ responses without binding every workflow directly to a different upstream API.
 
 ## Start Here
 
-1. Read the [Project Overview](/project-overview) to understand PubFi's product boundary.
-2. Use the [Quickstart](/getting-started/quickstart) to choose an interface and execution lane.
-3. Use the [Staging Guide](/getting-started/staging) before you test an integration.
+1. Make a first free HTTP request with the [Quickstart](/getting-started/quickstart).
+2. Find parameters and responses in the [API Reference](https://api.pubfi.ai/reference).
+3. Read the [Project Overview](/project-overview) for product context.
 
 ## Choose Your Path
 
