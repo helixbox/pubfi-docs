@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { validateSource, validateStagingRun } from './docs-release.ts';
+import { validateSource, validateStagingRun, validateStagingAcceptance } from './docs-release.ts';
 const source = 'a'.repeat(40);
 const run = { id: 12, head_sha: source, event: 'push', head_branch: 'main',
   path: '.github/workflows/deploy-stg.yml', status: 'completed', conclusion: 'success',
@@ -40,4 +40,13 @@ test('both environments use the same deploy implementation and serialize by envi
   assert.match(workflow, /cancel-in-progress: false\n  queue: max/u);
   assert.ok(workflow.indexOf('scripts/docs-release.ts authorize') < workflow.indexOf('vercel_token:'));
   assert.match(workflow, /scripts\/docs-release.ts accept/u);
+});
+
+test('a legacy build or skipped acceptance is not deployment proof', () => {
+  const accepted = { conclusion: 'success', steps: [{ name: 'Accept the public deployed revision', conclusion: 'success' }] };
+  validateStagingAcceptance([accepted]);
+  assert.throws(() => validateStagingAcceptance([]));
+  assert.throws(() => validateStagingAcceptance([{ conclusion: 'success', steps: [] }]));
+  assert.throws(() => validateStagingAcceptance([{ ...accepted, conclusion: 'failure' }]));
+  assert.throws(() => validateStagingAcceptance([accepted, accepted]));
 });

@@ -20,6 +20,11 @@ export function validateStagingRun(run: Record<string, unknown>, source: string,
   assert.equal((run.repository as { full_name: string }).full_name, 'helixbox/pubfi-docs');
   assert.equal((run.head_repository as { full_name: string }).full_name, 'helixbox/pubfi-docs');
 }
+export function validateStagingAcceptance(jobs: Array<{ conclusion?: string; steps?: Array<{ name?: string; conclusion?: string }> }>) {
+  const matches = jobs.filter(job => job.conclusion === 'success' &&
+    job.steps?.some(step => step.name === 'Accept the public deployed revision' && step.conclusion === 'success'));
+  assert.equal(matches.length, 1, 'one successful public revision acceptance is required');
+}
 export async function main() {
   const command = process.argv[2];
   const source = validateSource(process.env.DOCS_SOURCE_SHA ?? '');
@@ -36,6 +41,9 @@ export async function main() {
       assert.match(id, /^[1-9][0-9]*$/u);
       const run = JSON.parse(execFileSync('gh', ['api', `repos/helixbox/pubfi-docs/actions/runs/${id}`], { encoding: 'utf8' }));
       validateStagingRun(run, source, id);
+      const result = JSON.parse(execFileSync('gh', ['api', `repos/helixbox/pubfi-docs/actions/runs/${id}/jobs?filter=latest&per_page=100`], { encoding: 'utf8' }));
+      assert.ok(result.total_count <= 100, 'unexpected Staging job count');
+      validateStagingAcceptance(result.jobs);
     } else {
       assert.equal(source, process.env.GITHUB_SHA);
     }
