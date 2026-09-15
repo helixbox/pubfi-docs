@@ -55,6 +55,17 @@ free HTTP request, and maintain shared guides for authentication, quotas, and er
 public API Reference for operation parameters and responses. Do not create a cookbook page,
 copied schema catalog, or example project for each API.
 
+Keep the shared usage guides focused on PubFi-specific addresses, authentication, access
+selection, discovery, and errors. Do not teach general HTTP, JSON, curl, or programming concepts.
+Keep Quickstart to one clearly labelled example. Put provider-specific interpretation and
+necessary examples in `providers/<provider>.md`, linked from the Providers navigation group.
+Create a provider page only when a documented integration difference needs explanation; do not
+create one for every provider or operation. Keep full parameter tables and network lists in the
+generated API Reference. When moving content, update navigation and agent-readable links and
+retain the meaning of existing examples. Do not invent missing semantics or execution results.
+This maintenance lane changes docs only; it must not enable Growth or change another automation's
+prompt, model, schedule, or status.
+
 Retain `capability_id` and `free_rate_limit` in catalog examples. An independently advertised
 `:free` variant can work when paid pricing is unavailable. Empty or binary-only schemas describe
 transport, not provider JSON fields. Report missing source information; do not invent fields.

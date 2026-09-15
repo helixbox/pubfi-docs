@@ -1,333 +1,75 @@
 ---
-title: Registry Gateway Examples
-description: Select and call current Registry v2 gateway operations without using stale provider routes.
+title: Use The PubFi Gateway
+description: Discover PubFi routes, select access, and handle PubFi-specific execution rules.
 ---
 
-PubFi executes provider-backed requests through the currently installed Registry v2 generation.
-There is no permanent provider URL pattern. Use the public catalog or Runtime OpenAPI before every
-integration or route refresh.
+Use a PubFi API key with a route from the current [API Reference](https://api.pubfi.ai/reference).
+[Quickstart](/getting-started/quickstart) shows one complete free request. For provider-specific
+choices, see [Subscan](/providers/subscan) and [DeGov](/providers/degov).
 
 ## 1. Inspect Current Authority
 
-Get the first page of the installed catalog:
+| Surface | Purpose |
+| --- | --- |
+| [Capability catalog](https://api.pubfi.ai/v1/capabilities) | Find providers, exact routes, methods, access policies, and `ready` or `blocked` state. |
+| [Runtime OpenAPI](https://api.pubfi.ai/openapi.json) | Read the request and response contract for ready routes. |
+| `GET /v1/capabilities/{capability_id}` | Inspect one exact capability. |
 
-```sh
-curl --silent --show-error \
-  'https://api.pubfi.ai/v1/capabilities'
-```
-
-The paginated response uses `pubfi.gateway.registry.capability-page.v5`. Each compact capability
-summary includes:
-
-- the exact generation, manifest, and compile time;
-- each capability ID, public provider key, matcher, and allowed method;
-- whether PubFi needs a configured upstream credential;
-- one billing state for each allowed method; and
-- current `ready` or `blocked` readiness.
-
-Read each opaque `next_cursor` page to enumerate the complete installed generation. Keep the
-`provider_key` and `method` filters unchanged when you send a cursor. A saved first page is not the
-complete catalog.
-
-Use the Runtime OpenAPI when you need only current `ready` operations:
-
-```sh
-curl --silent --show-error \
-  'https://api.pubfi.ai/openapi.json'
-```
-
-Do not infer execution from a Discovery listing, an old example, or a saved route from a different
-Registry generation.
-
-For a free-capable route, the capability summary includes `free_rate_limit`. Runtime OpenAPI adds
-`x-pubfi-free-variant` to the same operation. These fields authorize the `:free` suffix; do not
-infer it from a provider name or billing mode.
-
-For a `quantro_priced` route, Runtime OpenAPI copies the matching method price from
-`x-pubfi-billing` into `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
-`x-pubfi-price-version`, and `x-pubfi-x402`. Use these fields only on the selected path and method.
-They are omitted for `free_health` and `pricing_unavailable` operations.
-
-### Filter Subscan Or DeGov
-
-Use the exact public provider key to limit discovery. For example, select `subscan` or `degov`:
-
-```sh
-export PUBFI_PROVIDER_KEY='degov'
-
-curl --silent --show-error --get \
-  'https://api.pubfi.ai/v1/capabilities' \
-  --data-urlencode "provider_key=${PUBFI_PROVIDER_KEY}" \
-  --data-urlencode 'limit=1000' |
-jq '{
-  generation,
-  matching_capability_count,
-  next_cursor,
-  capabilities: [.capabilities[] | {
-    capability_id,
-    matcher,
-    methods,
-    readiness: .readiness.status,
-    credential_required,
-    free_rate_limit,
-    operations
-  }]
-}'
-```
-
-If `next_cursor` is present, request the next page with the same `provider_key` and `limit`, plus
-`cursor=<next_cursor>`. Continue until `next_cursor` is absent. Select a `ready` operation and read its exact detail at
-`GET /v1/capabilities/{capability_id}`. Choose access separately:
-
-- **Free account request:** require `free_rate_limit`, append `:free`, and use a PubFi API key.
-  `pricing_unavailable` describes paid execution; it does not disable this advertised variant.
-- **Paid account request:** require the matching method's `billing.mode` to be `quantro_priced`
-  and inspect its `billing.credit_cost` before execution.
-- **Public health request:** `free_health` uses its exact path without a key or Credits.
-
-Confirm the same operation in the [Runtime OpenAPI](https://api.pubfi.ai/openapi.json).
-
-Use the live filtered catalogs for current operations:
-
-- [Subscan catalog](https://api.pubfi.ai/v1/capabilities?provider_key=subscan&limit=1000) and
-  [Subscan product context](https://pubfi.ai/products/subscan-api)
-- [DeGov catalog](https://api.pubfi.ai/v1/capabilities?provider_key=degov&limit=1000) and
-  [DeGov product context](https://pubfi.ai/products/degov-api)
-
-PubFi's DeGov routes use the DeGov Partner Agent API at `agent-api.degov.ai`.
-`atlas.degov.ai` is a UI and reference surface. It is not a second execution contract. Always
-invoke the PubFi gateway path from the live catalog; do not send an upstream provider credential.
+Filter the catalog with `provider_key=<provider key>` and optionally `method`. Follow opaque
+`next_cursor` values while keeping the filters unchanged. A first page is not a complete catalog.
+Retain `capability_id`, `matcher`, `methods`, `readiness`, `free_rate_limit`, and `operations` when
+passing a capability to an agent. A Discovery listing alone does not authorize execution.
 
 ## 2. Select An Exact Operation
 
-Copy the path and HTTP method from one current `ready` operation. Replace each documented path
-parameter with a value that satisfies its schema. The resulting concrete path is the gateway path.
-Do not add provider, network, or endpoint segments that are not present in the current schema.
+Use the advertised method and gateway path. Read parameters and request bodies from that
+operation's schema, rather than copying an upstream URL or another operation's request.
+If a schema is empty or only `string / binary`, report the missing provider schema; transport
+limits do not define JSON fields.
 
 ### Select A Network
 
-A path parameter such as `{network}` selects an upstream endpoint. It is not an API key, a URL,
-or the payment network used by x402. Use an alias from the parameter enum in the API Reference;
-its examples identify the corresponding upstream hosts. Do not guess a hostname or chain name.
-
-For Subscan, `polkadot` selects `polkadot.api.subscan.io`. Replace `{network}` in
-`/v1/gateway/subscan/{network}/api/v2/scan/account/reward_slash` with `polkadot`, but keep
-`https://api.pubfi.ai` as the request origin. Do not send your PubFi key to the upstream host.
-
-A path without `{network}` uses a fixed upstream target. Read that operation's target description;
-do not assume that every networkless path selects Polkadot. Prefer an explicit network-qualified
-route for a portfolio integration.
-
-### Identify The Operation You Need
-
-Match the requested data and response schema, not only a similar operation name. For Subscan:
-
-| Data | Upstream operation to find in the PubFi reference |
-| --- | --- |
-| Account reward and slash records | `POST /api/v2/scan/account/reward_slash` |
-| Account transfer records | `POST /api/v2/scan/transfers` |
-| Summed staking rewards | `POST /api/scan/staking/total_reward` |
-
-The current contract does not advertise `/api/v2/scan/rewards`. Do not treat it as an alias for
-reward history or reward totals. These operations return different data. If your existing client
-uses `/rewards`, compare its original response requirements before replacing it. See the upstream
-[account reward records](https://support.subscan.io/api-36910971) and
-[staking reward totals](https://support.subscan.io/api-36910963) contracts.
-
-For Polkadot reward history, set `PUBFI_ADDRESS` to the public account address you want to query.
-After confirming the ready route and its free advertisement, run this example with `curl` and `jq`:
-
-```sh
-curl --fail-with-body --silent --show-error \
-  'https://api.pubfi.ai/v1/gateway/subscan/polkadot/api/v2/scan/account/reward_slash:free' \
-  --header "Authorization: Bearer ${PUBFI_API_KEY}" \
-  --header 'Content-Type: application/json' \
-  --data "$(jq -n --arg address "$PUBFI_ADDRESS" \
-    '{address: $address, category: "Reward", page: 0, row: 10}')"
-```
-
-For transfers, use `/v1/gateway/subscan/polkadot/api/v2/scan/transfers:free` with the JSON body
-`{"address":"YOUR_ADDRESS","page":0,"row":10}` and the same headers. Use your PubFi key;
-Subscan's upstream `X-API-Key` instructions do not apply to the PubFi gateway.
-
-`page` starts at `0`; `row` is the page size, from `1` through `100`. `category: "Reward"`
-selects rewards; `Slash` selects slashes. Do not infer claimed/unclaimed defaults from that
-category. Inspect the operation schema if you need `claimed_filter` or other filters.
-Check the provider's business result as well as HTTP status: Subscan success uses `code: 0`.
-An empty reward list can be a successful query for an account with no matching records.
-
-Only `GET` and `POST` are supported. Use the operation's OpenAPI query parameters and body schema
-to construct the provider request. PubFi forwards a valid RFC 3986 query exactly as supplied,
-including duplicate or undeclared fields, up to 65,536 encoded bytes. It does not apply the
-source-declared query-value rules during execution. A non-empty `POST` body is forwarded
-byte-for-byte within the route-selected limit and uses the route-selected media type. Empty bodies
-are omitted, and `GET` bodies are rejected.
-
-If the body schema is empty or only `string / binary`, the provider fields are not described.
-Use the exact upstream operation documentation or report the missing schema. Do not interpret a
-transport size limit as a complete JSON contract. The [Quickstart](/getting-started/quickstart)
-contains a complete first request; the templates below apply to other selected operations.
-
-Set placeholders from the current schema:
-
-```sh
-export PUBFI_GATEWAY_PATH='<exact ready path from the Runtime OpenAPI>'
-export PUBFI_GATEWAY_METHOD='<GET or POST from the same Runtime OpenAPI operation>'
-```
+A selector such as `{network}` chooses an upstream endpoint. Its enum lists permitted aliases,
+and its examples identify their upstream targets. A path without a selector has a fixed target,
+shown in its description. Keep the PubFi API origin when selecting an upstream; do not send your
+PubFi key to that upstream host. See the relevant provider page for additional interpretation.
 
 ## 3. Execute With A PubFi API Key
 
-Send the supported API-key header:
+Use `Authorization: Bearer <PubFi API key>` on `https://api.pubfi.ai`. Staging uses
+`https://api-stg.pubfi.ai` and a separate key from that environment. See
+[API Key And Runtime](/getting-started/api-key-runtime) for key creation and account access.
+Upstream API-key instructions are not PubFi authentication. `X-PubFi-Api-Key` is not supported.
 
-```text
-Authorization: Bearer <PubFi API key>
-```
+Choose the access mode for the exact operation:
 
-Example:
+| Mode | PubFi requirement |
+| --- | --- |
+| Account-free | Advertised `free_rate_limit` or `x-pubfi-free-variant`, `:free` suffix, PubFi Bearer key, and available account quota. |
+| Account-paid | `quantro_priced` with a current method-specific `credit_cost`, PubFi Bearer key, active admission, and sufficient allocation. |
+| Public health | `free_health`; use the advertised path without a key or Credits. |
 
-```sh
-curl --include \
-  --request "$PUBFI_GATEWAY_METHOD" \
-  "https://api.pubfi.ai${PUBFI_GATEWAY_PATH}" \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
-
-The key must match the endpoint environment. The billing account must also have active admission
-and enough allocation for the method-specific `credit_cost`. `X-PubFi-Api-Key` is not accepted;
-remove it before accountless x402 because its presence still selects the credential lane.
-
-For a JSON `POST` operation, construct the body from the current OpenAPI schema:
-
-```sh
-export PUBFI_GATEWAY_METHOD='POST'
-export PUBFI_GATEWAY_BODY='<JSON that satisfies the current operation schema>'
-
-curl --include \
-  --request "$PUBFI_GATEWAY_METHOD" \
-  "https://api.pubfi.ai${PUBFI_GATEWAY_PATH}" \
-  --header 'Authorization: Bearer <PubFi API key>' \
-  --header 'Content-Type: application/json' \
-  --data "$PUBFI_GATEWAY_BODY"
-```
-
-OpenAPI guides client construction, but PubFi does not apply that source schema to the body bytes
-during execution. Do not copy a request body from another operation.
+The provider credential indicated by `credential_required` is managed server-side. You do not
+supply the upstream key. PubFi forwards the selected operation input and returns the provider
+body without adding a success wrapper. See [API Reference](/reference/api-reference) for transport
+limits and the response contract.
 
 ## 4. Execute An Advertised Free Variant
 
-Only use this lane when the current capability has `free_rate_limit` or the matching Runtime
-OpenAPI operation has `x-pubfi-free-variant`. The underlying operation can be an exact `GET` or
-`POST`, can require a server-side provider credential, and can have a request body. Append `:free`
-to its final path segment, keep the exact current operation input, and use the same PubFi API key:
+Append `:free` to the final path segment and retain the selected operation's method, body, and
+PubFi Bearer key. The suffix is valid only when that exact operation advertises it. Do not remove
+it to retry a failed free call as a paid request.
 
-```sh
-export PUBFI_GATEWAY_METHOD='<GET or POST from the advertised operation>'
-export PUBFI_FREE_PATH='<advertised exact gateway path with :free appended>'
-
-curl --include \
-  --request "$PUBFI_GATEWAY_METHOD" \
-  "https://api.pubfi.ai${PUBFI_FREE_PATH}" \
-  --header 'Authorization: Bearer <PubFi API key>'
-```
-
-For a JSON `POST`, add the body constructed from the selected current schema, as in the paid
-API-key example above. PubFi selects the upstream media type from the route contract.
-
-The free variant is account-level rate-limited and charges zero Credits. It does not reserve,
-finalize, replay, or emit Quantro request usage. A retryable limit rejection returns HTTP `429`
-with `gateway.free_rate_limited` and `Retry-After`. A cumulative hard-limit rejection returns
-`gateway.free_limit_reached` without `Retry-After`. The checked-in Subscan policy shares a
-2-request-per-second and 20,000-request-per-day allowance across its eligible exact routes for one
-billing account. Policy presence does not prove current route readiness. Require the current
-catalog or OpenAPI advertisement before execution, and do not send `PAYMENT-SIGNATURE` for this
-variant.
+Free variants charge zero Credits. `pricing_unavailable` on the paid operation does not disable
+an independently advertised free variant. Read rate and quota limits from the current contract;
+they may be shared across routes for one account. Availability is separate in each environment.
+Do not combine this lane with `PAYMENT-SIGNATURE`.
 
 ## 5. Use The Accountless x402 Lane When Eligible
 
-An exact gateway route can separately enable accountless x402. The public Base Sepolia example is
-Staging-only. Inspect the Staging catalog and Runtime OpenAPI, then select an exact ready path and
-method from that environment:
-
-```sh
-curl --silent --show-error \
-  'https://api-stg.pubfi.ai/v1/capabilities'
-
-curl --silent --show-error \
-  'https://api-stg.pubfi.ai/openapi.json'
-```
-
-Do not reuse a Production-selected path or method unless the current Staging contracts advertise
-the same operation as `ready`. Set new Staging values, then send the exact request without a PubFi
-API key or payment signature:
-
-```sh
-export PUBFI_GATEWAY_ORIGIN='https://api-stg.pubfi.ai'
-export PUBFI_GATEWAY_PATH='<exact ready path from the Staging Runtime OpenAPI>'
-export PUBFI_GATEWAY_METHOD='GET'
-
-curl --include \
-  --request "$PUBFI_GATEWAY_METHOD" \
-  "${PUBFI_GATEWAY_ORIGIN}${PUBFI_GATEWAY_PATH}"
-```
-
-An eligible unpaid request returns `402 Payment Required`, a `PAYMENT-REQUIRED` header, and the
-same current requirements in the JSON body. Validate that challenge before a wallet signs it.
-
-The paid retry uses `PAYMENT-SIGNATURE`. A settled success returns `PAYMENT-RESPONSE`. Never send a
-PubFi API key and `PAYMENT-SIGNATURE` together. MCP `pubfi.route.execute` supports the same payment
-lane through `x402/payment` and `x402/payment-response` metadata. The Base Sepolia example uses
-`https://mcp-stg.pubfi.ai/x402`, which rejects Bearer credentials.
-
-Staging permits Base Sepolia `eip155:84532`. Production permits Base mainnet `eip155:8453` only
-when the exact route has x402 enabled. The environment policy does not establish current
-availability. Treat the live catalog as route authority and the live challenge as payment-term
-authority.
-
-See [Accountless x402](/getting-started/x402) for the environment safety boundary and exact replay
-rules. See the [Staging guide](/getting-started/staging) for all Staging endpoints.
-
-## Success Response
-
-A successful gateway request returns the provider's exact bounded response bytes. PubFi does not
-wrap the body in a stable success envelope.
-
-Every success includes:
-
-```text
-Content-Type: <safe parameter-free response media type>
-x-pubfi-request-id: <request id>
-```
-
-An API-key lane success also includes:
-
-```text
-x-pubfi-registry-generation: <generation id>
-```
-
-An x402 lane success instead includes `PAYMENT-RESPONSE` and
-`Cache-Control: private, no-store`.
-
-The response shape depends on the provider. Use Runtime OpenAPI to design the client, and handle
-the provider's advertised media types and response shapes.
-
-Authenticated paid and `:free` direct-HTTP requests use automatic bounded response delivery on the
-normal route. Do not append a `:stream` suffix. The platform ceiling is 128 MiB, with a 10-second
-idle deadline, a 120-second total body deadline, and heavy-transfer concurrency limits of 1 per
-account, 4 per provider, and 8 globally. A route can impose a stricter budget. When you supply an
-explicit idempotency key, PubFi retains the encrypted response for exact replay for 24 hours. An
-expired replay returns `410` without another provider request or charge.
-
-## Provider Error And Business Responses
-
-A bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and exact response bytes.
-PubFi reduces a valid content type to its parameter-free media type. It uses
-`application/octet-stream` when the provider content type is missing or malformed.
-
-These completed provider responses are not PubFi gateway-error envelopes. Transport failure,
-redirects, oversized data, and unsupported final status classes remain gateway failures. In the
-API-key lane, an admitted provider attempt consumes the operation's selected `credit_cost`, even
-when the provider returns an error or the attempt times out. A free-variant provider response
-charges zero Credits.
+Accountless x402 is a separate advertised payment mode. It uses no PubFi API key. Follow the
+[Accountless x402 guide](/getting-started/x402) for challenge validation, environment selection,
+and payment execution. Do not combine payment headers with Bearer credentials.
 
 ## Registry Failure Classes
 
@@ -375,13 +117,3 @@ its terms before deciding whether to create a new authorization. MCP preserves t
 official `PaymentRequired` fields in the error result's `structuredContent` and adds an `error`
 message. Inspect the challenge and error before choosing the next action.
 
-## Public-Safe Boundary
-
-Examples must not publish:
-
-- PubFi API keys;
-- `PAYMENT-SIGNATURE` or `PAYMENT-RESPONSE` values;
-- wallet secrets or unredacted payment payloads;
-- upstream provider credentials;
-- account, purchase, usage, or billing records; or
-- claims that an old path, current offer, price, uptime result, or route remains available.

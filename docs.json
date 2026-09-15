@@ -40,6 +40,13 @@
         ]
       },
       {
+        "group": "Providers",
+        "pages": [
+          "providers/subscan",
+          "providers/degov"
+        ]
+      },
+      {
         "group": "Concepts",
         "pages": [
           "concepts/discovery",

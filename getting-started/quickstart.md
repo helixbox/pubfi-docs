@@ -18,7 +18,8 @@ This guide uses Production at `https://api.pubfi.ai`. For Staging, use a separat
 
 ## 2. Confirm The Free Example Is Available
 
-This example uses Subscan's current-time operation, which needs no address or request body.
+The example API is Subscan current time. It needs no address or request body; other providers
+use the same PubFi authentication and access-selection rules.
 Before running it, open the [API Reference](https://api.pubfi.ai/reference) and find
 `GET /v1/gateway/subscan/api/now`. Confirm that the operation advertises
 `x-pubfi-free-variant` with suffix `:free`. If it is absent, do not run this example or remove
@@ -52,9 +53,9 @@ Search the [API Reference](https://api.pubfi.ai/reference) for your operation. U
 path parameters, query parameters, and JSON body. For a free call, confirm the advertisement and
 append `:free` to the final path segment. Use `Authorization: Bearer` with your PubFi key.
 
-If the path includes `{network}`, select its documented alias before calling it. The
-[network selection guide](/reference/provider-gateway-examples#select-a-network) shows how to
-select Polkadot and distinguish account rewards, transfers, and reward totals.
+If the path includes `{network}`, select its documented alias before calling it. See
+[network selection](/reference/provider-gateway-examples#select-a-network) for the shared rule
+and the relevant provider page for provider-specific choices.
 
 If a request schema is empty or only says `string / binary`, it does not describe the provider's
 JSON fields. Consult the exact upstream operation documentation or report the missing schema.
@@ -75,6 +76,7 @@ When requesting help, include the method, path, redacted request body, status, e
 
 ## Next Steps
 
+- [Subscan](/providers/subscan): network selection, rewards, and transfers.
 - [Gateway Examples](/reference/provider-gateway-examples): discovery, POST bodies, and free or paid requests.
 - [API Key And Runtime](/getting-started/api-key-runtime): account access and quotas.
 - [MCP Client Setup](/getting-started/mcp-client): connect an agent.
