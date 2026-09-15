@@ -72,6 +72,11 @@ Source schemas guide request construction. They do not imply that PubFi validate
 or business result. PubFi authentication, paths, free access, and transport limits come from the
 installed gateway contract. Upstream API keys and hosts are not PubFi caller instructions.
 
+Endpoint-selection parameters such as `{network}` list allowed aliases in their enum and
+associate each alias with an upstream host in their examples. A route without a selector
+identifies its fixed upstream target. These descriptions come from the installed routing policy.
+See [network selection](/reference/provider-gateway-examples#select-a-network) for a worked request.
+
 ## Response Contract
 
 A successful gateway request returns the provider's exact bounded response bytes for the selected

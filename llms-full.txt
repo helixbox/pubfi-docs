@@ -351,3 +351,10 @@ Start with https://docs.pubfi.ai/getting-started/quickstart for a complete free 
 An advertised `:free` variant requires a PubFi API key and charges zero Credits, even when
 paid execution reports `pricing_unavailable`. Empty or binary-only request schemas do not
 describe provider JSON fields; use the exact upstream documentation or report the gap.
+
+Endpoint selection: use the documented alias for path parameters such as {network}; keep the
+PubFi gateway origin and Bearer key. Subscan's polkadot alias selects polkadot.api.subscan.io.
+Network-qualified routes make this selection explicit. Upstream X-API-Key instructions are not
+PubFi authentication. Account reward history, transfer records, and staking reward totals are
+different operations; /api/v2/scan/rewards is not an advertised alias. See
+https://docs.pubfi.ai/reference/provider-gateway-examples#select-a-network for exact requests.
