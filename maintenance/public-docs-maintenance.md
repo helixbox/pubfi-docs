@@ -165,3 +165,14 @@ npm run smoke:mcp-e2e --workspace apps/web
 Merging to `main` updates Staging. Production deployment requires an explicit manual run of
 `Deploy production` for the approved revision. A documentation maintenance run must not dispatch
 Production deployment without separate authorization.
+
+The Production workflow takes a full `source_sha` and its successful `Deploy staging` push
+`staging_run_id`. It verifies the exact source and main ancestry before deployment credentials
+are used. Both environments call the same deployment workflow and queue per environment.
+The public `/release.json` and workflow summary identify the deployed source and run; the
+summary includes the immutable Vercel deployment URL. Production builds with its own target
+configuration and is not claimed to reuse the Staging build. Do not publish documentation for
+an API that is not yet available in Production. A rollback selects a previously accepted commit
+and follows the same checks; it is an explicit action, not an automatic response to failure.
+
+For deployment-workflow changes, also run `node --experimental-strip-types --test scripts/docs-release.test.ts`.
