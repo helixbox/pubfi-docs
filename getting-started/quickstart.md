@@ -52,6 +52,10 @@ Search the [API Reference](https://api.pubfi.ai/reference) for your operation. U
 path parameters, query parameters, and JSON body. For a free call, confirm the advertisement and
 append `:free` to the final path segment. Use `Authorization: Bearer` with your PubFi key.
 
+If the path includes `{network}`, select its documented alias before calling it. The
+[network selection guide](/reference/provider-gateway-examples#select-a-network) shows how to
+select Polkadot and distinguish account rewards, transfers, and reward totals.
+
 If a request schema is empty or only says `string / binary`, it does not describe the provider's
 JSON fields. Consult the exact upstream operation documentation or report the missing schema.
 Do not invent parameters. See [API Reference](/reference/api-reference) for schema limits.
