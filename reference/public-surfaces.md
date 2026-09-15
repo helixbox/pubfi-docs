@@ -36,12 +36,15 @@ guide](/getting-started/staging).
 
 - `https://pubfi.ai`
 - `https://pubfi.ai/about`
+- `https://pubfi.ai/contact`
 - `https://pubfi.ai/developers`
+- `https://pubfi.ai/partners`
 - `https://pubfi.ai/pricing`
 - `https://pubfi.ai/products`
 - `https://pubfi.ai/status`
 - `https://pubfi.ai/blog`
 - `https://pubfi.ai/blog/{slug}`
+- `https://pubfi.ai/blog/{slug}.md`
 - `https://pubfi.ai/products/{slug}`
 - `https://pubfi.ai/discovery`
 - `https://pubfi.ai/discovery/api/{source_slug}`
@@ -57,11 +60,12 @@ guide](/getting-started/staging).
 - `https://pubfi.ai/privacy-policy`
 - `https://pubfi.ai/terms-of-service`
 
-Discovery describes source fit and public evidence. It does not prove that a Registry operation is
-ready.
+`/discovery` is the overview. `/discovery/sources` owns the searchable and filterable source
+directory, with crawlable pagination under `/discovery/sources/page/{page}`. Discovery describes
+source fit and public evidence. It does not prove that a Registry operation is ready.
 
-The landing, About, Developers, Products, and Pricing pages return HTML by default. An external
-`GET` or `HEAD` request can select the shared Markdown representation with
+The landing, About, Contact, Developers, Products, and Pricing pages return HTML by default. An
+external `GET` or `HEAD` request can select the shared Markdown representation with
 `Accept: text/markdown`. Those negotiated responses are private and no-store and set
 `Vary: Accept`. The stable `.md` companions below do not require content negotiation. An
 unsupported `Accept` value returns `406`. Unknown public paths preserve the same HTML or Markdown
@@ -69,6 +73,9 @@ preference with a `404`; private application paths do not use that fallback.
 
 ## Runtime Schemas And Catalogs
 
+- `https://pubfi.ai/api-reference` redirects to the selected environment's interactive reference
+- `https://pubfi.ai/openapi.json` redirects to the selected environment's Runtime OpenAPI
+- `https://pubfi.ai/.well-known/api-catalog` publishes an environment-matched RFC 9727 Linkset
 - `https://api.pubfi.ai/reference`
 - `https://api.pubfi.ai/openapi.json`
 - `https://api.pubfi.ai/v1/capabilities`
@@ -86,6 +93,11 @@ static provider OpenAPI files as execution authority.
 same installed snapshot. It contains no selected price and is not route-execution authority. It
 returns `503` rather than a partial inventory when the complete projection cannot be formed.
 
+The API Catalog uses `application/linkset+json` with the RFC 9727 profile. Its API root anchor
+links to the Runtime OpenAPI, interactive reference, public Status API, and Registry capability
+catalog for the request environment. It is discovery metadata, not execution or readiness
+authority.
+
 ## MCP Discovery
 
 - `https://api.pubfi.ai/.well-known/mcp.json`
@@ -93,9 +105,12 @@ returns `503` rather than a partial inventory when the complete projection canno
 - `https://mcp.pubfi.ai/.well-known/mcp.json`
 - `https://mcp.pubfi.ai/.well-known/openai-apps-challenge`
 - `https://mcp.pubfi.ai/.well-known/oauth-protected-resource`
+- `https://mcp.pubfi.ai/.well-known/oauth-authorization-server`
 - `https://mcp.pubfi.ai/x402`
 - `https://pubfi.ai/.well-known/mcp.json`
 - `https://pubfi.ai/.well-known/mcp/server-card.json`
+- `https://pubfi.ai/.well-known/ai-catalog.json`
+- `https://pubfi.ai/.well-known/ard.json`
 - `https://pubfi.ai/.well-known/mcp-registry-auth`
 - https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin
 
@@ -103,6 +118,17 @@ The OpenAI Apps challenge is a stable public plain-text domain ownership proof. 
 proof route is optional and can return `404`. MCP discovery and `tools/list` are public. On the
 authenticated root, `pubfi.route.execute` accepts a PubFi API key or OAuth access token. Eligible
 accountless x402 execution uses `/x402` without a Bearer credential.
+
+The selected MCP origin is also the OAuth authorization server. Its metadata owns dynamic client
+registration, authorization, token exchange and refresh, and revocation endpoints.
+
+The AI Catalog uses `application/ai-catalog+json`, declares specification version `1.0`, and
+references the environment-matched MCP Server Card and Runtime OpenAPI. The ARD route returns the
+exact same body. Neither route duplicates the capability catalog or proves operation readiness.
+
+`https://pubfi.ai/developers/llms.txt` is the compact developer index. Each published blog article
+has a canonical Markdown companion at `/blog/{slug}.md`; it includes the canonical HTML URL and
+uses absolute public links.
 
 ## Gateway Contract
 
@@ -140,6 +166,7 @@ calls the customer feature **Auto Top-Up**;
 - `https://pubfi.ai/agents.md`
 - `https://pubfi.ai/index.md`
 - `https://pubfi.ai/about.md`
+- `https://pubfi.ai/contact.md`
 - `https://pubfi.ai/developers.md`
 - `https://pubfi.ai/products.md`
 - `https://pubfi.ai/pricing.md`
@@ -169,12 +196,15 @@ The public `/status` page presents the no-store `pubfi.status.v1` and
 `pubfi.status.gateway.v2` contracts from `/v1/status` and `/v1/status/gateway`.
 Provider detail comes from the provider status route. The status APIs report `unknown` when
 evidence is missing, stale, or incoherent; they do not convert missing evidence into an empty
-successful state. Gateway summaries count source operations separately from Registry route
-variants and separate offered operations from unoffered operations. Operation detail binds source,
-route, and monitor identities and distinguishes monitoring coverage, nullable health, and evidence
-status. Deliberately inapplicable monitoring is not unknown health. Signals identify the
-responsible owner layer. Incident state can be `suspect`, `open`, `recovering`, or `resolved`.
-Status does not replace the current Registry catalog as execution authority.
+successful state. Gateway summaries count logical API operations separately from source operations
+and Registry route variants, and separate offered operations from unoffered operations. Operation
+detail binds API, source, route, and monitor identities and distinguishes monitoring coverage,
+nullable health, and evidence status. Deliberately inapplicable monitoring is not unknown health.
+Signals identify the responsible owner layer. Incident state can be `suspect`, `open`,
+`recovering`, or `resolved`. Seven-day history uses six-hour segments. It reports active expected,
+passed, failed, and unknown targets with an active-check percentage, plus passive provider request
+totals and separate PubFi-affected and upstream-affected counts. Status does not replace the
+current Registry catalog as execution authority.
 
 ## Public-Safe Rule
 

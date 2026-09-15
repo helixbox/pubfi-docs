@@ -41,13 +41,15 @@ The local stdio bridge is modern-only; legacy clients connect directly to the ho
 
 | Environment | Protected resource metadata | Authorization server |
 | --- | --- | --- |
-| Staging | `https://mcp-stg.pubfi.ai/.well-known/oauth-protected-resource` | `https://qwcbvvgcwdlpumawlajf.supabase.co/auth/v1` |
-| Production | `https://mcp.pubfi.ai/.well-known/oauth-protected-resource` | `https://wuugpdblvlpptlgnxwoi.supabase.co/auth/v1` |
+| Staging | `https://mcp-stg.pubfi.ai/.well-known/oauth-protected-resource` | `https://mcp-stg.pubfi.ai` |
+| Production | `https://mcp.pubfi.ai/.well-known/oauth-protected-resource` | `https://mcp.pubfi.ai` |
 
 The manifest's `auth` object advertises `pubfi_api_key` and `oauth_access_token`, sets
 `fallback: false`, and publishes the protected-resource and authorization-server URLs. OAuth
 consent can redirect the signed-in user to the product site's `/oauth/consent` page. Treat the
 `authorization_id` as an opaque continuation value; do not construct or modify it.
+The authorization-server metadata is at `/.well-known/oauth-authorization-server` on the selected
+MCP origin. PubFi owns client registration, authorization, token exchange, refresh, and revocation.
 
 ## Public API Schema
 

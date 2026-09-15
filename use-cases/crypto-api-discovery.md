@@ -12,8 +12,9 @@ chain-specific data. I need to compare source fit before integrating."
 
 ## Recommended PubFi Flow
 
-1. Start with [Discovery](https://pubfi.ai/discovery).
-2. Search by provider, category, chain, comparison, or topic.
+1. Start with the [Discovery overview](https://pubfi.ai/discovery).
+2. Use the [source directory](https://pubfi.ai/discovery/sources) to search and filter providers,
+   or continue by category, chain, comparison, or topic.
 3. Read public status, source freshness, auth/pricing posture, and claim-safe notes.
 4. Use related pages and Markdown mirrors for agent-readable context.
 5. If the workflow needs execution, inspect the [current Registry v2

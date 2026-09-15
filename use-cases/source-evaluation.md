@@ -21,7 +21,7 @@ A team needs to decide whether a crypto data source is trustworthy enough to int
 
 | Question | Surface |
 | --- | --- |
-| What sources exist? | [Discovery](https://pubfi.ai/discovery) |
+| What sources exist? | [Discovery source directory](https://pubfi.ai/discovery/sources) |
 | Is there a public docs/source link? | Discovery detail page |
 | Is the route callable? | [current Registry v2 catalog](https://api.pubfi.ai/v1/capabilities) |
 | What does the response look like? | [Runtime OpenAPI](https://api.pubfi.ai/openapi.json) and operation schema |

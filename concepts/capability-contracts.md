@@ -93,10 +93,16 @@ An operation with an effective free policy includes `x-pubfi-free-variant`. That
 ## Operation Pricing Inventory
 
 `GET https://api.pubfi.ai/v1/operation-pricing-inventory` projects every typed operation in the
-installed Registry snapshot into one public-safe `quantro.operation-pricing-inventory.v2`
-document. It identifies canonical operation keys, route revisions and closures, request bounds,
-and whether each operation is `free_health` or `merchant_priced`. It contains no selected Credit or
-x402 price and is not route-execution authority.
+installed Registry snapshot into one complete public-safe inventory. The compatibility response
+uses `quantro.operation-pricing-inventory.v2`. When x402 V2 intake is on, the response uses
+`quantro.operation-pricing-inventory.v3` and adds
+`x402_contract_version: "quantro.x402.v2"`. The v3 entry-set hash binds that contract version as
+well as the unchanged producer entries.
+
+Both schemas identify canonical operation keys, route revisions and closures, request bounds, and
+whether each operation is `free_health` or `merchant_priced`. Neither schema contains a selected
+Credit or x402 price, and neither is route-execution authority. Clients must inspect
+`schema_version` instead of assuming one inventory version.
 
 The response uses `Cache-Control: no-store`. The complete projection fails with `503` when the
 snapshot is unavailable or includes an unapproved provider, unsupported matcher, duplicate route

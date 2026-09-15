@@ -12,13 +12,19 @@ Runtime OpenAPI, and MCP metadata.
 | --- | --- | --- |
 | Homepage Markdown | Concise overview of source discovery, live contracts, route selection, and execution. | `https://pubfi.ai/index.md` |
 | About Markdown | Platform boundary, intended users, and explicit non-goals. | `https://pubfi.ai/about.md` |
+| Contact Markdown | Verified email task paths for product and API questions, partnership and integration inquiries, and account or support help. | `https://pubfi.ai/contact.md` |
 | Developers Markdown | Live catalog, capability detail, Runtime OpenAPI, hosted MCP, and execution entry points. | `https://pubfi.ai/developers.md` |
 | Products Markdown | Discovery, Registry-backed API access, hosted MCP, custom delivery, and provider-guide index. | `https://pubfi.ai/products.md` |
 | Pricing and access Markdown | Public, registered-account Credit, accountless x402, and custom-delivery access paths. | `https://pubfi.ai/pricing.md` |
 | Authentication Markdown | Public reads, API keys, MCP OAuth, account-bound free routes, and accountless x402. | `https://pubfi.ai/auth.md` |
 | `agents.md` | Public guide for Discovery, Registry, OpenAPI, MCP, and execution boundaries. | `https://pubfi.ai/agents.md` |
-| `llms.txt` | Concise public site and Discovery index. | `https://pubfi.ai/llms.txt` |
+| `llms.txt` | Concise index for public machine surfaces, runtime interfaces, guides, and blog Markdown. | `https://pubfi.ai/llms.txt` |
+| Developer LLM index | Compact OpenAPI, Registry, MCP, authentication, pricing, and execution entry point. | `https://pubfi.ai/developers/llms.txt` |
 | `llms-full.txt` | Expanded public retrieval corpus. | `https://pubfi.ai/llms-full.txt` |
+| AI Catalog | AI Catalog 1.0 manifest for the environment-matched MCP Server Card and Runtime OpenAPI. | `https://pubfi.ai/.well-known/ai-catalog.json` |
+| Agent Resource Descriptor | Ora-compatible alias that returns the exact AI Catalog body. | `https://pubfi.ai/.well-known/ard.json` |
+| API Catalog | RFC 9727 Linkset JSON that points to the environment-matched Runtime OpenAPI, API reference, Status API, and Registry catalog. | `https://pubfi.ai/.well-known/api-catalog` |
+| Blog Markdown companion | Canonical article content with absolute public links and an HTML canonical reference. | `https://pubfi.ai/blog/{slug}.md` |
 | Discovery Markdown | Agent-readable Discovery directory. | `https://pubfi.ai/discovery.md` |
 | Discovery capability-card JSON | Source-selection cards, schemas, provenance, and freshness metadata. | `https://pubfi.ai/discovery/agent-capabilities.json` |
 | Sitemap | Public indexable route inventory. | `https://pubfi.ai/sitemap.xml` |
@@ -31,13 +37,14 @@ Runtime OpenAPI, and MCP metadata.
 | Operation-pricing inventory | Complete no-store producer projection for approved operations; it contains no selected price and is not execution authority. | `https://api.pubfi.ai/v1/operation-pricing-inventory` |
 | Product status | Public component, Gateway, provider, and operation status presentation. Missing or stale evidence remains Unknown. | `https://pubfi.ai/status` |
 | Status API | No-store public-safe PubFi and Gateway status schemas. It does not replace Registry route authority. | `https://api.pubfi.ai/v1/status` |
-| API reference | Interactive HTTP reference. | `https://api.pubfi.ai/reference` |
-| Runtime OpenAPI | Executable HTTP schema for current `ready` Registry operations and API routes. | `https://api.pubfi.ai/openapi.json` |
+| API reference | Product-site alias that redirects to the selected environment's interactive HTTP reference. | `https://pubfi.ai/api-reference` |
+| Runtime OpenAPI | Product-site alias that redirects to the selected environment's executable HTTP schema. | `https://pubfi.ai/openapi.json` |
 | API-host MCP manifest | MCP discovery for clients that start from the API domain. | `https://api.pubfi.ai/.well-known/mcp.json` |
 | MCP ownership declaration | Public connector ownership metadata. | `https://api.pubfi.ai/.well-known/glama.json` |
 | Hosted MCP manifest | Hosted MCP discovery and current Registry metadata. | `https://mcp.pubfi.ai/.well-known/mcp.json` |
 | OpenAI Apps domain ownership proof | Stable public plain-text proof for OpenAI Apps domain verification. | `https://mcp.pubfi.ai/.well-known/openai-apps-challenge` |
 | MCP OAuth protected resource | OAuth resource metadata for the authenticated MCP root. | `https://mcp.pubfi.ai/.well-known/oauth-protected-resource` |
+| MCP OAuth authorization server | PubFi-owned OAuth metadata for client registration, authorization, token exchange, and revocation. | `https://mcp.pubfi.ai/.well-known/oauth-authorization-server` |
 | Accountless MCP x402 endpoint | Bearer-free MCP payment lane. | `https://mcp.pubfi.ai/x402` |
 | MCP discovery pointer | Product-site pointer to hosted MCP discovery. | `https://pubfi.ai/.well-known/mcp.json` |
 | MCP server card | Marketplace-oriented hosted MCP metadata. | `https://pubfi.ai/.well-known/mcp/server-card.json` |
@@ -58,12 +65,13 @@ Runtime OpenAPI, and MCP metadata.
 | Public docs repository | Public source and contribution history. | `https://github.com/helixbox/pubfi-docs` |
 | Canonical docs site | Full long-form documentation. | `https://docs.pubfi.ai` |
 
-The landing, About, Developers, Products, and Pricing HTML pages share their content with these
-Markdown companions. External `GET` and `HEAD` requests can also select Markdown on the canonical
-HTML path with `Accept: text/markdown`. HTML is the default, equal preference resolves to HTML,
-and a request that accepts neither HTML nor Markdown receives `406`. Negotiated responses are
-private and no-store and set `Vary: Accept`. Unknown public paths return representation-aware
-`404` responses with safe recovery links; private application paths retain their normal handling.
+The landing, About, Contact, Developers, Products, and Pricing HTML pages share their content with
+these Markdown companions. External `GET` and `HEAD` requests can also select Markdown on the
+canonical HTML path with `Accept: text/markdown`. HTML is the default, equal preference resolves to
+HTML, and a request that accepts neither HTML nor Markdown receives `406`. Negotiated responses
+are private and no-store and set `Vary: Accept`. Unknown public paths return
+representation-aware `404` responses with safe recovery links; private application paths retain
+their normal handling.
 
 ## Staging Boundary
 
@@ -120,12 +128,15 @@ Use the surfaces in this order for runtime work:
    instead of returning a partial projection.
 4. Use `/v1/status` and `/v1/status/gateway` for public-safe operational evidence. Treat
    `unknown` as missing, stale, or incoherent evidence, not health or route availability. Status
-   counts source operations separately from Registry route variants. Operation signals identify
-   the responsible owner layer, and incidents move through `suspect`, `open`, `recovering`, or
-   `resolved`. Schema `pubfi.status.gateway.v2` separates offered and unoffered operations and
+   counts logical API operations separately from source operations and Registry route variants.
+   Operation signals identify the responsible owner layer, and incidents move through `suspect`,
+   `open`, `recovering`, or `resolved`. Schema `pubfi.status.gateway.v2` separates offered and
+   unoffered operations and
    reports monitoring coverage, nullable health, and evidence status. Deliberately inapplicable
    monitoring is not unknown health. `operation_pricing_status` reports paid-execution pricing
    separately from provider and PubFi proxy signals.
+   Seven-day history uses six-hour segments. It reports active-target coverage separately from
+   passive provider request totals and separates PubFi-affected from upstream-affected requests.
 5. Use MCP `tools/list` on the selected endpoint for current MCP schemas. The authenticated root
    declares OAuth for both execution tools and includes compact runtime-upgrade proof outcomes;
    `/x402` retains three no-auth tools and only free-health or x402 outcomes. Use

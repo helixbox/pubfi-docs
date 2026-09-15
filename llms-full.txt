@@ -91,10 +91,13 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
   `atomic_amount: "1000"` (0.001 USDC) for every priced Subscan and DeGov operation. Confirm the
   installed values in the selected environment before execution.
 - `GET https://api.pubfi.ai/v1/operation-pricing-inventory` returns the complete public-safe
-  `quantro.operation-pricing-inventory.v2` producer projection for the installed snapshot. It
-  contains canonical route facts and `free_health` or `merchant_priced` classification, but no
-  selected price or execution authority. It uses `Cache-Control: no-store` and returns `503`
-  instead of a partial inventory when the complete approved projection cannot be formed.
+  producer projection for the installed snapshot. The compatibility response uses
+  `quantro.operation-pricing-inventory.v2`. When x402 V2 intake is on, the response uses
+  `quantro.operation-pricing-inventory.v3` with
+  `x402_contract_version: "quantro.x402.v2"`. It contains canonical route facts and `free_health`
+  or `merchant_priced` classification, but no selected price or execution authority. It uses
+  `Cache-Control: no-store` and returns `503` instead of a partial inventory when the complete
+  approved projection cannot be formed.
 - Registry execution matches an exact path and method. A successful HTTP operation returns the
   provider's exact bounded body plus PubFi request and Registry-generation headers.
 - Every bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and exact body.
@@ -213,12 +216,19 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - MCP manifest: https://mcp.pubfi.ai/.well-known/mcp.json
 - OpenAI Apps domain ownership proof: https://mcp.pubfi.ai/.well-known/openai-apps-challenge
 - MCP OAuth protected resource: https://mcp.pubfi.ai/.well-known/oauth-protected-resource
+- MCP OAuth authorization server: https://mcp.pubfi.ai/.well-known/oauth-authorization-server
 - MCP discovery pointer: https://pubfi.ai/.well-known/mcp.json
 - MCP server card: https://pubfi.ai/.well-known/mcp/server-card.json
+- AI Catalog: https://pubfi.ai/.well-known/ai-catalog.json
+- Agent Resource Descriptor: https://pubfi.ai/.well-known/ard.json
+- RFC 9727 API Catalog: https://pubfi.ai/.well-known/api-catalog
 - Optional MCP registry auth proof route: https://pubfi.ai/.well-known/mcp-registry-auth
 - Agents guide: https://pubfi.ai/agents.md
 - Product LLM index: https://pubfi.ai/llms.txt
+- Developer LLM index: https://pubfi.ai/developers/llms.txt
 - Product LLM full export: https://pubfi.ai/llms-full.txt
+- Environment-matched API reference: https://pubfi.ai/api-reference
+- Environment-matched Runtime OpenAPI: https://pubfi.ai/openapi.json
 - Discovery capability-card JSON: https://pubfi.ai/discovery/agent-capabilities.json
 - Agent interface guide: https://docs.pubfi.ai/reference/agent-interface
 - MCP client guides: https://docs.pubfi.ai/getting-started/mcp-clients
@@ -230,7 +240,9 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - Pricing: https://pubfi.ai/pricing
 - Status: https://pubfi.ai/status
 - Partners: https://pubfi.ai/partners
+- Contact: https://pubfi.ai/contact
 - Blog: https://pubfi.ai/blog
+- Blog Markdown companions: https://pubfi.ai/blog/{slug}.md
 - Product pages: https://pubfi.ai/products/subscan-api, https://pubfi.ai/products/degov-api, https://pubfi.ai/products/insight-api, https://pubfi.ai/products/defi-api
 - Sitemap: https://pubfi.ai/sitemap.xml
 - Robots policy: https://pubfi.ai/robots.txt
@@ -240,6 +252,7 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - Terms of service: https://pubfi.ai/terms-of-service
 - Homepage Markdown: https://pubfi.ai/index.md
 - About Markdown: https://pubfi.ai/about.md
+- Contact Markdown: https://pubfi.ai/contact.md
 - Developers Markdown: https://pubfi.ai/developers.md
 - Products Markdown: https://pubfi.ai/products.md
 - Pricing and access Markdown: https://pubfi.ai/pricing.md
@@ -250,10 +263,13 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 
 The public no-store status contracts use `pubfi.status.v1` and `pubfi.status.gateway.v2` with
 `operational`, `degraded`, `major_outage`, or `unknown`. Missing, stale, or incoherent evidence is
-`unknown`. Gateway summaries count source operations separately from Registry route variants.
-Operation status binds source, route, and monitor identities; signals identify the responsible
-owner layer. Schema v2 separates offered and unoffered operations and reports monitoring coverage,
-nullable health, and evidence status. Deliberately inapplicable monitoring is not unknown health.
+`unknown`. Gateway summaries count logical API operations separately from source operations and
+Registry route variants. Operation status binds logical API, source, route, and monitor identities;
+signals identify the responsible owner layer. Schema v2 separates offered and unoffered operations
+and reports monitoring coverage, nullable health, and evidence status. Deliberately inapplicable
+monitoring is not unknown health. Seven-day history uses six-hour segments and separates active
+target coverage from passive provider-request totals, including PubFi-affected and
+upstream-affected counts.
 Incidents use `suspect`, `open`, `recovering`, or `resolved` state. Status is operational evidence,
 not Registry route authority or proof that a purchase or x402 offer is available. Gateway
 summaries expose `operation_pricing_status`; a known pricing outage blocks paid execution without
