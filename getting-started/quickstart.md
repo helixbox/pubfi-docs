@@ -23,7 +23,7 @@ use the same PubFi authentication and access-selection rules.
 Before running it, open the [API Reference](https://api.pubfi.ai/reference) and find
 `GET /v1/gateway/subscan/api/now`. Confirm that the operation advertises
 `x-pubfi-free-variant` with suffix `:free`. If it is absent, do not run this example or remove
-its suffix to try a paid request. See [Gateway Examples](/reference/provider-gateway-examples)
+its suffix to try a paid request. See [Use The PubFi Gateway](/reference/provider-gateway-examples)
 to select another advertised free operation.
 
 The API Reference describes the installed routes. This example does not guarantee that the
@@ -77,7 +77,7 @@ When requesting help, include the method, path, redacted request body, status, e
 ## Next Steps
 
 - [Subscan](/providers/subscan): network selection, rewards, and transfers.
-- [Gateway Examples](/reference/provider-gateway-examples): discovery, POST bodies, and free or paid requests.
+- [Use The PubFi Gateway](/reference/provider-gateway-examples): discovery, POST bodies, and free or paid requests.
 - [API Key And Runtime](/getting-started/api-key-runtime): account access and quotas.
 - [MCP Client Setup](/getting-started/mcp-client): connect an agent.
 - [Accountless x402](/getting-started/x402): use a separately eligible payment flow.
