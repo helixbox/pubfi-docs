@@ -54,6 +54,7 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 - Pricing: https://pubfi.ai/pricing
 - Status: https://pubfi.ai/status
 - Partners: https://pubfi.ai/partners
+- Contact: https://pubfi.ai/contact
 - Blog: https://pubfi.ai/blog
 - Product pages: https://pubfi.ai/products/subscan-api, https://pubfi.ai/products/degov-api, https://pubfi.ai/products/insight-api, https://pubfi.ai/products/defi-api
 - Discovery: https://pubfi.ai/discovery
@@ -67,13 +68,21 @@ Public documentation for PubFi's agent-native crypto data layer and signed Regis
 - Terms of service: https://pubfi.ai/terms-of-service
 - Homepage Markdown: https://pubfi.ai/index.md
 - About Markdown: https://pubfi.ai/about.md
+- Contact Markdown: https://pubfi.ai/contact.md
 - Developers Markdown: https://pubfi.ai/developers.md
 - Products Markdown: https://pubfi.ai/products.md
 - Pricing and access Markdown: https://pubfi.ai/pricing.md
 - Authentication Markdown: https://pubfi.ai/auth.md
 - Agents guide: https://pubfi.ai/agents.md
 - Product LLM index: https://pubfi.ai/llms.txt
+- Developer LLM index: https://pubfi.ai/developers/llms.txt
 - Product LLM full export: https://pubfi.ai/llms-full.txt
+- AI Catalog: https://pubfi.ai/.well-known/ai-catalog.json
+- Agent Resource Descriptor: https://pubfi.ai/.well-known/ard.json
+- RFC 9727 API Catalog: https://pubfi.ai/.well-known/api-catalog
+- Environment-matched API reference: https://pubfi.ai/api-reference
+- Environment-matched Runtime OpenAPI: https://pubfi.ai/openapi.json
+- MCP OAuth authorization server: https://mcp.pubfi.ai/.well-known/oauth-authorization-server
 - Discovery capability-card JSON: https://pubfi.ai/discovery/agent-capabilities.json
 - Agent interface guide: https://docs.pubfi.ai/reference/agent-interface
 - Agent-readable surfaces: https://docs.pubfi.ai/agent-readable/surfaces
@@ -125,10 +134,13 @@ DeGov operation and uses a $1/1,000-Credit registered-purchase base. Confirm ins
 offer availability from the current catalog, Runtime OpenAPI, and offer response. Purchase
 creation requires the current offer key, exact catalog release hash, amount, accepted terms
 version and hash, and `Idempotency-Key`.
-The public no-store `quantro.operation-pricing-inventory.v2` inventory projects every approved
-typed plan in the installed snapshot as `free_health` or `merchant_priced`. It contains no selected
-price, is not execution authority, and returns `503` instead of a partial inventory when the
-complete projection cannot be formed.
+The public no-store operation-pricing inventory projects every approved typed plan in the installed
+snapshot as `free_health` or `merchant_priced`. The compatibility response uses
+`quantro.operation-pricing-inventory.v2`. When x402 V2 intake is on, the response uses
+`quantro.operation-pricing-inventory.v3` with
+`x402_contract_version: "quantro.x402.v2"`. It contains no selected price, is not execution
+authority, and returns `503` instead of a partial inventory when the complete projection cannot be
+formed.
 Every bounded provider HTTP `2xx`, `4xx`, or `5xx` response keeps its status and exact body. PubFi
 uses a safe parameter-free media type. These are provider responses, not PubFi gateway-error
 envelopes. Buffered overflow returns HTTP `502` with
@@ -138,13 +150,16 @@ result returns one HTTPS `resource_link` and compact status, media type, byte co
 expiry, and URI metadata without inline provider bytes.
 The public no-store status APIs use `operational`, `degraded`, `major_outage`, or `unknown`.
 Missing, stale, or incoherent evidence stays `unknown`; status does not replace the Registry
-catalog as route authority. Gateway summaries count source operations separately from Registry
-route variants. Operation signals identify the responsible owner layer, and incidents use
+catalog as route authority. Gateway summaries count logical API operations separately from source
+operations and Registry route variants. Operation status binds logical API, source, route, and
+monitor identities. Operation signals identify the responsible owner layer, and incidents use
 `suspect`, `open`, `recovering`, or `resolved` state. Schema `pubfi.status.gateway.v2` separates
 offered and unoffered operations and reports monitoring coverage, nullable health, and evidence
 status. Deliberately inapplicable monitoring is not unknown health. `operation_pricing_status`
 reports whether paid execution pricing is available without replacing independent provider or
 PubFi proxy evidence.
+Seven-day status history uses six-hour segments. It separates active-target coverage from passive
+provider request totals and separates PubFi-affected from upstream-affected requests.
 
 MCP `tools/list` is endpoint-specific. The authenticated root declares `oauth2` with no scopes for
 both execution tools and exposes free-health, account-free, account-paid, and compact runtime-

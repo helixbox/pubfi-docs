@@ -21,8 +21,8 @@ separate commerce or payment contract.
 - PubFi uses this data to authenticate the user, enforce the current catalog and account
   entitlement, execute the requested route, prevent abuse, support replay or disputes, and
   operate the service.
-- Recipients can include PubFi infrastructure and service providers, Supabase authentication,
-  and the selected upstream data provider when a route executes.
+- Recipients can include PubFi infrastructure and service providers and the selected upstream data
+  provider when a route executes.
 - Paid request identity is bound by a hash and canonical route identity; the account execution
   path does not retain full paid request bodies as request-body records.
 - Current retention is tied to the applicable billing-account or service-record lifetime unless a

@@ -63,7 +63,7 @@ era.
 The endpoints separate account execution from payment execution:
 
 - The authenticated root accepts one Bearer credential for `pubfi.route.execute` and
-  `pubfi.substrate.runtime_upgrade.verify`: a `pf_sk_v1_` PubFi API key or a Supabase OAuth access
+  `pubfi.substrate.runtime_upgrade.verify`: a `pf_sk_v1_` PubFi API key or a PubFi OAuth access
   token. Both use account admission and allocation. Invalid credentials never fall back to the
   other credential type or to x402. `X-PubFi-Api-Key` is not accepted.
 - The explicit `/x402` endpoint uses a wallet payment for one eligible request. It rejects

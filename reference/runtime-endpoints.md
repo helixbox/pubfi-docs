@@ -40,7 +40,7 @@ The corresponding Staging API root is `https://api-stg.pubfi.ai`. Fetch that env
 | `GET` | `/v1/status/gateway/providers/{provider_key}` | Public-safe status and operation detail for one active provider. |
 | `GET` | `/v1/status/gateway/operations/{capability_id}` | Public-safe status detail for one active Registry operation. |
 | `GET` | `/v1/capabilities` | Public paginated `pubfi.gateway.registry.capability-page.v5` catalog. |
-| `GET` | `/v1/operation-pricing-inventory` | Public no-store `quantro.operation-pricing-inventory.v2` projection for the complete installed snapshot. |
+| `GET` | `/v1/operation-pricing-inventory` | Public no-store v2 or contract-aware v3 projection for the complete installed snapshot. |
 | `GET` | `/.well-known/mcp.json` | API-host MCP discovery manifest. |
 | `GET` | `/.well-known/glama.json` | Public MCP connector ownership declaration. |
 | `GET` | `/.well-known/openai-apps-challenge` | Stable public plain-text proof for OpenAI Apps domain verification. |
@@ -53,8 +53,12 @@ response schemas.
 
 `GET /v1/operation-pricing-inventory` exposes canonical operation keys, route revisions and
 closures, request bounds, and `free_health` or `merchant_priced` classification for every approved
-typed plan. It contains no selected price and has no route-selection or execution authority. It
-returns `503` if the complete projection cannot be formed; it does not return a partial inventory.
+typed plan. It contains no selected price and has no route-selection or execution authority. The
+compatibility response is `quantro.operation-pricing-inventory.v2`. When x402 V2 intake is on, the
+route returns `quantro.operation-pricing-inventory.v3` with
+`x402_contract_version: "quantro.x402.v2"`; that value participates in the v3 entry-set hash.
+Clients must inspect `schema_version`. The route returns `503` if the complete projection cannot be
+formed; it does not return a partial inventory.
 
 The Runtime OpenAPI includes only current `ready` Registry operations. If the API has no valid
 programmed snapshot, it marks the Registry as unavailable and does not use a static provider
@@ -66,16 +70,18 @@ treated as healthy. Status is public-safe evidence about current PubFi component
 coverage, providers, and active operations. It does not replace the Registry catalog as route
 authority or prove that a purchase offer or x402 challenge is available.
 
-Status counts one source operation for each provider, method, and canonical upstream path. One
-source operation can have more than one Registry route variant. In Gateway summaries,
-`active_operations` counts source operations and `active_route_variants` counts route variants.
-`operation_coverage` reports both counts, separates `offered` from `not_offered`, and classifies
+Status counts logical API operations separately from source operations and Registry route
+variants. One logical API operation can have more than one source operation or route variant. In
+Gateway summaries, `active_operations` counts logical API operations and
+`active_route_variants` counts route variants. `operation_coverage` reports `api_operations`,
+`source_operations`, and `route_variants`, separates `offered` from `not_offered`, and classifies
 monitoring as `continuous`, `manual`, `not_applicable`, or `unreviewed`. Provider summaries use the
-same distinctions.
+same logical API grouping.
 
-Operation status includes `source_operation_key`, `source_revision_key`, `route_variant_key`, and
-an optional `monitor_target_key`. These values bind source, route, and monitoring evidence. They
-are not executable gateway paths. `support_status` is `offered` or `not_offered`;
+Operation status includes `api_operation_key`, `source_operation_key`, `source_revision_key`,
+`route_variant_key`, and an optional `monitor_target_key`. These values bind logical API, source,
+route, and monitoring evidence. They are not executable gateway paths. `support_status` is
+`offered` or `not_offered`;
 `monitoring_coverage` names the monitoring class; nullable `health_status` is present only for
 continuous monitoring; and `evidence_status` is `current`, `missing`, `stale`,
 `missing_or_stale`, or `not_applicable`. A deliberately unoffered or inapplicable operation does
@@ -87,6 +93,13 @@ or gateway failure.
 Gateway summaries expose `operation_pricing_status` separately from provider and PubFi proxy
 evidence. A known pricing outage is `major_outage` because paid execution is blocked, but it does
 not replace independent provider or proxy signals. Missing pricing evidence remains `unknown`.
+
+The Gateway response includes seven days of history in six-hour segments. New fields report
+`active_expected_targets`, `active_passed_targets`, `active_failed_targets`,
+`active_unknown_targets`, and `active_check_percentage`. Passive fields report
+`provider_request_total`, `provider_request_success`, `pubfi_affected_requests`, and
+`upstream_affected_requests`. Compatibility target-count fields remain present. These counts are
+operational evidence, not uptime percentages or route authority.
 
 ### Gateway Route
 
@@ -189,7 +202,10 @@ Current endpoint families:
 - `GET /version`;
 - `GET /.well-known/mcp.json`;
 - `GET /.well-known/openai-apps-challenge`; and
-- `GET /.well-known/oauth-protected-resource`.
+- `GET /.well-known/oauth-protected-resource`;
+- `GET /.well-known/oauth-authorization-server` for PubFi-owned OAuth metadata; and
+- `/oauth/register`, `/oauth/authorize`, `/oauth/token`, and `/oauth/revoke` for the advertised
+  OAuth protocol flow.
 
 The handshake, ping, `tools/list`, resource listing, and prompt listing methods are public.
 On the root endpoint, `pubfi.route.execute` and `pubfi.substrate.runtime_upgrade.verify` accept a
@@ -222,25 +238,31 @@ The corresponding Staging web root is `https://stg.pubfi.ai`.
 
 Current public endpoint families include:
 
-- `/`, `/about`, `/developers`, `/products`, `/pricing`, `/status`, `/blog`, `/blog/{slug}`, and
-  `/products/{slug}`;
-- `/discovery` and its source, category, chain, comparison, topic, and Markdown routes;
+- `/`, `/about`, `/contact`, `/developers`, `/partners`, `/products`, `/pricing`, `/status`,
+  `/blog`, `/blog/{slug}`, and `/products/{slug}`;
+- `/discovery`, its `/discovery/sources` directory and pagination, and its source, category, chain,
+  comparison, topic, and Markdown routes;
 - `/login`, `/oauth/consent`, `/privacy-policy`, and `/terms-of-service`;
-- `/index.md`, `/about.md`, `/developers.md`, `/products.md`, `/pricing.md`, and `/auth.md`;
-- `/agents.md`, `/llms.txt`, and `/llms-full.txt`;
+- `/index.md`, `/about.md`, `/contact.md`, `/developers.md`, `/products.md`, `/pricing.md`, and
+  `/auth.md`;
+- `/agents.md`, `/llms.txt`, `/developers/llms.txt`, and `/llms-full.txt`;
+- `/blog/{slug}.md` for canonical article Markdown companions;
+- `/openapi.json`, `/api-reference`, and `/api` as `307` redirects to the request environment's API;
 - `/sitemap.xml` and `/robots.txt`;
 - `/discovery/agent-capabilities.json`;
+- `/.well-known/api-catalog` for the environment-matched RFC 9727 API Linkset;
+- `/.well-known/ai-catalog.json` and `/.well-known/ard.json`, which return the same catalog body;
 - `/.well-known/mcp.json`;
 - `/.well-known/mcp/server-card.json`; and
 - `/.well-known/mcp-registry-auth`, which is optional and can return `404`.
 
 Legacy `/docs` routes redirect to `https://docs.pubfi.ai`.
 
-External `GET` and `HEAD` requests to `/`, `/about`, `/developers`, `/products`, and `/pricing`
-can select the shared Markdown representation with `Accept: text/markdown`. HTML remains the
-default. These responses set `Vary: Accept`; negotiated Markdown is private and no-store. A request
-that accepts neither HTML nor Markdown returns `406`. Unknown public paths return an HTML or
-Markdown `404` according to the same preference, while Next.js internal navigation and private
+External `GET` and `HEAD` requests to `/`, `/about`, `/contact`, `/developers`, `/products`, and
+`/pricing` can select the shared Markdown representation with `Accept: text/markdown`. HTML remains
+the default. These responses set `Vary: Accept`; negotiated Markdown is private and no-store. A
+request that accepts neither HTML nor Markdown returns `406`. Unknown public paths return an HTML
+or Markdown `404` according to the same preference, while Next.js internal navigation and private
 application paths retain normal handling.
 
 ## Public-Safe Rule

@@ -63,6 +63,8 @@ Snapshot sources:
 - Staging MCP: `https://mcp-stg.pubfi.ai`
 - Staging MCP x402: `https://mcp-stg.pubfi.ai/x402`
 - Pricing: `https://pubfi.ai/pricing`
+- Contact: `https://pubfi.ai/contact`
+- Partners: `https://pubfi.ai/partners`
 - Blog: `https://pubfi.ai/blog`
 - Product pages: `https://pubfi.ai/products/{product_slug}`
 - Discovery: `https://pubfi.ai/discovery`
@@ -76,14 +78,23 @@ Snapshot sources:
 - Terms of service: `https://pubfi.ai/terms-of-service`
 - Agents guide: `https://pubfi.ai/agents.md`
 - Product LLM index: `https://pubfi.ai/llms.txt`
+- Developer LLM index: `https://pubfi.ai/developers/llms.txt`
 - Product LLM full export: `https://pubfi.ai/llms-full.txt`
+- AI Catalog: `https://pubfi.ai/.well-known/ai-catalog.json`
+- Agent Resource Descriptor: `https://pubfi.ai/.well-known/ard.json`
+- RFC 9727 API Catalog: `https://pubfi.ai/.well-known/api-catalog`
 - Discovery capability-card JSON: `https://pubfi.ai/discovery/agent-capabilities.json`
+- Contact Markdown: `https://pubfi.ai/contact.md`
+- Blog Markdown companions: `https://pubfi.ai/blog/{slug}.md`
+- Environment-matched API reference: `https://pubfi.ai/api-reference`
+- Environment-matched OpenAPI schema: `https://pubfi.ai/openapi.json`
 - Interactive API reference: `https://api.pubfi.ai/reference`
 - OpenAPI schema: `https://api.pubfi.ai/openapi.json`
 - API-host MCP manifest: `https://api.pubfi.ai/.well-known/mcp.json`
 - MCP manifest: `https://mcp.pubfi.ai/.well-known/mcp.json`
 - OpenAI Apps domain ownership proof: `https://mcp.pubfi.ai/.well-known/openai-apps-challenge`
 - MCP OAuth protected resource: `https://mcp.pubfi.ai/.well-known/oauth-protected-resource`
+- MCP OAuth authorization server: `https://mcp.pubfi.ai/.well-known/oauth-authorization-server`
 - MCP x402 endpoint: `https://mcp.pubfi.ai/x402`
 - MCP discovery pointer: `https://pubfi.ai/.well-known/mcp.json`
 - MCP server card: `https://pubfi.ai/.well-known/mcp/server-card.json`

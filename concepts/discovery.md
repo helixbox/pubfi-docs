@@ -19,12 +19,17 @@ Discovery helps humans and agents:
 
 Canonical public routes include:
 
-- `/discovery`
+- `/discovery` for the overview
+- `/discovery/sources` for the searchable and filterable source directory
+- `/discovery/sources/page/{page}` for crawlable directory pagination
 - `/discovery/api/{source_slug}`
 - `/discovery/category/{slug}`
 - `/discovery/chain/{slug}`
 - `/discovery/compare/{slug-a}-vs-{slug-b}`
 - `/discovery/topic/{slug}`
+
+Use the overview to understand the evidence layers and integration paths. Use the source directory
+to browse or filter provider profiles.
 
 ## Discovery Is Not Execution
 
