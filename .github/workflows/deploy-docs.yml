@@ -1,0 +1,82 @@
+name: Deploy exact docs source
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+      source_sha:
+        required: true
+        type: string
+      staging_run_id:
+        type: string
+        default: ''
+    secrets:
+      VERCEL_TOKEN:
+        required: true
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: pubfi-docs-${{ inputs.target }}
+  cancel-in-progress: false
+  queue: max
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DOCS_SOURCE_SHA: ${{ inputs.source_sha }}
+      DOCS_TARGET: ${{ inputs.target }}
+      DOCS_STAGING_RUN_ID: ${{ inputs.staging_run_id }}
+    steps:
+      - name: Fetch trusted release helper
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          path: authority
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - name: Authorize exact source before deployment credentials
+        working-directory: authority
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node --experimental-strip-types scripts/docs-release.ts authorize
+      - name: Fetch exact approved source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ inputs.source_sha }}
+          path: source
+          persist-credentials: false
+      - name: Build and deploy
+        id: vercel
+        uses: darwinia-network/devops/actions/smart-vercel@c95f58a0786a9ddbaf0a8271276dc2774c4a6bf0
+        with:
+          node_version: 24
+          vercel_token: ${{ secrets.VERCEL_TOKEN }}
+          vercel_group: itering
+          cache_type: npm
+          workdir: source
+          script_install: npm ci
+          script_build: |
+            npm run check
+            npx --yes mint@latest validate
+            npx --yes mint@latest export --output export.zip
+            mkdir -p dist
+            unzip -q export.zip -d dist
+            npm run build:static-assets
+            node --experimental-strip-types ../authority/scripts/docs-release.ts stamp
+          dist_path: source/dist
+          vercel_json_path: source/vercel.json
+          preview_output: true
+          project_name: pubfi-docs
+          prod_mode: ${{ inputs.target == 'production' && 'true' || '' }}
+          alias_domain: ${{ inputs.target == 'production' && 'docs.pubfi.ai' || 'pubfi-docs-stg' }}
+          enable_cache: true
+      - name: Accept the public deployed revision
+        env:
+          DOCS_DEPLOYMENT_LINKS: ${{ steps.vercel.outputs.PREVIEW_LINK }}
+        run: node --experimental-strip-types authority/scripts/docs-release.ts accept
