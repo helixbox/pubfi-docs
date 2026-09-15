@@ -69,8 +69,8 @@ jobs:
             unzip -q export.zip -d dist
             npm run build:static-assets
             node --experimental-strip-types ../authority/scripts/docs-release.ts stamp
-          dist_path: source/dist
-          vercel_json_path: source/vercel.json
+          dist_path: dist
+          vercel_json_path: vercel.json
           preview_output: true
           project_name: pubfi-docs
           prod_mode: ${{ inputs.target == 'production' && 'true' || '' }}

@@ -50,3 +50,11 @@ test('a legacy build or skipped acceptance is not deployment proof', () => {
   assert.throws(() => validateStagingAcceptance([{ ...accepted, conclusion: 'failure' }]));
   assert.throws(() => validateStagingAcceptance([accepted, accepted]));
 });
+
+test('the deployment action resolves artifacts relative to its source working directory', async () => {
+  const { readFileSync } = await import('node:fs');
+  const workflow = readFileSync('.github/workflows/deploy-docs.yml', 'utf8');
+  assert.match(workflow, /workdir: source/u);
+  assert.match(workflow, /dist_path: dist/u);
+  assert.doesNotMatch(workflow, /dist_path: source\/dist/u);
+});
