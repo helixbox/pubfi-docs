@@ -29,7 +29,7 @@ clients cannot request or inspect per-key scopes. Listing billing accounts, mana
 all purchase operations require an authenticated human dashboard session. Key management requires
 Owner or Admin membership.
 
-Create keys from the PubFi dashboard under **Manage application keys**. Copy the key when it is
+Create keys from the PubFi Console under **API keys**. Copy the key when it is
 shown, because the full secret is displayed only once. The runtime assigns the key environment.
 The dashboard does not ask you to select one, and the create API accepts only a name:
 

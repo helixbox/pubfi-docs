@@ -82,8 +82,6 @@ preference with a `404`; private application paths do not use that fallback.
 - `https://api.pubfi.ai/v1/operation-pricing-inventory`
 - `https://api.pubfi.ai/v1/status`
 - `https://api.pubfi.ai/v1/status/gateway`
-- `https://api.pubfi.ai/v1/status/gateway/providers/{provider_key}`
-- `https://api.pubfi.ai/v1/status/gateway/operations/{capability_id}`
 
 `/v1/capabilities` is the public catalog for the installed Registry v2 generation. Runtime OpenAPI
 is the executable HTTP schema for current `ready` operations. PubFi does not publish separate
@@ -193,15 +191,16 @@ specific route, x402 offer, registered purchase offer, provider response, or pay
 Apply the same rule to the corresponding Staging status surfaces.
 
 The public `/status` page presents the no-store `pubfi.status.v1` and
-`pubfi.status.gateway.v2` contracts from `/v1/status` and `/v1/status/gateway`.
-Provider detail comes from the provider status route. The status APIs report `unknown` when
-evidence is missing, stale, or incoherent; they do not convert missing evidence into an empty
-successful state. Gateway summaries count logical API operations separately from source operations
-and Registry route variants, and separate offered operations from unoffered operations. Operation
-detail binds API, source, route, and monitor identities and distinguishes monitoring coverage,
-nullable health, and evidence status. Deliberately inapplicable monitoring is not unknown health.
-Signals identify the responsible owner layer. Incident state can be `suspect`, `open`,
-`recovering`, or `resolved`. Seven-day history uses six-hour segments. It reports active expected,
+`pubfi.status.gateway.v3` contracts from `/v1/status` and `/v1/status/gateway`.
+Provider summaries and sentinel observations come from `/v1/status/gateway`. Missing, stale, or
+incoherent evidence is not treated as healthy. A known failure remains visible when other
+observations are missing. Gateway summaries count logical API operations separately from source
+operations and Registry route variants, and separate offered operations from unoffered operations.
+Provider summaries separate reachability from operation-family health. Their evidence status is
+`current`, `missing_or_stale`, `stale`, or `unverified`; daily request metrics do not prove current
+health. Provider and operation detail endpoints are no longer public Status routes.
+Incidents identify the responsible owner layer. Incident state can be `suspect`, `open`,
+`recovering`, or `resolved`. Thirty-day history uses six-hour segments. It reports active expected,
 passed, failed, and unknown targets with an active-check percentage, plus passive provider request
 totals and separate PubFi-affected and upstream-affected counts. Status does not replace the
 current Registry catalog as execution authority.

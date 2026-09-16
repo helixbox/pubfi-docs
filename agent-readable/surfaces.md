@@ -129,14 +129,16 @@ Use the surfaces in this order for runtime work:
 4. Use `/v1/status` and `/v1/status/gateway` for public-safe operational evidence. Treat
    `unknown` as missing, stale, or incoherent evidence, not health or route availability. Status
    counts logical API operations separately from source operations and Registry route variants.
-   Operation signals identify the responsible owner layer, and incidents move through `suspect`,
-   `open`, `recovering`, or `resolved`. Schema `pubfi.status.gateway.v2` separates offered and
-   unoffered operations and
-   reports monitoring coverage, nullable health, and evidence status. Deliberately inapplicable
-   monitoring is not unknown health. `operation_pricing_status` reports paid-execution pricing
-   separately from provider and PubFi proxy signals.
-   Seven-day history uses six-hour segments. It reports active-target coverage separately from
-   passive provider request totals and separates PubFi-affected from upstream-affected requests.
+   Schema `pubfi.status.gateway.v3` includes provider summaries and sentinel observations.
+   Provider summaries separate reachability from operation-family health and report `current`,
+   `missing_or_stale`, `stale`, or `unverified` evidence. Known failures remain visible when other
+   observations are missing. Daily request metrics do not prove current health. Provider and
+   operation detail endpoints are no longer public Status routes. Incidents identify the
+   responsible owner layer and move through `suspect`, `open`, `recovering`, or `resolved`.
+   `operation_pricing_status` reports paid-execution pricing separately from provider and PubFi
+   proxy signals. Thirty-day history uses six-hour segments. It reports active-target coverage
+   separately from passive provider request totals and separates PubFi-affected from
+   upstream-affected requests.
 5. Use MCP `tools/list` on the selected endpoint for current MCP schemas. The authenticated root
    declares OAuth for both execution tools and includes compact runtime-upgrade proof outcomes;
    `/x402` retains three no-auth tools and only free-health or x402 outcomes. Use

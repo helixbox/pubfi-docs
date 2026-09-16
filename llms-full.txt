@@ -263,13 +263,15 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - Discovery directory Markdown: https://pubfi.ai/discovery.md
 - Provider Profile index: https://pubfi.ai/discovery/sources
 
-The public no-store status contracts use `pubfi.status.v1` and `pubfi.status.gateway.v2` with
+The public no-store status contracts use `pubfi.status.v1` and `pubfi.status.gateway.v3` with
 `operational`, `degraded`, `major_outage`, or `unknown`. Missing, stale, or incoherent evidence is
 `unknown`. Gateway summaries count logical API operations separately from source operations and
-Registry route variants. Operation status binds logical API, source, route, and monitor identities;
-signals identify the responsible owner layer. Schema v2 separates offered and unoffered operations
-and reports monitoring coverage, nullable health, and evidence status. Deliberately inapplicable
-monitoring is not unknown health. Seven-day history uses six-hour segments and separates active
+Registry route variants. Schema v3 includes provider summaries and sentinel observations.
+Provider summaries separate reachability from operation-family health and report `current`,
+`missing_or_stale`, `stale`, or `unverified` evidence. Known failures remain visible when other
+observations are missing. Daily request metrics do not prove current health. Provider and
+operation detail endpoints are no longer public Status routes.
+Thirty-day history uses six-hour segments and separates active
 target coverage from passive provider-request totals, including PubFi-affected and
 upstream-affected counts.
 Incidents use `suspect`, `open`, `recovering`, or `resolved` state. Status is operational evidence,
