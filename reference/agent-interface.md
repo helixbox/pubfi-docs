@@ -121,15 +121,14 @@ provider media type, byte size, and `audience: ["user"]`. Follow the capability 
 to receive the original status, media type, and exact bytes. PubFi does not publish generic
 artifact resources, templates, or a resource-read tool.
 
-An exact `free_health` execution uses `execution_status: free_health_executed` and
-`billing.mode: free_health` on either MCP endpoint. It is distinct from an authenticated
-account-free `:free` result, which uses `execution_status: registry_free_route_executed` and
-`credits_charged: 0`.
+The output schema retains `free_health_executed` and `free_health` for compatibility. These
+values do not make upstream health operations free. An advertised account-free `:free` result
+uses `execution_status: registry_free_route_executed` and `credits_charged: 0`.
 
 Catalog and detail schema v5 expose billing under the selected method's `operations[]` entry.
 `quantro_priced` carries a positive `credit_cost` and independent x402 terms under one immutable
-price version. `free_health` is public and has no Credit or x402 charge. `pricing_unavailable`
-cannot enter a paid execution lane.
+price version. Relayed upstream health operations follow the same pricing rules.
+`pricing_unavailable` cannot enter a paid execution lane and does not fall back to free access.
 
 An optional capability-level `free_rate_limit` advertises that the exact `GET` or `POST` operation
 has an API-key-authenticated free variant. Its required fields are `requests_per_window`,

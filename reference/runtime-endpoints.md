@@ -50,7 +50,7 @@ manifest, compact capability summaries, and current `ready` or `blocked` state. 
 response schemas.
 
 `GET /v1/operation-pricing-inventory` exposes canonical operation keys, route revisions and
-closures, request bounds, and `free_health` or `merchant_priced` classification for every approved
+closures, request bounds, and `merchant_priced` classification for every approved
 typed plan. It contains no selected price and has no route-selection or execution authority. The
 compatibility response is `quantro.operation-pricing-inventory.v2`. When x402 V2 intake is on, the
 route returns `quantro.operation-pricing-inventory.v3` with
@@ -122,9 +122,9 @@ The gateway has two separate caller lanes:
 Do not send `Authorization` or `X-PubFi-Api-Key` with `PAYMENT-SIGNATURE`. The legacy header is not
 accepted, but its presence still selects the credential lane.
 
-An exact operation whose catalog billing mode is `free_health` is public and bypasses both caller
-lanes. It uses the advertised path directly; there is no `:free` suffix. A `quantro_priced`
-operation uses the method-specific positive `credit_cost` for API-key execution and the independent
+Relayed upstream health operations follow normal pricing and authentication. PubFi's own
+service health endpoints remain public and free. A `quantro_priced` operation uses the
+method-specific positive `credit_cost` for API-key execution and the independent
 x402 terms from the same immutable price version.
 
 An eligible exact `GET` or `POST` operation can also advertise an account-level free variant. The
@@ -221,6 +221,10 @@ free-health, x402 settlement, payment-required, and x402 error outcomes. Missing
 execution credentials return HTTP `401` with protected-resource discovery and an MCP
 `_meta["mcp/www_authenticate"]` linking challenge. An invalid `pf_sk_v1_` API key keeps the
 separate API-key `401` response.
+
+The MCP output schemas retain free-health outcomes for compatibility. Clients must not infer
+free execution from an upstream operation name or path. Read the current method-specific billing
+metadata before execution.
 
 For an advertised free variant, `pubfi.route.execute` uses the same API-key admission and the same
 exact path with `:free` appended to its final segment. A successful result reports

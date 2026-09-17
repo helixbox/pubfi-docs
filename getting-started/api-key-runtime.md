@@ -154,8 +154,8 @@ also advertise an independent quota window, a cumulative limit, or shared bucket
 request skips Credit admission, reservation, usage emission, and replay. A retryable window or
 concurrency rejection returns `429`, `gateway.free_rate_limited`, and `Retry-After`. A cumulative
 limit returns `429` with `gateway.free_limit_reached` and no `Retry-After`. This lane is not
-anonymous and is not x402. It is also distinct from an exact `free_health` operation, which uses
-its advertised path without the suffix or authentication.
+anonymous and is not x402. An upstream health path does not imply free access. PubFi's own
+service health endpoints remain public and free.
 
 ## Security Boundary
 

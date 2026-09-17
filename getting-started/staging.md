@@ -105,8 +105,8 @@ method from the current catalog. Follow its query, body, response, and method-sp
 metadata. OpenAPI query and body fields guide request construction, but the gateway preserves a
 valid bounded RFC 3986 query and any bounded non-empty `POST` body bytes instead of applying the
 source schema online. The route selects the body media type. Empty bodies are omitted, and `GET`
-bodies are rejected. Exact `free_health` operations are public and use their
-advertised path without a `:free` suffix.
+bodies are rejected. Relayed upstream health operations use the same pricing and authentication
+rules as other upstream operations. PubFi's own service health endpoints remain public and free.
 
 ## Connect An MCP Client
 

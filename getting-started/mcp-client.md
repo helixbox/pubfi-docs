@@ -97,8 +97,8 @@ when the selected route is callable and configured.
 2. Select a capability in the client. PubFi does not rank or select one for you.
 3. Call `pubfi.capabilities.get` with its exact `capability_id` to read the full typed contract.
 4. Inspect the selected method's `operations[].billing`. Call `pubfi.route.execute` for the exact
-   ready `raw_path` and `method`. A priced API-key call consumes its positive `credit_cost`; an
-   exact `free_health` operation is public and has no Credit or x402 charge.
+   ready `raw_path` and `method`. A priced API-key call consumes its positive `credit_cost`; a
+   relayed upstream health operation follows the same pricing rules.
 5. Select the authenticated root with an API key or OAuth access token, or select the `/x402`
    endpoint without a Bearer credential. Never mix those lanes.
 
@@ -111,6 +111,10 @@ tool returns a compact verification proof. `/x402` declares `noauth` for its thr
 includes only free-health, x402 settlement, payment-required, and x402 error outcomes. Use the
 [Agent Interface Reference](/reference/agent-interface) for the stable tool-purpose and field
 summary. Do not copy an old schema into a client as permanent authority.
+
+The MCP output schemas retain free-health outcomes for compatibility. Clients must not infer
+free execution from an upstream operation name or path. Read the current method-specific billing
+metadata before execution.
 
 ## Local Stdio Bridge
 
@@ -180,8 +184,8 @@ The example never accepts a wallet key as a tool argument. The caller must injec
 client process through a wallet or secret manager.
 
 A separate historical Production example records the route, Base mainnet, canonical Base USDC,
-0.001 USDC, and Production payee accepted on 2026-07-27. Schema v5 now classifies exact health
-operations as `free_health`, so the pinned payment commands are archival and must not be run:
+0.001 USDC, and Production payee accepted on 2026-07-27. These pinned terms are historical,
+so the payment commands are archival and must not be run without current discovery:
 
 ```text
 https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet
