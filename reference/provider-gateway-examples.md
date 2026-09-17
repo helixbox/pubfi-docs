@@ -47,7 +47,9 @@ Choose the access mode for the exact operation:
 | --- | --- |
 | Account-free | Advertised `free_rate_limit` or `x-pubfi-free-variant`, `:free` suffix, PubFi Bearer key, and available account quota. |
 | Account-paid | `quantro_priced` with a current method-specific `credit_cost`, PubFi Bearer key, active admission, and sufficient allocation. |
-| Public health | `free_health`; use the advertised path without a key or Credits. |
+
+Relayed upstream health operations follow the account-paid rules. PubFi's own service health
+endpoints remain public and free.
 
 The provider credential indicated by `credential_required` is managed server-side. You do not
 supply the upstream key. PubFi forwards the selected operation input and returns the provider

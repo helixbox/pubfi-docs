@@ -561,22 +561,17 @@ function checkPluginReviewMaterial() {
   if (negativeCases.length !== 3) {
     failures.push("PubFi review material must contain exactly three negative cases, found " + negativeCases.length);
   }
-  if (text.includes("registry_free_route_executed")) {
-    failures.push("PubFi health review fixture must not use the old registry_free_route_executed placeholder");
+  for (const retired of ["/v1/gateway/degov/global/health", "free_health_executed", "generation sequence 47"]) {
+    if (text.includes(retired)) {
+      failures.push("PubFi review material contains a retired fixture: " + retired);
+    }
   }
-
   for (const marker of [
-    "route-f39f3795eb94457fd48bae32811d4da1da9e62b24f066578136ba00dacf70d57",
-    "GET /v1/gateway/degov/global/health",
-    "free_health",
-    "free_health_executed",
-    "route-3d4fa0587ffa237d7a4bcd555bc406e3387c825a058c3e0f9b315ed4dbf632b0",
-    "GET /v1/gateway/degov/global/v2/meta/data-status",
-    "credit_cost: 1",
-    "registry_route_executed"
+    "pubfi.capabilities.list", "pubfi.capabilities.get", "capability_id", "raw_path",
+    "quantro_priced", "credit_cost", "credits_charged", "registry_route_executed"
   ]) {
     if (!text.includes(marker)) {
-      failures.push("PubFi review material is missing fixture marker: " + marker);
+      failures.push("PubFi review material is missing current discovery contract: " + marker);
     }
   }
 }

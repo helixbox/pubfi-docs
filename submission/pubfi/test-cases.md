@@ -3,8 +3,8 @@
 Reviewer credentials must be supplied only in the OpenAI submission portal. Do not commit
 credentials, account identifiers, tokens, OTPs, or raw fixture responses.
 
-The Staging fixtures below are stable for Registry generation sequence 47. Expected results assert
-generation and result shapes, not dynamic provider data.
+Resolve these Staging cases from the current catalog. Expected results assert generation and
+result shapes, not fixed capability identifiers or dynamic provider data.
 
 ## Positive cases
 
@@ -16,32 +16,32 @@ generation and result shapes, not dynamic provider data.
 - Expected result shape: A compact current-catalog page with Registry-generation identity and an
   opaque next cursor when more results exist.
 
-### 2. Inspect the health capability
+### 2. Inspect an upstream health capability
 
-- Prompt: Inspect capability route-f39f3795eb94457fd48bae32811d4da1da9e62b24f066578136ba00dacf70d57
-  before using it.
-- Expected behavior: Call pubfi.capabilities.get with that exact current capability identifier.
-- Expected result shape: The detail identifies GET /v1/gateway/degov/global/health, a
-  free_health billing mode, readiness, request shape, and current Registry-generation identity.
-  Do not execute the provider route.
+- Prompt: Find an upstream health capability and inspect it before using it.
+- Expected behavior: Use pubfi.capabilities.list, then pubfi.capabilities.get with the returned
+  capability_id. Do not execute the provider route.
+- Expected result shape: The detail identifies the exact method, raw_path, method-specific
+  billing, readiness, request shape, and current Registry-generation identity. An upstream health
+  operation has no automatic free exemption. Report an empty result if none is available.
 
-### 3. Execute the free health capability
+### 3. Execute an upstream health capability with existing entitlement
 
-- Prompt: Run the current PubFi health capability and show me the result.
-- Expected behavior: Inspect the exact health capability first, then execute only GET
-  /v1/gateway/degov/global/health through Account/OAuth.
-- Expected result shape: execution_status is free_health_executed, billing.mode is free_health,
-  the upstream status is present, and no Credit or payment action is initiated.
+- Prompt: Run the upstream health capability we inspected through my connected account.
+- Expected behavior: Read current readiness and quantro_priced billing, disclose credit_cost,
+  and execute the exact method and raw_path through Account/OAuth only with existing entitlement.
+- Expected result shape: execution_status is registry_route_executed, credits_charged matches
+  the current credit_cost, and the upstream status is present. Do not initiate a Credit purchase
+  or switch to accountless payment. If pricing or entitlement is unavailable, stop execution.
 
 ### 4. Execute one existing-entitlement paid query
 
-- Prompt: Run the PubFi DeGov data-status capability through my connected account.
-- Expected behavior: Inspect capability
-  route-3d4fa0587ffa237d7a4bcd555bc406e3387c825a058c3e0f9b315ed4dbf632b0, disclose credit_cost: 1,
-  and execute only its exact GET /v1/gateway/degov/global/v2/meta/data-status contract through
-  Account/OAuth when the account has the required entitlement.
-- Expected result shape: execution_status is registry_route_executed, credits_charged is 1,
-  upstream status is present, and the current Registry-generation identity is present.
+- Prompt: Find and run a PubFi DeGov data-status query through my connected account.
+- Expected behavior: Discover and inspect the current capability_id, disclose credit_cost, and
+  execute its exact method and raw_path through Account/OAuth only with existing entitlement.
+- Expected result shape: execution_status is registry_route_executed, credits_charged matches
+  the current credit_cost, and upstream status and Registry-generation identity are present.
+  If the capability is absent or unready, report that result without inventing a route.
 
 ### 5. Filter without server-side ranking
 

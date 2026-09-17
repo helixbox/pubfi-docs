@@ -115,8 +115,8 @@ Use the surfaces in this order for runtime work:
    inspect schemas for current `ready` HTTP operations. A `quantro_priced` operation supplies its
    positive API-key `credit_cost` and independent x402 terms. Runtime OpenAPI repeats those terms
    in `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`, `x-pubfi-price-version`, and
-   `x-pubfi-x402`; it omits these four fields for non-priced operations. Exact `free_health` is
-   public. An optional capability-level `free_rate_limit` and OpenAPI `x-pubfi-free-variant`
+   `x-pubfi-x402`; it omits these four fields for non-priced operations. Relayed upstream health
+   operations follow normal pricing. An optional `free_rate_limit` and `x-pubfi-free-variant`
    advertise the same API-key-authenticated, zero-Credit `:free` variant. Response delivery is
    automatic on the normal route; there is no catalog stream policy, OpenAPI stream extension, or
    caller-selected `:stream` suffix.
@@ -146,6 +146,10 @@ Use the surfaces in this order for runtime work:
    `pubfi.capabilities.get` for the current Registry generation and exact capability detail.
 6. Use Discovery only for source-selection and public evidence context.
 7. Use long-form docs for workflow, security, payment, and claim boundaries.
+
+The MCP output schemas retain free-health outcomes for compatibility. Clients must not infer
+free execution from an upstream operation name or path. Read the current method-specific billing
+metadata before execution.
 
 Do not execute a saved path from an older generation. Do not create a provider URL from a naming
 convention.
