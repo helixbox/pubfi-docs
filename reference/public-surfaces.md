@@ -200,10 +200,11 @@ Provider summaries separate reachability from operation-family health. Their evi
 `current`, `missing_or_stale`, `stale`, or `unverified`; daily request metrics do not prove current
 health. Provider and operation detail endpoints are no longer public Status routes.
 Incidents identify the responsible owner layer. Incident state can be `suspect`, `open`,
-`recovering`, or `resolved`. Thirty-day history uses six-hour segments. It reports active expected,
-passed, failed, and unknown targets with an active-check percentage, plus passive provider request
-totals and separate PubFi-affected and upstream-affected counts. Status does not replace the
-current Registry catalog as execution authority.
+`recovering`, or `resolved`. Read the history window, segment duration, and segment timestamps
+from the selected environment's response; do not assume a fixed window or segment length.
+History reports active expected, passed, failed, and unknown targets with an active-check
+percentage. Keep these observations separate from passive request metrics when present.
+Status does not replace the current Registry catalog as execution authority.
 
 ## Public-Safe Rule
 

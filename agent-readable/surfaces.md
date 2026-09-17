@@ -136,9 +136,9 @@ Use the surfaces in this order for runtime work:
    operation detail endpoints are no longer public Status routes. Incidents identify the
    responsible owner layer and move through `suspect`, `open`, `recovering`, or `resolved`.
    `operation_pricing_status` reports paid-execution pricing separately from provider and PubFi
-   proxy signals. Thirty-day history uses six-hour segments. It reports active-target coverage
-   separately from passive provider request totals and separates PubFi-affected from
-   upstream-affected requests.
+   proxy signals. Read the history window, segment duration, and segment timestamps from the
+   selected environment's response. Do not assume a fixed window or segment length. Keep
+   active-target coverage separate from passive request metrics when present.
 5. Use MCP `tools/list` on the selected endpoint for current MCP schemas. The authenticated root
    declares OAuth for both execution tools and includes compact runtime-upgrade proof outcomes;
    `/x402` retains three no-auth tools and only free-health or x402 outcomes. Use

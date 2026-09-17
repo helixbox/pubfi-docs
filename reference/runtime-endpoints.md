@@ -92,12 +92,13 @@ Gateway summaries expose `operation_pricing_status` separately from provider and
 evidence. A known pricing outage is `major_outage` because paid execution is blocked, but it does
 not replace independent provider or proxy signals. Missing pricing evidence remains `unknown`.
 
-The Gateway response includes 30 days of history in six-hour segments. Fields report
+Read `health_history.window_days`, `segment_duration_seconds`, and each segment's `started_at`
+and `ended_at` from the selected environment's response. Do not assume a fixed history window or
+segment length: these can differ between deployed versions. Active history fields report
 `active_expected_targets`, `active_passed_targets`, `active_failed_targets`,
-`active_unknown_targets`, and `active_check_percentage`. Passive fields report
-`provider_request_total`, `provider_request_success`, `pubfi_affected_requests`, and
-`upstream_affected_requests`. Compatibility target-count fields remain present. These counts are
-operational evidence, not uptime percentages or route authority.
+`active_unknown_targets`, and `active_check_percentage`. Keep active-target coverage separate
+from passive request metrics when those metrics are present. Request totals do not prove current
+health. These counts are operational evidence, not uptime percentages or route authority.
 
 ### Gateway Route
 

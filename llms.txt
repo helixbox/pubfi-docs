@@ -159,8 +159,9 @@ health. Provider and operation detail endpoints are no longer public Status rout
 `suspect`, `open`, `recovering`, or `resolved` state and identify the responsible owner layer.
 `operation_pricing_status` reports whether paid execution pricing is available without replacing
 independent provider or PubFi proxy evidence.
-Thirty-day status history uses six-hour segments. It separates active-target coverage from passive
-provider request totals and separates PubFi-affected from upstream-affected requests.
+Read the status history window, segment duration, and segment timestamps from the selected
+environment's response. Do not assume a fixed window or segment length. Keep active-target
+coverage separate from passive request metrics when present.
 
 MCP `tools/list` is endpoint-specific. The authenticated root declares `oauth2` with no scopes for
 both execution tools and exposes free-health, account-free, account-paid, and compact runtime-
