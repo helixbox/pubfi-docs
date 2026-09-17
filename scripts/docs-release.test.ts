@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { validateSource, validateStagingRun, validateStagingAcceptance } from './docs-release.ts';
+import { validateSource, validateStagingRun, validateStagingAcceptance, waitForPublicRevision } from './docs-release.ts';
 const source = 'a'.repeat(40);
 const run = { id: 12, head_sha: source, event: 'push', head_branch: 'main',
   path: '.github/workflows/deploy-stg.yml', status: 'completed', conclusion: 'success',
@@ -57,4 +57,26 @@ test('the deployment action resolves artifacts relative to its source working di
   assert.match(workflow, /workdir: source/u);
   assert.match(workflow, /dist_path: dist/u);
   assert.doesNotMatch(workflow, /dist_path: source\/dist/u);
+});
+
+
+test('public revision acceptance waits for domain propagation without redeploying', async () => {
+  const expected = { source, run: '123', target: 'production' };
+  let time = 0;
+  let calls = 0;
+  const read = async () => Response.json(++calls === 1 ? { ...expected, source: 'b'.repeat(40) } : expected);
+  await waitForPublicRevision('https://docs.example', expected, read, () => time, async ms => { time += ms; });
+  assert.equal(calls, 2);
+  assert.equal(time, 2_000);
+});
+
+test('stale source, run, or environment cannot pass the bounded revision check', async () => {
+  const expected = { source, run: '123', target: 'production' };
+  for (const patch of [{ source: 'b'.repeat(40) }, { run: '122' }, { target: 'staging' }]) {
+    let time = 0;
+    await assert.rejects(waitForPublicRevision('https://docs.example', expected,
+      async () => Response.json({ ...expected, ...patch }), () => time,
+      async ms => { time += ms; }), /did not converge/u);
+    assert.equal(time, 60_000);
+  }
 });

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { appendFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
+import { setTimeout as delay } from 'node:timers/promises';
 
 export function validateSource(source: string) {
   assert.match(source, /^[0-9a-f]{40}$/u, 'a full source commit SHA is required');
@@ -25,6 +26,27 @@ export function validateStagingAcceptance(jobs: Array<{ conclusion?: string; ste
     job.steps?.some(step => step.name === 'Accept the public deployed revision' && step.conclusion === 'success'));
   assert.equal(matches.length, 1, 'one successful public revision acceptance is required');
 }
+export async function waitForPublicRevision(
+  origin: string,
+  expected: { source: string; run: string; target: string },
+  fetchFn: typeof fetch = fetch,
+  now: () => number = Date.now,
+  wait: (milliseconds: number) => Promise<unknown> = delay,
+) {
+  const deadline = now() + 60_000;
+  while (now() < deadline) {
+    const response = await fetchFn(`${origin}/release.json?run=${expected.run}`, {
+      redirect: 'error', cache: 'no-store',
+      signal: AbortSignal.timeout(Math.max(1, Math.min(10_000, deadline - now()))),
+    });
+    assert.equal(response.status, 200);
+    const actual = await response.json();
+    if (actual.source === expected.source && actual.run === expected.run && actual.target === expected.target) return;
+    if (now() < deadline) await wait(Math.min(2_000, deadline - now()));
+  }
+  throw new Error('The public docs revision did not converge within 60 seconds');
+}
+
 export async function main() {
   const command = process.argv[2];
   const source = validateSource(process.env.DOCS_SOURCE_SHA ?? '');
@@ -63,14 +85,7 @@ export async function main() {
   } else if (command === 'stamp') {
     writeFileSync('dist/release.json', JSON.stringify({ source, run: process.env.GITHUB_RUN_ID, target }));
   } else if (command === 'accept') {
-    const response = await fetch(`${origin}/release.json?run=${process.env.GITHUB_RUN_ID}`, {
-      redirect: 'error', cache: 'no-store', signal: AbortSignal.timeout(30_000),
-    });
-    assert.equal(response.status, 200);
-    const actual = await response.json();
-    assert.equal(actual.source, source);
-    assert.equal(actual.run, process.env.GITHUB_RUN_ID);
-    assert.equal(actual.target, target);
+    await waitForPublicRevision(origin, { source, run: process.env.GITHUB_RUN_ID ?? '', target });
     const home = await fetch(origin, { redirect: 'error', signal: AbortSignal.timeout(30_000) });
     assert.equal(home.status, 200);
     assert.match(home.headers.get('content-type') ?? '', /text\/html/u);
