@@ -36,9 +36,7 @@ The corresponding Staging API root is `https://api-stg.pubfi.ai`. Fetch that env
 | `GET` | `/openapi.json` | Runtime OpenAPI generated from the installed Registry v2 snapshot. |
 | `GET` | `/reference` | Interactive API reference for `/openapi.json`. |
 | `GET` | `/v1/status` | Public-safe PubFi component and Gateway summary using schema `pubfi.status.v1`. |
-| `GET` | `/v1/status/gateway` | Public-safe Gateway signals and provider summaries using schema `pubfi.status.gateway.v2`. |
-| `GET` | `/v1/status/gateway/providers/{provider_key}` | Public-safe status and operation detail for one active provider. |
-| `GET` | `/v1/status/gateway/operations/{capability_id}` | Public-safe status detail for one active Registry operation. |
+| `GET` | `/v1/status/gateway` | Public-safe Gateway signals and provider summaries using schema `pubfi.status.gateway.v3`. |
 | `GET` | `/v1/capabilities` | Public paginated `pubfi.gateway.registry.capability-page.v5` catalog. |
 | `GET` | `/v1/operation-pricing-inventory` | Public no-store v2 or contract-aware v3 projection for the complete installed snapshot. |
 | `GET` | `/.well-known/mcp.json` | API-host MCP discovery manifest. |
@@ -78,28 +76,29 @@ Gateway summaries, `active_operations` counts logical API operations and
 monitoring as `continuous`, `manual`, `not_applicable`, or `unreviewed`. Provider summaries use the
 same logical API grouping.
 
-Operation status includes `api_operation_key`, `source_operation_key`, `source_revision_key`,
-`route_variant_key`, and an optional `monitor_target_key`. These values bind logical API, source,
-route, and monitoring evidence. They are not executable gateway paths. `support_status` is
-`offered` or `not_offered`;
-`monitoring_coverage` names the monitoring class; nullable `health_status` is present only for
-continuous monitoring; and `evidence_status` is `current`, `missing`, `stale`,
-`missing_or_stale`, or `not_applicable`. A deliberately unoffered or inapplicable operation does
-not become an unknown health claim. Each signal also identifies the responsible `owner` layer. The
-Gateway response can include incidents in `suspect`, `open`, `recovering`, or `resolved` state.
+The Gateway response includes provider summaries and sentinel observations. Provider summaries
+separate `reachability_status` from `operation_family_status` and expose nullable `health_status`.
+Their `evidence_status` is `current`, `missing_or_stale`, `stale`, or `unverified`. Missing or stale
+observations do not prove healthy service. A known failure remains visible when other observations
+are missing. Daily request metrics can remain present after the latest health observation becomes
+stale; they are not proof of current health.
+
+The Gateway response can include incidents in `suspect`, `open`, `recovering`, or `resolved` state.
 Incident ownership and stage keep a provider failure separate from a PubFi Registry, credential,
-or gateway failure.
+or gateway failure. Provider and operation detail endpoints are no longer part of the public
+Status API; use `/v1/status/gateway` for provider summaries.
 
 Gateway summaries expose `operation_pricing_status` separately from provider and PubFi proxy
 evidence. A known pricing outage is `major_outage` because paid execution is blocked, but it does
 not replace independent provider or proxy signals. Missing pricing evidence remains `unknown`.
 
-The Gateway response includes seven days of history in six-hour segments. New fields report
+Read `health_history.window_days`, `segment_duration_seconds`, and each segment's `started_at`
+and `ended_at` from the selected environment's response. Do not assume a fixed history window or
+segment length: these can differ between deployed versions. Active history fields report
 `active_expected_targets`, `active_passed_targets`, `active_failed_targets`,
-`active_unknown_targets`, and `active_check_percentage`. Passive fields report
-`provider_request_total`, `provider_request_success`, `pubfi_affected_requests`, and
-`upstream_affected_requests`. Compatibility target-count fields remain present. These counts are
-operational evidence, not uptime percentages or route authority.
+`active_unknown_targets`, and `active_check_percentage`. Keep active-target coverage separate
+from passive request metrics when those metrics are present. Request totals do not prove current
+health. These counts are operational evidence, not uptime percentages or route authority.
 
 ### Gateway Route
 
