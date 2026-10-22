@@ -91,9 +91,10 @@ model at a high level:
   installed values in the current catalog and Runtime OpenAPI before execution.
 - An advertised `:free` variant keeps the same API key and billing-account binding, but uses an
   account-level rate limiter and charges zero Credits.
-- The free starter allocation provides 1,000 requests and is not Credits.
-- PubFi displays eligible purchase-origin `request_count` units as Credits. Credits are service
-  units, not money or a PubFi-owned financial ledger.
+- Each eligible billing account receives a one-time starter grant of 1,000 Credits. It is not a
+  purchase; the number of requests it supports depends on the current operation `credit_cost`.
+- Starter and purchased Credits use the same service unit and available balance. Credits are not
+  money or a PubFi-owned financial ledger.
 - Usage facts record immutable raw-unit observations and execution outcomes.
 - The billing-account `/billing` route is the detailed authoritative billing read. The focused
   `/credit-balance` route returns the authoritative available whole-Credit balance, while

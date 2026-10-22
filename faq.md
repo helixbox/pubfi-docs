@@ -78,10 +78,12 @@ The historical Production health acceptance on 2026-07-27 used canonical Base US
 per request. That route and price are not current authority. Refresh the catalog and require a new
 unsigned challenge before every new payment.
 
-## Are the free starter requests Credits?
+## Are starter Credits the same as purchased Credits?
 
-No. The starter allocation provides 1,000 free requests. PubFi uses **Credits** only for eligible
-purchase-origin `request_count` units.
+Yes. Each eligible billing account receives a one-time promotional grant of 1,000 **Credits**.
+Starter and purchased Credits use the same service unit and available balance, but the starter
+grant is not a purchase. The number of requests it supports depends on each operation's current
+`credit_cost`.
 
 ## Can a registered account buy Credits?
 

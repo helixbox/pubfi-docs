@@ -15,8 +15,9 @@ the authority for currently executable operations.
 
 ## Credits
 
-PubFi's product name for eligible, purchase-origin `request_count` units. Credits are service
-units. They are not money, a stored-value wallet, or the free starter allocation.
+PubFi service units for eligible API capacity, granted through the starter allocation or a
+verified purchase. Starter and purchased Credits use the same unit and available balance. Credits
+are not money or a stored-value wallet.
 
 ## Discovery
 
@@ -72,7 +73,8 @@ Evidence about whether provider docs, API status, or source references are curre
 
 ## Starter Allocation
 
-The 1,000 free requests given to an eligible new billing account. It is not Credits.
+The one-time promotional grant of 1,000 Credits given to an eligible billing account. It is not a
+purchase. Request capacity depends on the operation's current `credit_cost`.
 
 ## x402
 

@@ -121,6 +121,9 @@ private and no-store, creates no account or billing state, and does not accept O
 An API key can read its own account's usage, detailed billing, authoritative available Credit
 balance, and server-authoritative free-quota counters. The focused account routes are private and
 no-store. They do not expose payment or internal limiter state.
+Each eligible billing account receives a one-time starter grant of 1,000 Credits. Starter and
+purchased Credits share the same service unit and available balance; request capacity depends on
+the operation's current `credit_cost`. The starter grant is not a purchase.
 Accountless x402 creates no PubFi account, API key, Credits, or invoice. The environment-specific
 wallet's USDC is the payment balance; keep separate wallets and private keys for Staging and
 Production. A Signed Receipt is payment and execution evidence, not a balance, top-up, or deposit
@@ -135,7 +138,8 @@ offer availability from the current catalog, Runtime OpenAPI, and offer response
 creation requires the current offer key, exact catalog release hash, amount, accepted terms
 version and hash, and `Idempotency-Key`.
 The public no-store operation-pricing inventory projects every approved typed plan in the installed
-snapshot as `free_health` or `merchant_priced`. The compatibility response uses
+snapshot. Its schemas retain `free_health` for compatibility, but the current producer classifies
+upstream operations, including health operations, as `merchant_priced`. The compatibility response uses
 `quantro.operation-pricing-inventory.v2`. When x402 V2 intake is on, the response uses
 `quantro.operation-pricing-inventory.v3` with
 `x402_contract_version: "quantro.x402.v2"`. It contains no selected price, is not execution

@@ -74,7 +74,8 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - `GET https://api.pubfi.ai/v1/capabilities` returns the current paginated
   `pubfi.gateway.registry.capability-page.v5` catalog. Follow each opaque `next_cursor` for the
   complete installed generation. Match the selected method to `operations[].billing`; billing is
-  `free_health`, `pricing_unavailable`, or `quantro_priced`.
+  `pricing_unavailable` or `quantro_priced` for current upstream operations. The schema retains
+  `free_health` for compatibility; a health path does not imply free access.
 - Runtime OpenAPI is generated from the installed Registry snapshot. It includes the current ready
   gateway operations. Each operation includes `x-pubfi-billing`. A `quantro_priced` operation also
   repeats its method price in `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
@@ -96,8 +97,10 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
   producer projection for the installed snapshot. The compatibility response uses
   `quantro.operation-pricing-inventory.v2`. When x402 V2 intake is on, the response uses
   `quantro.operation-pricing-inventory.v3` with
-  `x402_contract_version: "quantro.x402.v2"`. It contains canonical route facts and `free_health`
-  or `merchant_priced` classification, but no selected price or execution authority. It uses
+  `x402_contract_version: "quantro.x402.v2"`. It contains canonical route facts and billing
+  classification, but no selected price or execution authority. The schemas retain `free_health`
+  for compatibility; the current producer classifies upstream operations, including health
+  operations, as `merchant_priced`. It uses
   `Cache-Control: no-store` and returns `503` instead of a partial inventory when the complete
   approved projection cannot be formed.
 - Registry execution matches an exact path and method. A successful HTTP operation returns the
@@ -140,8 +143,10 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
   billing state and does not accept OAuth fallback.
 - `X-PubFi-Api-Key` is not accepted, but it remains a credential carrier. Remove it before an
   accountless x402 request or the request stays in the credential lane.
-- The free starter allocation is 1,000 requests and is not Credits. PubFi uses Credits only for
-  eligible purchase-origin `request_count` units.
+- Each eligible billing account receives a one-time promotional starter grant of 1,000 Credits,
+  not a fixed number of free requests. Starter and purchased Credits use the same service unit
+  and available balance; the starter grant is not a purchase. Request capacity depends on each
+  operation's current `credit_cost`.
 - Registered purchase routes expose the currently available offers. The route existing does not
   prove that an offer is open for sale.
 - Purchase creation requires the current offer key, exact catalog release hash, amount, accepted
@@ -180,9 +185,9 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - A separate historical Production archive records HTTP and MCP for the 2026-07-27 acceptance route,
   `https://api.pubfi.ai/v1/gateway/quantro/health`, Base mainnet `eip155:8453`, canonical Base
   USDC, 1000 atomic units or 0.001 USDC per request, and the published payee. It verifies signed
-  offers, signed receipts, and exact replay. Schema v5 classifies exact health operations as
-  `free_health`, so the archived paid commands must not be run. The pinned values are not current
-  availability or payment authority:
+  offers, signed receipts, and exact replay. Relayed upstream health operations follow normal
+  pricing; their path does not imply free access. Do not run the archived paid commands: the
+  pinned values are not current availability or payment authority:
   https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet.
 - The 2026-07-27 Production acceptance run completed both HTTP and MCP payments with verified
   signed receipts and exact replay:

@@ -13,8 +13,8 @@ execution from becoming a free-form public data proxy.
 | API key | caller credential for gateway, capability, and MCP execution |
 | API-key access | one fixed model for gateway or MCP execution and same-account usage and billing reads |
 | billing account | owner of API keys, membership, admission, and product usage |
-| starter allocation | 1,000 free `request_count` units; not Credits |
-| Credit | dashboard presentation of eligible purchase-origin `request_count` units |
+| starter allocation | one-time promotional grant of 1,000 Credits to an eligible billing account |
+| Credit | service unit for eligible API capacity, granted through the starter allocation or a verified purchase |
 | admission | current account state and meter-specific raw-unit allocations used to authorize execution |
 | usage fact | immutable raw-unit observation about a Registry gateway execution attempt |
 | idempotency key | stable key that prevents double debit for the same accepted request |
@@ -41,6 +41,9 @@ Safe:
 - The current checked-in pricing target sets one Credit and 0.001 USDC for each priced Subscan and
   DeGov operation. Its registered-purchase base is $1 for 1,000 Credits. The installed catalog,
   Runtime OpenAPI, and current offer response remain the execution and availability authorities.
+- Starter and purchased Credits use the same unit and available Credit balance. The starter grant
+  is not a purchase and has no payment or refund lineage. Request capacity depends on each
+  operation's current `credit_cost`, not a fixed number of free requests.
 - A verified purchase can create purchase-origin Credits. A browser redirect alone cannot.
 - Auto Top-Up is off by default. Human account members can read its state. Only an Owner or Admin
   can add or change the shared payment method, enable or replace the policy, or turn it off.
