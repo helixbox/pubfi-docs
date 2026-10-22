@@ -18,9 +18,10 @@ commercial, settlement, allocation, and receipt facts behind those product surfa
 For accountless x402, the caller's USDC balance in the selected environment's wallet is the
 available payment balance. PubFi does not copy that value into an account or Credits balance.
 
-The free starter allocation is not Credits. PubFi uses **Credits** only for eligible,
-purchase-origin `request_count` units. Credits are service units, not money, a stored-value wallet,
-or a transferable token.
+Each eligible billing account receives a one-time starter grant of 1,000 **Credits**. Starter and
+purchased Credits use the same service unit and available balance, but the starter grant is not a
+purchase. Request capacity depends on each operation's current `credit_cost`. Credits are not money,
+a stored-value wallet, or a transferable token.
 
 ## HTTP Lane Selection
 

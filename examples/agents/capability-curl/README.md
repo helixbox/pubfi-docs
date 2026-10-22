@@ -23,10 +23,11 @@ sh examples/agents/capability-curl/inspect_registry.sh
 The response uses the paginated `pubfi.gateway.registry.capability-page.v5` schema. Follow each
 opaque `next_cursor`, then select only a current `ready` operation and use its exact matcher and
 HTTP method. Inspect that method's `operations[].billing`: `quantro_priced` provides the current
-Credits and x402 terms, `free_health` identifies a public exact health operation, and
-`pricing_unavailable` cannot enter a paid lane. Refresh
-the matching environment's OpenAPI before you construct an execution request because a new signed
-generation can change the route set:
+Credits and x402 terms, while `pricing_unavailable` cannot enter a paid lane. The schema retains
+`free_health` for compatibility; a health path does not imply free access. Relayed upstream health
+operations follow normal pricing and authentication. PubFi's own service health endpoints remain
+public and free. Refresh the matching environment's OpenAPI before you construct an execution
+request because a new signed generation can change the route set:
 
 - Staging: [`https://api-stg.pubfi.ai/openapi.json`](https://api-stg.pubfi.ai/openapi.json)
 - Production: [`https://api.pubfi.ai/openapi.json`](https://api.pubfi.ai/openapi.json)

@@ -18,10 +18,11 @@ export PUBFI_X402_RESOURCE_URL='https://api-stg.pubfi.ai<exact ready Quantro-pri
 sh examples/agents/x402-base-sepolia/show_challenge.sh
 ```
 
-Exact health operations are `free_health` and are not payment targets. If the selected priced
-route is x402 enabled, an eligible unpaid request returns HTTP `402`, a `PAYMENT-REQUIRED` header,
-a JSON payment requirement, and `Cache-Control: private, no-store`. Treat that live challenge as
-the authority for all payment terms.
+Relayed upstream health operations follow the same pricing rules as other upstream operations.
+A health path does not imply free access; PubFi's own service health endpoints remain public and
+free. If the selected priced route is x402 enabled, an eligible unpaid request returns HTTP `402`,
+a `PAYMENT-REQUIRED` header, a JSON payment requirement, and `Cache-Control: private, no-store`.
+Treat that live challenge as the authority for all payment terms.
 
 ## Install The Pinned Clients
 

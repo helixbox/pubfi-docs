@@ -1,10 +1,11 @@
 # x402 Base mainnet Production HTTP And MCP
 
-This archive records the Production route and payment policy accepted on 2026-07-27. The current
-schema v5 contract classifies exact health operations as `free_health`, so this pinned health route
-is not a current x402 payment target. Do not run the archived paid commands. Select a current ready
-non-health `quantro_priced` operation and approve a new bounded Base mainnet policy before making a
-Production payment.
+This archive records the Production route and payment policy accepted on 2026-07-27. Relayed
+upstream health operations now follow the same pricing rules as other upstream operations; a
+health path does not imply free access. This archive does not establish the pinned route's current
+availability or payment terms. Do not run the archived paid commands. Select a current ready
+`quantro_priced` operation and approve a new bounded Base mainnet policy before making a Production
+payment.
 
 ## Inspect Without A Wallet
 
@@ -18,9 +19,9 @@ The default resource is:
 https://api.pubfi.ai/v1/gateway/quantro/health
 ```
 
-The command is retained only to inspect the historical resource. A current exact health operation
-returns through the free-health lane, not a payment challenge. The historical acceptance below does
-not authorize a payment.
+The command is retained only to inspect the historical resource. Its current response must not be
+inferred from the health path or historical acceptance below. Require the current catalog and an
+unsigned challenge for any new payment. PubFi's own service health endpoints remain public and free.
 
 ## Install The Pinned Clients
 

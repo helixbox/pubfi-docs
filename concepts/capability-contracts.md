@@ -20,7 +20,7 @@ Each `operations[]` entry pairs one HTTP method with one billing state:
 
 | Mode | Meaning |
 | --- | --- |
-| `free_health` | The exact health operation is public and bypasses account admission, Credits, x402, and usage emission. |
+| `free_health` | Retained in the schema for compatibility; it does not make relayed upstream health operations free. |
 | `pricing_unavailable` | Current pricing is not available, so the operation cannot enter a paid execution lane. |
 | `quantro_priced` | The immutable price version supplies a positive `credit_cost` for API-key execution and independent exact x402 terms. |
 
@@ -43,8 +43,10 @@ When this object is present, append `:free` to the final path segment of the adv
 or `POST` route. Use the same PubFi API key and billing-account identity. A free route can require
 a server-side provider credential and can have a request body; the current route schema remains
 authoritative for its input. The free lane charges no Credits. A route-specific policy can replace
-the API default; the two policies are not cumulative. This is separate from `free_health`, which
-uses its advertised exact path without a suffix or API key.
+the API default; the two policies are not cumulative. This advertised account-free variant is
+separate from the compatibility-only `free_health` value. Relayed upstream health operations
+follow normal pricing and authentication; PubFi's own service health endpoints remain public and
+free.
 
 The checked-in Subscan Free Plan policy uses 2 requests per second, 2 concurrent attempts, a
 120-second permit TTL, and a provider-scoped quota of 20,000 requests per 86,400 seconds. Eligible
@@ -100,9 +102,10 @@ uses `quantro.operation-pricing-inventory.v2`. When x402 V2 intake is on, the re
 well as the unchanged producer entries.
 
 Both schemas identify canonical operation keys, route revisions and closures, request bounds, and
-whether each operation is `free_health` or `merchant_priced`. Neither schema contains a selected
-Credit or x402 price, and neither is route-execution authority. Clients must inspect
-`schema_version` instead of assuming one inventory version.
+billing classification. They retain `free_health` for compatibility, but the current producer
+classifies upstream operations, including health operations, as `merchant_priced`. Neither schema
+contains a selected Credit or x402 price, and neither is route-execution authority. Clients must
+inspect `schema_version` instead of assuming one inventory version.
 
 The response uses `Cache-Control: no-store`. The complete projection fails with `503` when the
 snapshot is unavailable or includes an unapproved provider, unsupported matcher, duplicate route
