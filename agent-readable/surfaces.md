@@ -171,9 +171,10 @@ convention.
 - An advertised exact `GET` or `POST` can append `:free` to its final path segment. It keeps the API
   key, account identity, and exact operation input, uses the published limiter, and charges zero
   Credits. The checked-in Subscan policy shares its allowance across eligible default and bounded
-  `{network}` routes for one billing account, including XCM, multi-chain, Pro, and `net_assets`
-  operations. Policy presence does not prove route readiness; require the current catalog or
-  OpenAPI advertisement before execution.
+  `{network}` routes for one billing account, subject to the
+  [Subscan integration exclusions](/providers/subscan#operation-eligibility). Policy presence does
+  not prove route eligibility or readiness; require the current catalog or OpenAPI advertisement
+  before execution.
 - Authenticated paid and `:free` direct HTTP automatically use bounded response delivery on the
   normal route. The platform ceiling is 128 MiB, with 10-second idle and 120-second body deadlines
   and heavy-transfer concurrency limits of 1 per account, 4 per provider, and 8 globally. A route

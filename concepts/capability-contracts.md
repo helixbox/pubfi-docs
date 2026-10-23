@@ -50,12 +50,13 @@ free.
 
 The checked-in Subscan Free Plan policy uses 2 requests per second, 2 concurrent attempts, a
 120-second permit TTL, and a provider-scoped quota of 20,000 requests per 86,400 seconds. Eligible
-exact Subscan routes share this allowance for one billing account. This applies to the default
-Polkadot routes and bounded `{network}` routes, including XCM, multi-chain, Pro, and
-`/api/v2/scan/accounts/net_assets` operations. A network value must be an exact alias in the
-installed source-declared origin set; it does not create an arbitrary upstream hostname. The
-policy does not prove that any route is installed or ready. Clients must require the current
-catalog `free_rate_limit` or matching OpenAPI `x-pubfi-free-variant` before they use the suffix.
+exact Subscan routes share this allowance for one billing account across default and bounded
+`{network}` routes. [Subscan integration exclusions](/providers/subscan#operation-eligibility)
+apply before route publication; an upstream plan or operation name does not establish eligibility.
+A network value must be an exact alias in the installed source-declared origin set; it does not
+create an arbitrary upstream hostname. The policy does not prove that any route is installed or
+ready. Clients must require the current catalog `free_rate_limit` or matching OpenAPI
+`x-pubfi-free-variant` before they use the suffix.
 
 ## Current Readiness
 

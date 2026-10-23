@@ -152,8 +152,10 @@ schema. A server-side provider credential does not make an advertised free varia
 
 The effective policy contains a fixed request window, a concurrency limit, a permit TTL, and can
 also advertise an independent quota window, a cumulative limit, or shared bucket scope. A free
-request skips Credit admission, reservation, usage emission, and replay. A retryable window or
-concurrency rejection returns `429`, `gateway.free_rate_limited`, and `Retry-After`. A cumulative
+request skips Credit admission, reservation, billable usage facts, and paid replay. PubFi records
+best-effort non-financial observations of completed free requests; observation failure does not
+change the provider result or create a Credit charge. A retryable window or concurrency rejection
+returns `429`, `gateway.free_rate_limited`, and `Retry-After`. A cumulative
 limit returns `429` with `gateway.free_limit_reached` and no `Retry-After`. This lane is not
 anonymous and is not x402. An upstream health path does not imply free access. PubFi's own
 service health endpoints remain public and free.

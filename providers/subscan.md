@@ -55,6 +55,20 @@ category. Inspect the operation schema if you need `claimed_filter` or other fil
 Check the provider's business result as well as HTTP status: Subscan success uses `code: 0`.
 An empty reward list can be a successful query for an account with no matching records.
 
+## Operation Eligibility
+
+The current Subscan integration excludes these exact upstream paths for both `GET` and `POST`:
+
+- `/api/v2/scan/accounts/net_assets`;
+- `/api/v2/scan/multiChain/account`;
+- `/api/v2/xcm/list`; and
+- every path beginning with `/api/scan/xcm/`.
+
+These exclusions apply before network expansion and remove the operations from the executable
+catalog and Runtime OpenAPI, not only from free access. Adding `:free` or selecting another network
+does not make an excluded operation available. Other operations still require the current catalog
+and method-specific contract; an upstream plan name does not establish PubFi eligibility.
+
 ## Free Access
 
 Confirm `x-pubfi-free-variant` on the exact operation before using the examples. The advertised
