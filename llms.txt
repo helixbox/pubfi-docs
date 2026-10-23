@@ -93,7 +93,10 @@ Discovery inclusion does not imply Registry readiness. The current Registry cata
 OpenAPI define executable paths and methods. API-key execution, registered purchases and Credits,
 and accountless x402 are separate modes. An optional catalog `free_rate_limit` and OpenAPI
 `x-pubfi-free-variant` advertise an API-key-authenticated `:free` route variant that charges zero
-Credits. The authenticated MCP root accepts a PubFi API key or OAuth access token for
+Credits. Subscan integration exclusions apply before route publication; an upstream plan or
+operation name does not establish eligibility. Free requests can record non-financial observations
+without creating billable usage facts or Credit charges.
+The authenticated MCP root accepts a PubFi API key or OAuth access token for
 `pubfi.route.execute`, including that advertised suffix, and for the account-only
 `pubfi.substrate.runtime_upgrade.verify` tool. It rejects payment metadata and does not fall back.
 The separate `/x402` endpoint rejects Bearer credentials, exposes only the three general Registry

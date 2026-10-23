@@ -125,9 +125,11 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
   `gateway.free_rate_limited` and `Retry-After`; a cumulative limit uses
   `gateway.free_limit_reached` without `Retry-After`. Successful MCP execution reports
   `execution_status: registry_free_route_executed` and `credits_charged: 0`. The checked-in Subscan
-  policy is provider-scoped across eligible default and bounded `{network}` routes, including XCM,
-  multi-chain, Pro, and `net_assets` operations. Require the current catalog or OpenAPI
-  advertisement before execution.
+  policy is provider-scoped across eligible default and bounded `{network}` routes, subject to the
+  Subscan integration exclusions at https://docs.pubfi.ai/providers/subscan#operation-eligibility.
+  Require the current catalog or OpenAPI advertisement before execution; upstream plan or
+  operation names do not establish eligibility. Free requests create no billable usage facts.
+  Best-effort non-financial observations do not change the provider result or create Credit charges.
 - Registry readiness is `ready` or `blocked`. Editorial terms such as `requestable` and
   `contract_ready` do not make an operation executable.
 - Registered API-key execution consumes the account's applicable meter allocation.
