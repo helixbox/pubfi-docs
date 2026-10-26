@@ -24,7 +24,7 @@ test('stamp records the selected commit, not the workflow helper commit', async 
   try {
     mkdirSync(join(scratch, 'dist'));
     execFileSync(process.execPath, ['--experimental-strip-types', resolve('scripts/docs-release.ts'), 'stamp'], {
-      cwd: scratch, env: { ...process.env, DOCS_SOURCE_SHA: source, DOCS_TARGET: 'production', GITHUB_SHA: 'b'.repeat(40), GITHUB_RUN_ID: '123' },
+      cwd: scratch, env: { ...process.env, DOCS_SOURCE_SHA: source, DOCS_TARGET: 'production', DOCS_PRODUCT_RELEASE: '', DOCS_STAGING_RUN_ID: '', GITHUB_SHA: 'b'.repeat(40), GITHUB_RUN_ID: '123' },
     });
     assert.deepEqual(JSON.parse(readFileSync(join(scratch, 'dist/release.json'), 'utf8')),
       { source, run: '123', target: 'production' });
