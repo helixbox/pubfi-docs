@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
-import { appendFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { setTimeout as delay } from 'node:timers/promises';
+import { binding, validateRequest } from './product-release.ts';
 
 export function validateSource(source: string) {
   assert.match(source, /^[0-9a-f]{40}$/u, 'a full source commit SHA is required');
@@ -28,7 +29,7 @@ export function validateStagingAcceptance(jobs: Array<{ conclusion?: string; ste
 }
 export async function waitForPublicRevision(
   origin: string,
-  expected: { source: string; run: string; target: string },
+  expected: { source: string; run: string; target: string; product_release?: unknown },
   fetchFn: typeof fetch = fetch,
   now: () => number = Date.now,
   wait: (milliseconds: number) => Promise<unknown> = delay,
@@ -41,7 +42,8 @@ export async function waitForPublicRevision(
     });
     assert.equal(response.status, 200);
     const actual = await response.json();
-    if (actual.source === expected.source && actual.run === expected.run && actual.target === expected.target) return;
+    if (actual.source === expected.source && actual.run === expected.run && actual.target === expected.target &&
+      (!expected.product_release || JSON.stringify(actual.product_release) === JSON.stringify(expected.product_release))) return;
     if (now() < deadline) await wait(Math.min(2_000, deadline - now()));
   }
   throw new Error('The public docs revision did not converge within 60 seconds');
@@ -51,6 +53,12 @@ export async function main() {
   const command = process.argv[2];
   const source = validateSource(process.env.DOCS_SOURCE_SHA ?? '');
   const target = process.env.DOCS_TARGET;
+  const release = process.env.DOCS_PRODUCT_RELEASE ? validateRequest(JSON.parse(process.env.DOCS_PRODUCT_RELEASE)) : undefined;
+  if (release) {
+    assert.equal(release.dry_run, false);
+    assert.equal(release.source_sha, source);
+    assert.equal(release.staging_run_id, process.env.DOCS_STAGING_RUN_ID);
+  }
   assert.ok(target === 'staging' || target === 'production');
   const origin = target === 'production' ? 'https://docs.pubfi.ai' : 'https://pubfi-docs-stg.vercel.app';
   if (command === 'authorize') {
@@ -58,7 +66,8 @@ export async function main() {
     assert.equal(process.env.GITHUB_REPOSITORY, 'helixbox/pubfi-docs');
     execFileSync('git', ['merge-base', '--is-ancestor', source, 'origin/main']);
     if (target === 'production') {
-      assert.equal(process.env.GITHUB_EVENT_NAME, 'workflow_dispatch');
+      assert.ok(process.env.GITHUB_EVENT_NAME === 'workflow_dispatch' ||
+        (process.env.GITHUB_EVENT_NAME === 'repository_dispatch' && release), 'an authorized production request is required');
       const id = process.env.DOCS_STAGING_RUN_ID ?? '';
       assert.match(id, /^[1-9][0-9]*$/u);
       const run = JSON.parse(execFileSync('gh', ['api', `repos/helixbox/pubfi-docs/actions/runs/${id}`], { encoding: 'utf8' }));
@@ -83,9 +92,13 @@ export async function main() {
     appendFileSync(process.env.GITHUB_STEP_SUMMARY ?? '',
       `### Docs ${target}\n- Previous: ${prior}\n- Source: ${source}\n- Staging run: ${process.env.DOCS_STAGING_RUN_ID || 'current run'}\n`);
   } else if (command === 'stamp') {
-    writeFileSync('dist/release.json', JSON.stringify({ source, run: process.env.GITHUB_RUN_ID, target }));
+    const path = 'dist/release.json';
+    const prior = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : {};
+    writeFileSync(path, JSON.stringify({ ...prior, source, run: process.env.GITHUB_RUN_ID, target,
+      ...(release ? { product_release: binding(release) } : {}) }));
   } else if (command === 'accept') {
-    await waitForPublicRevision(origin, { source, run: process.env.GITHUB_RUN_ID ?? '', target });
+    await waitForPublicRevision(origin, { source, run: process.env.GITHUB_RUN_ID ?? '', target,
+      ...(release ? { product_release: binding(release) } : {}) });
     const home = await fetch(origin, { redirect: 'error', signal: AbortSignal.timeout(30_000) });
     assert.equal(home.status, 200);
     assert.match(home.headers.get('content-type') ?? '', /text\/html/u);

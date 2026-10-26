@@ -233,3 +233,8 @@ We would like to extend our heartfelt gratitude to the following projects and co
 automation are licensed under [MIT](LICENSE-CODE.md). See [LICENSE.md](LICENSE.md).</sup>
 
 </div>
+
+## Agent ownership and releases
+
+See [Product docs releases](maintenance/product-releases.md) for daily Staging
+maintenance, version-bound Production publication, recovery, and Agent ownership.

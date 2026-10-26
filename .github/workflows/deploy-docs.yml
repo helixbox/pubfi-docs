@@ -11,6 +11,9 @@ on:
       staging_run_id:
         type: string
         default: ''
+      product_release:
+        type: string
+        default: ''
     secrets:
       VERCEL_TOKEN:
         required: true
@@ -28,6 +31,7 @@ jobs:
     env:
       DOCS_SOURCE_SHA: ${{ inputs.source_sha }}
       DOCS_TARGET: ${{ inputs.target }}
+      DOCS_PRODUCT_RELEASE: ${{ inputs.product_release }}
       DOCS_STAGING_RUN_ID: ${{ inputs.staging_run_id }}
     steps:
       - name: Fetch trusted release helper
@@ -40,6 +44,9 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 24
+      - name: Check release contracts
+        working-directory: authority
+        run: node --test scripts/docs-release.test.ts scripts/product-release.test.ts
       - name: Authorize exact source before deployment credentials
         working-directory: authority
         env:
