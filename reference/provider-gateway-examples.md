@@ -83,13 +83,20 @@ can use the same HTTP status numbers without a PubFi error code:
 | `400` | `gateway.invalid_typed_request` |
 | `401` | `gateway.unauthenticated` |
 | `402` | `gateway.billing_or_admission_action_required` |
+| `402` | `gateway.insufficient_credits` |
+| `402` | `gateway.budget_exceeded` |
 | `403` | `gateway.forbidden` |
 | `404` | `gateway.no_active_matching_route` |
-| `429` | `gateway.rate_reservation_or_budget_exceeded` |
+| `429` | `gateway.request_rate_limited` |
+| `429` | `gateway.stream_concurrency_limited` |
 | `502` | `gateway.upstream_transport_or_response_failure` |
 | `502` | `gateway.upstream_response_too_large` |
 | `503` | `gateway.registry_credential_admission_or_health_unavailable` |
 | `504` | `gateway.upstream_timeout` |
+
+Use the code as well as the status: insufficient Credits and account-budget rejection have distinct
+`402` codes, while request-rate and response-stream concurrency limits use separate `429` codes and
+include `Retry-After`.
 
 The error body uses the standard PubFi error object:
 
@@ -106,7 +113,7 @@ Lane admission can return more specific codes. For example:
 
 - An advertised free variant can return `gateway.free_rate_limited` with `Retry-After`, or
   `gateway.free_limit_reached` without it when a cumulative limit is exhausted.
-- API-key admission can return `gateway.insufficient_meter_escrow`,
+- API-key admission can return `gateway.insufficient_credits`,
   `gateway.billing_account_inactive`, `gateway.billing_admission_unknown`, or
   `gateway.billing_admission_stale`.
 - x402 can return `x402.conflicting_payment_lanes`, `x402.invalid_payment`,
