@@ -1,0 +1,108 @@
+name: Publish product docs
+on:
+  repository_dispatch:
+    types: [product-docs-release]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Accepted stable product tag
+        required: true
+        type: string
+      product_sha:
+        description: Full product source SHA verified by Docs Maintainer
+        required: true
+        type: string
+      product_evidence:
+        description: Successful product release or acceptance URL
+        required: true
+        type: string
+      source_sha:
+        description: Full version-compatible docs main SHA
+        required: true
+        type: string
+      staging_run_id:
+        description: Successful Deploy staging push run for the exact docs SHA
+        required: true
+        type: string
+      dry_run:
+        description: Qualify only; do not create a tag, deploy, or notify an Agent
+        type: boolean
+        default: true
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: docs-product-release
+  cancel-in-progress: false
+  queue: max
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      request: ${{ steps.plan.outputs.request }}
+      source_sha: ${{ steps.plan.outputs.source_sha }}
+      staging_run_id: ${{ steps.plan.outputs.staging_run_id }}
+      dry_run: ${{ steps.plan.outputs.dry_run }}
+      published: ${{ steps.plan.outputs.published }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/product-release.ts plan
+  tag:
+    needs: plan
+    if: needs.plan.outputs.dry_run == 'false' && needs.plan.outputs.published == 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          DOCS_RELEASE_REQUEST: ${{ needs.plan.outputs.request }}
+        run: node scripts/product-release.ts tag
+  deploy:
+    needs: [plan, tag]
+    uses: ./.github/workflows/deploy-docs.yml
+    with:
+      target: production
+      source_sha: ${{ needs.plan.outputs.source_sha }}
+      staging_run_id: ${{ needs.plan.outputs.staging_run_id }}
+      product_release: ${{ needs.plan.outputs.request }}
+    secrets:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  record:
+    environment: staging
+    needs: [plan, tag, deploy]
+    if: always() && needs.plan.result == 'success' && needs.plan.outputs.dry_run == 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - env:
+          DOCS_RELEASE_REQUEST: ${{ needs.plan.outputs.request }}
+          DOCS_RELEASE_RESULT: ${{ (needs.deploy.result == 'success' || needs.plan.outputs.published == 'true') && 'success' || 'failure' }}
+          HAST_RELEASE_MANAGER_HOOK_URL: ${{ secrets.HAST_RELEASE_MANAGER_HOOK_URL }}
+        run: node scripts/product-release.ts notify

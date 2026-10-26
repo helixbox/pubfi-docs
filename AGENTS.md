@@ -18,5 +18,5 @@
   repository-owned PR Docs/check or preview status.
 - An unattended maintenance automation must run `npm ci` and `npm run check`, plus local Mint
   validation and export when the changed surface requires them. It must not depend on a
-  pull-request CI or preview workflow. Main-branch release workflows remain separate and
-  unchanged.
+  pull-request CI or preview workflow. Daily maintenance stops at Staging. An accepted stable product release uses the
+  fixed handoff in `maintenance/product-releases.md`; do not use deployment credentials directly.
