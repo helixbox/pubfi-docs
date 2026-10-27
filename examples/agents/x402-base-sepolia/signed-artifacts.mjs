@@ -125,17 +125,22 @@ async function verifiedJws(compact, resourceOrigin) {
   return { body, keyId };
 }
 
-export async function requireSignedOffer(paymentRequired, resource) {
+export async function requireSignedOffer(paymentRequired, resource, selectPayment) {
   const offers = paymentRequired.extensions?.[OFFER_RECEIPT_EXTENSION]?.info?.offers;
   if (!Array.isArray(offers) || offers.length !== 1) {
     throw new Error('payment requirement omitted one signed offer');
   }
   const offer = offers[0];
   const accepted = paymentRequired.accepts?.[offer.acceptIndex];
+  if (
+    offer.acceptIndex !== 0 ||
+    selectPayment(paymentRequired.x402Version, paymentRequired.accepts) !== accepted
+  ) {
+    throw new Error('selected payment does not match the signed offer');
+  }
   const { body, keyId } = await verifiedJws(offer.signature, resource.origin);
   if (
     offer.format !== 'jws' ||
-    offer.acceptIndex !== 0 ||
     body.version !== 1 ||
     body.resourceUrl !== resource.href ||
     body.scheme !== accepted?.scheme ||
