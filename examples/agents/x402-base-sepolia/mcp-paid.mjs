@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { x402Client } from '@x402/core/client';
 import { toClientEvmSigner } from '@x402/evm';
@@ -18,6 +17,8 @@ import {
   resourceUrl,
 } from './payment-policy.mjs';
 import { requireSignedOffer, requireSignedReceipt } from './signed-artifacts.mjs';
+import { boundedResponse } from './bounded-response.mjs';
+import { BoundedMCPClient } from './mcp-boundary.mjs';
 
 let stage = 'configuration';
 
@@ -28,18 +29,19 @@ async function main() {
     chain: baseSepolia,
     transport: http('https://sepolia.base.org'),
   });
-  const paymentClient = new x402Client(expectedPaymentSelector()).register(
+  const selectPayment = expectedPaymentSelector();
+  const paymentClient = new x402Client(selectPayment).register(
     BASE_SEPOLIA_NETWORK,
     new ExactEvmScheme(toClientEvmSigner(account, publicClient)),
   );
-  const rawClient = new Client({ name: 'pubfi-public-x402-example', version: '1.0.0' });
+  const rawClient = new BoundedMCPClient({ name: 'pubfi-public-x402-example', version: '1.0.0' });
   const paidClient = wrapMCPClientWithPayment(rawClient, paymentClient, {
     autoPayment: true,
     onPaymentRequested: async ({ toolName, paymentRequired }) => {
       if (toolName !== 'pubfi.route.execute') {
         throw new Error('unexpected paid MCP tool');
       }
-      await requireSignedOffer(paymentRequired, resource);
+      await requireSignedOffer(paymentRequired, resource, selectPayment);
       return true;
     },
   });
@@ -51,7 +53,9 @@ async function main() {
     submittedPayment = paymentPayload;
   });
 
-  await paidClient.connect(new StreamableHTTPClientTransport(mcpUrlForResource(resource)));
+  await paidClient.connect(new StreamableHTTPClientTransport(mcpUrlForResource(resource), {
+    fetch: async (...args) => boundedResponse(await fetch(...args)),
+  }));
   try {
     const arguments_ = {
       raw_path: resource.pathname,
@@ -65,6 +69,7 @@ async function main() {
       result.isError ||
       result.paymentMade !== true ||
       !result.paymentResponse ||
+      !rawClient.firstPaidResult?.structuredContent ||
       !submittedPayment
     ) {
       throw new Error('official MCP client did not complete one payment');
@@ -81,12 +86,12 @@ async function main() {
     if (replay.isError) {
       throw new Error('paid MCP replay failed');
     }
-    assert.deepEqual(replay.structuredContent, result.structuredContent);
+    assert.deepEqual(replay.structuredContent, rawClient.firstPaidResult.structuredContent);
     assert.deepEqual(replay._meta?.['x402/payment-response'], result.paymentResponse);
 
     process.stdout.write(
       `${JSON.stringify({
-        client: '@x402/mcp@2.26.0',
+        client: '@x402/mcp@2.28.0',
         network: BASE_SEPOLIA_NETWORK,
         payer: account.address,
         paymentMade: true,

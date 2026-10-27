@@ -32,7 +32,11 @@ npm ci
 npm run check
 ```
 
-The example pins the same official client versions used by PubFi's deployment acceptance.
+The example pins official client versions. The acceptance evidence below used earlier versions.
+The x402 packages still declare Zod 3, so this example overrides them to the patched Zod 4
+release. The local tests exercise the HTTP and MCP payment flows with mock data and signatures.
+The example limits MCP responses and unsigned HTTP response bodies to 1 MiB and bounds MCP
+initialization, content, and payment-option lists before validation.
 
 ## Approve The Payment Boundary
 

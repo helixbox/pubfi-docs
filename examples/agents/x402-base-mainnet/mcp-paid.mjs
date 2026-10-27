@@ -28,7 +28,8 @@ async function main() {
     chain: base,
     transport: http('https://mainnet.base.org'),
   });
-  const paymentClient = new x402Client(expectedPaymentSelector()).register(
+  const selectPayment = expectedPaymentSelector();
+  const paymentClient = new x402Client(selectPayment).register(
     BASE_MAINNET_NETWORK,
     new ExactEvmScheme(toClientEvmSigner(account, publicClient)),
   );
@@ -39,7 +40,7 @@ async function main() {
       if (toolName !== 'pubfi.route.execute') {
         throw new Error('unexpected paid MCP tool');
       }
-      await requireSignedOffer(paymentRequired, resource);
+      await requireSignedOffer(paymentRequired, resource, selectPayment);
       return true;
     },
   });
@@ -86,7 +87,7 @@ async function main() {
 
     process.stdout.write(
       `${JSON.stringify({
-        client: '@x402/mcp@2.26.0',
+        client: '@x402/mcp@2.28.0',
         network: BASE_MAINNET_NETWORK,
         payer: account.address,
         paymentMade: true,

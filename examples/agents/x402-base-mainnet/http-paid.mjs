@@ -71,7 +71,8 @@ async function main() {
     chain: base,
     transport: http('https://mainnet.base.org'),
   });
-  const paymentClient = new x402Client(expectedPaymentSelector()).register(
+  const selectPayment = expectedPaymentSelector();
+  const paymentClient = new x402Client(selectPayment).register(
     BASE_MAINNET_NETWORK,
     new ExactEvmScheme(toClientEvmSigner(account, publicClient)),
   );
@@ -108,7 +109,7 @@ async function main() {
       if (response.status !== 402 || !paymentRequiredHeader) {
         throw new Error('unsigned response omitted the x402 challenge');
       }
-      await requireSignedOffer(decodePaymentRequiredHeader(paymentRequiredHeader), resource);
+      await requireSignedOffer(decodePaymentRequiredHeader(paymentRequiredHeader), resource, selectPayment);
       signedOfferVerified = true;
     }
     requirePrivateNoStore(response);
@@ -148,7 +149,7 @@ async function main() {
 
   process.stdout.write(
     `${JSON.stringify({
-      client: '@x402/fetch@2.26.0',
+      client: '@x402/fetch@2.28.0',
       network: BASE_MAINNET_NETWORK,
       payer: account.address,
       initialStatus: 402,

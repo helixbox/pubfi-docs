@@ -19,6 +19,7 @@ import {
   resourceUrl,
 } from './payment-policy.mjs';
 import { requireSignedOffer, requireSignedReceipt } from './signed-artifacts.mjs';
+import { boundedResponse } from './bounded-response.mjs';
 
 const MAX_RESPONSE_BYTES = 1024 * 1024;
 let stage = 'configuration';
@@ -71,7 +72,8 @@ async function main() {
     chain: baseSepolia,
     transport: http('https://sepolia.base.org'),
   });
-  const paymentClient = new x402Client(expectedPaymentSelector()).register(
+  const selectPayment = expectedPaymentSelector();
+  const paymentClient = new x402Client(selectPayment).register(
     BASE_SEPOLIA_NETWORK,
     new ExactEvmScheme(toClientEvmSigner(account, publicClient)),
   );
@@ -108,11 +110,11 @@ async function main() {
       if (response.status !== 402 || !paymentRequiredHeader) {
         throw new Error('unsigned response omitted the x402 challenge');
       }
-      await requireSignedOffer(decodePaymentRequiredHeader(paymentRequiredHeader), resource);
+      await requireSignedOffer(decodePaymentRequiredHeader(paymentRequiredHeader), resource, selectPayment);
       signedOfferVerified = true;
     }
     requirePrivateNoStore(response);
-    return response;
+    return request.headers.has('PAYMENT-SIGNATURE') ? response : boundedResponse(response);
   };
 
   stage = 'paid HTTP request';
@@ -148,7 +150,7 @@ async function main() {
 
   process.stdout.write(
     `${JSON.stringify({
-      client: '@x402/fetch@2.26.0',
+      client: '@x402/fetch@2.28.0',
       network: BASE_SEPOLIA_NETWORK,
       payer: account.address,
       initialStatus: 402,
