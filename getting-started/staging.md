@@ -87,10 +87,10 @@ contains only current `ready` operations. Refresh both surfaces when the generat
 ## Make An API-Key Call
 
 Select a current `ready` operation whose matching `operations[].billing.mode` is
-`quantro_priced`. Set its exact path and method, then send the staging key:
+`priced`. Set its exact path and method, then send the staging key:
 
 ```sh
-export PUBFI_GATEWAY_PATH='<exact ready Quantro-priced path>'
+export PUBFI_GATEWAY_PATH='<exact ready priced path>'
 export PUBFI_GATEWAY_METHOD='<GET or POST>'
 
 curl --fail --silent --show-error \
@@ -162,10 +162,10 @@ Staging is the PubFi Base Sepolia test boundary for accountless x402. The CAIP-2
 `eip155:84532`.
 
 To inspect a challenge, select a current `ready` method whose catalog billing mode is
-`quantro_priced`. Then call its exact route without a PubFi API key:
+`priced`. Then call its exact route without a PubFi API key:
 
 ```sh
-export PUBFI_X402_PATH='<exact ready Quantro-priced path>'
+export PUBFI_X402_PATH='<exact ready priced path>'
 
 curl --silent --show-error \
   --request '<GET or POST>' \

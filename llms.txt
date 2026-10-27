@@ -186,7 +186,7 @@ and that route are not current authority. Production commands spend real USDC wh
 catalog and challenge permit them. Production acceptance completed on 2026-07-27; see
 https://github.com/helixbox/pubfi-mono/actions/runs/30259030111 (source-repository access required).
 HTTP and MCP share the same x402 `exact` settlement and replay path. Exact replay reuses the first
-settlement and receipt without a second charge. Quantro is the common accounting-fact authority,
+settlement and receipt without a second charge. PubFi owns the accounting facts,
 but one request cannot debit both the registered and x402 lanes. Public docs and reachability
 checks do not prove ranking, traffic, or AI citation success.
 

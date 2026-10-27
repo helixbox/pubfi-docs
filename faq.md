@@ -102,7 +102,7 @@ Top-Up**; the API route name remains `credit-auto-reload`.
 ## Do Stripe and x402 debit the same balance?
 
 No. A registered purchase can create a purchase-origin allocation after verified settlement.
-x402 buys one eligible response directly and never creates or consumes Credits. Quantro remains
+x402 buys one eligible response directly and never creates or consumes Credits. PubFi is
 the common accounting-fact authority behind both entry modes. One request selects one authority, so
 it cannot debit both.
 

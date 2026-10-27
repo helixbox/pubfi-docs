@@ -126,7 +126,7 @@ values do not make upstream health operations free. An advertised account-free `
 uses `execution_status: registry_free_route_executed` and `credits_charged: 0`.
 
 Catalog and detail schema v5 expose billing under the selected method's `operations[]` entry.
-`quantro_priced` carries a positive `credit_cost` and independent x402 terms under one immutable
+`priced` carries a positive `credit_cost` and independent x402 terms under one immutable
 price version. Relayed upstream health operations follow the same pricing rules.
 `pricing_unavailable` cannot enter a paid execution lane and does not fall back to free access.
 

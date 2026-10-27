@@ -11,7 +11,7 @@ import {
 
 const EXPECTED_PAY_TO = '0x1111111111111111111111111111111111111111';
 const STAGING_RESOURCE =
-  'https://api-stg.pubfi.ai/v1/gateway/quantro/health';
+  'https://api-stg.pubfi.ai/v1/gateway/example/status';
 
 function withEnvironment(values, callback) {
   const previous = new Map();
@@ -57,10 +57,10 @@ test('accepts only the exact PubFi Staging gateway and MCP origins', () => {
   });
 
   for (const rejected of [
-    'https://api.pubfi.ai/v1/gateway/quantro/health',
-    'https://api-stg.pubfi.ai.example/v1/gateway/quantro/health',
+    'https://api.pubfi.ai/v1/gateway/example/status',
+    'https://api-stg.pubfi.ai.example/v1/gateway/example/status',
     'https://api-stg.pubfi.ai/v1/accounts',
-    'https://api-stg.pubfi.ai/v1/gateway/quantro/health#fragment',
+    'https://api-stg.pubfi.ai/v1/gateway/example/status#fragment',
   ]) {
     withEnvironment({ X402_RESOURCE_URL: rejected }, () => {
       assert.throws(() => resourceUrl());
@@ -68,7 +68,7 @@ test('accepts only the exact PubFi Staging gateway and MCP origins', () => {
   }
 
   assert.throws(() =>
-    mcpUrlForResource(new URL('https://api.pubfi.ai/v1/gateway/quantro/health')),
+    mcpUrlForResource(new URL('https://api.pubfi.ai/v1/gateway/example/status')),
   );
 });
 

@@ -183,16 +183,15 @@ https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-sepol
 The example never accepts a wallet key as a tool argument. The caller must inject the key into the
 client process through a wallet or secret manager.
 
-A separate historical Production example records the route, Base mainnet, canonical Base USDC,
-0.001 USDC, and Production payee accepted on 2026-07-27. These pinned terms are historical,
-so the payment commands are archival and must not be run without current discovery:
+The historical Production example contains an unsigned challenge inspector. Its paid clients are
+disabled:
 
 ```text
 https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet
 ```
 
-Historical acceptance is not current route or payment authority. Select a current non-health
-`quantro_priced` operation before constructing a new Production payment policy.
+Inspect the current catalog and unsigned challenge before constructing a Production payment with
+an independently approved wallet policy.
 
 The wire shape is:
 
@@ -202,7 +201,7 @@ The wire shape is:
   "params": {
     "name": "pubfi.route.execute",
     "arguments": {
-      "raw_path": "/v1/gateway/quantro/health",
+      "raw_path": "<exact ready gateway path>",
       "method": "GET"
     },
     "_meta": {
@@ -212,10 +211,10 @@ The wire shape is:
 }
 ```
 
-The string above marks the position of the object. Send the actual validated JSON object, not a
-string and not a private key.
+Replace the path placeholder with a current ready gateway route. The payment string marks the
+position of the object. Send the validated JSON object, not a string and not a private key.
 
-HTTP and MCP share the same x402 V2 `exact` payment path: Registry route, Quantro quote and claim,
+HTTP and MCP share the same x402 V2 `exact` payment path: Registry route, PubFi quote and claim,
 provider fence, settlement, Signed Receipt, and exact replay. A replay of the same paid tool call
 returns the retained result and payment response without a second provider call, settlement, or
 wallet charge. Replay equivalence applies to `structuredContent` and

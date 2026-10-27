@@ -568,7 +568,7 @@ function checkPluginReviewMaterial() {
   }
   for (const marker of [
     "pubfi.capabilities.list", "pubfi.capabilities.get", "capability_id", "raw_path",
-    "quantro_priced", "credit_cost", "credits_charged", "registry_route_executed"
+    "`priced`", "credit_cost", "credits_charged", "registry_route_executed"
   ]) {
     if (!text.includes(marker)) {
       failures.push("PubFi review material is missing current discovery contract: " + marker);

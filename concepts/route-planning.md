@@ -19,11 +19,13 @@ upstream provider.
 
 ```json
 {
-  "raw_path": "/v1/gateway/quantro/health",
+  "raw_path": "<exact ready gateway path>",
   "method": "GET",
-  "objective": "Check the current Quantro gateway route."
+  "objective": "Inspect the selected gateway route."
 }
 ```
+
+Replace the placeholder with a route from the current catalog.
 
 ## Hard Filters
 

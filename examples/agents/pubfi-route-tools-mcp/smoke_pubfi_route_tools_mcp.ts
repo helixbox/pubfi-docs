@@ -207,7 +207,7 @@ try {
       .filter(
         (operation) =>
           capability.readiness?.['status'] === 'ready' &&
-          operation.billing.mode === 'quantro_priced' &&
+          operation.billing.mode === 'priced' &&
           (!configuredRawPath ||
             (operation.method === configuredMethod &&
               matcherMatchesRawPath(capability.matcher, configuredRawPath))),
@@ -216,7 +216,7 @@ try {
   )[0];
   assert.ok(
     selectedPair,
-    'current Registry has no matching ready Quantro-priced non-health smoke operation',
+    'current Registry has no matching ready priced non-health smoke operation',
   );
   const selected = selectedPair.capability;
   const detail = await callTool('pubfi.capabilities.get', {
@@ -421,7 +421,7 @@ function requireOperationBilling(capability: RegistryCapability): void {
       assert.deepEqual(Object.keys(billing), ['mode']);
       return;
     }
-    assert.equal(billing.mode, 'quantro_priced');
+    assert.equal(billing.mode, 'priced');
     const creditCost = requiredNumber(billing.credit_cost, 'Registry operation credit cost');
     const priceVersion = requiredNumber(billing.price_version, 'Registry operation price version');
     assert.ok(Number.isSafeInteger(creditCost) && creditCost > 0);

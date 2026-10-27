@@ -6,7 +6,6 @@ export const MAX_AUTHORIZATION_SECONDS = 300;
 
 const PRODUCTION_API_ORIGIN = 'https://api.pubfi.ai';
 const PRODUCTION_MCP_X402_ENDPOINT = 'https://mcp.pubfi.ai/x402';
-const PRODUCTION_RESOURCE = 'https://api.pubfi.ai/v1/gateway/quantro/health';
 
 export function requiredEnvironment(name) {
   const value = process.env[name];
@@ -31,17 +30,7 @@ export function buyerPrivateKey() {
 }
 
 export function resourceUrl() {
-  const value = process.env.X402_RESOURCE_URL ?? PRODUCTION_RESOURCE;
-  const parsed = new URL(value);
-  if (
-    parsed.href !== PRODUCTION_RESOURCE ||
-    parsed.username ||
-    parsed.password ||
-    parsed.hash
-  ) {
-    throw new Error('X402_RESOURCE_URL is outside the PubFi Production gateway origin');
-  }
-  return parsed;
+  throw new Error('The historical Production payment example is disabled');
 }
 
 export function mcpUrlForResource(resource) {
