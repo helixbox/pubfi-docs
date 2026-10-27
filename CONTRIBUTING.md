@@ -31,7 +31,7 @@ Out of scope:
 - Use examples that can run without upstream provider secrets in the prompt or repository.
 - Public x402 documentation can describe standard headers, public network and asset identifiers,
   challenge validation, and exact replay. It must not contain wallet keys, signed authorizations,
-  receipt values, internal Quantro routes, or live commercial details.
+  receipt values, internal billing routes, or live commercial details.
 - Keep generated schemas linked from canonical runtime URLs unless a copied snapshot is explicitly
   versioned.
 

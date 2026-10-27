@@ -11,10 +11,10 @@ sh examples/agents/x402-base-sepolia/show_challenge.sh
 ```
 
 First inspect the complete Staging catalog and select a current `ready` method whose billing mode
-is `quantro_priced`. Supply its exact resource explicitly:
+is `priced`. Supply its exact resource explicitly:
 
 ```sh
-export PUBFI_X402_RESOURCE_URL='https://api-stg.pubfi.ai<exact ready Quantro-priced path>'
+export PUBFI_X402_RESOURCE_URL='https://api-stg.pubfi.ai<exact ready priced path>'
 sh examples/agents/x402-base-sepolia/show_challenge.sh
 ```
 
@@ -42,7 +42,7 @@ Read the unsigned challenge first. Independently approve its current `payTo` add
 Set these nonsecret values:
 
 ```sh
-export X402_RESOURCE_URL='https://api-stg.pubfi.ai<exact ready Quantro-priced path>'
+export X402_RESOURCE_URL='https://api-stg.pubfi.ai<exact ready priced path>'
 export X402_EXPECTED_PAY_TO='<approved payTo address>'
 ```
 

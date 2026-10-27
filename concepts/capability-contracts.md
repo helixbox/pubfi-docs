@@ -22,7 +22,7 @@ Each `operations[]` entry pairs one HTTP method with one billing state:
 | --- | --- |
 | `free_health` | Retained in the schema for compatibility; it does not make relayed upstream health operations free. |
 | `pricing_unavailable` | Current pricing is not available, so the operation cannot enter a paid execution lane. |
-| `quantro_priced` | The immutable price version supplies a positive `credit_cost` for API-key execution and independent exact x402 terms. |
+| `priced` | The immutable price version supplies a positive `credit_cost` for API-key execution and independent exact x402 terms. |
 
 Do not read `credit_cost` from the capability root. For a priced operation, read it from the
 `operations[]` entry that matches the selected method. A new price uses a new `price_version`.
@@ -84,7 +84,7 @@ exceed 65,536 encoded bytes. A non-empty `POST` body is bounded by the selected 
 byte-for-byte with the route-selected media type. The source schema does not admit those bytes
 online. Empty bodies are omitted, and `GET` bodies are rejected.
 
-Every generated gateway operation includes `x-pubfi-billing`. For `quantro_priced`, the same
+Every generated gateway operation includes `x-pubfi-billing`. For `priced`, the same
 method price is also available as `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
 `x-pubfi-price-version`, and `x-pubfi-x402`. The x402 object contains `network`, `asset`,
 `atomic_amount`, and `offer_id`. The four top-level price extensions are absent for `free_health`

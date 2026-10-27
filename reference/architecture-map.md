@@ -89,7 +89,7 @@ one eligible response and does not create or consume Credits.
 | `packages/rust/registry-worker-runtime/` | Shared runtime for Registry workers. |
 | `packages/rust/storage/` | SQLx/Postgres persistence for account, allocation, usage, integration, and x402 execution state. |
 | `packages/rust/discovery-contracts/` | Discovery source-selection and editorial route-planning models. |
-| `vendor/quantro-integration/` | Pinned provider-neutral purchase and x402 integration contract. |
+| `packages/rust/billing/` | PubFi purchase, settlement, allocation, and x402 billing contracts. |
 | `examples/agents/` | Public-safe agent and HTTP examples. |
 | `tools/pubfi-ops/` | Offline production-operations CLI. It is not a runtime image or a general-purpose client. |
 

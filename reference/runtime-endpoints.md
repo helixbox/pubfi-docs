@@ -123,7 +123,7 @@ Do not send `Authorization` or `X-PubFi-Api-Key` with `PAYMENT-SIGNATURE`. The l
 accepted, but its presence still selects the credential lane.
 
 Relayed upstream health operations follow normal pricing and authentication. PubFi's own
-service health endpoints remain public and free. A `quantro_priced` operation uses the
+service health endpoints remain public and free. A `priced` operation uses the
 method-specific positive `credit_cost` for API-key execution and the independent
 x402 terms from the same immutable price version.
 

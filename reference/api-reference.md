@@ -23,7 +23,7 @@ The document identifies its Registry authority with:
 Each generated Registry operation can also describe the exact route, provider, upstream, matcher,
 readiness, request policy, response policy, billing, meter, and maximum raw units.
 
-For an operation whose `x-pubfi-billing.mode` is `quantro_priced`, Runtime OpenAPI also copies the
+For an operation whose `x-pubfi-billing.mode` is `priced`, Runtime OpenAPI also copies the
 method price into these top-level extensions:
 
 | Extension | Value |

@@ -33,7 +33,7 @@ github.com/helixbox/pubfi-docs
 Snapshot sources:
 
 - `pubfi-mono` source snapshot at `d0ee242963fc4a6477e79b2ece98ec3aece643ce`;
-- `quantro-mono` origin/main through `f5a4dec934f4a2a6e072149d694df7984391b74b`; and
+- PubFi 0.3.0 billing contracts at `ce1d3a61eab366cab74f3230643677ce6a6fb338`; and
 - public Runtime OpenAPI, Registry v2 catalog, MCP `tools/list`, Staging and Production x402
   challenges, and the repository-access acceptance workflows observed on 2026-07-27.
 
@@ -143,9 +143,8 @@ Runnable public-safe examples live under [examples/](examples/README.md):
   MCP endpoint;
 - `examples/agents/capability-curl/`: no-auth Registry v2 catalog inspection;
 - `examples/agents/x402-base-sepolia/`: no-secret inspection of the current x402 challenge.
-- `examples/agents/x402-base-mainnet/`: Production HTTP and MCP clients pinned to the historical
-  2026-07-27 Base mainnet route, asset, amount, and payee. Current catalog and challenge checks are
-  required before use.
+- `examples/agents/x402-base-mainnet/`: a Production challenge inspector and disabled historical
+  HTTP and MCP payment examples.
 
 ## Shared Favicon
 

@@ -74,10 +74,10 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
 - `GET https://api.pubfi.ai/v1/capabilities` returns the current paginated
   `pubfi.gateway.registry.capability-page.v5` catalog. Follow each opaque `next_cursor` for the
   complete installed generation. Match the selected method to `operations[].billing`; billing is
-  `pricing_unavailable` or `quantro_priced` for current upstream operations. The schema retains
+  `pricing_unavailable` or `priced` for current upstream operations. The schema retains
   `free_health` for compatibility; a health path does not imply free access.
 - Runtime OpenAPI is generated from the installed Registry snapshot. It includes the current ready
-  gateway operations. Each operation includes `x-pubfi-billing`. A `quantro_priced` operation also
+  gateway operations. Each operation includes `x-pubfi-billing`. A `priced` operation also
   repeats its method price in `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`,
   `x-pubfi-price-version`, and `x-pubfi-x402`; non-priced operations omit these four fields.
   Separate static provider schemas are not execution authority. OpenAPI query parameters are
@@ -184,21 +184,10 @@ https://docs.pubfi.ai/getting-started/chatgpt-codex-plugin.
   Offers, Signed Receipts, and exact replay:
   https://github.com/helixbox/pubfi-mono/actions/runs/30258511212. The workflow link requires
   source-repository access.
-- A separate historical Production archive records HTTP and MCP for the 2026-07-27 acceptance route,
-  `https://api.pubfi.ai/v1/gateway/quantro/health`, Base mainnet `eip155:8453`, canonical Base
-  USDC, 1000 atomic units or 0.001 USDC per request, and the published payee. It verifies signed
-  offers, signed receipts, and exact replay. Relayed upstream health operations follow normal
-  pricing; their path does not imply free access. Do not run the archived paid commands: the
-  pinned values are not current availability or payment authority:
+- The Production archive provides an unsigned challenge inspector. Its historical HTTP and MCP
+  paid clients are disabled:
   https://github.com/helixbox/pubfi-docs/tree/main/examples/agents/x402-base-mainnet.
-- The 2026-07-27 Production acceptance run completed both HTTP and MCP payments with verified
-  signed receipts and exact replay:
-  https://github.com/helixbox/pubfi-mono/actions/runs/30259030111. The workflow link requires
-  source-repository access. Bounded read-only acceptance confirmed one `settled` settlement and one
-  signed receipt for each lane. Exact replay did not create a second charge. Public Base
-  transactions:
-  `0xb011351c24f40b597778ec1dd79807d2a4a01950ae219db3299f0c51f2cc594f` and
-  `0x25819c481c83ddc7dd028a8c3c6832ee7ba77a00b3b7300106bb6db5e73f9934`.
+  Check the live catalog and unsigned challenge before making a payment.
 - The examples require a buyer key injected by a wallet or secret manager. They never accept the
   key in an MCP tool argument or prompt. The Production commands spend real USDC.
 
@@ -332,7 +321,7 @@ replacing independent provider or PubFi proxy evidence, and missing pricing evid
 - Unrelated bounded MCP `_meta` entries can coexist with the flow. Only `x402/payment` carries
   payment. Paid replay compares structured content and payment-response metadata, not raw JSON-RPC
   bytes.
-- HTTP and MCP share the same Registry route, x402 `exact` payment, Quantro settlement, receipt, and
+- HTTP and MCP share the same Registry route, x402 `exact` payment, PubFi settlement, receipt, and
   exact replay path.
 - A failed paid retry can return a fresh standard payment requirement. HTTP preserves
   `PAYMENT-REQUIRED`; MCP preserves the official fields in `structuredContent` and adds an `error`
@@ -356,7 +345,7 @@ replacing independent provider or PubFi proxy evidence, and missing pricing evid
 - PubFi exposes a dynamic Registry catalog and Runtime OpenAPI for current executable operations.
 - PubFi supports registered API-key and MCP OAuth account execution plus separate accountless x402
   execution over HTTP and the explicit MCP `/x402` endpoint.
-- Quantro owns provider-neutral purchase, settlement, receipt, and resulting allocation facts.
+- PubFi owns provider-neutral purchase, settlement, receipt, and resulting allocation facts.
   One request selects either the authenticated account and Credits lane or the accountless x402
   lane; it cannot debit both.
 

@@ -11,28 +11,6 @@ import {
   resourceUrl,
 } from './payment-policy.mjs';
 
-const PRODUCTION_RESOURCE =
-  'https://api.pubfi.ai/v1/gateway/quantro/health';
-
-function withEnvironment(values, callback) {
-  const previous = new Map();
-  for (const [name, value] of Object.entries(values)) {
-    previous.set(name, process.env[name]);
-    process.env[name] = value;
-  }
-  try {
-    return callback();
-  } finally {
-    for (const [name, value] of previous) {
-      if (value === undefined) {
-        delete process.env[name];
-      } else {
-        process.env[name] = value;
-      }
-    }
-  }
-}
-
 function payment(overrides = {}) {
   return {
     scheme: 'exact',
@@ -50,26 +28,10 @@ function payment(overrides = {}) {
   };
 }
 
-test('accepts only the exact PubFi Production gateway and MCP origins', () => {
-  withEnvironment({ X402_RESOURCE_URL: PRODUCTION_RESOURCE }, () => {
-    const resource = resourceUrl();
-    assert.equal(resource.href, PRODUCTION_RESOURCE);
-    assert.equal(mcpUrlForResource(resource).href, 'https://mcp.pubfi.ai/x402');
-  });
-
-  for (const rejected of [
-    'https://api-stg.pubfi.ai/v1/gateway/quantro/health',
-    'https://api.pubfi.ai.example/v1/gateway/quantro/health',
-    'https://api.pubfi.ai/v1/accounts',
-    'https://api.pubfi.ai/v1/gateway/quantro/health#fragment',
-  ]) {
-    withEnvironment({ X402_RESOURCE_URL: rejected }, () => {
-      assert.throws(() => resourceUrl());
-    });
-  }
-
+test('disables the historical Production payment example', () => {
+  assert.throws(() => resourceUrl(), /historical Production payment example is disabled/);
   assert.throws(() =>
-    mcpUrlForResource(new URL('https://api-stg.pubfi.ai/v1/gateway/quantro/health')),
+    mcpUrlForResource(new URL('https://api-stg.pubfi.ai/v1/gateway/example/status')),
   );
 });
 

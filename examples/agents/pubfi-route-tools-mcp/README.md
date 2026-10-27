@@ -26,7 +26,7 @@ credential. Upstream provider credentials stay server-side.
 `pubfi.capabilities.list` enumerates compact summaries with an opaque generation-bound cursor.
 `pubfi.capabilities.get` returns the full typed contract for one exact capability id. The client
 agent selects the capability; PubFi does not rank candidates or infer intent. Executable paths,
-methods, matchers, schemas, method-specific Quantro pricing, and readiness come only from the
+methods, matchers, schemas, method-specific PubFi pricing, and readiness come only from the
 installed signed Registry generation.
 
 ## Run In Staging

@@ -28,7 +28,7 @@ result shapes, not fixed capability identifiers or dynamic provider data.
 ### 3. Execute an upstream health capability with existing entitlement
 
 - Prompt: Run the upstream health capability we inspected through my connected account.
-- Expected behavior: Read current readiness and quantro_priced billing, disclose credit_cost,
+- Expected behavior: Read current readiness and `priced` billing, disclose credit_cost,
   and execute the exact method and raw_path through Account/OAuth only with existing entitlement.
 - Expected result shape: execution_status is registry_route_executed, credits_charged matches
   the current credit_cost, and the upstream status is present. Do not initiate a Credit purchase

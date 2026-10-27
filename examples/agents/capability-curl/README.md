@@ -22,7 +22,7 @@ sh examples/agents/capability-curl/inspect_registry.sh
 
 The response uses the paginated `pubfi.gateway.registry.capability-page.v5` schema. Follow each
 opaque `next_cursor`, then select only a current `ready` operation and use its exact matcher and
-HTTP method. Inspect that method's `operations[].billing`: `quantro_priced` provides the current
+HTTP method. Inspect that method's `operations[].billing`: `priced` provides the current
 Credits and x402 terms, while `pricing_unavailable` cannot enter a paid lane. The schema retains
 `free_health` for compatibility; a health path does not imply free access. Relayed upstream health
 operations follow normal pricing and authentication. PubFi's own service health endpoints remain

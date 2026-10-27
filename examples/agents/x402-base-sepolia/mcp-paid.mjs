@@ -86,7 +86,7 @@ async function main() {
 
     process.stdout.write(
       `${JSON.stringify({
-        client: '@x402/mcp@2.19.0',
+        client: '@x402/mcp@2.26.0',
         network: BASE_SEPOLIA_NETWORK,
         payer: account.address,
         paymentMade: true,

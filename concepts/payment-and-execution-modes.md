@@ -3,9 +3,8 @@ title: Payment And Execution Modes
 description: How PubFi separates API-key usage, registered-account purchases, and accountless x402 payments.
 ---
 
-PubFi has separate caller entry modes, but it does not maintain separate financial authorities for
-each mode. PubFi owns route execution and product presentation. Quantro owns the provider-neutral
-commercial, settlement, allocation, and receipt facts behind those product surfaces.
+PubFi has separate caller entry modes and owns route execution, purchases, settlement, allocation,
+and receipt facts for those modes.
 
 ## Mode Comparison
 
@@ -130,6 +129,6 @@ dashboard. Their payment evidence is:
 The signed receipt is verifiable evidence for the settled payment and execution. It is not an
 account-balance, Credits, top-up, or deposit record.
 
-PubFi does not expose internal Quantro settlement records or payment payloads as public accountless
+PubFi does not expose internal settlement records or payment payloads as public accountless
 billing data. SIWX, a public wallet-history service, and anonymous Credits are not part of the
 current release.

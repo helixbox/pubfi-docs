@@ -103,7 +103,7 @@ payment authorization.
   `error` message. Validate every new term before signing again.
 - A Signed Receipt is verifiable payment and execution evidence, not an account balance, Credits,
   top-up, or deposit record. Exact replay reuses the settlement and receipt without another charge.
-- Quantro is the common accounting-fact authority. A request selects either the authenticated
+- PubFi owns the accounting facts. A request selects either the authenticated
   account and Credits lane or the x402 wallet-payment lane. It cannot debit both.
 
 ## Authority Order
@@ -112,7 +112,7 @@ Use the surfaces in this order for runtime work:
 
 1. Use `/v1/capabilities` to inspect the complete installed Registry generation.
 2. Match the selected method to schema v5 `operations[].billing`, then use Runtime OpenAPI to
-   inspect schemas for current `ready` HTTP operations. A `quantro_priced` operation supplies its
+   inspect schemas for current `ready` HTTP operations. A `priced` operation supplies its
    positive API-key `credit_cost` and independent x402 terms. Runtime OpenAPI repeats those terms
    in `x-pubfi-credit-cost`, `x-pubfi-price-policy-key`, `x-pubfi-price-version`, and
    `x-pubfi-x402`; it omits these four fields for non-priced operations. Relayed upstream health
