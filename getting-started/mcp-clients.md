@@ -599,7 +599,7 @@ custom HTTP-header configuration. It forwards to PubFi's hosted MCP endpoint. It
 second PubFi backend.
 
 Clone the [PubFi Docs repository](https://github.com/helixbox/pubfi-docs), install Node.js
-24.19.0 or a later Node.js 24 release, and use the absolute path to:
+24.22.1 or a later Node.js 24 release, and use the absolute path to:
 
 ```text
 examples/agents/pubfi-route-tools-mcp/server.ts
