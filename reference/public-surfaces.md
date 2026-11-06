@@ -149,6 +149,7 @@ operation can instead return an accountless x402 V2 challenge when no API-key ca
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/free-quotas`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/purchase-offers`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/purchases`
+- `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/purchases/{purchase_id}/payment-documents/{document_action}`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/credit-auto-reload`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups`
 - `https://api.pubfi.ai/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups/{setup_id}`
