@@ -158,6 +158,7 @@ concurrency limits without changing the selected gateway path.
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human account member. |
 | `POST` | `/v1/billing-accounts/{billing_account_id}/purchases` | Human Owner or Admin. Requires `Idempotency-Key`, current offer and catalog identities, a valid amount, and exact accepted terms identity. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/purchases/{purchase_id}` | Human account member. |
+| `GET` | `/v1/billing-accounts/{billing_account_id}/purchases/{purchase_id}/payment-documents/{document_action}` | Human account member. `document_action` is `invoice`, `invoice_pdf`, or `receipt`; returns a fresh provider-hosted document redirect. |
 | `GET` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload` | Human account member. API keys are denied. |
 | `PUT` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload` | Human Owner or Admin. Requires `Idempotency-Key`. |
 | `POST` | `/v1/billing-accounts/{billing_account_id}/credit-auto-reload/payment-method-setups` | Human Owner or Admin. Requires `Idempotency-Key` and exact current Service Credit Terms. |
