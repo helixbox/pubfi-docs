@@ -104,5 +104,6 @@ jobs:
       - env:
           DOCS_RELEASE_REQUEST: ${{ needs.plan.outputs.request }}
           DOCS_RELEASE_RESULT: ${{ (needs.deploy.result == 'success' || needs.plan.outputs.published == 'true') && 'success' || 'failure' }}
-          HAST_RELEASE_MANAGER_HOOK_URL: ${{ secrets.HAST_RELEASE_MANAGER_HOOK_URL }}
+          HAST_RELEASE_TASK_INVOKE_URL: ${{ secrets.HAST_RELEASE_TASK_INVOKE_URL }}
+          HAST_RELEASE_TASK_API_KEY: ${{ secrets.HAST_RELEASE_TASK_API_KEY }}
         run: node scripts/product-release.ts notify

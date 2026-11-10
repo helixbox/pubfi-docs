@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { validateRequest, binding, validateTag, validateStage, alreadyPublished, repository } from './product-release.ts';
+import { validateRequest, binding, validateTag, validateStage, alreadyPublished, repository, resultEvent } from './product-release.ts';
 const request = { tag: 'v1.2.3', product_sha: 'a'.repeat(40), source_sha: 'b'.repeat(40),
   product_evidence: 'https://github.com/helixbox/pubfi-mono/actions/runs/12', staging_run_id: '34', dry_run: true };
 const run = { id: 34, head_sha: request.source_sha, head_branch: 'main', event: 'push',
@@ -34,4 +34,14 @@ test('an accepted publication is idempotent and old events cannot roll it back',
   assert.equal(alreadyPublished(current, { ...request, tag: 'v1.2.4' }), false);
   assert.throws(() => alreadyPublished(current, { ...request, tag: 'v1.2.2' }));
   assert.throws(() => alreadyPublished(current, { ...request, source_sha: 'c'.repeat(40) }));
+});
+
+test('result events contain immutable facts and keep the same identity on retries', () => {
+  const result = resultEvent(request, 'published');
+  assert.deepEqual(result, resultEvent(request, 'published'));
+  assert.notEqual(result.request_id, resultEvent(request, 'failed').request_id);
+  assert.equal(result.payload.docs_repository, repository);
+  assert.deepEqual(binding(request), Object.fromEntries(Object.keys(binding(request)).map(key => [key, result.payload[key as keyof typeof result.payload]])));
+  assert.equal('prompt' in result.payload, false);
+  assert.equal('workflow_url' in result.payload, false);
 });
