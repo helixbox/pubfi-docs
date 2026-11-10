@@ -1,7 +1,7 @@
 # PubFi MCP Stdio Bridge Smoke Fixture
 
 This public example is a local, dependency-free MCP-compatible stdio bridge and smoke fixture for
-the PubFi hosted MCP endpoint. Run it with Node.js 24.19.0 or a later Node.js 24 release.
+the PubFi hosted MCP endpoint. Run it with Node.js 24.22.1 or a later Node.js 24 release.
 
 The bridge forwards modern `server/discover`, list, and `tools/call` requests to the Rust MCP
 endpoint instead of synthesizing a second handshake, running a retired TypeScript route-tool
